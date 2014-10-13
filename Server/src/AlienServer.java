@@ -29,7 +29,8 @@ public static void main (String[] argv) {
                 String text;
 	    	while(true){
                     text=s.nextLine().trim();
-                 //  if(text.equals("StartGame")) 
+                    if(text.equals("Start")) 
+                        server.StartGame();
                     
 	    	}
  

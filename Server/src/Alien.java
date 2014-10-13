@@ -9,6 +9,8 @@ public class Alien extends UnicastRemoteObject implements AlienInterface{
         public int Deputy;
 	public AlienInterface client=null;
         Map <String,String> role_pool;
+        Map <AlienInterface, List <? extends Tool>> 
+                inventory_pool = new HashMap<AlienInterface, List <? extends Tool>>();
         
         public Alien(String name) throws RemoteException{
             this.name = name;
@@ -20,12 +22,12 @@ public class Alien extends UnicastRemoteObject implements AlienInterface{
             role_pool.put("Captain","free");
             role_pool.put("Senior Assistant","free");
             role_pool.put("Engineer","free");
-            role_pool.put("Power Engineer","free");
             role_pool.put("Gunmen","free");
             role_pool.put("Scientist","free");
             role_pool.put("Doctor","free");
             role_pool.put("Signalmen","free");
             role_pool.put("Passenger","free");
+            
             
         }
         
@@ -45,12 +47,14 @@ public class Alien extends UnicastRemoteObject implements AlienInterface{
             this.role=role;
         }
         
-        public void StartGame(){
-            
-        }
         
         public Map ListRole(){
             return role_pool;
+        }
+        
+        @Override
+        public void setTool(String name) throws RemoteException{
+            
         }
         
         
@@ -67,14 +71,12 @@ public class Alien extends UnicastRemoteObject implements AlienInterface{
                     if ((!role_pool.get("Captain").equals("free")) &&
                          !role_pool.get("Senior Assistant").equals("free") &&
                          !role_pool.get("Engineer").equals("free") &&
-                         !role_pool.get("Power Engineer").equals("free") &&
                          !role_pool.get("Gunmen").equals("free") &&
                          !role_pool.get("Scientist").equals("free") &&
                          !role_pool.get("Doctor").equals("free") &&
                          !role_pool.get("Signalmen").equals("free") &&
                          !role_pool.containsKey("Deputy of Gunmen")) {
                         role_pool.put("Deputy of Engineer","free");
-                        role_pool.put("Deputy of Power Engineer","free");
                         role_pool.put("Deputy of Gunmen","free");
                         role_pool.put("Deputy of Scientist","free");
                         role_pool.put("Deputy of Doctor","free");
@@ -100,4 +102,33 @@ public class Alien extends UnicastRemoteObject implements AlienInterface{
             return false;
         }       
         
+        public void StartGame()throws RemoteException{
+            Collection<AlienInterface> values = connection_pool.values();
+            for (AlienInterface value : values) {
+                if(role_pool.get(value.getName()).equals("Captain")){
+                    value.setTool("Captain Badge");//капитанский значок
+                    inventory_pool.put(value,Arrays.asList(new Injector()));
+                }
+                if(role_pool.get(value.getName()).equals("Senior Assistant"))
+                    value.setTool("Rota"); //график дежурств
+                if(role_pool.get(value.getName()).equals("Engineer"))
+                    value.setTool("Battery");//батарейка
+                if(role_pool.get(value.getName()).equals("Gunmen"))
+                    value.setTool("Blaster");//бластер
+                if(role_pool.get(value.getName()).equals("Scientist"))
+                    value.setTool("Scanner");//сканер
+                if(role_pool.get(value.getName()).equals("Doctor"))
+                    value.setTool("Injector");//шприц
+                if(role_pool.get(value.getName()).equals("Signalmen"))
+                    value.setTool("Notebook");//ноутбук
+            value.StartGame();
+            }
+        }
+        
+        public void setHP(AlienInterface j, int heal){
+            j.setHP(heal);
+        }
+            public int getHP(){
+                return 0;
+            }
 }

@@ -19,4 +19,7 @@ public interface AlienInterface extends Remote{
     public void setRole(String role) throws RemoteException;
     public void setClient(AlienInterface c)throws RemoteException;
     public AlienInterface getClientByName(String name) throws RemoteException;
+    public void setTool(String name) throws RemoteException;
+    public void setHP(AlienInterface j, int heal) throws RemoteException;
+    public int getHP()throws RemoteException;
 }
