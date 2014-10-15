@@ -63,6 +63,9 @@ public class AlienClient {
                     System.out.println("Для голосования введите имя, для подтверждения - дважды");;
                     while(true){
                     String n=s.nextLine().trim();
+                    if(n.equals("!!")){
+                        client.Vote(server.Vote(null));
+                    }else
                         if(server.VoiceFromTo(name, n)){
                         System.out.println("Голос отдан");
                         } else System.out.println("Неправильное имя");

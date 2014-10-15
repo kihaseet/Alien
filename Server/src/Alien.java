@@ -11,7 +11,7 @@ public class Alien extends UnicastRemoteObject implements AlienInterface{
         Map <String,String> role_pool;
         Map <AlienInterface, List <? extends Tool>> 
                 inventory_pool = new HashMap<AlienInterface, List <? extends Tool>>();
-        Map <AlienInterface, HashMap<AlienInterface,Integer>> 
+        static Map <AlienInterface, HashMap<AlienInterface,Integer>> 
                 votelist = new HashMap<AlienInterface, HashMap<AlienInterface,Integer>>();;
         
         public Alien(String name) throws RemoteException{
@@ -115,28 +115,28 @@ public class Alien extends UnicastRemoteObject implements AlienInterface{
         public void StartGame() throws RemoteException{
             Collection<AlienInterface> values = connection_pool.values();
             for (AlienInterface value : values) {
-                if(role_pool.get(value.getName()).equals("Captain")){
-                    value.setTool("Captain Badge");//капитанский значок
-                    inventory_pool.put(value, Arrays.asList(new CaptainBudge()));
-                }
-                if(role_pool.get(value.getName()).equals("Senior Assistant")){
-                    value.setTool("Rota"); //график дежурств
-                    inventory_pool.put(value, Arrays.asList(new Rota()));}
-                if(role_pool.get(value.getName()).equals("Engineer")){
-                    value.setTool("Battery");//батарейка
-                    inventory_pool.put(value, Arrays.asList(new Battery()));}
-                if(role_pool.get(value.getName()).equals("Gunmen")){
-                    value.setTool("Blaster");//бластер
-                    inventory_pool.put(value, Arrays.asList(new Blaster()));}
-                if(role_pool.get(value.getName()).equals("Scientist")){
-                    value.setTool("Scanner");//сканер
-                    inventory_pool.put(value, Arrays.asList(new Scan()));}
-                if(role_pool.get(value.getName()).equals("Doctor")){
-                    value.setTool("Injector");//шприц
-                    inventory_pool.put(value, Arrays.asList(new Injector()));}
-                if(role_pool.get(value.getName()).equals("Signalmen")){
-                    value.setTool("Notebook");//ноутбук
-                    inventory_pool.put(value, Arrays.asList(new Notebook()));}
+//                if(role_pool.get(value.getName()).equals("Captain")){
+//                    value.setTool("Captain Badge");//капитанский значок
+//                    inventory_pool.put(value, Arrays.asList(new CaptainBudge()));
+//                }
+//                if(role_pool.get(value.getName()).equals("Senior Assistant")){
+//                    value.setTool("Rota"); //график дежурств
+//                    inventory_pool.put(value, Arrays.asList(new Rota()));}
+//                if(role_pool.get(value.getName()).equals("Engineer")){
+//                    value.setTool("Battery");//батарейка
+//                    inventory_pool.put(value, Arrays.asList(new Battery()));}
+//                if(role_pool.get(value.getName()).equals("Gunmen")){
+//                    value.setTool("Blaster");//бластер
+//                    inventory_pool.put(value, Arrays.asList(new Blaster()));}
+//                if(role_pool.get(value.getName()).equals("Scientist")){
+//                    value.setTool("Scanner");//сканер
+//                    inventory_pool.put(value, Arrays.asList(new Scan()));}
+//                if(role_pool.get(value.getName()).equals("Doctor")){
+//                    value.setTool("Injector");//шприц
+//                    inventory_pool.put(value, Arrays.asList(new Injector()));}
+//                if(role_pool.get(value.getName()).equals("Signalmen")){
+//                    value.setTool("Notebook");//ноутбук
+//                    inventory_pool.put(value, Arrays.asList(new Notebook()));}
             value.StartGame();
             }
         }
@@ -185,13 +185,24 @@ public class Alien extends UnicastRemoteObject implements AlienInterface{
         return this.votelist;
     }
     
+        @Override
     public boolean VoiceFromTo(String from, String to) throws RemoteException{
-        if ((connection_pool.containsKey(from))&&(connection_pool.containsKey(from))){
+        if ((connection_pool.containsKey(from))&&(connection_pool.containsKey(to))){
             AlienInterface f = connection_pool.get(from);
             AlienInterface t = connection_pool.get(to);
-        
+        System.out.println("Два стринга получены");
 
-        if (votelist.get(f).get(t)==1){
+
+        if (votelist.get(f).get(t) == null){ 
+                votelist.get(f).clear();
+                votelist.get(f).put(t, 1);
+                for (AlienInterface value : votelist.keySet()) {
+                    if(votelist.get(value).containsValue(2))
+                        resetVoting();   
+                    value.print(f.getName()+" отдал голос против "+t.getName());
+                }
+                return true;
+        } else if (votelist.get(f).get(t).equals(1)){
             votelist.get(f).put(t, 2);
             
             for (AlienInterface value : votelist.keySet()) {
@@ -200,17 +211,18 @@ public class Alien extends UnicastRemoteObject implements AlienInterface{
             
             return true;
         }
-
-        if ((votelist.get(f).get(t)==null)||(votelist.get(f).get(t)==0)){ 
-            votelist.get(f).clear();
-            votelist.get(f).put(t, 1);
-            
+        
+           if (votelist.get(f).get(t)==0)
+                    votelist.get(f).put(t, 1); 
+           
             for (AlienInterface value : votelist.keySet()) {
-                value.print(f.getName()+" голосует против "+t.getName());
+                if(votelist.get(value).containsValue(2))
+                        resetVoting(); 
+                if (votelist.get(f).get(t)!=2)value.print(f.getName()+" голосует против "+t.getName());
             }
             return true;
         }
-        }
+        
         return false;
     }
     
@@ -221,4 +233,14 @@ public class Alien extends UnicastRemoteObject implements AlienInterface{
     public boolean getStarted(){
             return true;
         }
+    
+    public void resetVoting(){
+        for (AlienInterface value : votelist.keySet()) {
+            for (AlienInterface val: votelist.get(value).keySet()){
+                if (votelist.get(value).get(val)==2)
+                        votelist.get(value).put(val, 1); 
+            }
+        }
+        
+    }
 }

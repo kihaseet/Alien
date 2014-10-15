@@ -57,6 +57,7 @@ public class Alien extends UnicastRemoteObject implements AlienInterface {
     }
 
     public void StartGame() {
+        System.out.println();
         System.out.println("Let's play!");
         this.isStarted=true;
 
@@ -127,9 +128,10 @@ public class Alien extends UnicastRemoteObject implements AlienInterface {
                 System.out.println(key.getName()+"=>"+innerKey.getName()+" "+boxHolder.get(innerKey));
             }
         }
-        return null; 
+        return votelist; 
     }
      
+    @Override
    public boolean VoiceFromTo(String from, String to){
        return true;
    }
