@@ -23,4 +23,5 @@ public interface AlienInterface extends Remote{
     public void setTool(String name) throws RemoteException;
     public void setHP(int heal) throws RemoteException;
     public int getHP()throws RemoteException;
+    public void useTools(AlienInterface j, Tool t) throws RemoteException;
 }

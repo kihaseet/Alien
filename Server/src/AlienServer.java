@@ -31,6 +31,9 @@ public static void main (String[] argv) {
                     text=s.nextLine().trim();
                     if(text.equals("Start")) 
                         server.StartGame();
+                    while (server.DayTime()){
+                        server.NightTime();
+                    }
                     
 	    	}
  

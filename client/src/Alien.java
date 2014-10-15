@@ -23,8 +23,13 @@ public class Alien extends UnicastRemoteObject implements AlienInterface {
 
     }
 
+    @Override
     public void setTool(String name){
         this.Inventory.add(new Tool(name));
+    }
+    
+    public void useTools(AlienInterface j, Tool t){
+        
     }
 
     public String getName() throws RemoteException {
@@ -94,10 +99,25 @@ public class Alien extends UnicastRemoteObject implements AlienInterface {
     
    
     public void setHP(int heal)throws RemoteException{
-        this.hp=heal;
+        this.hp=this.hp+heal;
+        if (this.hp>maxhp)this.hp=maxhp;
+        //if (this.hp<0) убить персонажа
     }
             
     public int getHP()throws RemoteException{
             return this.hp;
         }
+    
+     public AlienInterface Vote(Map <AlienInterface, HashMap<AlienInterface,Integer>> votelist) throws RemoteException{
+        for (AlienInterface key : votelist.keySet())
+        {
+            HashMap<AlienInterface, Integer> boxHolder = votelist.get(key);
+            for (AlienInterface innerKey : boxHolder.keySet())
+            {
+                System.out.println(key.getName()+" "+innerKey.getName()+" "+boxHolder.get(innerKey));
+            }
+        }
+            
+        return null;
+    }
 }

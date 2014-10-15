@@ -19,6 +19,9 @@ public class Tool {
     public void UltaUseTool(AlienInterface j){
         
     }
+    public void NightUseTool(AlienInterface j){
+        
+    }
     
 }
 

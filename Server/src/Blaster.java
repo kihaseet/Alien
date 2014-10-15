@@ -12,19 +12,19 @@ import java.util.logging.Logger;
  *
  * @author Тёса
  */
-public class Injector extends Tool{
+public class Blaster extends Tool{
 
     @Override
     public void UseTool(AlienInterface j) {
         try {
-            j.setHP(2);
-            this.counter=2;
+            j.setHP(-2);
         } catch (RemoteException ex) {
-            Logger.getLogger(Injector.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Blaster.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.counter=2;
     }
     
-    public Injector(){
+    public Blaster(){
     }
 
 
@@ -33,3 +33,4 @@ public class Injector extends Tool{
     
     
 }
+
