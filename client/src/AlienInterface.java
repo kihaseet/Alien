@@ -16,6 +16,7 @@ public interface AlienInterface extends Remote{
     public Map ListRole() throws RemoteException;
     public void StartGame() throws RemoteException;
     public String getName() throws RemoteException;
+    public boolean getStarted()throws RemoteException;;
     public void setRole(String role) throws RemoteException;
     public void setClient(AlienInterface c)throws RemoteException;
     public AlienInterface getClientByName(String name) throws RemoteException;
@@ -24,4 +25,7 @@ public interface AlienInterface extends Remote{
     public void setHP(int heal) throws RemoteException;
     public int getHP()throws RemoteException;
     public void useTools(AlienInterface j, Tool t) throws RemoteException;
+    public Map Vote(Map <AlienInterface, HashMap<AlienInterface,Integer>> votelist) throws RemoteException;
+    public boolean VoiceFromTo(String from, String to) throws RemoteException;
+    
 }

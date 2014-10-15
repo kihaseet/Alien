@@ -9,6 +9,8 @@ public class Alien extends UnicastRemoteObject implements AlienInterface {
     public int hp,maxhp, status;
     public int Deputy;
     public AlienInterface client = null;
+    public boolean isStarted=false;
+    
     Map<String, String> role_pool = new HashMap();
     List<Tool> Inventory;
 
@@ -20,8 +22,10 @@ public class Alien extends UnicastRemoteObject implements AlienInterface {
         this.role = "Passenger";
         this.Deputy = 0;
         this.Inventory = new ArrayList();
+        this.isStarted=false;
 
     }
+    
 
     @Override
     public void setTool(String name){
@@ -54,7 +58,13 @@ public class Alien extends UnicastRemoteObject implements AlienInterface {
 
     public void StartGame() {
         System.out.println("Let's play!");
+        this.isStarted=true;
 
+    }
+    
+    @Override
+    public boolean getStarted(){
+        return this.isStarted;
     }
 
     public Map ListRole() {
@@ -108,16 +118,19 @@ public class Alien extends UnicastRemoteObject implements AlienInterface {
             return this.hp;
         }
     
-     public AlienInterface Vote(Map <AlienInterface, HashMap<AlienInterface,Integer>> votelist) throws RemoteException{
+     public Map Vote(Map <AlienInterface, HashMap<AlienInterface,Integer>> votelist) throws RemoteException{
         for (AlienInterface key : votelist.keySet())
         {
             HashMap<AlienInterface, Integer> boxHolder = votelist.get(key);
             for (AlienInterface innerKey : boxHolder.keySet())
             {
-                System.out.println(key.getName()+" "+innerKey.getName()+" "+boxHolder.get(innerKey));
+                System.out.println(key.getName()+"=>"+innerKey.getName()+" "+boxHolder.get(innerKey));
             }
         }
-            
-        return null;
+        return null; 
     }
+     
+   public boolean VoiceFromTo(String from, String to){
+       return true;
+   }
 }

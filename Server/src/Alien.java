@@ -155,38 +155,70 @@ public class Alien extends UnicastRemoteObject implements AlienInterface{
                 t.UseTool(j);
             }
             
-    public boolean DayTime (){
+    public boolean DayTime () throws RemoteException, InterruptedException{
         votelist.clear();
-        Vote(votelist);
-        return true;
+        Collection<AlienInterface> values = connection_pool.values();
+        for (AlienInterface value : values) {
+                HashMap<AlienInterface,Integer> val = new HashMap<AlienInterface,Integer>();
+                val.put(value, 0);
+                votelist.put(value, val);
+        }
+        
+        for (AlienInterface value : votelist.keySet()) {
+            value.Vote(votelist);
+            }
+        
+        while(true){
+            Thread.sleep(1000);
+            if(1==2) return true;
+        }
     }
     
     public void NightTime(){
         
     }
-    public AlienInterface Vote(Map votelist){
+   
+    
+        @Override
+    public Map Vote(Map <AlienInterface, HashMap<AlienInterface,Integer>> votelist){
         
-        Collection<AlienInterface> values = connection_pool.values();
-            for (AlienInterface value : values) {
-                HashMap<AlienInterface,Integer> val = new HashMap<AlienInterface,Integer>();
-                val.put(value, 0);
-                votelist.put(value, val);
-            }
-
-        return null;
+        return this.votelist;
     }
     
-    public boolean VoiceFromTo(AlienInterface from,AlienInterface to){
+    public boolean VoiceFromTo(String from, String to) throws RemoteException{
+        if ((connection_pool.containsKey(from))&&(connection_pool.containsKey(from))){
+            AlienInterface f = connection_pool.get(from);
+            AlienInterface t = connection_pool.get(to);
+        
 
-        if (votelist.get(from).get(to)==1){
-            votelist.get(from).put(to, 2);
+        if (votelist.get(f).get(t)==1){
+            votelist.get(f).put(t, 2);
+            
+            for (AlienInterface value : votelist.keySet()) {
+                value.print(f.getName()+" подтвердил голос против "+t.getName());
+            }
+            
             return true;
         }
-        if ((votelist.get(from).get(to)==null)||votelist.get(from).get(to)==0){ 
-            votelist.get(from).clear();
-            votelist.get(from).put(to, 1);
+
+        if ((votelist.get(f).get(t)==null)||(votelist.get(f).get(t)==0)){ 
+            votelist.get(f).clear();
+            votelist.get(f).put(t, 1);
+            
+            for (AlienInterface value : votelist.keySet()) {
+                value.print(f.getName()+" голосует против "+t.getName());
+            }
             return true;
+        }
         }
         return false;
     }
+    
+    public void print(String msg) {
+        System.out.println(msg);
+    }
+
+    public boolean getStarted(){
+            return true;
+        }
 }

@@ -33,7 +33,6 @@ public class AlienClient {
 		    	
                         //server.send(client.getName(),msg);
 		    	System.out.println("[System] Chat Remote Object is ready:");
-
                       //  server.setClient(client);
                         System.out.println("Выберите роль из списка досупных:");
                         Map role_list=server.ListRole();
@@ -57,9 +56,19 @@ public class AlienClient {
                             else System.out.println("Ошибка добавления роли");
 		    	}
                         
-                    while (true){
-                        
+                    while (!client.getStarted()){
+                        Thread.sleep(1000);
                     }
+                     
+                    System.out.println("Для голосования введите имя, для подтверждения - дважды");;
+                    while(true){
+                    String n=s.nextLine().trim();
+                        if(server.VoiceFromTo(name, n)){
+                        System.out.println("Голос отдан");
+                        } else System.out.println("Неправильное имя");
+            
+            
+        }
  
 	    	}catch (Exception e) {
 	    		System.out.println("[System] Server failed: " + e);
