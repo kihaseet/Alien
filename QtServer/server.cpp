@@ -98,8 +98,8 @@ void Server::noVerifyClientName(QString name){
     foreach (ClientSocket* client, m_clients)
     {
         if(client->_name==name){
+            client->_socket->close();
             m_clients.removeOne(client);
-
             break;
         }
 

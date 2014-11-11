@@ -15,11 +15,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(_xmlmaker,SIGNAL(namecorrect(QString,QString)),_serv,SLOT(verifyClientName(QString,QString)));
     connect(_xmlmaker,SIGNAL(noVerifyClientName(QString)),_serv,SLOT(noVerifyClientName(QString)));
     connect(_xmlmaker,SIGNAL(sendtoclient(QString,QString)),_serv,SLOT(slotsendToClient(QString,QString)));
+    connect(_xmlmaker,SIGNAL(registerRolebyPlayer(QString,QString)),_game,SLOT(registerRolebyPlayer(QString,QString));
 
     connect(_game,SIGNAL(namecorrect(QString,QString)),_xmlmaker,SLOT(slotnamecorrect(QString,QString)));
     connect(_game,SIGNAL(nonamecorrect(QString)),_xmlmaker,SLOT(nonamecorrect(QString)));
     connect(_game,SIGNAL(sendrolelist2all (QMap <QString,player>,QMap<QString,player>)),
             _xmlmaker,SLOT(updaterolelist(QMap <QString,player>,QMap<QString,player>)));
+    connect(_game,SIGNAL(rolecorrect(QString)),_xmlmaker,SLOT(rolecorrect(QString)));
+    connect(_game,SIGNAL(norolecorrect(QString)),_xmlmaker,SLOT(norolecorrect(QString)));
+
+
 
 
 }

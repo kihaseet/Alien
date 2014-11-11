@@ -66,3 +66,40 @@ void game::register_new_player(QString tempname,QString name){
     }else
         emit nonamecorrect(tempname);
 }
+
+void game::registerRolebyPlayer(QString _name, QString role){
+    if(role!="Passenger"){
+    bool inc=false;
+    QMap<QString, player>::iterator jt = rolelist.begin();
+    for (;jt != rolelist.end(); ++jt){
+        if(jt.value()==NULL){
+            inc=true;
+            if(jt.key()==role){
+                jt.value()=playerlist.value(_name);
+                playerlist.value(_name).rolelist.append(role);
+                emit rolecorrect(_name);
+            }
+        }
+        if((jt.value()!=NULL)&&(jt.key()==role)){
+            emit norolecorrect(_name);
+        }
+    }
+    if((inc==false)&&(rolelist.size()==7)){
+        rolelist.insert("Dep_Doctor",NULL);
+        rolelist.insert("Dep_Gunmen",NULL);
+        rolelist.insert("Dep_Engineer",NULL);
+        rolelist.insert("Dep_Scientist",NULL);
+        rolelist.insert("Dep_Signalmen",NULL);
+    }
+    if((inc==false)&&(rolelist.size()==12)){
+        rolelist.insert("Passenger",NULL);
+    }
+    }else{
+        passengerlist.append(playerlist.value(_name));
+        playerlist.value(_name).rolelist.append(role);
+        emit rolecorrect(_name);
+    }
+
+    emit sendrolelist2all(playerlist,rolelist);
+
+}

@@ -17,6 +17,7 @@ public:
     QMap <QString,item> itemlist;
     QQueue <voting> votingque;
     QMap <QString,player> rolelist;
+    QList <player> passengerlist;
 
 signals:
     void startgame();
@@ -24,11 +25,14 @@ signals:
     void startnight();
     void namecorrect(QString name, QString tempname);
     void nonamecorrect(QString name);
+    void rolecorrect(QString name);
+    void norolecorrect(QString name);
     void sendrolelist2all(QMap <QString,player> playerlist,QMap <QString,player>rolelist);
 
 
 public slots:
     void register_new_player(QString tempname, QString name);
+    void registerRolebyPlayer(QString _name, QString role);
     void add_role();
     void delete_role();
     void use_item();

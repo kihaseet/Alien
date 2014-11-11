@@ -34,8 +34,6 @@ public slots:
     void send_to_all(ingame_event _eve,QMap <QString,player> playerlist,QMap <QString,item> itemlist);
     void slotnamecorrect(QString tempname, QString _name);
     void nonamecorrect(QString tempname);
-    void rolecorrect(QString _name);
-    void norolecorrect(QString _name);
     void updaterolelist(QMap<QString, player> playerlist, QMap<QString,player>_rolelist);
 
 signals:

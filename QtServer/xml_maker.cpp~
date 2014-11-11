@@ -21,9 +21,6 @@ void xml_maker::new_analise(const QString _name,const QString input){
         if(_xml.what=="regname"){
             emit newname(_name,_xml.whom);
         }
-        if(_xml.what=="regrole"){
-            emit registerRolebyPlayer(_name,_xml.whom);
-        }
         qDebug()  << _xml.what << _xml.whom << _xml.how << _xml.rotation;
     }
 }
@@ -756,28 +753,6 @@ void xml_maker::nonamecorrect(QString tempname){
 
     emit sendtoclient(tempname,doc.toString());
     emit noVerifyClientName(tempname);
-}
-
-void xml_maker::rolecorrect(QString _name){
-    QDomDocument doc("select");
-
-    QDomElement domElement = doc.createElement("select");
-    doc.appendChild(domElement);
-
-    domElement.appendChild(doc.createElement("rolecorrect"));
-
-    emit sendtoclient(_name,doc.toString());
-}
-
-void xml_maker::norolecorrect(QString _name){
-    QDomDocument doc("select");
-
-    QDomElement domElement = doc.createElement("select");
-    doc.appendChild(domElement);
-
-    domElement.appendChild(doc.createElement("norolecorrect"));
-
-    emit sendtoclient(_name,doc.toString());
 }
 
 
