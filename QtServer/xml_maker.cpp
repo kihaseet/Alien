@@ -107,7 +107,7 @@ QQueue<QString> xml_maker::makeRotation(const QDomNode& node){
 
 /*==================================================*/
 
-void xml_maker::nightmare(QQueue<ingame_event> _que,QMap <QString,player> playerlist, QMap <QString,item> itemlist){
+void xml_maker::nightmare(QQueue<ingame_event*> _que,QMap <QString,player> playerlist, QMap <QString,item> itemlist){
     QMap<QString, player>::iterator it = playerlist.begin();
     for (;it != playerlist.end(); ++it) {/*для всех игроков*/
         QDomDocument doc("init");
@@ -179,6 +179,11 @@ void xml_maker::nightmare(QQueue<ingame_event> _que,QMap <QString,player> player
         ingame_event _eve;
         while(!_queue.isEmpty()){
             _eve=_queue.dequeue();
+            if(_eve.what=="alien"){
+                if(it.value().name==_eve.who.name){
+                    domStat.appendChild(makeElement(doc,"alien","","",""));
+                }
+            }
             if(_eve.what=="up"){/*если встал с ванны*/
                 up.appendChild(makeElement(doc,_eve.who.name,"","",""));
                 if(it.value().name==_eve.who.name){
@@ -192,6 +197,9 @@ void xml_maker::nightmare(QQueue<ingame_event> _que,QMap <QString,player> player
                 }
             }
 
+            if((_eve.what=="getitem")&&(it.value().name==_eve.who.name)){
+                domStat.appendChild(makeElement(doc,"item","get",_eve.useit.power,_eve.useit.handle));
+            }
             if((_eve.what=="useitem")
                     &&(_eve.useit.handle=="Mop")
                     &&(it.value().name==_eve.who.name)) {
@@ -388,187 +396,220 @@ void xml_maker::end_of_day(QMap <QString,player> playerlist,QMap <QString,item> 
     }
 }
 
-QDomElement xml_maker::append_actions(QDomDocument& domDoc,player _player,
-                                      QMap <QString,player> _playerlist, QMap <QString,item> _itemlist,
-                                      int is_night) /*указатель на DOM,текущий игрок,список игроков,список вещей,ночь/день*/
-{
+//QDomElement xml_maker::append_actions(QDomDocument& domDoc,player _player,
+//                                      QMap <QString,player> _playerlist, QMap <QString,item> _itemlist,
+//                                      int is_night) /*указатель на DOM,текущий игрок,список игроков,список вещей,ночь/день*/
+//{
+//    QDomElement domActions = domDoc.createElement("actions");
+
+//    QList<QString>::iterator jt = _player.actionlist.begin();
+
+//    while (jt != _player.actionlist.end()) {
+//        domActions.appendChild(doc.createElement(*jt));
+//        ++jt;
+//    }{
+////    if(is_night==0){
+////        /*ночные применения предметов*/
+////        if(_player.use_night_item==0){
+
+////            QMap<QString, item>::iterator jt = _player.itemlist.begin();
+////            for (;jt != _player.itemlist.end(); ++jt) {
+
+////                if(((jt.key()=="Blaster") || (jt.key()=="Injector")
+////                    || (jt.key()=="Battery") || (jt.key()=="Scanner")
+////                    || (jt.key()=="Mop"))
+////                        && (jt.value().power==0)) {
+
+////                    QDomElement domItem=domDoc.createElement("use");
+
+////                    QDomAttr domAttr = domDoc.createAttribute("item");
+////                    domAttr.setValue(jt.key());
+////                    domItem.setAttributeNode(domAttr);
+
+////                    domActions.appendChild(domItem);
+
+////                    if(jt.key()!="Battery"){
+////                        QMap<QString, player>::iterator it = _playerlist.begin();
+////                        for (;it != _playerlist.end(); ++it) {
+////                            domItem.appendChild(domDoc.createElement(it.key()));
+////                        }
+////                    }
+////                }
+////                if(_player.status==2 && jt.key()=="Fetus"){
+////                    QDomElement domItem=domDoc.createElement("use");
+
+////                    QDomAttr domAttr = domDoc.createAttribute("item");
+////                    domAttr.setValue(jt.key());
+////                    domItem.setAttributeNode(domAttr);
+////                    domActions.appendChild(domItem);
+////                }
+////            }
+
+////            jt = _player.itemlist.begin();
+////            for (;jt != _player.itemlist.end(); ++jt) {
+
+////                if(((jt.key()=="Blaster")&&(jt.value().power==0) )|| ((jt.key()=="Injector")&&(jt.value().power==0))
+////                        || (jt.key()=="Battery") || (jt.key()=="Scanner")
+////                        || (jt.key()=="Badge")) {
+
+////                    QDomElement domItem=domDoc.createElement("use");
+
+////                    QDomAttr domAttr = domDoc.createAttribute("ult");
+////                    domAttr.setValue(jt.key());
+////                    domItem.setAttributeNode(domAttr);
+
+////                    domActions.appendChild(domItem);
+
+////                    if((jt.key()!="Battery")&&(jt.key()!="Badge")){
+////                        QMap<QString, player>::iterator it = _playerlist.begin();
+////                        for (;it != _playerlist.end(); ++it) {
+////                            domItem.appendChild(domDoc.createElement(it.key()));
+////                        }
+////                    }
+////                    if(jt.key()=="Battery"){
+////                        QMap<QString, item>::iterator kt = _itemlist.begin();
+////                        for (;kt != _itemlist.end(); ++kt) {
+////                            if(kt.value().power==-1){
+////                                domItem.appendChild(domDoc.createElement(kt.key()));
+////                            }
+////                        }
+////                    }
+////                    if(jt.key()=="Badge" && jt.value().power==0){
+////                        QMap<QString, item>::iterator kt = _itemlist.begin();
+////                        for (;kt != _itemlist.end(); ++kt) {
+////                            if(kt.key()!="Notebook"){
+////                                domItem.appendChild(domDoc.createElement(kt.key()));
+////                            }
+////                        }
+////                        domItem.appendChild(domDoc.createElement("Mop"));
+////                    }
+////                }
+////            }
+////        }
+////    }
+
+////    if(is_night==1){
+////        QString _forrepower;
+////        QMap<QString, item>::iterator jt = _itemlist.begin();
+////        for (;jt != _itemlist.end(); ++jt) {
+////            if((jt.key()=="Battery")&&(jt.value().power==0)&&(_itemlist.contains(jt.value().forrepower))){
+////                _forrepower=jt.value().forrepower;
+////            }
+////        }
+////        /*дневные применения предметов*/
+////        jt = _player.itemlist.begin();
+////        for (;jt != _player.itemlist.end(); ++jt) {
+
+////            if(((jt.value().power==0)||(_forrepower==jt.key()))&&((jt.key()!="Badge")||(jt.key()!="Fetus")
+////                                                                  ||(jt.key()!="Rotation")||(jt.key()!="Blaster"))) {
+
+////                QDomElement domItem=domDoc.createElement("use");
+
+////                QDomAttr domAttr = domDoc.createAttribute("item");
+////                domAttr.setValue(jt.key());
+////                domItem.setAttributeNode(domAttr);
+
+////                domActions.appendChild(domItem);
+
+////                if(jt.key()!="Battery"){
+////                    QMap<QString, player>::iterator it = _playerlist.begin();
+////                    for (;it != _playerlist.end(); ++it) {
+////                        domItem.appendChild(domDoc.createElement(it.key()));
+////                    } else {
+////                        QMap<QString, item>::iterator kt = _itemlist.begin();
+////                        for (;kt != _itemlist.end(); ++kt) {
+////                            if(kt.value().power>=0){
+////                                domItem.appendChild(domDoc.createElement(kt.key()));
+////                            }
+////                        }
+////                    }
+////                }
+////            }
+////            if((jt.key()=="Rotation")&&(jt.value().rotation.isEmpty())){
+
+////                DomElement domItem=domDoc.createElement("use");
+
+////                QDomAttr domAttr = domDoc.createAttribute("item");
+////                domAttr.setValue(jt.key());
+////                domItem.setAttributeNode(domAttr);
+////                domActions.appendChild(domItem);
+////            }
+
+////        }
+////        /*дневные ульты*/
+////        jt = _player.itemlist.begin();
+////        for (;jt != _player.itemlist.end(); ++jt) {
+
+////            if(((jt.key()=="Blaster")&&(jt.value().power==0) ) || ((jt.key()=="Injector")&&(jt.value().power==0))
+////                    || (jt.key()=="Battery") || (jt.key()=="Scanner")
+////                    || (jt.key()=="Badge") || (jt.key()=="Notebook")) {
+
+////                QDomElement domItem=domDoc.createElement("use");
+
+////                QDomAttr domAttr = domDoc.createAttribute("ult");
+////                domAttr.setValue(jt.key());
+////                domItem.setAttributeNode(domAttr);
+
+////                domActions.appendChild(domItem);
+
+////                if((jt.key()!="Battery")&&(jt.key()!="Badge")){
+////                    QMap<QString, player>::iterator it = _playerlist.begin();
+////                    for (;it != _playerlist.end(); ++it) {
+////                        domItem.appendChild(domDoc.createElement(it.key()));
+////                    }
+////                }
+////                if(jt.key()=="Battery"){
+////                    QMap<QString, item>::iterator kt = _itemlist.begin();
+////                    for (;kt != _itemlist.end(); ++kt) {
+////                        if(kt.value().power==-1){
+////                            domItem.appendChild(domDoc.createElement(kt.key()));
+////                        }
+////                    }
+////                }
+////                if(jt.key()=="Badge" && jt.value().power==0){
+////                    QMap<QString, item>::iterator kt = _itemlist.begin();
+////                    for (;kt != _itemlist.end(); ++kt) {
+////                        domItem.appendChild(domDoc.createElement(kt.key()));
+////                    }
+////                }
+////            }
+////        }
+////    }
+//}
+//    return domActions;
+//}
+
+QDomElement xml_maker::append_actions(QDomDocument &domDoc, player* player){
     QDomElement domActions = domDoc.createElement("actions");
-
-    QList<QString>::iterator jt = _player.actionlist.begin();
-
-    while (jt != _player.actionlist.end()) {
-        domActions.appendChild(doc.createElement(*jt));
-        ++jt;
-    }
-    if(is_night==0){
-        /*ночные применения предметов*/
-        if(_player.use_night_item==0){
-
-            QMap<QString, item>::iterator jt = _player.itemlist.begin();
-            for (;jt != _player.itemlist.end(); ++jt) {
-
-                if(((jt.key()=="Blaster") || (jt.key()=="Injector")
-                    || (jt.key()=="Battery") || (jt.key()=="Scanner")
-                    || (jt.key()=="Mop"))
-                        && (jt.value().power==0)) {
-
-                    QDomElement domItem=domDoc.createElement("use");
-
-                    QDomAttr domAttr = domDoc.createAttribute("item");
-                    domAttr.setValue(jt.key());
-                    domItem.setAttributeNode(domAttr);
-
-                    domActions.appendChild(domItem);
-
-                    if(jt.key()!="Battery"){
-                        QMap<QString, player>::iterator it = _playerlist.begin();
-                        for (;it != _playerlist.end(); ++it) {
-                            domItem.appendChild(domDoc.createElement(it.key()));
-                        }
-                    }
+    foreach (QPair<QString,QList<QString>> var, player->actionlist) {
+        if(var.first=="attack"
+                || var.first=="wait"  || var.first=="up"
+                || var.first=="down"  || var.first=="unvote")
+            domActions.appendChild(makeElement(domDoc,var.first,"","",""));
+        else {
+            if(var.first=="vote" || var.first=="infect"){
+                QDomElement domVoting = domDoc.createElement(var.first);
+                foreach (QString per, var.second) {
+                    domVoting.appendChild(makeElement(domDoc,per,"","",""));
                 }
-                if(_player.status==2 && jt.key()=="Fetus"){
-                    QDomElement domItem=domDoc.createElement("use");
-
-                    QDomAttr domAttr = domDoc.createAttribute("item");
-                    domAttr.setValue(jt.key());
-                    domItem.setAttributeNode(domAttr);
-                    domActions.appendChild(domItem);
-                }
+                domActions.appendChild(domVoting);
             }
-
-            jt = _player.itemlist.begin();
-            for (;jt != _player.itemlist.end(); ++jt) {
-
-                if(((jt.key()=="Blaster")&&(jt.value().power==0) )|| ((jt.key()=="Injector")&&(jt.value().power==0))
-                        || (jt.key()=="Battery") || (jt.key()=="Scanner")
-                        || (jt.key()=="Badge")) {
-
-                    QDomElement domItem=domDoc.createElement("use");
-
-                    QDomAttr domAttr = domDoc.createAttribute("ult");
-                    domAttr.setValue(jt.key());
-                    domItem.setAttributeNode(domAttr);
-
-                    domActions.appendChild(domItem);
-
-                    if((jt.key()!="Battery")&&(jt.key()!="Badge")){
-                        QMap<QString, player>::iterator it = _playerlist.begin();
-                        for (;it != _playerlist.end(); ++it) {
-                            domItem.appendChild(domDoc.createElement(it.key()));
-                        }
-                    }
-                    if(jt.key()=="Battery"){
-                        QMap<QString, item>::iterator kt = _itemlist.begin();
-                        for (;kt != _itemlist.end(); ++kt) {
-                            if(kt.value().power==-1){
-                                domItem.appendChild(domDoc.createElement(kt.key()));
-                            }
-                        }
-                    }
-                    if(jt.key()=="Badge" && jt.value().power==0){
-                        QMap<QString, item>::iterator kt = _itemlist.begin();
-                        for (;kt != _itemlist.end(); ++kt) {
-                            if(kt.key()!="Notebook"){
-                                domItem.appendChild(domDoc.createElement(kt.key()));
-                            }
-                        }
-                        domItem.appendChild(domDoc.createElement("Mop"));
-                    }
+            if (var.first.startsWith("use")){
+                QDomElement domUse = makeElement(domDoc,"use","item","",var.first.mid(3));
+                foreach (QString per, var.second) {
+                    domUse.appendChild(makeElement(domDoc,per,"","",""));
                 }
+                domActions.appendChild(domUse);
+            }
+            if (var.first.startsWith("ult")){
+                QDomElement domUlt = makeElement(domDoc,"use","ult","",var.first.mid(3));
+                foreach (QString per, var.second) {
+                    domUlt.appendChild(makeElement(domDoc,per,"","",""));
+                }
+                domActions.appendChild(domUlt);
             }
         }
     }
-
-    if(is_night==1){
-        QString _forrepower;
-        QMap<QString, item>::iterator jt = _itemlist.begin();
-        for (;jt != _itemlist.end(); ++jt) {
-            if((jt.key()=="Battery")&&(jt.value().power==0)&&(_itemlist.contains(jt.value().forrepower))){
-                _forrepower=jt.value().forrepower;
-            }
-        }
-        /*дневные применения предметов*/
-        jt = _player.itemlist.begin();
-        for (;jt != _player.itemlist.end(); ++jt) {
-
-            if(((jt.value().power==0)||(_forrepower==jt.key()))&&((jt.key()!="Badge")||(jt.key()!="Fetus")
-                                                                  ||(jt.key()!="Rotation")||(jt.key()!="Blaster"))) {
-
-                QDomElement domItem=domDoc.createElement("use");
-
-                QDomAttr domAttr = domDoc.createAttribute("item");
-                domAttr.setValue(jt.key());
-                domItem.setAttributeNode(domAttr);
-
-                domActions.appendChild(domItem);
-
-                if(jt.key()!="Battery"){
-                    QMap<QString, player>::iterator it = _playerlist.begin();
-                    for (;it != _playerlist.end(); ++it) {
-                        domItem.appendChild(domDoc.createElement(it.key()));
-                    } else {
-                        QMap<QString, item>::iterator kt = _itemlist.begin();
-                        for (;kt != _itemlist.end(); ++kt) {
-                            if(kt.value().power>=0){
-                                domItem.appendChild(domDoc.createElement(kt.key()));
-                            }
-                        }
-                    }
-                }
-            }
-            if((jt.key()=="Rotation")&&(jt.value().rotation.isEmpty())){
-
-                DomElement domItem=domDoc.createElement("use");
-
-                QDomAttr domAttr = domDoc.createAttribute("item");
-                domAttr.setValue(jt.key());
-                domItem.setAttributeNode(domAttr);
-                domActions.appendChild(domItem);
-            }
-
-        }
-        /*дневные ульты*/
-        jt = _player.itemlist.begin();
-        for (;jt != _player.itemlist.end(); ++jt) {
-
-            if(((jt.key()=="Blaster")&&(jt.value().power==0) ) || ((jt.key()=="Injector")&&(jt.value().power==0))
-                    || (jt.key()=="Battery") || (jt.key()=="Scanner")
-                    || (jt.key()=="Badge") || (jt.key()=="Notebook")) {
-
-                QDomElement domItem=domDoc.createElement("use");
-
-                QDomAttr domAttr = domDoc.createAttribute("ult");
-                domAttr.setValue(jt.key());
-                domItem.setAttributeNode(domAttr);
-
-                domActions.appendChild(domItem);
-
-                if((jt.key()!="Battery")&&(jt.key()!="Badge")){
-                    QMap<QString, player>::iterator it = _playerlist.begin();
-                    for (;it != _playerlist.end(); ++it) {
-                        domItem.appendChild(domDoc.createElement(it.key()));
-                    }
-                }
-                if(jt.key()=="Battery"){
-                    QMap<QString, item>::iterator kt = _itemlist.begin();
-                    for (;kt != _itemlist.end(); ++kt) {
-                        if(kt.value().power==-1){
-                            domItem.appendChild(domDoc.createElement(kt.key()));
-                        }
-                    }
-                }
-                if(jt.key()=="Badge" && jt.value().power==0){
-                    QMap<QString, item>::iterator kt = _itemlist.begin();
-                    for (;kt != _itemlist.end(); ++kt) {
-                        domItem.appendChild(domDoc.createElement(kt.key()));
-                    }
-                }
-            }
-        }
-    }
-
-    return domActions;
 }
 
 void xml_maker::send_to_all(ingame_event _eve,QMap <QString,player> playerlist,QMap <QString,item> itemlist){
@@ -593,6 +634,16 @@ void xml_maker::send_to_all(ingame_event _eve,QMap <QString,player> playerlist,Q
         QDomElement domEvents = doc.createElement("events");
         domChanges.appendChild(domEvents);
 
+        if(_eve.what=="clear"){
+            if(_eve.whom.name==it.value().name){
+                domStat.appendChild(makeElement(doc,"clear","","",""));
+                domStat.appendChild(makeElement(doc,"item","del","Fetus",""));
+            }
+            domEvents.appendChild(makeElement(doc,"playmess","",_eve.whom.name+" избавился от эмбриона!",""));
+        }
+        if((_eve.what=="getitem")&&(it.value().name==_eve.who.name)){
+            domStat.appendChild(makeElement(doc,"item","get",_eve.useit.power,_eve.useit.handle));
+        }
         if(_eve.what=="up"){/*если встал с ванны*/
             up.appendChild(makeElement(doc,_eve.who.name,"","",""));
             if(it.value().name==_eve.who.name){
@@ -730,6 +781,19 @@ void xml_maker::send_to_all(ingame_event _eve,QMap <QString,player> playerlist,Q
         emit sendtoclient(it.value().name,doc.toString());
     }
 }
+
+void xml_maker::send_actionlist(player* who){
+    QDomDocument doc("change");
+
+    QDomElement domChanges = doc.createElement("change");
+    doc.appendChild(domChanges);
+
+    domChanges.appendChild(doc.createElement(this->append_actions(doc,who,NULL,NULL,0)));
+
+    emit sendtoclient(who.name,doc.toString());
+}
+
+
 
 void xml_maker::slotnamecorrect(QString tempname,QString _name){
     QDomDocument doc("select");

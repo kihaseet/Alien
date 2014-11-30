@@ -6,20 +6,25 @@ class ingame_event:public QObject
 {
 Q_OBJECT
 public:
-    player who,whom;
+    QString who,whom;
     QString what;
-    item useit;
-    ingame_event(player wh,player whm,QString wht,item it);
+    QString useit;
+    QList <QString> rota;
+    ingame_event(QString wh, QString whm, QString wht, QString it, QList rot);
 signals:
-    void event_useitem();
-    void event_ultitem();
-    void event_attack();
-    void event_infect();
-    void event_wait();
-    void event_up();
-    void event_down();
-    void event_vote();
+    void event_useitem(QString wh,QString whm,QString usei);
+    void event_useitemcap(QString wh,QString whm,QString usei);
+    void event_ultitem(QString wh,QString whm,QString usei);
+    void event_attack(QString wh,QString whm);
+    void event_infect(QString wh,QString whm);
+    void event_wait(QString wh);
+    void event_up(QString wh);
+    void event_down(QString wh);
+    void event_vote(QString wh,QString whm);
+    void event_unvote(QString wh);
+    void event_useitemrot(QList<QString>rota);
     void event_norecognize();
+    void event_alien(QString wh);
 public slots:
     void do_event();
 };

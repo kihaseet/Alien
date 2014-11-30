@@ -16,9 +16,7 @@ public:
     xml_msg traverseNode(const QDomNode& node, xml_msg _xml,QString mod);
     QQueue <QString> makeRotation(const QDomNode& node);
 
-    QDomElement append_actions(QDomDocument& domDoc, player _player,
-                               QMap<QString, player> _playerlist,QMap <QString,item> itemlist,
-                               int is_night);
+    QDomElement append_actions(QDomDocument &domDoc, player* player);
     QDomElement makeElement(QDomDocument& domDoc,
                              const QString& strName,
                              const QString& strAttr = QString(),
@@ -26,10 +24,11 @@ public:
     QDomElement append_events();
 
     QDomElement name_role_list(QDomDocument& domDoc,QMap <QString,player> _rolelist);
+    void send_actionlist(player* who);
 
 public slots:
     void new_analise(const QString _name, const QString input);
-    void nightmare(QQueue<ingame_event> _que,QMap <QString,player> playerlist, QMap <QString,item> itemlist);
+    void nightmare(QQueue<ingame_event *> _que, QMap <QString,player> playerlist, QMap <QString,item> itemlist);
     void end_of_day(QMap <QString,player> playerlist,QMap <QString,item> itemlist);
     void send_to_all(ingame_event _eve,QMap <QString,player> playerlist,QMap <QString,item> itemlist);
     void slotnamecorrect(QString tempname, QString _name);

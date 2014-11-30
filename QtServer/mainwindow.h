@@ -29,6 +29,7 @@ private:
 
 public slots:
     void onAddLogToGui(const QString string);
+    void newGameSessionStatus(bool check);
 };
 
 #endif // MAINWINDOW_H
