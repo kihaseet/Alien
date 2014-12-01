@@ -9,8 +9,8 @@ public:
     QString who,whom;
     QString what;
     QString useit;
-    QList <QString> rota;
-    ingame_event(QString wh, QString whm, QString wht, QString it, QList rot);
+    QQueue <QString> rota;
+    ingame_event(QString wh, QString whm, QString wht, QString it, QQueue <QString>rot);
 signals:
     void event_useitem(QString wh,QString whm,QString usei);
     void event_useitemcap(QString wh,QString whm,QString usei);

@@ -1,4 +1,5 @@
 #include "item.h"
+#include "player.h"
 
 item::item()
 {
@@ -111,7 +112,7 @@ Notebook::Notebook(){
     role="Signalmen";
 }
 
-void Notebook::use_item_day(){
+void Notebook::use_item_day(player *whom){
 
 }
 
@@ -130,15 +131,15 @@ Battery::Battery(){
     role="Engineer";
 }
 
-void Battery::use_item_day(QString forrep){
-        this->forrepower=forrep;
+void Battery::use_item_day(item* whom){
+        this->forrepower=whom->handle;
 }
 
-void Battery::use_item_night(int isday,QString forrep){
+void Battery::use_item_night(){
     this->power=2;
 }
 
-void Battery::ult_item(){
+void Battery::ult_item(item *whom){
 
 }
 
@@ -172,7 +173,7 @@ void Mop::use_item_day(){
 
 }
 
-void Mop::use_item_night(){
+void Mop::use_item_night(player* whom){
 
 }
 
@@ -189,7 +190,7 @@ void Fetus::use_item_day(){
 
 }
 
-void Fetus::use_item_night(){
+void Fetus::use_item_night(player *whom){
 
 }
 

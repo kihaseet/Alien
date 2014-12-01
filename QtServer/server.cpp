@@ -11,7 +11,7 @@ Server::Server(int nPort, QWidget* pwgt /*=0*/) : m_nNextBlockSize(0)
 
     if (!m_ptcpServer->listen(QHostAddress::Any, nPort))
     {
-        add_to_log("Server Error "+ m_ptcpServer->errorString());
+        //add_to_log("Server Error "+ m_ptcpServer->errorString());
         m_ptcpServer->close();
         return;
     }
@@ -29,15 +29,19 @@ Server::Server(int nPort, QWidget* pwgt /*=0*/) : m_nNextBlockSize(0)
             this, SLOT(on_disconnected()));
     connect(pClientSocket->_socket, SIGNAL(readyRead()),
             this, SLOT(slotReadClient()));
-    add_to_log("New connection");
+    //add_to_log("New connection");
 }
 
 void Server::on_disconnected(){
-    add_to_log("client disconnected");
+    //add_to_log("client disconnected");
 
     QTcpSocket* client = (QTcpSocket*)sender();
-    m_clients.removeOne(client);
-    client->deleteLater();
+    foreach (ClientSocket* cl, m_clients) {
+        if(cl->_socket==client){
+            m_clients.removeOne(cl);
+            client->deleteLater();
+        }
+    }
 }
 
 void Server::slotReadClient()

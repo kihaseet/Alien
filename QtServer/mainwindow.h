@@ -30,6 +30,8 @@ private:
 public slots:
     void onAddLogToGui(const QString string);
     void newGameSessionStatus(bool check);
+    void updatePlayerlist(QMap<QString,player*>playerlist);
+    void updateInventory(QListWidgetItem* ss);
 };
 
 #endif // MAINWINDOW_H

@@ -1,6 +1,6 @@
 #include "event.h"
 
-ingame_event::ingame_event(QString wh, QString whm, QString wht, QString it,QList rot)
+ingame_event::ingame_event(QString wh, QString whm, QString wht, QString it, QQueue<QString> rot)
 {
     if(wh!="")this->who=wh;
     if(whm!="")this->whom=whm;
@@ -10,44 +10,40 @@ ingame_event::ingame_event(QString wh, QString whm, QString wht, QString it,QLis
 }
 
 void ingame_event::do_event(){
-    switch (this->what){
-    case "alien":
-    {emit event_alien(this->who);break;}
 
-    case "attack":
-    {emit event_attack(this->who,this->whom);break;}
+    if(this->what=="alien")
+    {emit event_alien(this->who);}
 
-    case "useitem":
+    if(this->what=="attack")
+    {emit event_attack(this->who,this->whom);}
+
+    if(this->what=="useitem")
     {
         if(rota.isEmpty())emit event_useitem(this->who,this->whom,this->useit);
         else emit event_useitemrot(this->rota);
-        break;
     }
 
-    case "useitemCap":
-    {emit event_useitemcap(this->who,this->whom,this->useit);break;}
+    if(this->what=="useitemCap")
+    {emit event_useitemcap(this->who,this->whom,this->useit);}
 
-    case "ultitem":
-    {emit event_ultitem(this->who,this->whom,this->useit);break;}
+    if(this->what=="ultitem")
+    {emit event_ultitem(this->who,this->whom,this->useit);}
 
-    case "wait":
-    {emit event_wait(this->who);break;}
+    if(this->what=="wait")
+    {emit event_wait(this->who);}
 
-    case "up":
-    {emit event_up(this->who);break;}
+    if(this->what=="up")
+    {emit event_up(this->who);}
 
-    case "down":
-    {emit event_down(this->who);break;}
+    if(this->what=="down")
+    {emit event_down(this->who);}
 
-    case "infect":
-    {emit event_infect(this->who,this->whom);break;}
+    if(this->what=="infect")
+    {emit event_infect(this->who,this->whom);}
 
-    case "vote":
-    {emit event_vote(this->who,this->whom);break;}
+    if(this->what=="vote")
+    {emit event_vote(this->who,this->whom);}
 
-    case "unvote":
-    {emit event_unvote(this->who);break;}
-
-    default:{emit event_norecognize();}
-    }
+    if(this->what=="unvote")
+    {emit event_unvote(this->who);}
 }

@@ -8,8 +8,9 @@ class voting:public QObject
     Q_OBJECT
 public:
     QString target;
+    bool is_over;//true когда голосование уже закончилось
     // QMap <player*,QMap<player*,int>> votelist;//кто голосует
-    QMap <QString,QPair<QString,int>> votelist;
+    QMap <QString,QPair<QString,int> > votelist;
     QList<QString> electlist;//против кого голосуют
     QList<QString> winners;
 

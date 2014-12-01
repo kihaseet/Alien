@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(_serv, SIGNAL(addLogToGui(const QString,const QString)), _xmlmaker, SLOT(new_analise(const QString,const QString)));
 
     connect(_xmlmaker,SIGNAL(newname(QString,QString)),_game,SLOT(register_new_player(QString,QString)));
-    connect(_xmlmaker,SIGNAL(registerRolebyPlayer(QString,QString)),_game,SLOT(registerRolebyPlayer(QString,QString));
+    connect(_xmlmaker,SIGNAL(registerRolebyPlayer(QString,QString)),_game,SLOT(registerRolebyPlayer(QString,QString)));
     connect(_xmlmaker,SIGNAL(namecorrect(QString,QString)),_serv,SLOT(verifyClientName(QString,QString)));
     connect(_xmlmaker,SIGNAL(noVerifyClientName(QString)),_serv,SLOT(noVerifyClientName(QString)));
     connect(_xmlmaker,SIGNAL(sendtoclient(QString,QString)),_serv,SLOT(slotsendToClient(QString,QString)));
@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
             _xmlmaker,SLOT(nightmare(QQueue<ingame_event*>,QMap<QString,player>,QMap<QString,item>)));
 
 
-
+    connect(ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(updateInventory(QListWidgetItem*)));
 
 }
 
@@ -49,8 +49,27 @@ void MainWindow::onAddLogToGui(const QString string)
     ui->textBrowser->append(QTime::currentTime().toString()+" "+string);
 }
 
+void MainWindow::updateInventory(QListWidgetItem* ss){
+    ui->textBrowser_2->clear();
+    ui->textBrowser_2->append(_game->itemlist.value(ss->text())->name);
+    ui->textBrowser_2->append(_game->itemlist.value(ss->text())->note);
+}
+
+void MainWindow::updatePlayerlist(QMap<QString,player*>playerlist){
+    QStringList play;
+    foreach (player* var, playerlist.values()) {
+        QString s;
+        foreach (QString v, var->rolelist) {
+            s.append("["+v+"]");
+        }
+        play.append(s+var->name);
+    }
+    ui->listWidget->clear();
+    ui->listWidget->addItems(play);
+}
+
 void MainWindow::newGameSessionStatus(bool check){
-    if(check)
-        ui->action_3->setEnabled();
-    else ui->action_3->setDisabled();
+    if(check){
+        ui->action_3->setEnabled(true);}
+    else {ui->action_3->setDisabled(true);}
 }

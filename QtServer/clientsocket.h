@@ -9,7 +9,7 @@ class ClientSocket
 public:
     QTcpSocket* _socket;
     QString _name;
-    ClientSocket(QTcpSocket* socket,QString name = QString());
+    ClientSocket(QTcpSocket* socket,QString name);
 };
 
 #endif // CLIENTSOCKET_H

@@ -4,6 +4,9 @@
 #include "player.h"
 #include "voting.h"
 #include "event.h"
+class ingame_event;
+
+
 
 class game:public QObject
 {
@@ -20,16 +23,17 @@ public:
     QMap <QString,player*> playerlist;//имя-игрок!!!
     QMap <QString,item*> itemlist;//название-указатель
     QList <QString> brokeitemlist;
-    QQueue <voting> votingque;//очередь дневных голосований
+    QQueue <voting*> votingque;//очередь дневных голосований
     QQueue <QString> nightrotation; //очередь ночных дежурств
     QMultiMap <QString,player*> rolelist;//роль-игроки
-    QList <player*> passengerlist;//список игроков без роли
+    QList <QString> passengerlist;//список игроков без роли
 
 
+    void sortNightActions();
     void StartRandomEvasion();
     bool makeNightActoins();
     void player_death(player *dead);
-    bool check_for_role(QString role);
+    void check_for_role(QString role);
     void day_end_curr_voting(QString winner);
     void make_actionlist(player* who);
 //обязательно понадобится проверка на изменение количества игроков во время голосования (убийство, дисконнект)
@@ -38,13 +42,13 @@ public:
 signals:
     void startnewsessionenable(bool check);
     void startgame();
-    void startday(QQueue <ingame_event*> _nightqu, QMap <QString,player> playerlis,QMap <QString,item> itemlis);
+    void startday();
     void startnight();
     void namecorrect(QString name, QString tempname);
     void nonamecorrect(QString name);
     void rolecorrect(QString name);
     void norolecorrect(QString name);
-    void sendrolelist2all(QMap <QString,player> playerlist,QMultiMap <QString,player>rolelist);
+    void sendrolelist2all(QMap <QString,player*> playerlist,QMultiMap <QString,player*>rolelist);
     void game_over();
     void send_actionlist(player* who);
     void send_changes(player* who);
@@ -64,9 +68,9 @@ public slots:
     void add_role(player *whom, QString what);
     void delete_role(player *whom, QString what);
     void slot_use_item(QString who, QString whom, QString useit);
-    void slot_ult_item();
-    void add_item();
-    void delete_item();
+    void slot_ult_item(QString who,QString whom,QString useit);
+    void add_item(){}
+    void delete_item(){}
     void start();
     void day();
     void day_next_voting();
@@ -74,7 +78,7 @@ public slots:
     void day_cap_curr_voting(QString who,QString win,QString useit);
     void night_start();
     bool night();
-    void make_events(QString who,QString whm,QString what,QString how,QQueue<QString> rota);
+    void make_events(QString who, QString whom, QString what, QString how, QQueue<QString> rota);
     void slot_use_item_cap(QString who, QString whom, QString useit);
     void day_canseled_voting();
     void slot_game_over();

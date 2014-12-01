@@ -5,13 +5,20 @@ voting::voting(QList<QString> mapwho, QList<QString> mapwhom, QString tar)
 {
     target=tar;
     electlist.append(mapwhom);
+    is_over=false;
 
-    QListIterator<QString>it(mapwho);
-    while (it.hasNext()){
+    //    QListIterator<QString>it(mapwho);
+    //    while (it.hasNext()){
+    //        QPair <QString,int> tmp;
+    //        tmp.first=it.next();
+    //        tmp.second=0;
+    //        votelist.insert(it.value(),tmp);
+    //    }
+    foreach (QString var, mapwho) {
         QPair <QString,int> tmp;
-        tmp.first=it.next();
+        tmp.first=var;
         tmp.second=0;
-        votelist.insert(it.value(),tmp);
+        votelist.insert(var,tmp);
     }
 }
 
@@ -19,8 +26,10 @@ voting::voting(QList<QString> mapwho, QList<QString> mapwhom, QString tar)
 void voting::on_voting(QString who, QString whom){
     if(electlist.contains(whom) && votelist.contains(who)){
         if(votelist.value(who).second==0){
-            votelist.value(who).first=whom;
-            votelist.value(who).second=1;
+            QPair <QString,int> tmp;
+            tmp.first=whom;
+            tmp.second=1;
+            votelist.insert(who,tmp);
         }
         //тут будет отправка всем сообщения об изменении голоса
     }
@@ -32,17 +41,19 @@ void voting::on_voting(QString who, QString whom){
 
 void voting::off_voting(QString who){
     if(votelist.contains(who) && votelist.value(who).second==1){
-        votelist.value(who).second=0;
+        QPair <QString,int> tmp;
+        tmp.first=votelist.value(who).first;
+        tmp.second=0;
+        votelist.insert(who,tmp);
     }
     //тут будет отправка сообщения всем о снятии голоса
 }
 
 bool voting::is_complite(){
-    QMapIterator<player,QPair>it(votelist);
-    while (it.hasNext()){
-        if(it.next().value().second!=1){
+    QPair <QString,int> tmp;
+    foreach (tmp, votelist.values()) {
+        if(tmp.second!=1)
             return false;
-        }
     }
     return true;
 }
@@ -52,26 +63,28 @@ void voting::calc_votes(){
     foreach (QString var, electlist) {
         calc.insert(var,0);
     }
-    foreach (QPair <QString,int> tmp, votelist.values()) {
+    QPair <QString,int> tmp;
+    foreach (tmp, votelist.values()) {
         if(electlist.contains(tmp.first)){
             calc.insert(tmp.first,calc.value(tmp.first)+1);
         }
     }
-    QList<QPair<QString,int>> result;
+    QList<QPair<QString,int> > result;
 
     foreach (QString v, calc.keys()) {
         result.append(qMakePair(v,calc.value(v)));
     }
-    qSort(result.begin(),result.end(),QPairSecondComparer);
+    qSort(result.begin(),result.end(),QPairSecondComparer());
 
-    foreach (QPair<QString,int> v1, result) {
+    QPair<QString,int> v1;
+    foreach (v1, result) {
         if(v1.second<result.first().second)
             result.removeOne(v1);
     }
-
-        foreach (QPair<QString,int> var, result) {
-            winners.append(var.first);
-        };
+    QPair<QString,int> var;
+    foreach (var, result) {
+        winners.append(var.first);
+    };
 }
 
 void voting::use_notebook(QString who,QString whom,QString useit){
