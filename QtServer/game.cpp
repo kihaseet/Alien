@@ -33,15 +33,15 @@ game::game()
     _nightque.clear();
     currentday=0;
     //daytime=true;
-    player* defolt;
-    defolt->name="";
-    rolelist.insert("Captain",defolt);
-    rolelist.insert("Doctor",defolt);
-    rolelist.insert("Gunmen",defolt);
-    rolelist.insert("Assistant",defolt);
-    rolelist.insert("Engineer",defolt);
-    rolelist.insert("Scientist",defolt);
-    rolelist.insert("Signalmen",defolt);
+    player* defolt = new player("");
+
+    unclame_rolelist.append("Captain");
+    unclame_rolelist.append("Doctor");
+    unclame_rolelist.append("Gunmen");
+    unclame_rolelist.append("Assistant");
+    unclame_rolelist.append("Engineer");
+    unclame_rolelist.append("Scientist");
+    unclame_rolelist.append("Signalmen");
     
     connect(this,SIGNAL(startday()),SLOT(day()));
     connect(this,SIGNAL(startnight()),SLOT(night_start()));
@@ -551,52 +551,33 @@ void game::register_new_player(QString tempname,QString name){
         player* noob = new player(name);
         playerlist.insert(name,noob);
         emit namecorrect(tempname,name);
-        emit sendrolelist2all(this->playerlist,this->rolelist);
-    }else
+        emit sendrolelist2all(this->playerlist,this->unclame_rolelist);//тупая структура, подумать о замене.
+    }else//подумал, возможно замена не нужна
         emit nonamecorrect(tempname);
 }
 
 void game::registerRolebyPlayer(QString _name, QString role){
     if(role!="Passenger"){
-        bool inc=false;
-        //QMultiMap<QString, player*>::iterator jt = rolelist.begin();
-        foreach (player* jt, rolelist.values()) {
-
-
-       // for (;jt != rolelist.end(); ++jt){
-            if(jt->name==""){
-                inc=true;
-                if(rolelist.key(jt)==role){
-                    jt=playerlist.value(_name);
-                    playerlist.value(_name)->rolelist.append(role);
-                    emit rolecorrect(_name);
-                }
-            }
-            if((jt->name!="")&&(rolelist.key(jt)==role)){
-                emit norolecorrect(_name);
-            }
-        }
-        if((inc==false)&&(rolelist.size()==7)){
-            player* defolt;
-            defolt->name="";
-            rolelist.insert("Dep_Doctor",defolt);
-            rolelist.insert("Dep_Gunmen",defolt);
-            rolelist.insert("Dep_Engineer",defolt);
-            rolelist.insert("Dep_Scientist",defolt);
-            rolelist.insert("Dep_Signalmen",defolt);
-            emit startnewsessionenable(true);
-        }
-        if((inc==false)&&(rolelist.size()==12)){
-            rolelist.insert("Passenger",NULL);
+        if(unclame_rolelist.contains(role)){
+            unclame_rolelist.removeOne(role);
+            rolelist.insertMulti(role,playerlist.value(_name));
+            playerlist.value(_name)->rolelist.append(role);
+            emit rolecorrect(_name);
+        }else norolecorrect(_name);
+        if(unclame_rolelist.count()==0){
+            unclame_rolelist.append("Dep_Doctor");
+            unclame_rolelist.append("Dep_Gunmen");
+            unclame_rolelist.append("Dep_Engineer");
+            unclame_rolelist.append("Dep_Scientist");
+            unclame_rolelist.append("Dep_Signalmen");
+            emit startnewsessionenable();
         }
     }else{
         passengerlist.append(_name);
         playerlist.value(_name)->rolelist.append(role);
         emit rolecorrect(_name);
-    }
-    
-    emit sendrolelist2all(playerlist,rolelist);
-    
+    } 
+    emit sendrolelist2all(playerlist,unclame_rolelist);
 }
 
 void game::player_death(player* dead){

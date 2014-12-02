@@ -34,7 +34,7 @@ public:
     QDomElement append_events(QDomDocument &domDoc, QMap <QString,player*> playerlist);
     QDomElement append_stats(QDomDocument &domDoc, player* player);
 
-    QDomElement name_role_list(QDomDocument& domDoc,QMap <QString,player> _rolelist);
+    QDomElement name_role_list(QDomDocument& domDoc,QMap <QString,player*> playerlist,QList<QString>_rolelist);
     void send_actionlist(player* who);
     void send_stat(player* who);
 
@@ -48,7 +48,7 @@ public slots:
     void nonamecorrect(QString tempname);
     void rolecorrect(QString _name);
     void norolecorrect(QString _name);
-    void updaterolelist(QMap<QString, player> playerlist, QMap<QString,player>_rolelist);
+    void updaterolelist(QMap<QString, player *> playerlist, QList<QString> _rolelist);
 
 signals:
     void xml_create(QString who,QString what,QString whom,QString how,QQueue<QString>rota);

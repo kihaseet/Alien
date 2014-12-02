@@ -11,7 +11,7 @@ Server::Server(int nPort, QWidget* pwgt /*=0*/) : m_nNextBlockSize(0)
 
     if (!m_ptcpServer->listen(QHostAddress::Any, nPort))
     {
-        //add_to_log("Server Error "+ m_ptcpServer->errorString());
+        add_to_log("[Server] ","Server Error "+ m_ptcpServer->errorString());
         m_ptcpServer->close();
         return;
     }
@@ -29,11 +29,11 @@ Server::Server(int nPort, QWidget* pwgt /*=0*/) : m_nNextBlockSize(0)
             this, SLOT(on_disconnected()));
     connect(pClientSocket->_socket, SIGNAL(readyRead()),
             this, SLOT(slotReadClient()));
-    //add_to_log("New connection");
+    add_to_log("[Server] ","New connection");
 }
 
 void Server::on_disconnected(){
-    //add_to_log("client disconnected");
+    add_to_log("[Server] ","client disconnected");
 
     QTcpSocket* client = (QTcpSocket*)sender();
     foreach (ClientSocket* cl, m_clients) {
@@ -62,13 +62,18 @@ void Server::slotReadClient()
         QString str;
         in >> str;
 
+        //add_to_log("[Server] ",str);
         foreach (ClientSocket* client, m_clients) {
             if (client->_socket==pClientSocket){
                 if (client->_name==""){
                     client->_name=str;
-                    add_to_log(str,str);
+                    //add_to_log(str,str);
+                    //add_to_log("[Server] ","new message!");
+                    send_to_analise(str,str);
                 } else{
-                    add_to_log(client->_name,str);
+                    //add_to_log(client->_name,str);
+                    add_to_log(client->_name,"new message!");
+                    send_to_analise(client->_name,str);
                 }
             }
         }
@@ -82,6 +87,7 @@ void Server::slotReadClient()
 
 void Server::sendToClient(QTcpSocket* pSocket, const QString& str)
 {
+    qDebug() << "[Server]"<<str;
     QByteArray arrBlock;
     QDataStream out(&arrBlock, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
@@ -120,4 +126,11 @@ void Server::slotsendToClient(QString _name,QString msg)
 
 void Server::add_to_log(QString _name,QString msg){
     emit addLogToGui(_name,msg);
+
+
+}
+
+void Server::send_to_analise(QString _name,QString msg){
+    emit sendToAnalise(_name,msg);
+    slotsendToClient(_name,msg);
 }

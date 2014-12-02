@@ -28,8 +28,8 @@ private:
     game* _game;
 
 public slots:
-    void onAddLogToGui(const QString string);
-    void newGameSessionStatus(bool check);
+    void onAddLogToGui(QString name, QString string);
+    void newGameSessionStatus();
     void updatePlayerlist(QMap<QString,player*>playerlist);
     void updateInventory(QListWidgetItem* ss);
 };

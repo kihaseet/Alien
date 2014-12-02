@@ -12,7 +12,7 @@ void xml_maker::new_analise(const QString _name,const QString input){
     if(input!="New connection") {
         QDomDocument domDoc;
         xml_msg _xml;
-
+        qDebug() <<"[XMLmaker:input]" <<input;
         if(domDoc.setContent(input)) {
             QDomElement domElement= domDoc.documentElement();
 
@@ -24,7 +24,8 @@ void xml_maker::new_analise(const QString _name,const QString input){
         if(_xml.what=="regrole"){
             emit registerRolebyPlayer(_name,_xml.whom);
         }
-        qDebug()  << _xml.what << _xml.whom << _xml.how << _xml.rotation;
+
+        qDebug()  <<"[XMLmaker:to game]"<< _xml.what << _xml.whom << _xml.how << _xml.rotation;
     }
 }
 
@@ -37,7 +38,7 @@ xml_msg xml_maker::traverseNode(const QDomNode& node,xml_msg _xml, QString mod)
         if(domNode.isElement()) {
             QDomElement domElement = domNode.toElement();
             if(!domElement.isNull()) {
-                //qDebug()  << mod;
+                qDebug()  << mod;
                 if (mod=="selecting"){
 
                     if((domElement.tagName() == "regname") || (domElement.tagName() == "regrole" )) {
@@ -729,30 +730,33 @@ void xml_maker::norolecorrect(QString _name){
 }
 
 
-void xml_maker::updaterolelist(QMap <QString,player> playerlist,QMap<QString,player>_rolelist){
-    QMap<QString, player>::iterator it = playerlist.begin();
-    for (;it != playerlist.end(); ++it){
+void xml_maker::updaterolelist(QMap <QString,player*> playerlist,QList<QString>_rolelist){
+//    QMap<QString, player>::iterator it = playerlist.begin();
+//    for (;it != playerlist.end(); ++it){
+    foreach (player* it, playerlist.values()) {
         QDomDocument doc("select");
-
         QDomElement domElement = doc.createElement("select");
         doc.appendChild(domElement);
-        domElement.appendChild(name_role_list(doc,_rolelist));
-
-        emit sendtoclient(it.value().name,doc.toString());
+        domElement.appendChild(name_role_list(doc,playerlist,_rolelist));
+        emit sendtoclient(it->name,doc.toString());
     }
 }
 
 
 
 
-QDomElement xml_maker::name_role_list(QDomDocument& domDoc,QMap <QString,player> _rolelist){
+QDomElement xml_maker::name_role_list(QDomDocument& domDoc,QMap <QString,player*> playerlist,QList<QString>_rolelist){
     QDomElement domElement=domDoc.createElement("list");
-    QMap<QString, player>::iterator it = _rolelist.begin();
-    for (;it != _rolelist.end(); ++it) {
+    foreach (player* it, playerlist.values()) {
         QString _name;
-        if(it.value().name!="") _name=it.value().name;
-        else _name="";
-        domElement.appendChild(makeElement(domDoc,it.key(),"",_name,""));
+        if(it->rolelist.isEmpty()){
+            domElement.appendChild(makeElement(domDoc,"name","is","",it->name));
+        }else{
+            domElement.appendChild(makeElement(domDoc,"name","is",it->rolelist.first(),it->name));
+        }
+    }
+    foreach (QString var, _rolelist) {
+        domElement.appendChild(makeElement(domDoc,var,"","",""));
     }
     return domElement;
 }

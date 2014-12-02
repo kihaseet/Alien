@@ -24,10 +24,12 @@ private:
 public:
     Server(int nPort, QWidget* pwgt);
     void add_to_log(QString _name, QString msg);
+    void send_to_analise(QString _name,QString msg);
 
 
 signals:
     void addLogToGui(QString n, QString s);
+    void sendToAnalise(QString n, QString msg);
 
 public slots:
     virtual void slotNewConnection();

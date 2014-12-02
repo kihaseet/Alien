@@ -27,7 +27,7 @@ public:
     QQueue <QString> nightrotation; //очередь ночных дежурств
     QMultiMap <QString,player*> rolelist;//роль-игроки
     QList <QString> passengerlist;//список игроков без роли
-
+    QList <QString> unclame_rolelist;
 
     void sortNightActions();
     void StartRandomEvasion();
@@ -40,7 +40,7 @@ public:
     //и собственно динамическое изменение голосов
 
 signals:
-    void startnewsessionenable(bool check);
+    void startnewsessionenable();
     void startgame();
     void startday();
     void startnight();
@@ -48,7 +48,7 @@ signals:
     void nonamecorrect(QString name);
     void rolecorrect(QString name);
     void norolecorrect(QString name);
-    void sendrolelist2all(QMap <QString,player*> playerlist,QMultiMap <QString,player*>rolelist);
+    void sendrolelist2all(QMap <QString,player*> playerlist,QList <QString>rolelist);
     void game_over();
     void send_actionlist(player* who);
     void send_changes(player* who);
