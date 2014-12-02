@@ -50,8 +50,9 @@ game::game()
 }
 
 void game::start(){
-    StartRandomEvasion();
-    //votingque.enqueue(new voting(playerlist,playerlist.values(),"Alien"));
+    emit startnewsessionenable(false);
+
+    _event=new ingame_event("","","","");
     connect(_event,SIGNAL(event_attack(QString,QString)),this,SLOT(slot_attack(QString,QString)));
     connect(_event,SIGNAL(event_down(QString)),this,SLOT(slot_down(QString)));
     connect(_event,SIGNAL(event_infect(QString,QString)),this,SLOT(slot_infect(QString,QString)));
@@ -61,9 +62,60 @@ void game::start(){
     connect(_event,SIGNAL(event_useitemcap(QString,QString,QString)),this,SLOT(slot_use_item_cap(QString,QString,QString)));
     connect(_event,SIGNAL(event_wait(QString)),this,SLOT(slot_wait(QString)));
     connect(_event,SIGNAL(event_alien(QString)),this,SLOT(slot_alien(QString)));
-
+    connect(_event,SIGNAL(event_getitem(QString,QString,QString)),this,SLOT(slot_getitem(QString,QString,QString)));
+    StartRandomEvasion();
+    unclame_rolelist.clear();
+    getItemByRoleAll();
     emit startday();
 }
+
+void game::getItemByRoleAll(){
+    foreach (player* var, playerlist) {
+        if(var->rolelist.contains("Captain")){
+            item* bb=new Badge();
+            bb->power=0;
+            var->itemlist.insert("Badge",bb);
+            itemlist.insert("Badge",bb);
+        }
+        if(var->rolelist.contains("Doctor")){
+            item* bb=new Injector();
+            bb->power=0;
+            var->itemlist.insert("Injector",bb);
+            itemlist.insert("Injector",bb);
+        }
+        if(var->rolelist.contains("Gunmen")){
+            item* bb=new Blaster();
+            bb->power=0;
+            var->itemlist.insert("Blaster",bb);
+            itemlist.insert("Blaster",bb);
+        }
+        if(var->rolelist.contains("Assistant")){
+            item* bb=new Rotation();
+            bb->power=0;
+            var->itemlist.insert("Rotation",bb);
+            itemlist.insert("Rotation",bb);
+        }
+        if(var->rolelist.contains("Engineer")){
+            item* bb=new Battery();
+            bb->power=1;
+            var->itemlist.insert("Battery",bb);
+            itemlist.insert("Battery",bb);
+        }
+        if(var->rolelist.contains("Scientist")){
+            item* bb=new Scanner();
+            bb->power=0;
+            var->itemlist.insert("Scanner",bb);
+            itemlist.insert("Scanner",bb);
+        }
+        if(var->rolelist.contains("Signalmen")){
+            item* bb=new Notebook();
+            bb->power=0;
+            var->itemlist.insert("Notebook",bb);
+            itemlist.insert("Notebook",bb);
+        }
+    }
+}
+
 
 void game::make_actionlist(player* who){
     who->actionlist.clear();
@@ -191,6 +243,7 @@ void game::make_actionlist(player* who){
         if(who->waiting==false)
             who->actionlist.append(qMakePair(QString("wait"),tmp));
     }
+    emit send_actionlist(who);
 }
 
 
@@ -198,7 +251,7 @@ void game::day(){
     if(makeNightActoins()){
         daytime=true;
         currentday++;
-        _currvoting->is_over=true;
+        // _currvoting->is_over=true;
 
         if (!votingque.isEmpty()){
             day_next_voting();
@@ -221,6 +274,9 @@ void game::day_next_voting(){
 
     connect (_currvoting,SIGNAL(voting_over(QList<QString>)),this,SLOT(day_resolve_curr_voting(QList<QString>)));
     connect (_currvoting,SIGNAL(voting_canseled()),this,SLOT(day_canseled_voting()));
+    foreach (player* var, playerlist.values()) {
+        make_actionlist(var);
+    }
 
 }
 
@@ -257,6 +313,9 @@ void game::day_end_curr_voting(QString winner){
             add_role(win,_currvoting->target);
         }
     }
+    foreach (player* var, playerlist.values()) {
+        make_actionlist(var);
+    }
     _currvoting->is_over=true;
     if(!votingque.isEmpty()){
         day_next_voting();
@@ -276,6 +335,10 @@ void game::day_resolve_curr_voting(QList<QString> win){
     if(win.count()>1){
         //тут будет предложение капитану определить итог голосования лично
         hardresolve=true;
+
+    }
+    foreach (player* var, playerlist.values()) {
+        make_actionlist(var);
     }
 
 }
@@ -283,6 +346,9 @@ void game::day_resolve_curr_voting(QList<QString> win){
 
 void game::day_canseled_voting(){
     //тут будет сообщение игрокам об отмене голосования
+    foreach (player* var, playerlist.values()) {
+        make_actionlist(var);
+    }
     if(!votingque.isEmpty()){
         day_next_voting();
     }
@@ -304,6 +370,7 @@ void game::slot_game_over(){
 
 bool game::night(){
     foreach (player* v, playerlist.values()){
+         make_actionlist(v);
         if(v->waiting==false){
             break;
             return false;
@@ -318,131 +385,167 @@ void game::night_start(){
         v->waiting=false;
         v->attack_thisnight=0;
         v->use_night_item=0;
+        make_actionlist(v);
     }
 }
 
 void game::StartRandomEvasion(){
-    int sizeoflist=playerlist.size();
-    int a1=rand()%(sizeoflist)+1;//первый чужой
+    QTime midnight(0,0,0);
+    qsrand(midnight.secsTo(QTime::currentTime()));
+    int sizeoflist=playerlist.count();
+    int a1=qrand()%(sizeoflist);//первый чужой
     int a2=0;
     int a3;//первый зараженный
     int a4;//первый раненый
     player* first;
-    do{
-        a3=rand()%(sizeoflist)+1;
-        a4=rand()%(sizeoflist)+1;
+    while(true){
+        a3=qrand()%(sizeoflist);
+        a4=qrand()%(sizeoflist);
+        if(a1!=a3 && a1!=a4)break;
     }
-    while(a3==a1);
-    
+
     foreach (player* var, playerlist.values()) {
         if(a2==a4){
             var->HP=1;
-            first=var;
+            //first=var;
+        }
+        if(a2==a3){
+            //var->status=1;
+            //item* fet=new Fetus();
+            //fet->power=2;
+            //var->itemlist.insert("Fetus",fet);
+            // ingame_event* _eve1=new ingame_event(var->name,"2","getitem","Fetus");
+            //_nightque.enqueue(_eve1);
+            ingame_event* _eve=new ingame_event(var->name,var->name,"infect","");
+            _nightque.enqueue(_eve);
+        }
+        if(a2==a1){
+            //            var->status=2;
+            //            var->invasionday=0;
+            //            var->HP=5;
+            //            item* fet=new Fetus();
+            //            fet->power=2;
+            //            var->itemlist.insert("Fetus",fet);
+            // ingame_event* _eve1=new ingame_event(var->name,"2","getitem","Fetus");
+            //_nightque.enqueue(_eve1);
+            ingame_event* _eve=new ingame_event(var->name,var->name,"alien","");
+            _nightque.enqueue(_eve);
         }
         a2++;
     }
-    //    QMap<QString, player>::const_iterator i;
-    //    for (i = playerlist.constBegin(); i != playerlist.constEnd(); ++i){
-    //        if(a2==a4){
-    //            i.value().HP=1;
-    //            first=i.value();
+
+
+    //for (i = playerlist.constBegin(); i != playerlist.constEnd(); ++i){
+    //    foreach (player* i, playerlist.values()) {
+    //        if (a2==a1){
+    //            i->status=2;
+    //            i->invasionday=0;
+    //            i->HP=5;
+
+    //            item* fet=new Fetus();
+    //            fet->power=2;
+    //            i->itemlist.insert("Fetus",fet);
+    //            ingame_event* _eve1=new ingame_event(i->name,"","getitem",fet->handle,tmp);
+    //            _nightque.enqueue(_eve1);
+
+    //            ingame_event* _eve=new ingame_event("",i->name,"alien","",tmp);
+    //            _nightque.enqueue(_eve);
+
+    //        }
+    //        if(a2==a3){
+    //            i->status=1;
+
     //        }
     //        a2++;
     //    }
-    a2=0;
-    QQueue<QString>tmp;
-    //for (i = playerlist.constBegin(); i != playerlist.constEnd(); ++i){
-    foreach (player* i, playerlist.values()) {
-        if (a2==a1){
-            i->status=2;
-            i->invasionday=0;
-            i->HP=5;
-
-            item* fet=new Fetus();
-            fet->power=2;
-            i->itemlist.insert("Fetus",fet);
-            ingame_event* _eve1=new ingame_event(i->name,"","getitem",fet->handle,tmp);
-            _nightque.enqueue(_eve1);
-            
-            ingame_event* _eve=new ingame_event("",i->name,"alien","",tmp);
-            _nightque.enqueue(_eve);
-            
-        }
-        if(a2==a3){
-            i->status=1;
-            
-            item* fet=new Fetus();
-            fet->power=2;
-            i->itemlist.insert("Fetus",fet);
-            ingame_event* _eve1=new ingame_event(i->name,"","getitem",fet->handle,tmp);
-            _nightque.enqueue(_eve1);
-            
-            ingame_event* _eve2=new ingame_event("",i->name,"infect","",tmp);
-            _nightque.enqueue(_eve2);
-        }
-        a2++;
-    }
 }
 
 void game::slot_attack(QString who, QString whom){
     //если надо, добавить проверку на наличие
-    player* _who = playerlist.value(who);
-    player* _whom = playerlist.value(whom);
-    if(_who->HP<5) _who->HP+1;
-    _whom->HP=_whom->HP-2;
-    _who->success_attack=_who->success_attack+1;
-    if(_who->success_attack==2){
-        if(!_who->itemlist.contains("Fetus")){
-            item* fet=new Fetus();
-            fet->power=0;
-            _who->itemlist.insert("Fetus",fet);
+    //player* _who = playerlist.value(who);
+    //player* _whom = playerlist.value(whom);
+    if(playerlist.value(who)->HP<5) playerlist.value(who)->HP+1;
+    playerlist.value(whom)->HP=playerlist.value(whom)->HP-2;
+    playerlist.value(who)->success_attack=playerlist.value(who)->success_attack+1;
+    if(playerlist.value(who)->success_attack==2){
+        // if(!_who->itemlist.contains("Fetus")){
+        if(playerlist.value(who)->invasion=-1){
+            //            item* fet=new Fetus();
+            //            fet->power=0;
+            //            _who->itemlist.insert("Fetus",fet);
+            playerlist.value(who)->invasion=0;
         }
-        _who->success_attack=0;
+        playerlist.value(who)->success_attack=0;
     }
+     make_actionlist(playerlist.value(who));
 }
 
 void game::slot_infect(QString who, QString whom){
-    player* _who=playerlist.value(who);
-    player* _whom=playerlist.value(whom);
-    if(_who->itemlist.value("Fetus")->power==0 && _who->status==2){
-        if(_whom->status==1){
-            _whom->itemlist.value("Fetus")->power=2;
-        }
-        if(_whom->status==0){
-            item* fet=new Fetus();
-            fet->power=2;
-            _whom->itemlist.insert("Fetus",fet);
-            _whom->status=1;
-        }
-
-        if(_whom->status==2){
-            if(_whom->HP<5)_whom->HP=_whom->HP+2;
-            if(_whom->HP>5)_whom->HP=5;
-        }
-        _who->itemlist.remove("Fetus");
+    // player* _who=playerlist.value(who);
+    // player* _whom=playerlist.value(whom);
+    //if(_who->itemlist.value("Fetus")->power==0 && _who->status==2){
+    playerlist.value(who)->invasion=-1;
+    if(playerlist.value(whom)->status<2){
+        //playerlist.value(whom)->itemlist.value("Fetus")->power=2;
+        playerlist.value(whom)->status=1;
+        playerlist.value(whom)->invasion=2;
+        // }
+        //if(playerlist.value(whom)->status==0){
+        //item* fet=new Fetus();
+        //fet->power=2;
+        // playerlist.value(whom)->itemlist.insert("Fetus",fet);
+        // playerlist.value(whom)->status=1;
     }
+
+    if(playerlist.value(whom)->status==2){
+        if(playerlist.value(whom)->HP<5)playerlist.value(whom)->HP=playerlist.value(whom)->HP+2;
+        if(playerlist.value(whom)->HP>5)playerlist.value(whom)->HP=5;
+    }
+    //playerlist.value(who)->itemlist.remove("Fetus");
+    // }
+    make_actionlist(playerlist.value(who));
+}
+
+void game::slot_getitem(QString who,QString useit,QString power){
+    //player* _who=playerlist.value(who);
+    // if(itemlist.keys().contains(useit)){
+    // if(useit!="Fetus"){
+    foreach (player* var, playerlist.values()) {
+        if(var->itemlist.contains(useit)){
+            var->itemlist.remove(useit);
+        }
+    }
+    itemlist.value(useit)->power=power.toInt();
+    //}
+    playerlist.value(who)->itemlist.insert(useit,itemlist.value(useit));
+make_actionlist(playerlist.value(who));
+    // }
 }
 
 void game::slot_alien(QString who){
-    player* _who = playerlist.value(who);
-    if (_who->status==1 && _who->itemlist.value("Fetus")->power==0){
-        _who->status=2;
-        _who->HP=_who->HP+(_who->HP-1);
-        _who->success_attack=1;
-        _who->itemlist.remove("Fetus");
-    }
+    // player* _who = playerlist.value(who);
+    //if (_who->status==1 && _who->itemlist.value("Fetus")->power==0){
+    playerlist.value(who)->status=2;
+    playerlist.value(who)->HP=playerlist.value(who)->HP+(playerlist.value(who)->HP-1);
+    playerlist.value(who)->success_attack=1;
+    // _who->itemlist.remove("Fetus");
+    //  }
+    make_actionlist(playerlist.value(who));
 }
 
 void game::slot_wait(QString who){
     if(playerlist.value(who)->waiting==true)playerlist.value(who)->waiting==false;
+    make_actionlist(playerlist.value(who));
 }
 
 void game::slot_up(QString who){
     playerlist.value(who)->healthy=true;
+    make_actionlist(playerlist.value(who));
 }
 
 void game::slot_down(QString who){
     playerlist.value(who)->healthy=false;
+    make_actionlist(playerlist.value(who));
 }
 
 
@@ -454,7 +557,7 @@ void game::add_role(player* whom,QString what){
             whom->itemlist.insert(var->handle,var);
         }
     }
-
+    make_actionlist(whom);
 }
 
 void game::delete_role(player* whom,QString what){
@@ -466,7 +569,7 @@ void game::delete_role(player* whom,QString what){
             whom->itemlist.remove(var->handle);
         }
     }
-
+make_actionlist(whom);
 }
 
 void game::slot_use_item(QString who,QString whom,QString useit){
@@ -478,6 +581,7 @@ void game::slot_use_item(QString who,QString whom,QString useit){
             _who->itemlist.value(useit)->use_item_day(whom);
         else _who->itemlist.value(useit)->use_item_night(whom);
     }//нужно обдумать использование и переписать!!
+    make_actionlist(playerlist.value(who));
 }
 
 void game::slot_use_item_cap(QString who,QString whom,QString useit){
@@ -491,6 +595,7 @@ void game::slot_use_item_cap(QString who,QString whom,QString useit){
             _who->itemlist.value("Badge")->power=-1;
         }
     }
+    make_actionlist(playerlist.value(who));
 }
 
 void game::slot_ult_item(QString who,QString whom,QString useit){
@@ -502,6 +607,7 @@ void game::slot_ult_item(QString who,QString whom,QString useit){
     if(_who->rolelist.isEmpty()){
         passengerlist.append(who);
     }
+    make_actionlist(playerlist.value(who));
 
 }
 
@@ -513,8 +619,10 @@ void game::make_events(QString who,QString whom,QString what,QString how,QQueue<
     if (this->daytime){
         _event=new_event;
         _event->do_event();
+        make_actionlist(playerlist.value(who));
     } else {
         _nightque.enqueue(new_event);
+        make_actionlist(playerlist.value(who));
         if(what=="wait"){
             playerlist.value(who)->waiting=true;
         }
@@ -528,10 +636,21 @@ void game::make_events(QString who,QString whom,QString what,QString how,QQueue<
 
 
 bool game::makeNightActoins(){//true - продолжать игру, false - game over
+
+    QQueue <ingame_event*> _night = _nightque;
     while(!_nightque.isEmpty()){
-        _event=_nightque.dequeue();
+        ingame_event* _eve=_nightque.dequeue();
+        _event->what=_eve->what;
+        _event->who=_eve->who;
+        _event->whom=_eve->whom;
+        _event->useit=_eve->useit;
+        //     _event->rota=_eve->rota;
+
+
+        //_event=_nightque.dequeue();
         _event->do_event();
     }
+    emit send_nightmare(_night,playerlist);
     if (playerlist.count()>1){
         foreach (player* v, playerlist.values()) {
             if (v->status>=1){

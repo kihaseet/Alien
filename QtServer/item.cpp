@@ -15,7 +15,7 @@ void item::counter(){
 }
 
 Badge::Badge(){
-    name="Капитанский значок";
+    name="Значок";
     handle="Badge";
     role="Captain";
 }
@@ -33,7 +33,7 @@ void Badge::ult_item(){
 }
 
 Rotation::Rotation(){
-    name="График дежурств";
+    name="График";
     handle="Rotation";
     role="Assistant";
 }
@@ -178,22 +178,5 @@ void Mop::use_item_night(player* whom){
 }
 
 void Mop::ult_item(){
-
-}
-
-Fetus::Fetus(){
-    name="Эмбрион";
-    handle="fetus";
-}
-
-void Fetus::use_item_day(){
-
-}
-
-void Fetus::use_item_night(player *whom){
-
-}
-
-void Fetus::ult_item(){
 
 }

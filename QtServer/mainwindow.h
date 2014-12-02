@@ -5,6 +5,7 @@
 #include <QtGui>
 #include <QtCore>
 
+
 #include "server.h"
 #include "xml_maker.h"
 #include "game.h"

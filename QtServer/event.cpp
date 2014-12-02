@@ -8,6 +8,13 @@ ingame_event::ingame_event(QString wh, QString whm, QString wht, QString it, QQu
     if(it!="")useit=it;
     if(!rot.isEmpty())rota=rot;
 }
+ingame_event::ingame_event(QString wh, QString whm, QString wht, QString it)
+{
+    if(wh!="")this->who=wh;
+    if(whm!="")this->whom=whm;
+    if(wht!="")this->what=wht;
+    if(it!="")useit=it;
+}
 
 void ingame_event::do_event(){
 
@@ -46,4 +53,7 @@ void ingame_event::do_event(){
 
     if(this->what=="unvote")
     {emit event_unvote(this->who);}
+
+    if(this->what=="getitem")
+    {emit event_getitem(this->who,this->useit,this->whom);}//whom - заряд
 }

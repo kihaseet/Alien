@@ -103,13 +103,4 @@ public:
     void use_item_night(player* whom);
     void ult_item();
 };
-
-class Fetus:public item
-{
-public:
-    Fetus();
-    void use_item_day();
-    void use_item_night(player* whom);
-    void ult_item();
-};
 #endif // ITEM_H

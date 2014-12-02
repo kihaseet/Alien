@@ -11,6 +11,7 @@ public:
     QString useit;
     QQueue <QString> rota;
     ingame_event(QString wh, QString whm, QString wht, QString it, QQueue <QString>rot);
+    ingame_event(QString wh, QString whm, QString wht, QString it);
 signals:
     void event_useitem(QString wh,QString whm,QString usei);
     void event_useitemcap(QString wh,QString whm,QString usei);
@@ -25,6 +26,7 @@ signals:
     void event_useitemrot(QList<QString>rota);
     void event_norecognize();
     void event_alien(QString wh);
+    void event_getitem(QString who,QString useit,QString whom);
 public slots:
     void do_event();
 };

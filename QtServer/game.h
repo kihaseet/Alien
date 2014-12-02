@@ -36,6 +36,7 @@ public:
     void check_for_role(QString role);
     void day_end_curr_voting(QString winner);
     void make_actionlist(player* who);
+    void getItemByRoleAll();
 //обязательно понадобится проверка на изменение количества игроков во время голосования (убийство, дисконнект)
     //и собственно динамическое изменение голосов
 
@@ -55,6 +56,7 @@ signals:
     void send_changes(player* who);
     void send_events(player* who);
     void send_votelist(player* who);
+    void send_nightmare(QQueue <ingame_event*>_n,QMap <QString,player*> p);
 
 
 public slots:
@@ -67,6 +69,7 @@ public slots:
     void slot_up(QString who);
     void slot_down(QString who);
     void slot_alien(QString who);
+    void slot_getitem(QString who,QString useit,QString power);
     void add_role(player *whom, QString what);
     void delete_role(player *whom, QString what);
     void slot_use_item(QString who, QString whom, QString useit);
