@@ -40,7 +40,8 @@ public:
     //и собственно динамическое изменение голосов
 
 signals:
-    void startnewsessionenable();
+    void GuiUpdatePlayerlist(QMap<QString,player*>list);
+    void startnewsessionenable(bool check);
     void startgame();
     void startday();
     void startnight();
@@ -59,6 +60,7 @@ signals:
 public slots:
     void register_new_player(QString tempname, QString name);
     void registerRolebyPlayer(QString _name, QString role);
+    void slot_disconnected(QString name);
     void slot_attack(QString who, QString whom);
     void slot_infect(QString who, QString whom);
     void slot_wait(QString who);

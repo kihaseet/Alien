@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     connect(_serv, SIGNAL(sendToAnalise(QString,QString)), _xmlmaker, SLOT(new_analise(const QString,const QString)));
     connect(_serv,SIGNAL(addLogToGui(QString,QString)),this,SLOT(onAddLogToGui(QString,QString)));
+    connect(_serv,SIGNAL(client_disconnected(QString)),_game,SLOT(slot_disconnected(QString)));
 
     connect(_xmlmaker,SIGNAL(newname(QString,QString)),_game,SLOT(register_new_player(QString,QString)));
     connect(_xmlmaker,SIGNAL(registerRolebyPlayer(QString,QString)),_game,SLOT(registerRolebyPlayer(QString,QString)));
@@ -30,11 +31,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
             _xmlmaker,SLOT(updaterolelist(QMap <QString,player*>,QList<QString>)));
     connect(_game,SIGNAL(rolecorrect(QString)),_xmlmaker,SLOT(rolecorrect(QString)));
     connect(_game,SIGNAL(norolecorrect(QString)),_xmlmaker,SLOT(norolecorrect(QString)));
-    connect(_game,SIGNAL(startnewsessionenable()),this,SLOT(newGameSessionStatus()));
+    connect(_game,SIGNAL(startnewsessionenable(bool)),this,SLOT(newGameSessionStatus(bool)));
 
     connect(_game,SIGNAL(startday(QQueue<ingame_event*>,QMap<QString,player>,QMap<QString,item>)),
             _xmlmaker,SLOT(nightmare(QQueue<ingame_event*>,QMap<QString,player>,QMap<QString,item>)));
-
+    connect(_game,SIGNAL(GuiUpdatePlayerlist(QMap<QString,player*>)),this,SLOT(updatePlayerlist(QMap<QString,player*>)));
 
    // connect(ui->listWidget,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(updateInventory(QListWidgetItem*)));
 
@@ -61,7 +62,7 @@ void MainWindow::updatePlayerlist(QMap<QString,player*>playerlist){
     foreach (player* var, playerlist.values()) {
         QString s;
         foreach (QString v, var->rolelist) {
-            s.append("["+v+"]");
+            s.append("["+v.left(3)+"]");
         }
         play.append(s+var->name);
     }
@@ -69,7 +70,7 @@ void MainWindow::updatePlayerlist(QMap<QString,player*>playerlist){
     ui->playerlist->addItems(play);
 }
 
-void MainWindow::newGameSessionStatus(){
+void MainWindow::newGameSessionStatus(bool check){
 
-        ui->action_3->setEnabled(true);
+        ui->action_3->setEnabled(check);
 }

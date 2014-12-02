@@ -548,36 +548,75 @@ bool game::makeNightActoins(){//true - продолжать игру, false - ga
 
 void game::register_new_player(QString tempname,QString name){
     if(!playerlist.contains(name)){
-        player* noob = new player(name);
-        playerlist.insert(name,noob);
+        if(playerlist.contains(tempname)){
+            playerlist.value(tempname)->name=name;
+        }else{
+            player* noob = new player(name);
+            playerlist.insert(name,noob);
+        }
         emit namecorrect(tempname,name);
         emit sendrolelist2all(this->playerlist,this->unclame_rolelist);//тупая структура, подумать о замене.
     }else//подумал, возможно замена не нужна
         emit nonamecorrect(tempname);
+    emit GuiUpdatePlayerlist(playerlist);
+}
+
+void game::slot_disconnected(QString name){
+    if(playerlist.contains(name)){
+        foreach (QString var,playerlist.value(name)->rolelist){
+            playerlist.value(name)->rolelist.removeOne(var);
+            unclame_rolelist.append(var);
+        }
+        playerlist.remove(name);
+    }
+    emit sendrolelist2all(playerlist,unclame_rolelist);
+    emit GuiUpdatePlayerlist(playerlist);
 }
 
 void game::registerRolebyPlayer(QString _name, QString role){
     if(role!="Passenger"){
-        if(unclame_rolelist.contains(role)){
+        if(playerlist.value(_name)->rolelist.isEmpty())
+        {
+            if(unclame_rolelist.contains(role)){
+                unclame_rolelist.removeOne(role);
+                rolelist.insertMulti(role,playerlist.value(_name));
+                playerlist.value(_name)->rolelist.append(role);
+                passengerlist.removeOne(_name);
+                emit rolecorrect(_name);
+            }else norolecorrect(_name);
+        }else{
             unclame_rolelist.removeOne(role);
-            rolelist.insertMulti(role,playerlist.value(_name));
+            foreach (QString var,playerlist.value(_name)->rolelist){
+                playerlist.value(_name)->rolelist.removeOne(var);
+                unclame_rolelist.append(var);
+            }
             playerlist.value(_name)->rolelist.append(role);
             emit rolecorrect(_name);
-        }else norolecorrect(_name);
+        }
+
         if(unclame_rolelist.count()==0){
             unclame_rolelist.append("Dep_Doctor");
             unclame_rolelist.append("Dep_Gunmen");
             unclame_rolelist.append("Dep_Engineer");
             unclame_rolelist.append("Dep_Scientist");
             unclame_rolelist.append("Dep_Signalmen");
-            emit startnewsessionenable();
+
         }
     }else{
         passengerlist.append(_name);
         playerlist.value(_name)->rolelist.append(role);
         emit rolecorrect(_name);
-    } 
+    }
     emit sendrolelist2all(playerlist,unclame_rolelist);
+    emit GuiUpdatePlayerlist(playerlist);
+
+    QList <QString> mainrole;//проверка на запуск новой сессии (заняты ли все основные роли)
+    mainrole <<"Captain"<<"Doctor"<<"Signalmen"<<"Gunmen"<<"Assistant"<<"Engineer"<<"Scientist";
+    bool check=true;
+    foreach (QString var, mainrole) {
+        if (unclame_rolelist.contains(var))check=false;
+    }
+    emit startnewsessionenable(check);
 }
 
 void game::player_death(player* dead){

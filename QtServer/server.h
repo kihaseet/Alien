@@ -30,6 +30,7 @@ public:
 signals:
     void addLogToGui(QString n, QString s);
     void sendToAnalise(QString n, QString msg);
+    void client_disconnected(QString n);
 
 public slots:
     virtual void slotNewConnection();

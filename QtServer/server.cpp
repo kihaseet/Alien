@@ -33,11 +33,13 @@ Server::Server(int nPort, QWidget* pwgt /*=0*/) : m_nNextBlockSize(0)
 }
 
 void Server::on_disconnected(){
-    add_to_log("[Server] ","client disconnected");
+
 
     QTcpSocket* client = (QTcpSocket*)sender();
     foreach (ClientSocket* cl, m_clients) {
         if(cl->_socket==client){
+            add_to_log(cl->_name,"client disconnected");
+            emit client_disconnected(cl->_name);
             m_clients.removeOne(cl);
             client->deleteLater();
         }
