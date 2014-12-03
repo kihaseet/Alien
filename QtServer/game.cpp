@@ -53,6 +53,7 @@ void game::start(){
     emit startnewsessionenable(false);
 
     _event=new ingame_event("","","","");
+   // _currvoting=new voting();
     connect(_event,SIGNAL(event_attack(QString,QString)),this,SLOT(slot_attack(QString,QString)));
     connect(_event,SIGNAL(event_down(QString)),this,SLOT(slot_down(QString)));
     connect(_event,SIGNAL(event_infect(QString,QString)),this,SLOT(slot_infect(QString,QString)));
@@ -271,6 +272,8 @@ void game::day_next_voting(){
 
     connect (_event,SIGNAL(event_vote(QString,QString)),_currvoting,SLOT(on_voting(QString,QString)));
     connect (_event,SIGNAL(event_unvote(QString)),_currvoting,SLOT(off_voting(QString)));
+    connect (_event,SIGNAL(event_vote(QString,QString)),this,SLOT(slot_vote(QString,QString)));
+    connect (_event,SIGNAL(event_unvote(QString)),this,SLOT(slot_unvote(QString)));
 
     connect (_currvoting,SIGNAL(voting_over(QList<QString>)),this,SLOT(day_resolve_curr_voting(QList<QString>)));
     connect (_currvoting,SIGNAL(voting_canseled()),this,SLOT(day_canseled_voting()));
@@ -533,6 +536,21 @@ void game::slot_alien(QString who){
     make_actionlist(playerlist.value(who));
 }
 
+void game::slot_vote(QString who,QString whom){
+    emit GuiUpdateVotelist(_currvoting->votelist);
+    foreach (player* var, playerlist.values()) {
+        make_actionlist(var);
+    }
+}
+void game::slot_unvote(QString who){
+    emit GuiUpdateVotelist(_currvoting->votelist);
+    foreach (player* var, playerlist.values()) {
+        make_actionlist(var);
+    }
+}
+
+
+
 void game::slot_wait(QString who){
     if(playerlist.value(who)->waiting==true)playerlist.value(who)->waiting==false;
     make_actionlist(playerlist.value(who));
@@ -612,12 +630,38 @@ void game::slot_ult_item(QString who,QString whom,QString useit){
 }
 
 
-void game::make_events(QString who,QString whom,QString what,QString how,QQueue<QString> rota){
+void game::make_events(QString who,QString what,QString whom,QString how,QQueue<QString> rota){
     //player* _who,_whom;
     //item _how;
     ingame_event* new_event=new ingame_event(who,whom,what,how,rota);
     if (this->daytime){
         _event=new_event;
+        _event->do_event();
+        make_actionlist(playerlist.value(who));
+    } else {
+        _nightque.enqueue(new_event);
+        make_actionlist(playerlist.value(who));
+        if(what=="wait"){
+            playerlist.value(who)->waiting=true;
+        }
+        if(night()==true){
+            //тут отправка сообщения об окончании ночи
+            day();
+        }
+    }
+}
+
+void game::make_events(QString who,QString what,QString whom,QString how){
+    //player* _who,_whom;
+    //item _how;
+    ingame_event* new_event=new ingame_event(who,whom,what,how);
+    if (this->daytime){
+
+        //_event=new_event;
+        _event->who=who;
+        _event->whom=whom;
+        _event->what=what;
+        _event->useit=how;
         _event->do_event();
         make_actionlist(playerlist.value(who));
     } else {

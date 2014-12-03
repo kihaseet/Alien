@@ -33,6 +33,7 @@ public slots:
     void newGameSessionStatus(bool check);
     void updatePlayerlist(QMap<QString,player*>playerlist);
     void updateInventory(QListWidgetItem* ss);
+    void UpdateVotelist();
 };
 
 #endif // MAINWINDOW_H

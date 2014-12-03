@@ -5,11 +5,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 {
     ui->setupUi(this);
 
+
     _serv=new Server(21277,this);
     _xmlmaker = new xml_maker();
     _game=new game();
 
     connect(ui->action_3,SIGNAL(triggered()),_game,SLOT(start()));
+    connect(ui->action_2,SIGNAL(triggered()),this,SLOT(UpdateVotelist()));
     connect(ui->playerlist,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(updateInventory(QListWidgetItem*)));
 
     connect(_serv, SIGNAL(sendToAnalise(QString,QString)), _xmlmaker, SLOT(new_analise(const QString,const QString)));
@@ -23,6 +25,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(_xmlmaker,SIGNAL(sendtoclient(QString,QString)),_serv,SLOT(slotsendToClient(QString,QString)));
     connect(_xmlmaker,SIGNAL(xml_create(QString,QString,QString,QString,QQueue<QString>)),
             _game,SLOT(make_events(QString,QString,QString,QString,QQueue<QString>)));
+    connect(_xmlmaker,SIGNAL(xml_create_norot(QString,QString,QString,QString)),
+            _game,SLOT(make_events(QString,QString,QString,QString)));
 
     connect(_game,SIGNAL(send_actionlist(player*)),_xmlmaker,SLOT());
     connect(_game,SIGNAL(namecorrect(QString,QString)),_xmlmaker,SLOT(slotnamecorrect(QString,QString)));
@@ -35,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     connect(_game,SIGNAL(startday()),_game,SLOT(day()));
     connect(_game,SIGNAL(GuiUpdatePlayerlist(QMap<QString,player*>)),this,SLOT(updatePlayerlist(QMap<QString,player*>)));
+    connect(_game,SIGNAL(GuiUpdateVotelist(QMap <QString,QPair<QString,int> >)),this,SLOT(UpdateVotelist(QMap <QString,QPair<QString,int> >)));
 
     connect(_game,SIGNAL(send_nightmare(QQueue<ingame_event*>,QMap<QString,player*>)),
             _xmlmaker,SLOT(nightmare(QQueue<ingame_event*>,QMap<QString,player*>)));
@@ -91,4 +96,15 @@ void MainWindow::updatePlayerlist(QMap<QString,player*>playerlist){
 void MainWindow::newGameSessionStatus(bool check){
 
         ui->action_3->setEnabled(check);
+        ui->action_2->setEnabled(!check);
+}
+
+void MainWindow::UpdateVotelist(){
+    ui->text_info->clear();
+    ui->text_log->append("Голосование:");
+    //QPair<QString,int> var;
+    foreach (QString var, _game->_currvoting->votelist.keys()) {
+        ui->text_log->append(var+": "+_game->_currvoting->votelist.value(var).first+" ("
+                              +QString::number(_game->_currvoting->votelist.value(var).second)+")");
+    }
 }

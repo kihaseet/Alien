@@ -1,9 +1,16 @@
 #include "voting.h"
 
+voting::voting(){
+    is_over=true;
+}
+
 voting::voting(QList<QString> mapwho, QList<QString> mapwhom, QString tar)
 //создает новое голосование, задавая цель, получая список всех голосующих и список против кого голосуют
 {
     target=tar;
+    electlist.clear();
+    votelist.clear();
+    winners.clear();
     electlist.append(mapwhom);
     is_over=false;
 
@@ -59,21 +66,38 @@ bool voting::is_complite(){
 }
 
 void voting::calc_votes(){
-    QMap <QString,int> calc;
+    //    QMap <QString,int> calc;
+    //    foreach (QString var, electlist) {
+    //        calc.insert(var,0);
+    //    }
+    //    QPair <QString,int> tmp;
+    //    foreach (tmp, votelist.values()) {
+    //        if(electlist.contains(tmp.first)){
+    //            calc.insert(tmp.first,calc.value(tmp.first)+1);
+    //        }
+    //  }
+    QList<QPair<QString,int> > result;
     foreach (QString var, electlist) {
-        calc.insert(var,0);
+        result.append(qMakePair(var,0));
     }
     QPair <QString,int> tmp;
     foreach (tmp, votelist.values()) {
         if(electlist.contains(tmp.first)){
-            calc.insert(tmp.first,calc.value(tmp.first)+1);
+            //calc.insert(tmp.first,calc.value(tmp.first)+1);
+            QPair <QString,int> ttmp;
+            foreach (ttmp, result) {
+                if(ttmp.first==tmp.first){
+                    result.append(qMakePair(ttmp.first,ttmp.second+1));
+                    result.removeOne(ttmp);
+
+                }
+            }
         }
     }
-    QList<QPair<QString,int> > result;
 
-    foreach (QString v, calc.keys()) {
-        result.append(qMakePair(v,calc.value(v)));
-    }
+//    foreach (QString v, calc.keys()) {
+//        result.append(qMakePair(v,calc.value(v)));
+//    }
     qSort(result.begin(),result.end(),QPairSecondComparer());
 
     QPair<QString,int> v1;

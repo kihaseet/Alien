@@ -56,12 +56,15 @@ public slots:
 
 signals:
     void xml_create(QString who,QString what,QString whom,QString how,QQueue<QString>rota);
+    void xml_create_norot(QString who,QString what,QString whom,QString how);
     void newname(QString _tempname,QString who);
     void newrole(QString who);
     void sendtoclient(QString _name,QString _xmldoc);
     void noVerifyClientName(QString tempname);
     void namecorrect(QString tempname,QString name);
     void registerRolebyPlayer(QString _name, QString role);
+    void votebyPlayer(QString _name,QString whom);
+    void unvotebyPlayer(QString _name);
 
 };
 

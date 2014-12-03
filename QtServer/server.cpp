@@ -134,5 +134,5 @@ void Server::add_to_log(QString _name,QString msg){
 
 void Server::send_to_analise(QString _name,QString msg){
     emit sendToAnalise(_name,msg);
-    slotsendToClient(_name,msg);
+   // slotsendToClient(_name,msg);
 }

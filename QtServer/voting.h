@@ -16,6 +16,7 @@ public:
 
 
     voting(QList<QString> mapwho, QList<QString> mapwhom, QString target);
+    voting();
     bool is_complite();
     void start();
     void calc_votes();
@@ -35,7 +36,7 @@ struct QPairSecondComparer
     template<typename T1, typename T2>
     bool operator()(const QPair<T1,T2> & a, const QPair<T1,T2> & b) const
     {
-        return a.second < b.second;
+        return a.second > b.second;
     }
 };
 

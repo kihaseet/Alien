@@ -42,6 +42,7 @@ public:
 
 signals:
     void GuiUpdatePlayerlist(QMap<QString,player*>list);
+    void GuiUpdateVotelist(QMap <QString,QPair<QString,int> > votelist);
     void startnewsessionenable(bool check);
     void startgame();
     void startday();
@@ -70,6 +71,8 @@ public slots:
     void slot_down(QString who);
     void slot_alien(QString who);
     void slot_getitem(QString who,QString useit,QString power);
+    void slot_vote(QString who,QString whom);
+    void slot_unvote(QString who);
     void add_role(player *whom, QString what);
     void delete_role(player *whom, QString what);
     void slot_use_item(QString who, QString whom, QString useit);
@@ -83,7 +86,8 @@ public slots:
     void day_cap_curr_voting(QString who,QString win,QString useit);
     void night_start();
     bool night();
-    void make_events(QString who, QString whom, QString what, QString how, QQueue<QString> rota);
+    void make_events(QString who, QString what, QString whom, QString how, QQueue<QString> rota);
+    void make_events(QString who, QString what, QString whom, QString how);
     void slot_use_item_cap(QString who, QString whom, QString useit);
     void day_canseled_voting();
     void slot_game_over();

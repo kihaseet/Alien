@@ -20,9 +20,14 @@ void xml_maker::new_analise(const QString _name,const QString input){
         }
         if(_xml.what=="regname"){
             emit newname(_name,_xml.whom);
-        }
-        if(_xml.what=="regrole"){
-            emit registerRolebyPlayer(_name,_xml.whom);
+        }else{
+            if(_xml.what=="regrole"){
+                emit registerRolebyPlayer(_name,_xml.whom);
+            }else{
+
+                if (!_xml.rotation.isEmpty())emit xml_create(_name,_xml.what,_xml.whom,_xml.how,_xml.rotation);
+                else xml_create_norot(_name,_xml.what,_xml.whom,_xml.how);
+            }
         }
 
         qDebug()  <<"[XMLmaker:to game]"<< _xml.what << _xml.whom << _xml.how << _xml.rotation;
@@ -51,6 +56,10 @@ xml_msg xml_maker::traverseNode(const QDomNode& node,xml_msg _xml, QString mod)
                     if(domElement.tagName() == "vote") {
                         _xml.what = domElement.tagName();
                         _xml.whom = domElement.text();
+                        //qDebug()  << domElement.tagName() << domElement.text();
+                    }
+                    if(domElement.tagName() == "unvote") {
+                        _xml.what = domElement.tagName();
                         //qDebug()  << domElement.tagName() << domElement.text();
                     }
                 }

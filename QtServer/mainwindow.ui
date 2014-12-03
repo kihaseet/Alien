@@ -69,8 +69,9 @@
      <string>Игра</string>
     </property>
     <addaction name="action"/>
-    <addaction name="separator"/>
     <addaction name="action_3"/>
+    <addaction name="separator"/>
+    <addaction name="action_2"/>
     <addaction name="separator"/>
     <addaction name="action_5"/>
    </widget>
@@ -101,6 +102,14 @@
   <action name="action_5">
    <property name="text">
     <string>Выход</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Результаты голосования</string>
    </property>
   </action>
  </widget>
