@@ -37,7 +37,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(_game,SIGNAL(norolecorrect(QString)),_xmlmaker,SLOT(norolecorrect(QString)));
     connect(_game,SIGNAL(startnewsessionenable(bool)),this,SLOT(newGameSessionStatus(bool)));
 
-    connect(_game,SIGNAL(startday()),_game,SLOT(day()));
+    //connect(_game,SIGNAL(startday()),_game,SLOT(day()));
     connect(_game,SIGNAL(GuiUpdatePlayerlist(QMap<QString,player*>)),this,SLOT(updatePlayerlist(QMap<QString,player*>)));
     connect(_game,SIGNAL(GuiUpdateVotelist(QMap <QString,QPair<QString,int> >)),this,SLOT(UpdateVotelist(QMap <QString,QPair<QString,int> >)));
 

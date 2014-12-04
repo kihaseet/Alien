@@ -1,17 +1,19 @@
 #include "voting.h"
 
 voting::voting(){
+    qDebug()<<"voting::voting()";
     is_over=true;
 }
 
 voting::voting(QList<QString> mapwho, QList<QString> mapwhom, QString tar)
 //создает новое голосование, задавая цель, получая список всех голосующих и список против кого голосуют
 {
+    qDebug()<<"voting::voting(QList<QString> mapwho, QList<QString> mapwhom, QString tar)"<<tar;
     target=tar;
     electlist.clear();
-    votelist.clear();
+    this->votelist.clear();
     winners.clear();
-    electlist.append(mapwhom);
+    this->electlist.append(mapwhom);
     is_over=false;
 
     //    QListIterator<QString>it(mapwho);
@@ -25,18 +27,19 @@ voting::voting(QList<QString> mapwho, QList<QString> mapwhom, QString tar)
         QPair <QString,int> tmp;
         tmp.first=var;
         tmp.second=0;
-        votelist.insert(var,tmp);
+        this->votelist.insert(var,tmp);
     }
 }
 
 
 void voting::on_voting(QString who, QString whom){
-    if(electlist.contains(whom) && votelist.contains(who)){
-        if(votelist.value(who).second==0){
+    qDebug()<<"void voting::on_voting(QString who, QString whom)";
+    if(electlist.contains(whom) && this->votelist.contains(who)){
+        if(this->votelist.value(who).second==0){
             QPair <QString,int> tmp;
             tmp.first=whom;
             tmp.second=1;
-            votelist.insert(who,tmp);
+            this->votelist.insert(who,tmp);
         }
         //тут будет отправка всем сообщения об изменении голоса
     }
@@ -47,6 +50,7 @@ void voting::on_voting(QString who, QString whom){
 }
 
 void voting::off_voting(QString who){
+    qDebug()<<"void voting::off_voting(QString who)";
     if(votelist.contains(who) && votelist.value(who).second==1){
         QPair <QString,int> tmp;
         tmp.first=votelist.value(who).first;
@@ -57,15 +61,17 @@ void voting::off_voting(QString who){
 }
 
 bool voting::is_complite(){
+    qDebug()<<"voting::is_complite()";
     QPair <QString,int> tmp;
-    foreach (tmp, votelist.values()) {
-        if(tmp.second!=1)
+    foreach (tmp, this->votelist.values()) {
+        if(tmp.second==0)
             return false;
     }
     return true;
 }
 
 void voting::calc_votes(){
+    qDebug()<<"voting::calc_votes()";
     //    QMap <QString,int> calc;
     //    foreach (QString var, electlist) {
     //        calc.insert(var,0);
@@ -76,6 +82,7 @@ void voting::calc_votes(){
     //            calc.insert(tmp.first,calc.value(tmp.first)+1);
     //        }
     //  }
+    winners.clear();
     QList<QPair<QString,int> > result;
     foreach (QString var, electlist) {
         result.append(qMakePair(var,0));

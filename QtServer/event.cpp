@@ -17,6 +17,7 @@ ingame_event::ingame_event(QString wh, QString whm, QString wht, QString it)
 }
 
 void ingame_event::do_event(){
+    qDebug()<<"ingame_event::do_event()"<<this->what;
 
     if(this->what=="alien")
     {emit event_alien(this->who);}

@@ -12,7 +12,7 @@ void xml_maker::new_analise(const QString _name,const QString input){
     if(input!="New connection") {
         QDomDocument domDoc;
         xml_msg _xml;
-        qDebug() <<"[XMLmaker:input]" <<input;
+        //qDebug() <<"[XMLmaker:input]" <<input;
         if(domDoc.setContent(input)) {
             QDomElement domElement= domDoc.documentElement();
 
@@ -25,12 +25,14 @@ void xml_maker::new_analise(const QString _name,const QString input){
                 emit registerRolebyPlayer(_name,_xml.whom);
             }else{
 
-                if (!_xml.rotation.isEmpty())emit xml_create(_name,_xml.what,_xml.whom,_xml.how,_xml.rotation);
-                else xml_create_norot(_name,_xml.what,_xml.whom,_xml.how);
+                if (!_xml.rotation.isEmpty())
+                    emit xml_create(_name,_xml.what,_xml.whom,_xml.how,_xml.rotation);
+                else
+                    xml_create_norot(_name,_xml.what,_xml.whom,_xml.how);
             }
         }
 
-        qDebug()  <<"[XMLmaker:to game]"<< _xml.what << _xml.whom << _xml.how << _xml.rotation;
+        //qDebug()  <<"[XMLmaker:to game]"<< _xml.what << _xml.whom << _xml.how << _xml.rotation;
     }
 }
 
@@ -43,7 +45,7 @@ xml_msg xml_maker::traverseNode(const QDomNode& node,xml_msg _xml, QString mod)
         if(domNode.isElement()) {
             QDomElement domElement = domNode.toElement();
             if(!domElement.isNull()) {
-                qDebug()  << mod;
+                //qDebug()  << mod;
                 if (mod=="selecting"){
 
                     if((domElement.tagName() == "regname") || (domElement.tagName() == "regrole" )) {

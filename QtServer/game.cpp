@@ -29,10 +29,11 @@ public:
 
 game::game()
 {
+    qDebug()<<"game::game()";
     votingque.clear();
     _nightque.clear();
     currentday=0;
-    //daytime=true;
+    daytime=true;
     player* defolt = new player("");
 
     unclame_rolelist.append("Captain");
@@ -50,10 +51,11 @@ game::game()
 }
 
 void game::start(){
+    qDebug()<<"game::start()";
     emit startnewsessionenable(false);
 
     _event=new ingame_event("","","","");
-   // _currvoting=new voting();
+    _currvoting=new voting();
     connect(_event,SIGNAL(event_attack(QString,QString)),this,SLOT(slot_attack(QString,QString)));
     connect(_event,SIGNAL(event_down(QString)),this,SLOT(slot_down(QString)));
     connect(_event,SIGNAL(event_infect(QString,QString)),this,SLOT(slot_infect(QString,QString)));
@@ -71,6 +73,7 @@ void game::start(){
 }
 
 void game::getItemByRoleAll(){
+    qDebug()<<"game::getItemByRoleAll()";
     foreach (player* var, playerlist) {
         if(var->rolelist.contains("Captain")){
             item* bb=new Badge();
@@ -119,6 +122,7 @@ void game::getItemByRoleAll(){
 
 
 void game::make_actionlist(player* who){
+    qDebug()<<"game::make_actionlist(player* who)"<<who->name;
     who->actionlist.clear();
     QList<QString> tmp;
     if(daytime){
@@ -249,6 +253,7 @@ void game::make_actionlist(player* who){
 
 
 void game::day(){
+    qDebug()<<"game::day()";
     if(makeNightActoins()){
         daytime=true;
         currentday++;
@@ -263,8 +268,15 @@ void game::day(){
 }
 
 void game::day_next_voting(){
+    qDebug()<<"game::day_next_voting()";
     hardresolve=false;
-    _currvoting = votingque.dequeue();
+    voting* new_voting = votingque.dequeue();
+    //_currvoting = votingque.dequeue();
+    _currvoting->is_over=false;
+    _currvoting->electlist=new_voting->electlist;
+    _currvoting->votelist=new_voting->votelist;
+    _currvoting->target=new_voting->target;
+
     connect (_event,SIGNAL(event_useitem(QString,QString,QString)),_currvoting,SLOT(use_notebook(QString,QString,QString)));
     connect (_event,SIGNAL(event_useitem(QString,QString,QString)),this,SLOT(day_cap_curr_voting(QString,QString,QString)));
 
@@ -272,8 +284,8 @@ void game::day_next_voting(){
 
     connect (_event,SIGNAL(event_vote(QString,QString)),_currvoting,SLOT(on_voting(QString,QString)));
     connect (_event,SIGNAL(event_unvote(QString)),_currvoting,SLOT(off_voting(QString)));
-    connect (_event,SIGNAL(event_vote(QString,QString)),this,SLOT(slot_vote(QString,QString)));
-    connect (_event,SIGNAL(event_unvote(QString)),this,SLOT(slot_unvote(QString)));
+    //connect (_event,SIGNAL(event_vote(QString,QString)),this,SLOT(slot_vote(QString,QString)));
+    //connect (_event,SIGNAL(event_unvote(QString)),this,SLOT(slot_unvote(QString)));
 
     connect (_currvoting,SIGNAL(voting_over(QList<QString>)),this,SLOT(day_resolve_curr_voting(QList<QString>)));
     connect (_currvoting,SIGNAL(voting_canseled()),this,SLOT(day_canseled_voting()));
@@ -285,12 +297,14 @@ void game::day_next_voting(){
 
 
 void game::day_cap_curr_voting(QString who,QString win,QString useit){
+    qDebug()<<"game::day_cap_curr_voting";
     if(useit=="Badge"){
         day_end_curr_voting(win);
     }
 }
 
 void game::day_end_curr_voting(QString winner){
+    qDebug()<<"game::day_end_curr_voting(QString winner)";
     //тут отправка игрокам сообщения
     if (playerlist.contains(winner)){
         player* win = playerlist.value(winner);
@@ -320,6 +334,18 @@ void game::day_end_curr_voting(QString winner){
         make_actionlist(var);
     }
     _currvoting->is_over=true;
+    disconnect (_event,SIGNAL(event_useitem(QString,QString,QString)),_currvoting,SLOT(use_notebook(QString,QString,QString)));
+    disconnect (_event,SIGNAL(event_useitem(QString,QString,QString)),this,SLOT(day_cap_curr_voting(QString,QString,QString)));
+
+    disconnect (_event,SIGNAL(event_ultitem(QString,QString,QString)),_currvoting,SLOT(ult_notebook(QString,QString,QString)));
+
+    disconnect (_event,SIGNAL(event_vote(QString,QString)),_currvoting,SLOT(on_voting(QString,QString)));
+    disconnect (_event,SIGNAL(event_unvote(QString)),_currvoting,SLOT(off_voting(QString)));
+    //connect (_event,SIGNAL(event_vote(QString,QString)),this,SLOT(slot_vote(QString,QString)));
+    //connect (_event,SIGNAL(event_unvote(QString)),this,SLOT(slot_unvote(QString)));
+
+    disconnect (_currvoting,SIGNAL(voting_over(QList<QString>)),this,SLOT(day_resolve_curr_voting(QList<QString>)));
+    disconnect (_currvoting,SIGNAL(voting_canseled()),this,SLOT(day_canseled_voting()));
     if(!votingque.isEmpty()){
         day_next_voting();
     }
@@ -331,6 +357,7 @@ void game::day_end_curr_voting(QString winner){
 
 void game::day_resolve_curr_voting(QList<QString> win){
 
+    qDebug()<<"game::day_resolve_curr_voting(QList<QString> win)";
 
     if(win.count()==1){
         day_end_curr_voting(win.first());
@@ -348,6 +375,7 @@ void game::day_resolve_curr_voting(QList<QString> win){
 
 
 void game::day_canseled_voting(){
+    qDebug()<<"game::day_canseled_voting()";
     //тут будет сообщение игрокам об отмене голосования
     foreach (player* var, playerlist.values()) {
         make_actionlist(var);
@@ -372,8 +400,9 @@ void game::slot_game_over(){
 }
 
 bool game::night(){
+    qDebug()<<"game::night()";
     foreach (player* v, playerlist.values()){
-         make_actionlist(v);
+        make_actionlist(v);
         if(v->waiting==false){
             break;
             return false;
@@ -383,6 +412,7 @@ bool game::night(){
 }
 
 void game::night_start(){
+    qDebug()<<"game::night_start()";
     daytime=false;
     foreach (player* v, playerlist.values()) {
         v->waiting=false;
@@ -393,6 +423,7 @@ void game::night_start(){
 }
 
 void game::StartRandomEvasion(){
+    qDebug()<<"game::StartRandomEvasion()";
     QTime midnight(0,0,0);
     qsrand(midnight.secsTo(QTime::currentTime()));
     int sizeoflist=playerlist.count();
@@ -480,10 +511,11 @@ void game::slot_attack(QString who, QString whom){
         }
         playerlist.value(who)->success_attack=0;
     }
-     make_actionlist(playerlist.value(who));
+    make_actionlist(playerlist.value(who));
 }
 
 void game::slot_infect(QString who, QString whom){
+    qDebug()<<"game::slot_infect(QString who, QString whom)";
     // player* _who=playerlist.value(who);
     // player* _whom=playerlist.value(whom);
     //if(_who->itemlist.value("Fetus")->power==0 && _who->status==2){
@@ -510,6 +542,7 @@ void game::slot_infect(QString who, QString whom){
 }
 
 void game::slot_getitem(QString who,QString useit,QString power){
+    qDebug()<<"game::slot_getitem(QString who,QString useit,QString power)";
     //player* _who=playerlist.value(who);
     // if(itemlist.keys().contains(useit)){
     // if(useit!="Fetus"){
@@ -521,11 +554,12 @@ void game::slot_getitem(QString who,QString useit,QString power){
     itemlist.value(useit)->power=power.toInt();
     //}
     playerlist.value(who)->itemlist.insert(useit,itemlist.value(useit));
-make_actionlist(playerlist.value(who));
+    make_actionlist(playerlist.value(who));
     // }
 }
 
 void game::slot_alien(QString who){
+    qDebug()<<"game::slot_alien(QString who)";
     // player* _who = playerlist.value(who);
     //if (_who->status==1 && _who->itemlist.value("Fetus")->power==0){
     playerlist.value(who)->status=2;
@@ -537,13 +571,15 @@ void game::slot_alien(QString who){
 }
 
 void game::slot_vote(QString who,QString whom){
-    emit GuiUpdateVotelist(_currvoting->votelist);
+    qDebug()<<"game::slot_vote(QString who,QString whom)";
+    // emit GuiUpdateVotelist(_currvoting->votelist);
     foreach (player* var, playerlist.values()) {
         make_actionlist(var);
     }
 }
 void game::slot_unvote(QString who){
-    emit GuiUpdateVotelist(_currvoting->votelist);
+    qDebug()<<"game::slot_unvote(QString who)";
+    // emit GuiUpdateVotelist(_currvoting->votelist);
     foreach (player* var, playerlist.values()) {
         make_actionlist(var);
     }
@@ -552,22 +588,26 @@ void game::slot_unvote(QString who){
 
 
 void game::slot_wait(QString who){
+    qDebug()<<"game::slot_wait(QString who)";
     if(playerlist.value(who)->waiting==true)playerlist.value(who)->waiting==false;
     make_actionlist(playerlist.value(who));
 }
 
 void game::slot_up(QString who){
+    qDebug()<<"game::slot_up(QString who)";
     playerlist.value(who)->healthy=true;
     make_actionlist(playerlist.value(who));
 }
 
 void game::slot_down(QString who){
+    qDebug()<<"game::slot_down(QString who)";
     playerlist.value(who)->healthy=false;
     make_actionlist(playerlist.value(who));
 }
 
 
 void game::add_role(player* whom,QString what){
+    qDebug()<<"game::add_role(player* whom,QString what)";
     rolelist.insertMulti(what,whom);
     whom->rolelist.append(what);
     foreach (item* var, itemlist.values()) {
@@ -579,6 +619,7 @@ void game::add_role(player* whom,QString what){
 }
 
 void game::delete_role(player* whom,QString what){
+    qDebug()<<"game::delete_role(player* whom,QString what)";
     rolelist.remove(what,whom);
     if(rolelist.count(what)==0)rolelist.remove(what);
     whom->rolelist.removeOne(what);
@@ -587,10 +628,11 @@ void game::delete_role(player* whom,QString what){
             whom->itemlist.remove(var->handle);
         }
     }
-make_actionlist(whom);
+    make_actionlist(whom);
 }
 
 void game::slot_use_item(QString who,QString whom,QString useit){
+    qDebug()<<"game::slot_use_item(QString who,QString whom,QString useit)";
     player* _who=playerlist.value(who);
     player* _whom=playerlist.value(whom);
 
@@ -603,6 +645,7 @@ void game::slot_use_item(QString who,QString whom,QString useit){
 }
 
 void game::slot_use_item_cap(QString who,QString whom,QString useit){
+    qDebug()<<"game::slot_use_item_cap(QString who,QString whom,QString useit)";
     player* _who=playerlist.value(who);
     player* _whom=playerlist.value(whom);
     if(_who->itemlist.value("Badge")->power!=-1){
@@ -617,6 +660,7 @@ void game::slot_use_item_cap(QString who,QString whom,QString useit){
 }
 
 void game::slot_ult_item(QString who,QString whom,QString useit){
+    qDebug()<<"game::slot_ult_item(QString who,QString whom,QString useit)";
     player* _who=playerlist.value(who);
     player* _whom=playerlist.value(whom);
     _who->itemlist.value(useit)->ult_item(whom);
@@ -633,9 +677,13 @@ void game::slot_ult_item(QString who,QString whom,QString useit){
 void game::make_events(QString who,QString what,QString whom,QString how,QQueue<QString> rota){
     //player* _who,_whom;
     //item _how;
+    qDebug()<<"game::make_events(QString who,QString what,QString whom,QString how,QQueue<QString> rota)"<<what;
     ingame_event* new_event=new ingame_event(who,whom,what,how,rota);
     if (this->daytime){
-        _event=new_event;
+        _event->who=who;
+        _event->whom=whom;
+        _event->what=what;
+        _event->useit=how;
         _event->do_event();
         make_actionlist(playerlist.value(who));
     } else {
@@ -680,7 +728,7 @@ void game::make_events(QString who,QString what,QString whom,QString how){
 
 
 bool game::makeNightActoins(){//true - продолжать игру, false - game over
-
+    qDebug()<<"game::makeNightActoins()";
     QQueue <ingame_event*> _night = _nightque;
     while(!_nightque.isEmpty()){
         ingame_event* _eve=_nightque.dequeue();
@@ -783,6 +831,7 @@ void game::registerRolebyPlayer(QString _name, QString role){
 }
 
 void game::player_death(player* dead){
+    qDebug()<<"game::player_death(player* dead)";
     //тут будет отправка о том что игрок мертв
     QList <QString> mainroles;
     mainroles << "Captain"<<"Doctor"<<"Gunmen"<<"Assistant"<<"Engineer"<<"Scientist"<<"Signalmen";
@@ -802,12 +851,13 @@ void game::player_death(player* dead){
             }
     }
     passengerlist.removeAll(dead->name);
-
+    emit GuiUpdatePlayerlist(playerlist);
 }
 
 void game::check_for_role(QString role){//передача роли заместителям или кому придется, заодно добавление голосований если нужно
     //дописать то, что после капитана роль принимает на себя заместитель и наоборот!
     //вроде должно сработать. пока не отражено, что капитан назначает первого помощника сам.
+    qDebug()<<"game::check_for_role(QString role)";
     QMap <QString,QString>deprole;
     deprole.insert("Doctor","Deputy of Doctor");
     deprole.insert("Gunmen","Deputy of Gunmen");
@@ -821,7 +871,7 @@ void game::check_for_role(QString role){//передача роли замест
     if(co==1){
         //тут будет отправка сообщения о присвоении роли единственному заму
         add_role(rolelist.value(deprole.value(role)),role);
-        delete_role(rolelist.value(deprole.value(role)),deprole.value(role));
+        if(role!="Captain" || role !="Assistant")delete_role(rolelist.value(deprole.value(role)),deprole.value(role));
     }
     if(co>1){
         //начало голосования среди замов роли
@@ -839,7 +889,8 @@ void game::check_for_role(QString role){//передача роли замест
         foreach (QString var, deprole.values()) {
             foreach (player* vvv, playerlist.values()) {
                 if(vvv->rolelist.contains(deprole.value(var))){
-                    cc.append(vvv->name);
+                    if(var!="Captain" && var!="Assistant")
+                        cc.append(vvv->name);
                 }
             }
             // cc.append(rolelist.values(var));
@@ -885,6 +936,7 @@ void game::check_for_role(QString role){//передача роли замест
 }
 
 void game::sortNightActions(){
+    qDebug()<<"game::sortNightActions()";
     QQueue<ingame_event*>_queue=_nightque;
     qSort(_queue.begin(),_queue.end(),qLe());
     QQueue<ingame_event*>_que;

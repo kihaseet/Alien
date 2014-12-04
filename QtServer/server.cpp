@@ -89,7 +89,7 @@ void Server::slotReadClient()
 
 void Server::sendToClient(QTcpSocket* pSocket, const QString& str)
 {
-    qDebug() << "[Server]"<<str;
+    //qDebug() << "[Server]"<<str;
     QByteArray arrBlock;
     QDataStream out(&arrBlock, QIODevice::WriteOnly);
     out.setVersion(QDataStream::Qt_4_8);
