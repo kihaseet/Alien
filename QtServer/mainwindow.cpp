@@ -72,6 +72,9 @@ void MainWindow::updateInventory(QListWidgetItem* ss){
     QPair<QString,QList<QString> > varr;
     foreach (varr, _game->playerlist.value(ss->text())->actionlist) {
         ui->text_info->append("Action: "+varr.first);
+        foreach (QString vav,varr.second){
+            ui->text_info->append("Action: "+varr.first+" - "+vav);
+        }
     }
 
    // ui->textBrowser_2->clear();

@@ -35,11 +35,12 @@ public slots:
     void slotDO();
     void slotVO();
     void slotUN();
+    void slotUB();
 private slots:
     void slotReadyRead  ();
     void slotError      (QAbstractSocket::SocketError); void slotSendToServer();
     void slotConnected  ();
     void slotConnecting ();
-  //  void slotDisonnected  ();
+    //  void slotDisonnected  ();
 };
 #endif //_MyClient_h_

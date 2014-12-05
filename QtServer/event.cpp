@@ -34,7 +34,7 @@ void ingame_event::do_event(){
     if(this->what=="useitemCap")
     {emit event_useitemcap(this->who,this->whom,this->useit);}
 
-    if(this->what=="ultitem")
+    if(this->what=="useult")
     {emit event_ultitem(this->who,this->whom,this->useit);}
 
     if(this->what=="wait")

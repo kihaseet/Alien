@@ -40,6 +40,7 @@ MyClient::MyClient(const QString& strHost,
 
     QPushButton* pcui = new QPushButton("&use item");
     QPushButton* pcuu = new QPushButton("&use ult");
+    QPushButton* pcub = new QPushButton("&ult badge");
     QPushButton* pcat = new QPushButton("&attack");
     QPushButton* pcin = new QPushButton("&infect");
     QPushButton* pcwa = new QPushButton("&wait");
@@ -51,7 +52,7 @@ MyClient::MyClient(const QString& strHost,
 
     connect(pcmd, SIGNAL(clicked()),SLOT(slotSendToServer()));
     connect(pcon, SIGNAL(clicked()),SLOT(slotConnecting()));
-    connect(m_ptxtInput, SIGNAL(returnPressed()),this, SLOT(slotSendToServer()));
+    //connect(m_ptxtInput, SIGNAL(returnPressed()),this, SLOT(slotSendToServer()));
 
     connect(pcui, SIGNAL(clicked()),SLOT(slotUI()));
     connect(pcuu, SIGNAL(clicked()),SLOT(slotUU()));
@@ -62,6 +63,7 @@ MyClient::MyClient(const QString& strHost,
     connect(pcdo, SIGNAL(clicked()),SLOT(slotDO()));
     connect(pcvo, SIGNAL(clicked()),SLOT(slotVO()));
     connect(pcun, SIGNAL(clicked()),SLOT(slotUN()));
+    connect(pcub, SIGNAL(clicked()),SLOT(slotUB()));
 
     //Layout setup
     QVBoxLayout* pvbxLayout = new QVBoxLayout;
@@ -94,7 +96,9 @@ MyClient::MyClient(const QString& strHost,
     pvbxLayout->addLayout(H1);
     pvbxLayout->addLayout(H2);
     pvbxLayout->addLayout(H3);
+    pvbxLayout->addWidget(pcub);
     pvbxLayout->addWidget(pcmd);
+
     setLayout(pvbxLayout);
 }
 
@@ -113,7 +117,7 @@ void MyClient::slotReadyRead()
         }
         QTime  time; QString str;
         in >> str;
-        qDebug()<<str;
+        //qDebug()<<str;
         //  m_ptxtInfo->append(str); m_nNextBlockSize = 0;
     }
 }
@@ -254,6 +258,11 @@ void MyClient::slotVO(){
 void MyClient::slotUN(){
     m_ptxtInput->clear();
     m_ptxtInput->setText("<!DOCTYPE voting><voting><unvote/></voting>");
+}
+
+void MyClient::slotUB(){
+    m_ptxtInput->clear();
+    m_ptxtInput->setText("<!DOCTYPE changing><changing><use badge=\"Battery\">Blaster</use></changing>");
 }
 
 void MyClient::slotConnecting(){

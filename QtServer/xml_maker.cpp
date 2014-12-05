@@ -92,6 +92,17 @@ xml_msg xml_maker::traverseNode(const QDomNode& node,xml_msg _xml, QString mod)
                             _xml.how=domElement.attribute("ult","");
                             //qDebug()  << domElement.tagName() << domElement.attribute("ult","") << domElement.text();
                         }
+                        if(domElement.attribute("badge","")!=""){
+
+                            // qDebug()  << domElement.tagName() << domElement.attribute("item","");
+                            if(_xml.how!="Rotation" && _xml.how!="Badge"){
+                                _xml.what="useitemCap";
+                                _xml.how=domElement.attribute("badge","");
+                                _xml.whom=domElement.text();
+
+                            } else _xml.what="bad_action";
+
+                        }
                     }
                 }
             }

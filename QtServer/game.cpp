@@ -141,10 +141,10 @@ void game::make_actionlist(player* who){
                 }
                 break;}
             if(var->handle == "Notebook"){
-                if(_currvoting->is_over!=true){
-                    who->actionlist.append(qMakePair(QString("ultNotebook"),tmp));
-                    if(var->power==0)
-                        who->actionlist.append(qMakePair(QString("useNotebook"),_currvoting->electlist));
+                if(_currvoting->is_over!=true || hardresolve==true){
+                    who->actionlist.append(qMakePair(QString("ultNotebook"),tmp));}
+                if(var->power==0 && _currvoting->is_over!=true){
+                    who->actionlist.append(qMakePair(QString("useNotebook"),_currvoting->electlist));
                 }
                 break;}
             if(var->handle == "Battery"){
@@ -160,7 +160,7 @@ void game::make_actionlist(player* who){
                 }
                 break;}
             if(var->handle == "Badge"){
-                if(_currvoting->is_over!=true && hardresolve==true){
+                if(_currvoting->is_over==true && hardresolve==true){
                     who->actionlist.append(qMakePair(QString("useBadge"),_currvoting->winners));
                 }
                 if(var->power==0){
@@ -219,7 +219,13 @@ void game::make_actionlist(player* who){
                     break;}
                 if(var->handle == "Badge"){
                     if(var->power==0){
-                        who->actionlist.append(qMakePair(QString("ultBadge"),itemlist.keys()));
+                        QList <QString> iitemlist;
+                        foreach (QString iitem, itemlist.keys()) {
+                            if(iitem!="Rotation" && iitem!="Badge"){
+                                iitemlist.append(iitem);
+                            }
+                        }
+                        who->actionlist.append(qMakePair(QString("ultBadge"),iitemlist));
                     }
                     break;}
                 if(var->handle == "Mop"){
@@ -298,7 +304,7 @@ void game::day_next_voting(){
 
 void game::day_cap_curr_voting(QString who,QString win,QString useit){
     qDebug()<<"game::day_cap_curr_voting";
-    if(useit=="Badge"){
+    if(useit=="Badge" && _currvoting->winners.contains(win)){
         day_end_curr_voting(win);
     }
 }
@@ -339,8 +345,7 @@ void game::day_end_curr_voting(QString winner){
 
     disconnect (_event,SIGNAL(event_ultitem(QString,QString,QString)),_currvoting,SLOT(ult_notebook(QString,QString,QString)));
 
-    disconnect (_event,SIGNAL(event_vote(QString,QString)),_currvoting,SLOT(on_voting(QString,QString)));
-    disconnect (_event,SIGNAL(event_unvote(QString)),_currvoting,SLOT(off_voting(QString)));
+
     //connect (_event,SIGNAL(event_vote(QString,QString)),this,SLOT(slot_vote(QString,QString)));
     //connect (_event,SIGNAL(event_unvote(QString)),this,SLOT(slot_unvote(QString)));
 
@@ -359,6 +364,7 @@ void game::day_resolve_curr_voting(QList<QString> win){
 
     qDebug()<<"game::day_resolve_curr_voting(QList<QString> win)";
 
+    _currvoting->is_over=true;
     if(win.count()==1){
         day_end_curr_voting(win.first());
     }
@@ -367,6 +373,8 @@ void game::day_resolve_curr_voting(QList<QString> win){
         hardresolve=true;
 
     }
+    disconnect (_event,SIGNAL(event_vote(QString,QString)),_currvoting,SLOT(on_voting(QString,QString)));
+    disconnect (_event,SIGNAL(event_unvote(QString)),_currvoting,SLOT(off_voting(QString)));
     foreach (player* var, playerlist.values()) {
         make_actionlist(var);
     }
@@ -377,6 +385,15 @@ void game::day_resolve_curr_voting(QList<QString> win){
 void game::day_canseled_voting(){
     qDebug()<<"game::day_canseled_voting()";
     //тут будет сообщение игрокам об отмене голосования
+
+    _currvoting->is_over=true;
+    disconnect (_event,SIGNAL(event_vote(QString,QString)),_currvoting,SLOT(on_voting(QString,QString)));
+    disconnect (_event,SIGNAL(event_unvote(QString)),_currvoting,SLOT(off_voting(QString)));
+    disconnect (_event,SIGNAL(event_useitem(QString,QString,QString)),_currvoting,SLOT(use_notebook(QString,QString,QString)));
+    disconnect (_event,SIGNAL(event_useitem(QString,QString,QString)),this,SLOT(day_cap_curr_voting(QString,QString,QString)));
+    disconnect (_event,SIGNAL(event_ultitem(QString,QString,QString)),_currvoting,SLOT(ult_notebook(QString,QString,QString)));
+    disconnect (_currvoting,SIGNAL(voting_over(QList<QString>)),this,SLOT(day_resolve_curr_voting(QList<QString>)));
+    disconnect (_currvoting,SIGNAL(voting_canseled()),this,SLOT(day_canseled_voting()));
     foreach (player* var, playerlist.values()) {
         make_actionlist(var);
     }
@@ -646,9 +663,9 @@ void game::slot_use_item(QString who,QString whom,QString useit){
 
 void game::slot_use_item_cap(QString who,QString whom,QString useit){
     qDebug()<<"game::slot_use_item_cap(QString who,QString whom,QString useit)";
-    player* _who=playerlist.value(who);
-    player* _whom=playerlist.value(whom);
-    if(_who->itemlist.value("Badge")->power!=-1){
+    //player* _who=playerlist.value(who);
+    //player* _whom=playerlist.value(whom);
+    if(playerlist.value(who)->itemlist.value("Badge")->power!=-1){
         if(itemlist.value(useit)->power==0){
             if(daytime==true)
                 itemlist.value(useit)->use_item_day(whom);
@@ -680,23 +697,60 @@ void game::make_events(QString who,QString what,QString whom,QString how,QQueue<
     qDebug()<<"game::make_events(QString who,QString what,QString whom,QString how,QQueue<QString> rota)"<<what;
     ingame_event* new_event=new ingame_event(who,whom,what,how,rota);
     if (this->daytime){
+
+        //_event=new_event;
         _event->who=who;
         _event->whom=whom;
         _event->what=what;
         _event->useit=how;
-        _event->do_event();
-        make_actionlist(playerlist.value(who));
-    } else {
-        _nightque.enqueue(new_event);
-        make_actionlist(playerlist.value(who));
-        if(what=="wait"){
-            playerlist.value(who)->waiting=true;
+        if(make_events_check(_event)){
+            _event->do_event();
+            make_actionlist(playerlist.value(who));
         }
-        if(night()==true){
-            //тут отправка сообщения об окончании ночи
-            day();
+    } else {
+        if(make_events_check(new_event)){
+            _nightque.enqueue(new_event);
+            make_actionlist(playerlist.value(who));
+            if(what=="wait"){
+                playerlist.value(who)->waiting=true;
+            }
+            if(night()==true){
+                //тут отправка сообщения об окончании ночи
+                day();
+            }
         }
     }
+}
+
+bool game::make_events_check(ingame_event* _event){
+    QString check_first,check_second;
+    if(!playerlist.contains(_event->who))return false;
+    if(_event->whom!="")check_second=_event->whom;
+
+    if(_event->what=="useitem"){
+        check_first="use"+_event->useit;
+    } else
+        if(_event->what=="useult"){
+            check_first="ult"+_event->useit;
+        } else
+            if (_event->what=="useitemCap"){
+                check_first="ultBadge";
+                check_second=_event->useit;
+            }
+            else
+            {
+                check_first = _event->what;
+            }
+    QPair <QString,QList<QString> > tmp;
+    foreach (tmp, playerlist.value(_event->who)->actionlist) {
+        if (tmp.first==check_first){
+            if(!tmp.second.isEmpty()){
+                if(tmp.second.contains(check_second))return true;
+                else return false;
+            }else return true;
+        }
+    }
+    return false;
 }
 
 void game::make_events(QString who,QString what,QString whom,QString how){
@@ -710,19 +764,24 @@ void game::make_events(QString who,QString what,QString whom,QString how){
         _event->whom=whom;
         _event->what=what;
         _event->useit=how;
-        _event->do_event();
-        make_actionlist(playerlist.value(who));
-    } else {
-        _nightque.enqueue(new_event);
-        make_actionlist(playerlist.value(who));
-        if(what=="wait"){
-            playerlist.value(who)->waiting=true;
+        if(make_events_check(_event)){
+            _event->do_event();
+            make_actionlist(playerlist.value(who));
         }
-        if(night()==true){
-            //тут отправка сообщения об окончании ночи
-            day();
+    } else {
+        if(make_events_check(new_event)){
+            _nightque.enqueue(new_event);
+            make_actionlist(playerlist.value(who));
+            if(what=="wait"){
+                playerlist.value(who)->waiting=true;
+            }
+            if(night()==true){
+                //тут отправка сообщения об окончании ночи
+                day();
+            }
         }
     }
+
 }
 
 

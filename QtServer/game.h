@@ -37,6 +37,7 @@ public:
     void day_end_curr_voting(QString winner);
     void make_actionlist(player* who);
     void getItemByRoleAll();
+    bool make_events_check(ingame_event* _event);
 //обязательно понадобится проверка на изменение количества игроков во время голосования (убийство, дисконнект)
     //и собственно динамическое изменение голосов
 
