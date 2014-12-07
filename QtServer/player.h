@@ -16,6 +16,7 @@ public:
     QString whoinvas;/*имя последнего заразившего игрока*/
     int use_night_item; //0 если не было использований вещей ночью
     int attack_thisnight;//0 если чужой никого не атаковал этой ночью
+    bool simplebath;//true если не покидал биованну этой ночью
     QList <QString> rolelist;
     QList <QPair<QString,QList<QString> > > actionlist;
     QMap <QString,item*> itemlist; //дескриптор-указатель

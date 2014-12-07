@@ -15,6 +15,7 @@ public:
     bool daytime;
     int currentday;
     bool hardresolve; //true если во время голосования решение принимает капитан
+    QString mopper;//дежурный
 
     ingame_event* _event;//объект текущего события
     voting* _currvoting;//объект текущего голосования
@@ -38,12 +39,14 @@ public:
     void make_actionlist(player* who);
     void getItemByRoleAll();
     bool make_events_check(ingame_event* _event);
+    void day_check_over();
 //обязательно понадобится проверка на изменение количества игроков во время голосования (убийство, дисконнект)
     //и собственно динамическое изменение голосов
 
 signals:
     void GuiUpdatePlayerlist(QMap<QString,player*>list);
     void GuiUpdateVotelist(QMap <QString,QPair<QString,int> > votelist);
+    void GuiMess2Log(QString name,QString msg);
     void startnewsessionenable(bool check);
     void startgame();
     void startday();
@@ -85,6 +88,7 @@ public slots:
     void day_next_voting();
     void day_resolve_curr_voting(QList<QString> win);
     void day_cap_curr_voting(QString who,QString win,QString useit);
+    void check_for_role_capDecision(QString who,QString whom,QString useit);
     void night_start();
     bool night();
     void make_events(QString who, QString what, QString whom, QString how, QQueue<QString> rota);

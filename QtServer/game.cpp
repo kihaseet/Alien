@@ -9,18 +9,18 @@ public:
         QList<QString>list;
 
         QString tt1,tt2;
-        if(t1->what=="useitem"||t1->what=="useult"||t1->what=="useultCap"){
+        if(t1->what=="useitem"||t1->what=="useult"||t1->what=="useitemCap"){
             tt1=t1->what+t1->useit;
         }
         else tt1=t1->what;
 
-        if(t2->what=="useitem"||t2->what=="useult"||t2->what=="useultCap"){
+        if(t2->what=="useitem"||t2->what=="useult"||t2->what=="useitemCap"){
             tt2=t2->what+t2->useit;
         }
         else tt2=t2->what;
-        list <<"useultCapInjector"<<"useitemInjector" <<"useultCapScanner"<<"useitemScanner"
-            <<"useultCapMop"<<"useitemMop"<<"useultCapBattery"<<"useitemBattery"
-           <<"useultCapBlaster"<<"useitemBlaster"
+        list <<"useitemCapInjector"<<"useitemInjector" <<"useitemCapScanner"<<"useitemScanner"
+            <<"useitemCapMop"<<"useitemMop"<<"useitemCapBattery"<<"useitemBattery"
+           <<"useitemCapBlaster"<<"useitemBlaster"
           <<"useultBattery"<<"useultInjector" <<"useultBlaster"<<"useultScanner"<<"attack"
          <<"infect"<<"wait"<<"alien"<<"up"<<"down"<<"getitem"<<"delitem";
         return (list.indexOf(tt1) < list.indexOf(tt2));
@@ -169,7 +169,26 @@ void game::make_actionlist(player* who){
                 break;}
             if(var->handle == "Rotation"){
                 if(nightrotation.isEmpty()){
-                    who->actionlist.append(qMakePair(QString("useRotation"),playerlist.keys()));
+                    QList<QString>deprole;
+                    QList<QString>cand;//готовим список дежурных
+                    deprole <<"Deputy of Doctor"<<"Deputy of Gunmen"<<"Deputy of Engineer"
+                           <<"Deputy of Scientist"<<"Deputy of Signalmen"<<"Assistant";
+                    foreach (player* it, playerlist) {
+                        foreach (QString r, it->rolelist) {
+                            if(deprole.contains(r)&&(!cand.contains(it->name))){
+                                cand.append(it->name);
+                            }
+                        }
+                    }
+                    cand.append(passengerlist);
+                    if(cand.count()<=1){
+                        foreach (player* jt, playerlist) {
+                            if(!jt->rolelist.contains("Captain")){
+                                cand.append(jt->name);
+                            }
+                        }
+                    }
+                    who->actionlist.append(qMakePair(QString("useRotation"),cand));
                 }
                 break;//если добавить дефолт, то там буде обработка ошибок
             }
@@ -221,7 +240,7 @@ void game::make_actionlist(player* who){
                     if(var->power==0){
                         QList <QString> iitemlist;
                         foreach (QString iitem, itemlist.keys()) {
-                            if(iitem!="Rotation" && iitem!="Badge"){
+                            if(iitem!="Rotation" && iitem!="Badge" && iitem!="Notebook"){
                                 iitemlist.append(iitem);
                             }
                         }
@@ -257,6 +276,17 @@ void game::make_actionlist(player* who){
     emit send_actionlist(who);
 }
 
+void game::day_check_over(){
+    if (!votingque.isEmpty()){
+        day_next_voting();
+    } else {
+        if(!nightrotation.isEmpty()||
+                (unclame_rolelist.contains("Captain")&&(unclame_rolelist.contains("Assistant")))){
+            night_start();
+        }else emit GuiMess2Log("[Game]","Помощник капитана должен назначить график дежурств!");
+    }
+}
+
 
 void game::day(){
     qDebug()<<"game::day()";
@@ -265,13 +295,12 @@ void game::day(){
         currentday++;
         // _currvoting->is_over=true;
 
-        if (!votingque.isEmpty()){
-            day_next_voting();
-        } else {
-            night_start();
-        }
-    } else emit game_over();
+        emit GuiMess2Log("[Game]","Start Day "+QString::number(currentday));
+        day_check_over();
+    }else emit game_over();
 }
+
+
 
 void game::day_next_voting(){
     qDebug()<<"game::day_next_voting()";
@@ -284,8 +313,6 @@ void game::day_next_voting(){
     _currvoting->target=new_voting->target;
 
     connect (_event,SIGNAL(event_useitem(QString,QString,QString)),_currvoting,SLOT(use_notebook(QString,QString,QString)));
-    connect (_event,SIGNAL(event_useitem(QString,QString,QString)),this,SLOT(day_cap_curr_voting(QString,QString,QString)));
-
     connect (_event,SIGNAL(event_ultitem(QString,QString,QString)),_currvoting,SLOT(ult_notebook(QString,QString,QString)));
 
     connect (_event,SIGNAL(event_vote(QString,QString)),_currvoting,SLOT(on_voting(QString,QString)));
@@ -299,6 +326,9 @@ void game::day_next_voting(){
         make_actionlist(var);
     }
 
+    if(_currvoting->target=="Alien")emit GuiMess2Log("[Game]","Выбираем цель диагностической операции");
+    else emit GuiMess2Log("[Game]","Голосование на передачу должности: "+_currvoting->target);
+
 }
 
 
@@ -306,6 +336,7 @@ void game::day_cap_curr_voting(QString who,QString win,QString useit){
     qDebug()<<"game::day_cap_curr_voting";
     if(useit=="Badge" && _currvoting->winners.contains(win)){
         day_end_curr_voting(win);
+        emit GuiMess2Log("[Game]","Капитан отдал решающий голос в пользу "+win);
     }
 }
 
@@ -317,17 +348,23 @@ void game::day_end_curr_voting(QString winner){
         if (_currvoting->target=="Alien"){
             if(win->status<2){
                 //игрок - человек
+                emit GuiMess2Log("[Game]","Игрок "+winner+" - человек");
                 win->HP=win->HP-1;
-                if(win->HP>0)win->healthy=false;
+                if(win->HP>0){
+                    win->healthy=false;
+                }
                 else player_death(win);
                 if(win->status==1){
                     //оповещение об изъятии эмбриона
                     win->status=0;
-                    win->itemlist.remove("Fetus");
+                    win->invasion=-1;
+                    emit GuiMess2Log("[Game]","Из игрока "+winner+" извлечен эмбрион");
+                    //win->itemlist.remove("Fetus");
                 }
             }
             if(win->status==2){
                 //оповещение о том, что игрок - чужой
+                emit GuiMess2Log("[Game]","Игрок "+winner+" - чужой!");
                 player_death(win);
             }
         }
@@ -345,18 +382,10 @@ void game::day_end_curr_voting(QString winner){
 
     disconnect (_event,SIGNAL(event_ultitem(QString,QString,QString)),_currvoting,SLOT(ult_notebook(QString,QString,QString)));
 
-
-    //connect (_event,SIGNAL(event_vote(QString,QString)),this,SLOT(slot_vote(QString,QString)));
-    //connect (_event,SIGNAL(event_unvote(QString)),this,SLOT(slot_unvote(QString)));
-
     disconnect (_currvoting,SIGNAL(voting_over(QList<QString>)),this,SLOT(day_resolve_curr_voting(QList<QString>)));
     disconnect (_currvoting,SIGNAL(voting_canseled()),this,SLOT(day_canseled_voting()));
-    if(!votingque.isEmpty()){
-        day_next_voting();
-    }
-    else {
-        night_start();
-    }
+
+    day_check_over();
 }
 
 
@@ -364,12 +393,15 @@ void game::day_resolve_curr_voting(QList<QString> win){
 
     qDebug()<<"game::day_resolve_curr_voting(QList<QString> win)";
 
+    emit GuiMess2Log("[Game]","Подсчет голосов завершен");
     _currvoting->is_over=true;
     if(win.count()==1){
         day_end_curr_voting(win.first());
     }
     if(win.count()>1){
+        connect (_event,SIGNAL(event_useitem(QString,QString,QString)),this,SLOT(day_cap_curr_voting(QString,QString,QString)));
         //тут будет предложение капитану определить итог голосования лично
+        emit GuiMess2Log("[Game]","Капитан должен сделать решающий выбор");
         hardresolve=true;
 
     }
@@ -386,6 +418,7 @@ void game::day_canseled_voting(){
     qDebug()<<"game::day_canseled_voting()";
     //тут будет сообщение игрокам об отмене голосования
 
+    emit GuiMess2Log("[Game]","Голосование было отменено по техническим причинам!");
     _currvoting->is_over=true;
     disconnect (_event,SIGNAL(event_vote(QString,QString)),_currvoting,SLOT(on_voting(QString,QString)));
     disconnect (_event,SIGNAL(event_unvote(QString)),_currvoting,SLOT(off_voting(QString)));
@@ -397,10 +430,8 @@ void game::day_canseled_voting(){
     foreach (player* var, playerlist.values()) {
         make_actionlist(var);
     }
-    if(!votingque.isEmpty()){
-        day_next_voting();
-    }
-    else night_start();
+
+    day_check_over();
 }
 
 void game::slot_game_over(){
@@ -410,8 +441,10 @@ void game::slot_game_over(){
 
     if(playerlist.begin().value()->status==0){
         //отправка всем сообщение о победе людей
+        emit GuiMess2Log("[Game]","Игра завершена победой людей!");
     } else {
         //отправка всем сообщения о победе чужих
+        emit GuiMess2Log("[Game]","Игра завершена победой чужих!");
     }
     //статистика, ачивки, прочее дерьмо
 }
@@ -421,7 +454,6 @@ bool game::night(){
     foreach (player* v, playerlist.values()){
         make_actionlist(v);
         if(v->waiting==false){
-            break;
             return false;
         }
     }
@@ -429,9 +461,25 @@ bool game::night(){
 }
 
 void game::night_start(){
+    emit GuiMess2Log("[Game]","Началась ночь "+QString::number(currentday));
     qDebug()<<"game::night_start()";
     daytime=false;
+    while(!nightrotation.isEmpty()){
+        mopper = nightrotation.dequeue();
+        if(!playerlist.keys().contains(mopper)) mopper="";
+    }
+    if(mopper!=""){
+        emit GuiMess2Log("[Game]","Сегодня дежурит "+mopper);
+        item* bb=new Mop();
+        bb->power=0;
+        playerlist.value(mopper)->itemlist.insert("Mop",bb);
+        itemlist.insert("Mop",bb);
+    }
+
     foreach (player* v, playerlist.values()) {
+        if(v->healthy==false){
+            v->simplebath=true;
+        }
         v->waiting=false;
         v->attack_thisnight=0;
         v->use_night_item=0;
@@ -625,6 +673,8 @@ void game::slot_down(QString who){
 
 void game::add_role(player* whom,QString what){
     qDebug()<<"game::add_role(player* whom,QString what)";
+    emit GuiMess2Log("[Game]","Роль "+what+" отдата игроку "+whom->name);
+    if(unclame_rolelist.contains(what))unclame_rolelist.removeOne(what);
     rolelist.insertMulti(what,whom);
     whom->rolelist.append(what);
     foreach (item* var, itemlist.values()) {
@@ -637,6 +687,10 @@ void game::add_role(player* whom,QString what){
 
 void game::delete_role(player* whom,QString what){
     qDebug()<<"game::delete_role(player* whom,QString what)";
+    QList<QString>mainrole;
+    mainrole <<"Captain"<<"Gunmen"<<"Engineer"
+           <<"Scientist"<<"Signalmen"<<"Assistant"<<"Doctor";
+    emit GuiMess2Log("[Game]","Игрок "+whom->name+ "потерял роль "+what);
     rolelist.remove(what,whom);
     if(rolelist.count(what)==0)rolelist.remove(what);
     whom->rolelist.removeOne(what);
@@ -644,6 +698,12 @@ void game::delete_role(player* whom,QString what){
         if(var->role==what){
             whom->itemlist.remove(var->handle);
         }
+    }
+    if(mainrole.contains(what)){
+        unclame_rolelist.append(what);
+    }
+    if(whom->rolelist.isEmpty()){
+        passengerlist.append(whom->name);
     }
     make_actionlist(whom);
 }
@@ -670,7 +730,7 @@ void game::slot_use_item_cap(QString who,QString whom,QString useit){
             if(daytime==true)
                 itemlist.value(useit)->use_item_day(whom);
             else itemlist.value(useit)->use_item_night(whom);
-            _who->itemlist.value("Badge")->power=-1;
+            playerlist.value(who)->itemlist.value("Badge")->power=-1;
         }
     }
     make_actionlist(playerlist.value(who));
@@ -703,7 +763,11 @@ void game::make_events(QString who,QString what,QString whom,QString how,QQueue<
         _event->whom=whom;
         _event->what=what;
         _event->useit=how;
+        _event->rota=rota;
         if(make_events_check(_event)){
+            if(nightrotation.isEmpty()){
+                nightrotation=rota;
+            }
             _event->do_event();
             make_actionlist(playerlist.value(who));
         }
@@ -771,11 +835,16 @@ void game::make_events(QString who,QString what,QString whom,QString how){
     } else {
         if(make_events_check(new_event)){
             _nightque.enqueue(new_event);
-            make_actionlist(playerlist.value(who));
+            if(what=="attack")
+                playerlist.value(who)->attack_thisnight=1;
+            if(what=="useitem"||what=="useult"||what=="useitemCap")
+                playerlist.value(who)->use_night_item=1;
             if(what=="wait"){
                 playerlist.value(who)->waiting=true;
             }
-            if(night()==true){
+            make_actionlist(playerlist.value(who));
+            if(night()){
+
                 //тут отправка сообщения об окончании ночи
                 day();
             }
@@ -788,6 +857,7 @@ void game::make_events(QString who,QString what,QString whom,QString how){
 
 bool game::makeNightActoins(){//true - продолжать игру, false - game over
     qDebug()<<"game::makeNightActoins()";
+    sortNightActions();
     QQueue <ingame_event*> _night = _nightque;
     while(!_nightque.isEmpty()){
         ingame_event* _eve=_nightque.dequeue();
@@ -801,6 +871,41 @@ bool game::makeNightActoins(){//true - продолжать игру, false - ga
         //_event=_nightque.dequeue();
         _event->do_event();
     }
+
+    foreach (player* it, playerlist) {
+        if(it->HP<=0){
+            player_death(it);
+            continue;
+        }
+
+        if(it->simplebath==true && it->healthy=false){
+            it->HP=it->HP+1;
+        }
+        if(it->HP>=3){
+            if(it->status<2){
+                it->HP=3;
+            }
+            if(it->status==2 && it->HP>5){
+                it->HP=5;
+            }
+            _event = make_events(it->name,"up","","");
+            _event->do_event();
+        }
+        if(it->status<2 && it->HP<3){
+            it->healthy=false;
+            _event = make_events(it->name,"down","","");
+            _event->do_event();
+        }
+        if(it->status==1){
+            it->invasion=it->invasion-1;
+            if(it->invasion==0){
+                _event = make_events(it->name,"alien",it->whoinvas,"");
+                _event->do_event();
+            }
+        }
+        it->itemlist.remove("Mop");
+    }
+    itemlist.remove("Mop");//скорее всего нужно будет удалить и сам объект из памяти
     emit send_nightmare(_night,playerlist);
     if (playerlist.count()>1){
         foreach (player* v, playerlist.values()) {
@@ -892,6 +997,7 @@ void game::registerRolebyPlayer(QString _name, QString role){
 void game::player_death(player* dead){
     qDebug()<<"game::player_death(player* dead)";
     //тут будет отправка о том что игрок мертв
+    emit GuiMess2Log("[Game]","Погиб игрок "+dead->name);
     QList <QString> mainroles;
     mainroles << "Captain"<<"Doctor"<<"Gunmen"<<"Assistant"<<"Engineer"<<"Scientist"<<"Signalmen";
     playerlist.remove(dead->name);
@@ -900,6 +1006,7 @@ void game::player_death(player* dead){
             if(v==dead){
 
                 if(mainroles.contains(var)){
+                    unclame_rolelist.append(var);
                     rolelist.remove(var);
                     check_for_role(var);
                 }
@@ -913,6 +1020,17 @@ void game::player_death(player* dead){
     emit GuiUpdatePlayerlist(playerlist);
 }
 
+void game::check_for_role_capDecision(QString who,QString whom,QString useit){//капитан выбирает старпома из числа пассажиров
+    if(playerlist.value(who)->rolelist.contains("Captain") && useit=="Badge" && hardresolve==false){
+        disconnect (_event,SIGNAL(event_useitem(QString,QString,QString)),this,SLOT(check_for_role_capDecision(QString,QString,QString)));
+        if(playerlist.contains(whom) && passengerlist.contains(whom)){
+            add_role(playerlist.value(whom),"Assistant");
+        }else{
+            check_for_role("Assistant");
+        }
+    }
+}
+
 void game::check_for_role(QString role){//передача роли заместителям или кому придется, заодно добавление голосований если нужно
     //дописать то, что после капитана роль принимает на себя заместитель и наоборот!
     //вроде должно сработать. пока не отражено, что капитан назначает первого помощника сам.
@@ -923,9 +1041,23 @@ void game::check_for_role(QString role){//передача роли замест
     deprole.insert("Engineer","Deputy of Engineer");
     deprole.insert("Scientist","Deputy of Scientist");
     deprole.insert("Signalmen","Deputy of Signalmen");
-    deprole.insert("Captain","Assistant");
+    //deprole.insert("Captain","Assistant");
     deprole.insert("Assistant","Captain");
 
+    if(role=="Assistant"){
+        //тут отправка капитану сообщения о том что он должен назначить персонажа-старпома
+        //QList<QString> forAssistant;
+        if(!unclame_rolelist.contains("Captain")){
+
+
+            if(passengerlist.count()==0){
+                add_role(rolelist.value("Captain"),role);
+            }else{
+                connect (_event,SIGNAL(event_useitem(QString,QString,QString)),this,SLOT(check_for_role_capDecision(QString,QString,QString)));
+            }
+        }
+
+    }
     int co = rolelist.count(deprole.value(role));
     if(co==1){
         //тут будет отправка сообщения о присвоении роли единственному заму
@@ -999,31 +1131,68 @@ void game::sortNightActions(){
     QQueue<ingame_event*>_queue=_nightque;
     qSort(_queue.begin(),_queue.end(),qLe());
     QQueue<ingame_event*>_que;
-    QList <QString> playerblock;
-    QList <QString> playeritemuse;
-    QString itblok;
-    QList <QString> playerhunt;
-    QList <QString> attackedhuman;
+    QList <QString> playerblock; //игроки, чьи действия или действия на которых заблокированы
+    QList <QString> playeritemuse;//игроки, пользовавшиеся предмеами этой ночью
+    QString itblok;//предмет, использованный капитаном
+    QList <QString> playerhunt;//игроки, попадающие под защиту боевика
+    QList <QString> attackedhuman;//атакованные чужими люди
     //QList<ingame_event*>::iterator i;
-    while (_queue.isEmpty()) {
+    while (!_queue.isEmpty()) {
         ingame_event* _eve=_queue.dequeue();
 
-        if(_eve->what=="useult"&&playerlist.value(_eve->who)->rolelist.contains("Captain")
-                &&playerlist.value(_eve->who)->itemlist.value("Badge")->power==0){
-            _eve->what="useitemCap";
+        if(_eve->what=="wait"){
+            _que.enqueue(_eve);
+            continue;
+        }
+        if((playerlist.value(_eve->who)->healthy==false)&&(_eve->what=="up"||(_eve->what=="useitem")
+                                                           ||(_eve->what=="useitemCap")||(_eve->what=="useult")
+                                                           ||(_eve->what=="attack")||(_eve->what=="infect"))){
+            playerlist.value(_eve->who)->simplebath=false;
+        }
+        if(_eve->what=="alien"||_eve->what=="up"||_eve->what=="down"
+                ||_eve->what=="getitem"||_eve->what=="delitem"){
+            _que.enqueue(_eve);
+            continue;
+        }
+        if(((playerblock.contains(_eve->who))||(playerblock.contains(_eve->whom)))
+                &&((_eve->what=="useitem")||(_eve->what=="useitemCap")||(_eve->what=="useult")||(_eve->what=="attack")
+                   ||(_eve->what=="infect"))){
+            continue;
+        }
+        bool AAA = playerhunt.contains(_eve->who);
+        bool BBB = playerhunt.contains(_eve->whom);
+        if(((!AAA&&BBB)||(!BBB&&AAA))//адская замена ксору
+                &&((_eve->what=="useult")||(_eve->what=="attack")
+                   ||(_eve->what=="infect"))){
+            playerlist.value(_eve->who)->HP=playerlist.value(_eve->who)->HP-2;
+            continue;
+        }
+        if(_eve->what=="useitemCap"
+                && playerlist.value(_eve->who)->itemlist.value("Badge")->power==0
+                && itemlist.value(_eve->useit)->power==0){
             if(_eve->useit=="Mop"){
-                playerblock.append(_eve->whom);
+                if(!playerlist.value(_eve->whom)->rolelist.contains("Doctor")){
+                    playerblock.append(_eve->whom);
+                }
             }
             if(_eve->useit=="Battery"){
                 playerblock.append(_eve->who);
             }
             if(_eve->useit=="Blaster"){
-                playerblock.append(_eve->whom);
+                playerhunt.append(_eve->whom);
+                if(playerlist.value(_eve->whom)->healthy==false){
+                    foreach (player* vavar, playerlist.values()) {
+                        if(vavar->healthy==false && vavar->name!=_eve->whom)playerhunt.append(vavar->name);
+                    }
+                }
+                playerhunt.append(_eve->who);
             }
             _que.enqueue(_eve);
+            playeritemuse.append(_eve->who);
             itblok=_eve->useit;
             continue;
         }
+
         if((_eve->what=="useitem"||_eve->what=="useult")&&
                 ((_eve->useit==itblok)||(playeritemuse.contains(_eve->who)))){
             continue;
@@ -1039,11 +1208,7 @@ void game::sortNightActions(){
             playerblock.append(_eve->whom);
             continue;
         }
-        if(((playerblock.contains(_eve->who))||(playerblock.contains(_eve->whom)))
-                &&((_eve->what=="useitem")||(_eve->what=="useult")||(_eve->what=="attack")
-                   ||(_eve->what=="infect"))){
-            continue;
-        }
+
         if((_eve->what=="useitem")&&(_eve->useit=="Battery")){
             _que.enqueue(_eve);
             playeritemuse.append(_eve->who);
@@ -1053,25 +1218,17 @@ void game::sortNightActions(){
         if((_eve->what=="useitem")&&(_eve->useit=="Blaster")){
             _que.enqueue(_eve);
             playeritemuse.append(_eve->who);
-            if(_eve->whom!="")playerhunt.append(_eve->whom); else//опасная для логики зона
-            {
-                foreach (player* play, playerlist.values()) {
-                    if(!play->healthy)playerhunt.append(play->name);
+            if(playerlist.value(_eve->whom)->healthy==false){
+                foreach (player* vavar, playerlist.values()) {
+                    if(vavar->healthy==false)playerhunt.append(vavar->name);
                 }
-            }
+            }else playerhunt.append(_eve->whom);
             playerhunt.append(_eve->who);
-            continue;
-        }
-        bool AAA = playerhunt.contains(_eve->who);
-        bool BBB = playerhunt.contains(_eve->whom);
-        if(((!AAA&&BBB)||(!BBB&&AAA))//адская замена ксору
-                &&((_eve->what=="useult")||(_eve->what=="attack")
-                   ||(_eve->what=="infect"))){
-            playerlist.value(_eve->who)->HP=playerlist.value(_eve->who)->HP-2;
             continue;
         }
 
         if((_eve->what=="useult")&&(_eve->useit=="Battery")){
+            playeritemuse.append(_eve->who);
             _que.enqueue(_eve);
             continue;
         }
@@ -1098,15 +1255,7 @@ void game::sortNightActions(){
             _que.enqueue(_eve);
             continue;
         }
-        if(_eve->what=="wait"){
-            _que.enqueue(_eve);
-            continue;
-        }
-        if(_eve->what=="alien"||_eve->what=="up"||_eve->what=="down"
-                ||_eve->what=="getitem"||_eve->what=="delitem"){
-            _que.enqueue(_eve);
-            continue;
-        }
+
 
 
     }
