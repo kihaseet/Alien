@@ -2,15 +2,17 @@
 
 AlienClient::AlienClient(QObject *parent) : QObject(parent)
 {
-    connect(&server_connection, SIGNAL(GetData(QString)), &protocol, SLOT(GetData(QString)));
+    server_connection = new tcpclient();
+    protocol.setConnection(server_connection);
+    connect(server_connection, SIGNAL(GetData(QString)), &protocol, SLOT(GetData(QString)));
 
     connect(&protocol
             , SIGNAL(GetParsedData(SERVER_RESPONSE_TYPE,QMap<QString,AlienClient::PlayerInfo>&))
             , this
             , SLOT(GetParsedData(SERVER_RESPONSE_TYPE,QMap<QString,AlienClient::PlayerInfo>&)));
 
-    connect(&server_connection, SIGNAL(errormess(QString)), this, SLOT(errormess(QString)));
-    connect(&server_connection, SIGNAL(disconnect), this, SLOT(disconnect));
+    connect(server_connection, SIGNAL(errormess(QString)), this, SLOT(errormess(QString)));
+    connect(server_connection, SIGNAL(disconnect), this, SLOT(disconnect));
 }
 
 AlienClient::~AlienClient()
@@ -20,13 +22,13 @@ AlienClient::~AlienClient()
 
 bool AlienClient::connect_(QString addr)
 {
-    QStringList& addr_port = addr.split(":");
+    QStringList addr_port = addr.split(":");
     if (addr_port.count() != 2)
     {
         return false;
     }
 
-    server_connection.connect(addr_port[0], addr_port[1].toInt());
+    server_connection->connect_(addr_port[0], addr_port[1].toInt());
     return true;
 }
 
@@ -52,12 +54,16 @@ void AlienClient::makeTurn(TurnObject& turn)
     }
 }
 
-void AlienClient::GetParsedData(SERVER_RESPONSE_TYPE type, QMap<QString, AlienClient::PlayerInfo>& players)
+void AlienClient::GetParsedData(SERVER_RESPONSE_TYPE type, QMap<QString, PlayerInfo>& players)
 {
-    if (type == XmlProtocol::SRT_LIST)
-    {
-        emit updatePlayers(players);
-    }
+//    if (type == XmlProtocol::SRT_LIST)
+//    {
+//        emit updatePlayers(players);
+//    }
+//    else
+//    {
+//        emit
+//    }
 }
 
 void AlienClient::errormess(QString mess)

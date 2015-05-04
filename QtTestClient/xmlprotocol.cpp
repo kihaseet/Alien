@@ -10,6 +10,11 @@ XmlProtocol::~XmlProtocol()
 
 }
 
+void XmlProtocol::setConnection(tcpclient* connection)
+{
+    this->connection = connection;
+}
+
 void XmlProtocol::sendRegister(QString name)
 {
     QDomDocument doc("selecting");
@@ -28,7 +33,7 @@ void XmlProtocol::sendSelectRole(QString role)
     connection->sendData(doc.toString());
 }
 
-void XmlProtocol::sendAction(AlienClient::TURN_TYPE action, QString item, QStringList targets)
+void XmlProtocol::sendAction(TURN_TYPE action, QString item, QStringList targets)
 {
     QDomDocument doc("changing");
     QDomElement domElement = doc.createElement("changing");
@@ -38,25 +43,25 @@ void XmlProtocol::sendAction(AlienClient::TURN_TYPE action, QString item, QStrin
     {
         switch (action)
         {
-        case AlienClient::TT_USE_ITEM:
+        case TT_USE_ITEM:
             domElement.appendChild(makeElement(doc, "use", "item", targets[0], item));
             break;
-        case AlienClient::TT_ULT_ITEM:
+        case TT_ULT_ITEM:
             domElement.appendChild(makeElement(doc, "use", "ult", targets[0], item));
             break;
-        case AlienClient::TT_ATTACK:
+        case TT_ATTACK:
             domElement.appendChild(makeElement(doc, "attack", "", targets[0], ""));
             break;
-        case AlienClient::TT_INFECT:
+        case TT_INFECT:
             domElement.appendChild(makeElement(doc, "infect", "", targets[0], ""));
             break;
-        case AlienClient::TT_SKIP:
+        case TT_SKIP:
             domElement.appendChild(makeElement(doc, "wait", "", "", ""));
             break;
-        case AlienClient::TT_UP:
+        case TT_UP:
             domElement.appendChild(makeElement(doc, "up", "", "", ""));
             break;
-        case AlienClient::TT_DOWN:
+        case TT_DOWN:
             domElement.appendChild(makeElement(doc, "down", "", "", ""));
             break;
 
@@ -64,7 +69,7 @@ void XmlProtocol::sendAction(AlienClient::TURN_TYPE action, QString item, QStrin
     }
     else
     {
-        auto multiTarget = domElement.appendChild(makeElement(doc, "use", "item", "", item));
+        QDomNode multiTarget = domElement.appendChild(makeElement(doc, "use", "item", "", item));
 
         for (auto& target : targets)
         {
@@ -86,13 +91,21 @@ void XmlProtocol::sendVote(QString name, bool unvote)
 
 void XmlProtocol::GetData(QString data)
 {
-    QStringList list = msg.split("\n\n");
+    QStringList list = data.split("\n\n");
     for (QString& m: list) {
         QDomDocument domDoc;
         if(domDoc.setContent(m)) {
             QDomElement domElement= domDoc.documentElement();
-            if(domElement.tagName()=="select"){
+            if(domElement.tagName() == "select"){
                 select(domElement.firstChildElement());
+            }
+            else if(domElement.tagName() == "change")
+            {
+                change(domElement.firstChildElement());
+            }
+            else if(domElement.tagName() == "vote")
+            {
+                vote(domElement.firstChildElement());
             }
         }
     }
@@ -117,15 +130,25 @@ void XmlProtocol::select(QDomElement node){
         }
         else if(node.tagName() == "list"){
             QDomElement list = node.firstChildElement();
-            QMap <QString,AlienClient::PlayerInfo> players;
+            QMap <QString,PlayerInfo> players;
             while(!list.isNull()){
-                players.insert(list.tagName(), AlienClient::PlayerInfo(list.tagName(), list.text(), AlienClient::PLAYER_STATUS::PS_UP));
+                players.insert(list.tagName(), PlayerInfo(list.tagName(), list.text(), PS_UP));
                 list = list.nextSiblingElement();
             }
             emit GetParsedData(type, players);
         }
         node = node.nextSiblingElement();
     }
+}
+
+void XmlProtocol::change(QDomElement node)
+{
+    this->connection = connection;
+}
+
+void XmlProtocol::vote(QDomElement node)
+{
+
 }
 
 QDomElement XmlProtocol::makeElement( QDomDocument& domDoc,

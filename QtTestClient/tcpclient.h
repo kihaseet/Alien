@@ -12,7 +12,7 @@ private:
     int nPort;
 public:
     tcpclient();
-    void connect(QString addr, int Port);
+    void connect_(QString addr, int Port);
     void sendData(QString document);
 public slots:
     void readData();

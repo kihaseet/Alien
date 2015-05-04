@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui network xml
+CONFIG += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -39,7 +40,8 @@ HEADERS  += tcpclient.h \
     ui/playerlist.h \
     ui/playerwidget.h \
     ui/start.h \
-    xmlprotocol.h
+    xmlprotocol.h \
+    types.h
 
 FORMS    += ui/form.ui \
     ui/game.ui \

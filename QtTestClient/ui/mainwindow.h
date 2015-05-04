@@ -6,8 +6,7 @@
 #include "lobby.h"
 #include "start.h"
 #include "game.h"
-#include "tcpclient.h"
-#include "xmlmanager.h"
+#include "alienclient.h"
 
 namespace Ui {
 class MainWindow;
@@ -30,8 +29,7 @@ private:
     Lobby* lobbyWindow;
     start* startWindow;
     Game* gameWindow;
-    tcpclient* server;
-    xmlmaker* xmlManager;
+    AlienClient client;
 };
 
 #endif // MAINWINDOW_H

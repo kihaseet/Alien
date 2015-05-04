@@ -42,7 +42,7 @@ void tcpclient::slotConnected()
     emit errormess("Loading player's list...");
 }
 
-void tcpclient::connect(QString addr, int Port){
+void tcpclient::connect_(QString addr, int Port){
     this->nPort = Port;
     serv->connectToHost(addr,Port);
 }
