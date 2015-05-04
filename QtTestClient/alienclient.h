@@ -31,6 +31,7 @@ private:
 
 signals:
     waitLobby();
+    registerStatus(SELECT_TYPE status);
     updateItems(QMap<QString, int>& updated_items);
     updatePlayers(QMap<QString, PlayerInfo>& updated_players);
     updateActions(QVector<TurnObject> actions);
@@ -38,7 +39,7 @@ signals:
     updateEvents(QVector<EventInfo> events);
     startVoting(QString target, QStringList players);
     updateVoting(QMap<QString, QPair<int, QString> > votelist);
-    endVoting(QString target, QString result);
+    endVoting(QString target, QString name, QString result);
     updateInit(INIT_TYPE type);
 
 
@@ -47,6 +48,7 @@ private slots:
     void onChange(onChangeInfo info);
     void onSelect(onSelectInfo info);
     void onInit(onInitInfo info);
+    void onVote(onVoteInfo info);
     void errormess(QString mess);
     void disconnect();
 

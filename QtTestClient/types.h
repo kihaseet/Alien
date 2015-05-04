@@ -93,7 +93,7 @@ struct onChangeInfo {
     CurrectPlayerInfo updated_stats;
     QVector<EventInfo> events;
     QVector<TurnObject> avaible_actions;
-    QMap<QString, QStringList> update_list;
+//    QMap<QString, QStringList> update_list;
 };
 
 struct onSelectInfo {
@@ -125,6 +125,9 @@ struct PlayerInfo {
         this->role = role;
         this->status = status;
     }
+
+    PlayerInfo()
+    {}
 };
 
 #endif // TYPES
