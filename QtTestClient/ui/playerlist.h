@@ -2,7 +2,7 @@
 #define PLAYERLIST_H
 
 #include <QWidget>
-#include <playerwidget.h>
+#include <ui/playerwidget.h>
 #include <QMap>
 
 namespace Ui {

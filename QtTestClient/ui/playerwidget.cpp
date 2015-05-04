@@ -10,8 +10,8 @@ PlayerWidget::PlayerWidget(QString n, QString r, QWidget *parent) :
     status = "↑";
     ui->setupUi(this);
     HP = 3;
-    ui->labelName=name;
-    ui->labelStatus=status;
+    ui->labelName->setText(name);
+    ui->labelStatus->setText(status);
 }
 
 PlayerWidget::~PlayerWidget()
@@ -20,17 +20,17 @@ PlayerWidget::~PlayerWidget()
 }
 
 void PlayerWidget::SetStatus(QString st){
-    ui->labelStatus = st;
+    ui->labelStatus->setText(st);
 }
 
 void PlayerWidget::giveRole(QString r){
     rolelist.append(r);
     name = r+name;
-     ui->labelName=name;
+     ui->labelName->setText(name);
 }
 void PlayerWidget::delRole(QString r){
     if(rolelist.contains(r)){
-        rolelist.removeOne(role);
+        rolelist.removeOne(r);
 
     }
 }
@@ -42,5 +42,5 @@ void PlayerWidget::setVote(int v){
     for(int i = 1;i<=v;i++){
         vote = vote+" *";
     }
-    ui->labelVote=vote;
+    ui->labelVote->setText(vote);
 }

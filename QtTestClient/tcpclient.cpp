@@ -1,10 +1,8 @@
 #include "tcpclient.h"
 
 
-tcpclient::tcpclient(int Port)
+tcpclient::tcpclient()
 {
-    //nHost = Host;
-    nPort = Port;
     serv = new QTcpSocket();
     connect(serv, SIGNAL(connected()),this, SLOT(slotConnected()));
     connect(serv, SIGNAL(error(QAbstractSocket::SocketError)), this,
@@ -44,8 +42,9 @@ void tcpclient::slotConnected()
     emit errormess("Loading player's list...");
 }
 
-void tcpclient::slotConnecting(QString addr){
-     serv->connectToHost(addr,nPort);
+void tcpclient::connect(QString addr, int Port){
+    this->nPort = Port;
+    serv->connectToHost(addr,Port);
 }
 
 void tcpclient::slotDisconect(){

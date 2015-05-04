@@ -14,7 +14,7 @@ class Game : public QWidget
 
 public:
     explicit Game(QWidget *parent = 0);
-    ~Lobby();
+    ~Game();
 
 public slots:
 

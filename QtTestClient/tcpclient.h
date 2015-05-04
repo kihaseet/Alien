@@ -11,13 +11,13 @@ private:
     QString nHost;
     int nPort;
 public:
-    tcpclient(int Port);
-public slots:
+    tcpclient();
+    void connect(QString addr, int Port);
     void sendData(QString document);
+public slots:
     void readData();
     void slotConnected();
     void slotError(QAbstractSocket::SocketError err);
-    void slotConnecting(QString addr);
     void slotDisconect();
 signals:
     void GetData(QString msg);
