@@ -3,6 +3,8 @@
 
 #include <QString>
 #include <QStringList>
+#include <QMap>
+#include <QVector>
 
 enum TURN_TYPE {
     TT_USE_ITEM = 0,
@@ -43,38 +45,16 @@ enum INIT_TYPE {
     IT_ENDVOTING_FOR_ALIEN
 };
 
-struct VotingInfo {
-
+enum SELECT_TYPE {
+    SRT_NAME_CORRECT = 0,
+    SRT_ROLE_CORRECT,
+    SRT_NAME_INCORRECT,
+    SRT_ROLE_INCORRECT,
 };
 
 struct EventInfo {
     EVENT_TYPE type;
     QStringList message;
-};
-
-struct PlayerInfo {
-    QString name;
-    QString role;
-    PLAYER_STATUS status;
-    bool onDuty;
-
-    PlayerInfo(QString name, QString role, PLAYER_STATUS status)
-    {
-        this->name = name;
-        this->role = role;
-        this->status = status;
-    }
-};
-
-struct CurrectPlayerInfo
-{
-    QString name;
-    QString role;
-    PLAYER_STATUS status;
-    int health;
-    bool infected;
-    bool alien;
-    bool onDuty;
 };
 
 struct TurnObject {
@@ -97,12 +77,54 @@ struct TurnObject {
     }
 };
 
-enum SERVER_RESPONSE_TYPE {
-    SRT_NAME_CORRECT = 0,
-    SRT_ROLE_CORRECT,
-    SRT_NAME_INCORRECT,
-    SRT_ROLE_INCORRECT,
-    SRT_LIST
+struct CurrectPlayerInfo
+{
+    QString name;
+    QStringList role;
+    PLAYER_STATUS status;
+    int health;
+    bool infected;
+    bool alien;
+    bool onDuty;
+    bool dead;
+};
+
+struct onChangeInfo {
+    CurrectPlayerInfo updated_stats;
+    QVector<EventInfo> events;
+    QVector<TurnObject> avaible_actions;
+    QMap<QString, QStringList> update_list;
+};
+
+struct onSelectInfo {
+    SELECT_TYPE type;
+    QMap<QString, QString> players;
+};
+
+struct onInitInfo {
+    INIT_TYPE type;
+
+    QString target;
+    QStringList data;
+};
+
+struct onVoteInfo {
+    QMap<QString, QPair<int, QString> > votelist;
+};
+
+struct PlayerInfo {
+    QString name;
+    QStringList role;
+    PLAYER_STATUS status;
+    bool onDuty;
+    bool dead;
+
+    PlayerInfo(QString name, QStringList role, PLAYER_STATUS status)
+    {
+        this->name = name;
+        this->role = role;
+        this->status = status;
+    }
 };
 
 #endif // TYPES

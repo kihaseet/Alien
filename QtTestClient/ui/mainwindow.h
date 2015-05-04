@@ -19,6 +19,9 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+    static AlienClient client;
+
 public slots:
     void GoLobbyWindow();
     void Disconnect();
@@ -29,7 +32,6 @@ private:
     Lobby* lobbyWindow;
     start* startWindow;
     Game* gameWindow;
-    AlienClient client;
 };
 
 #endif // MAINWINDOW_H

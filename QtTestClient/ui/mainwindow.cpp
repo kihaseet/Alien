@@ -51,3 +51,5 @@ void MainWindow::Disconnect(){
     stackedWidget->setCurrentIndex(0);
     startWindow->setLabelText("Disconnect!..");
 }
+
+AlienClient MainWindow::client;

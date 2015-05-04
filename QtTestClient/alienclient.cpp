@@ -54,18 +54,6 @@ void AlienClient::makeTurn(TurnObject& turn)
     }
 }
 
-void AlienClient::GetParsedData(SERVER_RESPONSE_TYPE type, QMap<QString, PlayerInfo>& players)
-{
-//    if (type == XmlProtocol::SRT_LIST)
-//    {
-//        emit updatePlayers(players);
-//    }
-//    else
-//    {
-//        emit
-//    }
-}
-
 void AlienClient::errormess(QString mess)
 {
 

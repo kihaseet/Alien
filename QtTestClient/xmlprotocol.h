@@ -30,10 +30,16 @@ private:
     void select(QDomElement node);
     void change(QDomElement node);
     void vote(QDomElement node);
+    void init(QDomElement node);
 
 signals:
-    void GetParsedData(SERVER_RESPONSE_TYPE type, QMap<QString, PlayerInfo>& players);
-    void GetActions(QVector<TurnObject> actions);
+//    void GetParsedData(SERVER_RESPONSE_TYPE type, QMap<QString, PlayerInfo>& players);
+//    void GetActions(QVector<TurnObject> actions);
+
+    void onChange(onChangeInfo info);
+    void onSelect(onSelectInfo info);
+    void onVote(onVoteInfo info);
+    void onInit(onInitInfo info);
 
 public slots:
     void GetData(QString data);

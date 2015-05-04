@@ -43,7 +43,10 @@ signals:
 
 
 private slots:
-    void GetParsedData(SERVER_RESPONSE_TYPE type, QMap<QString, PlayerInfo>& players);
+//    void GetParsedData(SERVER_RESPONSE_TYPE type, QMap<QString, PlayerInfo>& players);
+    void onChange(onChangeInfo info);
+    void onSelect(onSelectInfo info);
+    void onInit(onInitInfo info);
     void errormess(QString mess);
     void disconnect();
 
