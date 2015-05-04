@@ -1,6 +1,7 @@
 #ifndef VOTING_H
 #define VOTING_H
 #include <QtGui>
+
 #include "player.h"
 
 class voting:public QObject
@@ -20,6 +21,7 @@ public:
     bool is_complite();
     void start();
     void calc_votes();
+    void send_voting_over(QList<QString> v);
 public slots:
     void on_voting(QString who, QString whom);
     void off_voting(QString who);

@@ -34,35 +34,35 @@ public:
     QDomElement append_events(QDomDocument &domDoc, QMap <QString,player*> playerlist);
     QDomElement append_stats(QDomDocument &domDoc, player* player);
     void event_maker(QDomDocument doc, QDomElement domStat,
-                     QDomElement domEvents, player* it, QMap <QString,player*> playerlist,
+                     QDomElement domEvents, player* it, QMap<QString, player *> playerlist,
                      ingame_event* _eve);
 
     QDomElement name_role_list(QDomDocument& domDoc,QMap <QString,player*> playerlist,QList<QString>_rolelist);
+    QDomElement name_role_list(QDomDocument& domDoc, QList<player *> *playerlist);
     void send_actionlist(player* who);
     void send_stat(player* who);
 
 public slots:
     void day_event(ingame_event* _eve,QMap <QString,player*> playerlist);
-    void new_analise(const QString _name, const QString input);
-    void nightmare(QQueue<ingame_event *> _que, QMap<QString, player *> playerlist);
+    void new_analise(int _name, const QString input);
+    void nightmare(QQueue<ingame_event *> _que, QList<player *> playerlist);
     void end_of_day(QMap<QString, player *> playerlist, QMap<QString, item *> itemlist);
     void send_votelist_to_all(QMap <QString,player*> playerlist,QMap <QString,QPair<QString,int> > votelist);
-    void send_to_all(ingame_event *_eve, QMap<QString, player *> playerlist, QMap<QString, item *> itemlist);
-    void slotnamecorrect(QString tempname, QString _name);
-    void nonamecorrect(QString tempname);
-    void rolecorrect(QString _name);
-    void norolecorrect(QString _name);
-    void updaterolelist(QMap<QString, player *> playerlist, QList<QString> _rolelist);
+   // void send_to_all(ingame_event *_eve, QMap<QString, player *> playerlist, QMap<QString, item *> itemlist);
+    void slotnamecorrect(int tempname);
+    void nonamecorrect(int tempname);
+    void rolecorrect(int _name);
+    void norolecorrect(int _name);
+    void updaterolelist(QList<player *> NameRolelist);
 
 signals:
-    void xml_create(QString who,QString what,QString whom,QString how,QQueue<QString>rota);
-    void xml_create_norot(QString who,QString what,QString whom,QString how);
-    void newname(QString _tempname,QString who);
+    void xml_create(int who,QString what,QString whom,QString how,QQueue<QString>rota);
+    void xml_create_norot(int who,QString what,QString whom,QString how);
+    void newname(int _tempname,QString who,QString avatar);
     void newrole(QString who);
-    void sendtoclient(QString _name,QString _xmldoc);
-    void noVerifyClientName(QString tempname);
-    void namecorrect(QString tempname,QString name);
-    void registerRolebyPlayer(QString _name, QString role);
+    void sendtoclient(int _name,QString _xmldoc);
+    void send_to_all(QString _xmldoc);
+    void registerRolebyPlayer(int _name, QString role);
     void votebyPlayer(QString _name,QString whom);
     void unvotebyPlayer(QString _name);
 

@@ -1,11 +1,17 @@
 #ifndef GAME_H
 #define GAME_H
+
+
 #include <QtCore>
 #include "player.h"
 #include "voting.h"
 #include "event.h"
-class ingame_event;
+#include <QDebug>
 
+class ingame_event;
+class player;
+class item;
+class voting;
 
 
 class game:public QObject
@@ -21,20 +27,23 @@ public:
     voting* _currvoting;//объект текущего голосования
     QQueue <ingame_event*> _nightque;//очередь ночных событий
     game();
-    QMap <QString,player*> playerlist;//имя-игрок!!!
+    QMap <int,QString> connectedName; //дескриптор сокета - имя ДЛЯ ЗАРЕГАННЫХ
+    QMap <QString,player*>* playerlist;//имя-игрок!!!
     QMap <QString,item*> itemlist;//название-указатель
     QList <QString> brokeitemlist;
     QQueue <voting*> votingque;//очередь дневных голосований
     QQueue <QString> nightrotation; //очередь ночных дежурств
-    QMultiMap <QString,player*> rolelist;//роль-игроки
+    QMultiMap <QString,player*> rolelist;//роль-игрок
     QList <QString> passengerlist;//список игроков без роли
     QList <QString> unclame_rolelist;
 
     void sortNightActions();
     void StartRandomEvasion();
+    void StartRandomEvasion_testing();
     bool makeNightActoins();
     void player_death(player *dead);
     void check_for_role(QString role);
+    void check_HP(QString who);
     void day_end_curr_voting(QString winner);
     void make_actionlist(player* who);
     void getItemByRoleAll();
@@ -44,30 +53,31 @@ public:
     //и собственно динамическое изменение голосов
 
 signals:
-    void GuiUpdatePlayerlist(QMap<QString,player*>list);
+    void GuiUpdatePlayerlist(QList<player*>list);
     void GuiUpdateVotelist(QMap <QString,QPair<QString,int> > votelist);
     void GuiMess2Log(QString name,QString msg);
     void startnewsessionenable(bool check);
     void startgame();
     void startday();
     void startnight();
-    void namecorrect(QString name, QString tempname);
-    void nonamecorrect(QString name);
-    void rolecorrect(QString name);
-    void norolecorrect(QString name);
-    void sendrolelist2all(QMap <QString,player*> playerlist,QList <QString>rolelist);
+    void namecorrect(int name);
+    void nonamecorrect(int name);
+    void rolecorrect(int name);
+    void norolecorrect(int name);
+    void sendrolelist2all(QList <player*> pllst);
     void game_over();
     void send_actionlist(player* who);
     void send_changes(player* who);
     void send_events(player* who);
     void send_votelist(player* who);
-    void send_nightmare(QQueue <ingame_event*>_n,QMap <QString,player*> p);
+    void send_nightmare(QQueue <ingame_event*>_n,QList <player*> p);
 
 
 public slots:
-    void register_new_player(QString tempname, QString name);
-    void registerRolebyPlayer(QString _name, QString role);
-    void slot_disconnected(QString name);
+    void register_new_player(int tempname, QString name, QString avatar);
+    void registerRolebyPlayer(int _na, QString role);
+    void slotSendRolelist();
+    void slot_disconnected(int na);
     void slot_attack(QString who, QString whom);
     void slot_infect(QString who, QString whom);
     void slot_wait(QString who);
@@ -91,8 +101,8 @@ public slots:
     void check_for_role_capDecision(QString who,QString whom,QString useit);
     void night_start();
     bool night();
-    void make_events(QString who, QString what, QString whom, QString how, QQueue<QString> rota);
-    void make_events(QString who, QString what, QString whom, QString how);
+    void make_events(int wwh, QString what, QString whom, QString how, QQueue<QString> rota);
+    void make_events(int wwh, QString what, QString whom, QString how);
     void slot_use_item_cap(QString who, QString whom, QString useit);
     void day_canseled_voting();
     void slot_game_over();

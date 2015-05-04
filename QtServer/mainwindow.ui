@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
-    <height>315</height>
+    <width>489</width>
+    <height>291</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,6 +32,10 @@
       <width>211</width>
       <height>91</height>
      </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">
+background: white;</string>
     </property>
    </widget>
    <widget class="QListWidget" name="playerlist">
@@ -60,7 +64,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>500</width>
+     <width>489</width>
      <height>21</height>
     </rect>
    </property>

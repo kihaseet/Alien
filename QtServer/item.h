@@ -3,8 +3,10 @@
 
 #include <QtCore>
 #include "player.h"
+#include "game.h"
 
 class player;
+class game;
 
 class item:public QObject
 {
@@ -16,11 +18,12 @@ public:
     QString note; //описание
     QString forrepower;//предмет для батарейки
     QString role;//чей предмет
-    int lastscan;//статус последней просканированной цели
+    QPair<QString,int> lastscan;//статус последней просканированной цели
     int power; /*!=0 незаряжен, -1 сломан*/
     void counter();
     void reforge(int i);
-    item();
+    item();//добавить playerlist
+    game* _game;
 
 public slots:
     virtual void use_item_day(QString whom){}
@@ -35,7 +38,7 @@ signals:
 class Badge:public item
 {
 public:
-    Badge();
+    Badge(game* _g);
     void use_item_day();
     void use_item_night();
     void ult_item();
@@ -44,8 +47,8 @@ public:
 class Rotation:public item
 {
 public:
-    Rotation();
-    void use_item_day();
+    Rotation(game* _g);
+    void use_item_day(QString whom);
     void use_item_night();
     void ult_item();
 };
@@ -53,54 +56,54 @@ public:
 class Blaster:public item
 {
 public:
-    Blaster();
+    Blaster(game *_g);
     void use_item_day();
-    void use_item_night(player *whom);
-    void ult_item(player *whom);
+    void use_item_night(QString whom);
+    void ult_item(QString whom);
 };
 
 class Injector:public item
 {
 public:
-    Injector();
-    void use_item_day(player *whom);
-    void use_item_night(player *whom);
-    void ult_item();
+    Injector(game *_g);
+    void use_item_day(QString whom);
+    void use_item_night(QString whom);
+    void ult_item(QString whom);
 };
 
 class Notebook:public item
 {
 public:
-    Notebook();
-    void use_item_day(player *whom);
-    void use_item_night();
-    void ult_item();
+    Notebook(game *_g);
+    void use_item_day(QString whom);
+    void use_item_night(QString whom);
+    void ult_item(QString whom);
 };
 
 class Battery:public item
 {
 public:
-    Battery();
-    void use_item_day(item* whom);
-    void use_item_night();
-    void ult_item(item* whom);
+    Battery(game *_g);
+    void use_item_day(QString whom);
+    void use_item_night(QString whom);
+    void ult_item(QString whom);
 };
 
 class Scanner:public item
 {
 public:
-    Scanner();
-    void use_item_day(player* whom);
-    void use_item_night(player* whom);
-    void ult_item();
+    Scanner(game *_g);
+    void use_item_day(QString whom);
+    void use_item_night(QString whom);
+    void ult_item(QString whom);
 };
 
 class Mop:public item
 {
 public:
-    Mop();
+    Mop(game *_g);
     void use_item_day();
-    void use_item_night(player* whom);
+    void use_item_night(QString whom);
     void ult_item();
 };
 #endif // ITEM_H

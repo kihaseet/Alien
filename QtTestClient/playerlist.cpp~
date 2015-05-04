@@ -1,0 +1,14 @@
+#include "playerlist.h"
+#include "ui_playerlist.h"
+
+PlayerList::PlayerList(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::PlayerList)
+{
+    ui->setupUi(this);
+}
+
+PlayerList::~PlayerList()
+{
+    delete ui;
+}

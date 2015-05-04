@@ -17,7 +17,7 @@ ingame_event::ingame_event(QString wh, QString whm, QString wht, QString it)
 }
 
 void ingame_event::do_event(){
-    qDebug()<<"ingame_event::do_event()"<<this->what;
+    qDebug()<<"ingame_event::do_event()"<<this->who<<this->what<<whom<<useit;
 
     if(this->what=="alien")
     {emit event_alien(this->who);}
@@ -27,8 +27,9 @@ void ingame_event::do_event(){
 
     if(this->what=="useitem")
     {
-        if(rota.isEmpty())emit event_useitem(this->who,this->whom,this->useit);
-        else emit event_useitemrot(this->rota);
+        //if(rota.isEmpty())
+            emit event_useitem(this->who,this->whom,this->useit);
+        //else emit event_useitemrot(this->rota);
     }
 
     if(this->what=="useitemCap")

@@ -7,7 +7,7 @@ xml_maker::xml_maker()
 
 
 
-void xml_maker::new_analise(const QString _name,const QString input){
+void xml_maker::new_analise(int _name,const QString input){
 
     if(input!="New connection") {
         QDomDocument domDoc;
@@ -19,7 +19,7 @@ void xml_maker::new_analise(const QString _name,const QString input){
             _xml=traverseNode(domElement,_xml,domDoc.doctype().name());
         }
         if(_xml.what=="regname"){
-            emit newname(_name,_xml.whom);
+            emit newname(_name,_xml.whom,_xml.how);
         }else{
             if(_xml.what=="regrole"){
                 emit registerRolebyPlayer(_name,_xml.whom);
@@ -34,6 +34,97 @@ void xml_maker::new_analise(const QString _name,const QString input){
 
         //qDebug()  <<"[XMLmaker:to game]"<< _xml.what << _xml.whom << _xml.how << _xml.rotation;
     }
+}
+
+xml_msg xml_maker::traverseNode(const QDomNode& node,xml_msg _xml, QString mod)
+{
+    QDomNode domNode = node.firstChild();
+    while(!domNode.isNull()) {
+        if(domNode.isElement()) {
+            QDomElement domElement = domNode.toElement();
+            if(!domElement.isNull()) {
+                //qDebug()  << mod;
+                if (mod=="selecting"){
+
+                    if((domElement.tagName() == "regname") || (domElement.tagName() == "regrole" )) {
+                        _xml.what=domElement.tagName();
+                        _xml.whom=domElement.text();
+                        _xml.how=domElement.attribute("avatar","");
+                        //qDebug()  << domElement.tagName() << domElement.text();
+                    }
+                }
+                if (mod=="voting"){
+                    if(domElement.tagName() == "vote") {
+                        _xml.what = domElement.tagName();
+                        _xml.whom = domElement.text();
+                        //qDebug()  << domElement.tagName() << domElement.text();
+                    }
+                    if(domElement.tagName() == "unvote") {
+                        _xml.what = domElement.tagName();
+                        //qDebug()  << domElement.tagName() << domElement.text();
+                    }
+                }
+                if (mod == "changing") {
+                    if((domElement.tagName() == "attack") || (domElement.tagName() == "infect")) {
+                        _xml.what = domElement.tagName();
+                        _xml.whom = domElement.text();
+                        //qDebug()  << domElement.tagName() << domElement.text();
+                    }
+                    if((domElement.tagName() == "wait")||(domElement.tagName()=="up")||(domElement.tagName()=="down")){
+                        _xml.what=domElement.tagName();
+                        //qDebug()  << domElement.tagName();
+                    }
+                    if(domElement.tagName() == "use"){
+                        if(domElement.attribute("item","")!=""){
+                            _xml.what="useitem";
+                            _xml.how=domElement.attribute("item","");
+                            // qDebug()  << domElement.tagName() << domElement.attribute("item","");
+                            if(_xml.how=="Rotation"){
+                                _xml.rotation=makeRotation(domNode);
+                            }
+                            else _xml.whom=domElement.text();
+
+                        }
+                        if(domElement.attribute("ult","")!=""){
+                            _xml.what="useult";
+                            _xml.whom=domElement.text();
+                            _xml.how=domElement.attribute("ult","");
+                            //qDebug()  << domElement.tagName() << domElement.attribute("ult","") << domElement.text();
+                        }
+                        if(domElement.attribute("badge","")!=""){
+
+                            // qDebug()  << domElement.tagName() << domElement.attribute("item","");
+                            if(_xml.how!="Rotation" && _xml.how!="Badge"){
+                                _xml.what="useitemCap";
+                                _xml.how=domElement.attribute("badge","");
+                                _xml.whom=domElement.text();
+
+                            } else _xml.what="bad_action";
+
+                        }
+                    }
+                }
+            }
+        }
+        traverseNode(domNode,_xml,mod);
+        domNode = domNode.nextSibling();
+    }
+    return _xml;
+}
+
+QQueue<QString> xml_maker::makeRotation(const QDomNode& node){
+    QQueue<QString> rotation;
+    QDomNode domNode = node.firstChild();
+    while(!domNode.isNull()) {
+        if(domNode.isElement()) {
+            QDomElement domElement = domNode.toElement();
+            if(!domElement.isNull()) {
+                rotation.enqueue(domElement.tagName().mid(2));
+            }
+        }
+        domNode = domNode.nextSibling();
+    }
+    return rotation;
 }
 
 /*==================================================*/
@@ -57,19 +148,26 @@ void xml_maker::day_event(ingame_event* _eve,QMap <QString,player*> playerlist){
         QDomElement domEvents = append_events(doc,playerlist);
         domChanges.appendChild(domEvents);
 
+        QMap <QString,player*> playlist;
+        foreach (player* var, playerlist) {
+            playlist.insert(var->name,var);
+        }
+        event_maker(doc,domStat,domEvents,it,playlist,_eve);
 
-        event_maker(doc,domStat,domEvents,it,playerlist,_eve);
-
-        emit sendtoclient(it->name,doc.toString());
+        emit sendtoclient(it->SocketId,doc.toString());
     }
 }
 
 
-void xml_maker::nightmare(QQueue<ingame_event*> _que,QMap <QString,player*> playerlist){
+void xml_maker::nightmare(QQueue<ingame_event*> _que,QList <player*> playerlist){
 
     //QMap<QString, player*>::iterator it = playerlist.begin();
     //for (;it != playerlist.end(); ++it) {/*для всех игроков*/
-    foreach (player* it, playerlist.values()) {
+    QMap <QString,player*> playlist;
+    foreach (player* var, playerlist) {
+        playlist.insert(var->name,var);
+    }
+    foreach (player* it, playerlist) {
 
         QDomDocument doc("init");
 
@@ -87,7 +185,7 @@ void xml_maker::nightmare(QQueue<ingame_event*> _que,QMap <QString,player*> play
         domChanges.appendChild(domStat);
 
 
-        QDomElement domEvents = append_events(doc,playerlist);
+        QDomElement domEvents = append_events(doc,playlist);
         domChanges.appendChild(domEvents);
 
 
@@ -95,9 +193,9 @@ void xml_maker::nightmare(QQueue<ingame_event*> _que,QMap <QString,player*> play
         ingame_event* _eve;
         while(!_queue.isEmpty()){
             _eve=_queue.dequeue();
-            event_maker(doc,domStat,domEvents,it,playerlist,_eve);
+            event_maker(doc,domStat,domEvents,it,playlist,_eve);
         }
-        emit sendtoclient(it->name,doc.toString());
+        emit sendtoclient(it->SocketId,doc.toString());
     }
 
 }
@@ -417,12 +515,12 @@ void xml_maker::send_votelist_to_all(QMap <QString,player*> playerlist,QMap <QSt
             domVotes.appendChild(makeElement(doc,"status","",QString::number(it.value().second),""));
             domVotes.appendChild(makeElement(doc,"target","",it.value().first,""));
         }
-        emit sendtoclient(var->name,doc.toString());
+        emit sendtoclient(var->SocketId,doc.toString());
     }
 }
 
-void xml_maker::send_to_all(ingame_event* _eve,QMap <QString,player*> playerlist,QMap <QString,item*> itemlist){
-}
+//void xml_maker::send_to_all(ingame_event* _eve,QMap <QString,player*> playerlist,QMap <QString,item*> itemlist){
+//}
 
 void xml_maker::send_actionlist(player* who){
     QDomDocument doc("change");
@@ -432,7 +530,7 @@ void xml_maker::send_actionlist(player* who){
 
     domChanges.appendChild(append_actions(doc,who));
 
-    emit sendtoclient(who->name,doc.toString());
+    emit sendtoclient(who->SocketId,doc.toString());
 }
 
 void xml_maker::send_stat(player* who){
@@ -443,40 +541,37 @@ void xml_maker::send_stat(player* who){
 
     domChanges.appendChild(append_stats(doc,who));
 
-    emit sendtoclient(who->name,doc.toString());
+    emit sendtoclient(who->SocketId,doc.toString());
 }
 
 
 
 
-void xml_maker::slotnamecorrect(QString tempname,QString _name){
+void xml_maker::slotnamecorrect(int tempname){
     QDomDocument doc("select");
 
     QDomElement domElement = doc.createElement("select");
     doc.appendChild(domElement);
 
     domElement.appendChild(doc.createElement("namecorrect"));
-
-    //domElement.appendChild(name_role_list(doc,_rolelist));
-    emit namecorrect(tempname,_name);
-    emit sendtoclient(_name,doc.toString());
     emit sendtoclient(tempname,doc.toString());
+    //emit sendtoclient(tempname,doc.toString());
 }
 
 
-void xml_maker::nonamecorrect(QString tempname){
+void xml_maker::nonamecorrect(int tempname){
     QDomDocument doc("select");
 
     QDomElement domElement = doc.createElement("select");
     doc.appendChild(domElement);
 
-    domElement.appendChild(doc.createElement("namecorrect"));
+    domElement.appendChild(doc.createElement("nonamecorrect"));
 
     emit sendtoclient(tempname,doc.toString());
-    emit noVerifyClientName(tempname);
+ //   emit noVerifyClientName(tempname);
 }
 
-void xml_maker::rolecorrect(QString _name){
+void xml_maker::rolecorrect(int _name){
     QDomDocument doc("select");
 
     QDomElement domElement = doc.createElement("select");
@@ -487,7 +582,7 @@ void xml_maker::rolecorrect(QString _name){
     emit sendtoclient(_name,doc.toString());
 }
 
-void xml_maker::norolecorrect(QString _name){
+void xml_maker::norolecorrect(int _name){
     QDomDocument doc("select");
 
     QDomElement domElement = doc.createElement("select");
@@ -499,20 +594,28 @@ void xml_maker::norolecorrect(QString _name){
 }
 
 
-void xml_maker::updaterolelist(QMap <QString,player*> playerlist,QList<QString>_rolelist){
-    //    QMap<QString, player>::iterator it = playerlist.begin();
-    //    for (;it != playerlist.end(); ++it){
-    foreach (player* it, playerlist.values()) {
-        QDomDocument doc("select");
-        QDomElement domElement = doc.createElement("select");
-        doc.appendChild(domElement);
-        domElement.appendChild(name_role_list(doc,playerlist,_rolelist));
-        emit sendtoclient(it->name,doc.toString());
+void xml_maker::updaterolelist(QList <player*> NameRolelist){
+    QDomDocument doc("select");
+    QDomElement domEl = doc.createElement("select");
+    doc.appendChild(domEl);
+    QDomElement domElement=doc.createElement("list");
+    domEl.appendChild(domElement);
+    foreach (player* jt, NameRolelist) {
+        if(jt->rolelist.isEmpty()) domElement.appendChild(makeElement(doc,jt->name,"","",""));
+        else
+            domElement.appendChild(makeElement(doc,jt->name,"",jt->rolelist.first(),""));
     }
+    emit send_to_all(doc.toString());
 }
 
 
-
+QDomElement xml_maker::name_role_list(QDomDocument& domDoc,QList <player*>* playerlist){
+    QDomElement domElement=domDoc.createElement("list");
+    /*foreach (player* it, playerlist) {
+        domElement.appendChild(makeElement(domDoc,it->name,"",playerlist->value(it),""));
+    }*/
+    return domElement;
+}
 
 QDomElement xml_maker::name_role_list(QDomDocument& domDoc,QMap <QString,player*> playerlist,QList<QString>_rolelist){
     QDomElement domElement=domDoc.createElement("list");

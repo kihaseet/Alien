@@ -1,6 +1,9 @@
 #ifndef EVENT_H
 #define EVENT_H
+#include <QtCore>
 #include "player.h"
+
+class player;
 
 class ingame_event:public QObject
 {
@@ -10,6 +13,7 @@ public:
     QString what;
     QString useit;
     QQueue <QString> rota;
+    player* wh;
     ingame_event(QString wh, QString whm, QString wht, QString it, QQueue <QString>rot);
     ingame_event(QString wh, QString whm, QString wht, QString it);
 signals:

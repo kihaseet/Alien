@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     item.cpp \
     voting.cpp \
     event.cpp \
-    clientsocket.cpp
+    clientsocket.cpp \
+    config.cpp
 
 HEADERS  += mainwindow.h \
     game.h \
@@ -31,6 +32,8 @@ HEADERS  += mainwindow.h \
     item.h \
     voting.h \
     event.h \
-    clientsocket.h
+    clientsocket.h \
+    config.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    config.ui
