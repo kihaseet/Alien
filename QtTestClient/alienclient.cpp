@@ -9,9 +9,9 @@ AlienClient::AlienClient(QObject *parent) : QObject(parent)
     connect(server_connection, SIGNAL(disconnect), this, SLOT(disconnect));
 
     connect(&protocol, SIGNAL(onChange(onChangeInfo)), this, SLOT(onChange(onChangeInfo)));
-    connect(&protocol, SIGNAL(onInit(onInitInfo)), this, SLOT(onInit(onInitInfo));
-    connect(&protocol, SIGNAL(onSelect(onSelectInfo)), this, SLOT(onSelect(onSelectInfo));
-    connect(&protocol, SIGNAL(onVote(onVoteInfo)), this, SLOT(onVote(onVoteInfo));
+    connect(&protocol, SIGNAL(onInit(onInitInfo)), this, SLOT(onInit(onInitInfo)));
+    connect(&protocol, SIGNAL(onSelect(onSelectInfo)), this, SLOT(onSelect(onSelectInfo)));
+    connect(&protocol, SIGNAL(onVote(onVoteInfo)), this, SLOT(onVote(onVoteInfo)));
 }
 
 AlienClient::~AlienClient()

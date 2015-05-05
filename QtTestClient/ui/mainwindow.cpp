@@ -13,13 +13,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
 //    xmlManager = new xmlmaker();
 //    server = new tcpclient(21277);
-//    stackedWidget = new QStackedWidget(this);
-//    stackedWidget->addWidget(startWindow);
-//    stackedWidget->addWidget(lobbyWindow);
-//    stackedWidget->addWidget(gameWindow);
-//    setCentralWidget(stackedWidget);
+    stackedWidget = new QStackedWidget(this);
+    stackedWidget->addWidget(startWindow);
+    stackedWidget->addWidget(lobbyWindow);
+    stackedWidget->addWidget(gameWindow);
+    setCentralWidget(stackedWidget);
 
-//    stackedWidget->setCurrentIndex(0);
+    stackedWidget->setCurrentIndex(0);
 
 //    connect(server,SIGNAL(errormess(QString)),startWindow,SLOT(setLabelText(QString)));
 //    connect(server,SIGNAL(disconnect()),this,SLOT(Disconnect()));

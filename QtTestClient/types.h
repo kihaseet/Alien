@@ -75,6 +75,14 @@ struct TurnObject {
         targets = QStringList();
         type = TT_SKIP;
     }
+
+    friend bool operator == (const TurnObject& left, const TurnObject& right)
+    {
+       return
+          left.item == right.item &&
+          left.type == right.type &&
+          left.targets == right.targets;
+    }
 };
 
 struct CurrectPlayerInfo
