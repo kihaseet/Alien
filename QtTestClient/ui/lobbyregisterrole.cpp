@@ -30,11 +30,14 @@ void LobbyRegisterRole::slot_wrong_role(){
     ui->label->setText("Роль указана неверно или уже занята");
 }
 
-void LobbyRegisterRole::updateButtons(QList<QString> player){
+void LobbyRegisterRole::updateButtons(QList<PlayerInfo> player){
     foreach (QWidget* but, buttons) {
         but->setEnabled(true);
     }
-    foreach (QString role, player) {
+    foreach (PlayerInfo r, player) {
+        QString role;
+        if(!r.role.isEmpty()) role = r.role.first();
+
         if(role=="Captain"){
             ui->Button_Cap->setDisabled(true);
             continue;}

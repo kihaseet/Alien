@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <ui/playerwidget.h>
 #include <QMap>
+#include "types.h"
 
 namespace Ui {
 class PlayerList;
@@ -17,7 +18,7 @@ class PlayerList : public QWidget
 public:
     explicit PlayerList(QWidget *parent = 0);
     ~PlayerList();
-    void startGame (QMap<QString,QString> playerlist);
+    void startGame (QMap<QString,PlayerInfo> playerlist);
 
 private:
     Ui::PlayerList *ui;

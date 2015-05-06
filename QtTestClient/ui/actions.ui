@@ -1,22 +1,30 @@
-<?xml version='1.0'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <author/>
- <comment/>
- <exportmacro/>
  <class>Actions</class>
- <widget name="Actions" class="QWidget">
+ <widget class="QWidget" name="Actions">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>240</width>
-    <height>320</height>
+    <width>389</width>
+    <height>78</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <widget class="QWidget" name="horizontalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>-1</x>
+     <y>0</y>
+     <width>391</width>
+     <height>80</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout"/>
+  </widget>
  </widget>
- <pixmapfunction/>
+ <resources/>
  <connections/>
 </ui>

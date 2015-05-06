@@ -13,11 +13,11 @@ PlayerList::~PlayerList()
     delete ui;
 }
 
-void PlayerList::startGame(QMap <QString,QString> playerlist){
+void PlayerList::startGame(QMap<QString, PlayerInfo> playerlist){
     int i=-1;
     int j=0;
     foreach (QString name, playerlist.keys()) {
-        PlayerWidget* noob = new PlayerWidget(name,playerlist.value(name),this);
+        PlayerWidget* noob = new PlayerWidget(name,playerlist[name].role.first(),this);
         playlist.insert(name,noob);
         ui->gridLayout->addWidget(noob,++i,j);
         if(i==3) {

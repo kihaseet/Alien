@@ -2,6 +2,7 @@
 #define INVENTORY_H
 
 #include <QWidget>
+#include <QPushButton>
 
 namespace Ui {
 class Inventory;
@@ -14,6 +15,9 @@ class Inventory : public QWidget
 public:
     explicit Inventory(QWidget *parent = 0);
     ~Inventory();
+
+    void AddButton(QPushButton *button);
+    void RemoveButton(QPushButton *button);
 
 private:
     Ui::Inventory *ui;

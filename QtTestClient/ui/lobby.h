@@ -7,6 +7,7 @@
 #include "lobbyregistername.h"
 #include "lobbyregisterrole.h"
 #include "lobbywaiting.h"
+#include "types.h"
 
 namespace Ui {
 class Lobby;
@@ -26,9 +27,8 @@ public:
     LobbyWaiting* lobbyWaiting;
 
 public slots:
-    void updatePlayerList(QMap<QString, QString> player);
-    void setSelectRoleWindow();
-    void setWaitingWindow();
+    void updatePlayerList(QMap<QString, PlayerInfo> players);
+    void setSelectWindow(SELECT_TYPE status);
 
 private:
     Ui::Lobby *ui;

@@ -26,7 +26,11 @@ SOURCES += tcpclient.cpp \
     ui/playerwidget.cpp \
     ui/start.cpp \
     main.cpp \
-    xmlprotocol.cpp
+    xmlprotocol.cpp \
+    ui/actions.cpp \
+    ui/inventory.cpp \
+    ui/log.cpp \
+    ui/status.cpp
 
 HEADERS  += tcpclient.h \
     xmlmanager.h \
@@ -41,9 +45,13 @@ HEADERS  += tcpclient.h \
     ui/playerwidget.h \
     ui/start.h \
     xmlprotocol.h \
-    types.h
+    types.h \
+    ui/actions.h \
+    ui/inventory.h \
+    ui/log.h \
+    ui/status.h
 
-FORMS    += ui/form.ui \
+FORMS    += \
     ui/game.ui \
     ui/lobby.ui \
     ui/lobbyregistername.ui \
@@ -52,4 +60,8 @@ FORMS    += ui/form.ui \
     ui/mainwindow.ui \
     ui/playerlist.ui \
     ui/playerwidget.ui \
-    ui/start.ui
+    ui/start.ui \
+    ui/actions.ui \
+    ui/inventory.ui \
+    ui/log.ui \
+    ui/status.ui

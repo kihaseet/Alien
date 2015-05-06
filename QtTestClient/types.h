@@ -5,6 +5,7 @@
 #include <QStringList>
 #include <QMap>
 #include <QVector>
+#include <QPushButton>
 
 enum TURN_TYPE {
     TT_USE_ITEM = 0,
@@ -61,6 +62,8 @@ struct TurnObject {
     TURN_TYPE type;
     QStringList targets;
     QString item;
+    QPushButton* button;
+    bool curr;
 
     TurnObject(TURN_TYPE type, QStringList targets, QString item)
     {
@@ -80,9 +83,11 @@ struct TurnObject {
     {
        return
           left.item == right.item &&
-          left.type == right.type &&
-          left.targets == right.targets;
+          left.type == right.type;
     }
+signals:
+    buttonclicked();
+
 };
 
 struct CurrectPlayerInfo

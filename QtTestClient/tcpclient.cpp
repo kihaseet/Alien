@@ -39,6 +39,7 @@ void tcpclient::slotError(QAbstractSocket::SocketError err)
 
 void tcpclient::slotConnected()
 {
+    connect(serv,SIGNAL(disconnected()),this,SLOT(slotDisconect()));
     emit errormess("Loading player's list...");
 }
 
@@ -48,6 +49,7 @@ void tcpclient::connect_(QString addr, int Port){
 }
 
 void tcpclient::slotDisconect(){
-    emit disconnect();
+    emit sig_disconnect();
+    disconnect(serv,SIGNAL(disconnected()),this,SLOT(slotDisconect()));
 }
 

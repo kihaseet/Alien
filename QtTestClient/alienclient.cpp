@@ -82,6 +82,7 @@ void AlienClient::onSelect(onSelectInfo info)
         players[player].role.append(info.players[player]);
         players[player].name = player;
     }
+    emit updatePlayers(players);
 }
 
 void AlienClient::onInit(onInitInfo info)

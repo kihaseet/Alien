@@ -19,32 +19,31 @@ public:
     bool register_(QString name);
     bool selectRole(QString name);
     void makeTurn(TurnObject &turn);
+    tcpclient* server_connection;
+    QMap<QString, PlayerInfo> players;
 
 private:
     QMap<QString, int> items;
-    QMap<QString, PlayerInfo> players;
 
-    tcpclient* server_connection;
     XmlProtocol protocol;
 
     CurrectPlayerInfo currentPlayer;
 
 signals:
-    waitLobby();
     registerStatus(SELECT_TYPE status);
     updateItems(QMap<QString, int>& updated_items);
     updatePlayers(QMap<QString, PlayerInfo>& updated_players);
     updateActions(QVector<TurnObject> actions);
     updateStat(CurrectPlayerInfo& info);
     updateEvents(QVector<EventInfo> events);
-    startVoting(QString target, QStringList players);
+    startVoting(QString target, QStringList playerss);
     updateVoting(QMap<QString, QPair<int, QString> > votelist);
     endVoting(QString target, QString name, QString result);
     updateInit(INIT_TYPE type);
 
 
 private slots:
-//    void GetParsedData(SERVER_RESPONSE_TYPE type, QMap<QString, PlayerInfo>& players);
+    //    void GetParsedData(SERVER_RESPONSE_TYPE type, QMap<QString, PlayerInfo>& players);
     void onChange(onChangeInfo info);
     void onSelect(onSelectInfo info);
     void onInit(onInitInfo info);

@@ -22,7 +22,7 @@ public slots:
 signals:
     void GetData(QString msg);
     void errormess(QString mess);
-    void disconnect();
+    void sig_disconnect();
 };
 
 #endif // TCPCLIENT_H

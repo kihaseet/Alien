@@ -21,21 +21,23 @@ MainWindow::MainWindow(QWidget *parent) :
 
     stackedWidget->setCurrentIndex(0);
 
-//    connect(server,SIGNAL(errormess(QString)),startWindow,SLOT(setLabelText(QString)));
-//    connect(server,SIGNAL(disconnect()),this,SLOT(Disconnect()));
-//    connect(server,SIGNAL(GetData(QString)),xmlManager,SLOT(new_analise(QString)));
+    connect(client.server_connection,SIGNAL(errormess(QString)),startWindow,SLOT(setLabelText(QString)));
+    connect(client.server_connection,SIGNAL(sig_disconnect()),this,SLOT(Disconnect()));
+    connect(&client,SIGNAL(updatePlayers(QMap<QString,PlayerInfo>&)),this,SLOT(GoLobbyWindow()));
 
-//    connect(startWindow,SIGNAL(ConnectClicked(QString)),server,SLOT(slotConnecting(QString)));
-//    connect(xmlManager,SIGNAL(send2serv(QString)),server,SLOT(sendData(QString)));
-//    connect(xmlManager,SIGNAL(signal_playerlist(QMap<QString,QString>)),lobbyWindow,SLOT(updatePlayerList(QMap<QString,QString>)));
-//    connect(xmlManager,SIGNAL(signal_playerlist(QMap<QString,QString>)),this,SLOT(GoLobbyWindow()));
-//    connect(xmlManager,SIGNAL(signal_NameCorrect()),lobbyWindow,SLOT(setSelectRoleWindow()));
-//    connect(xmlManager,SIGNAL(signal_NoNameCorrect()),lobbyWindow->lobbyRegisterName,SLOT(slot_wrongName()));
-//    connect(xmlManager,SIGNAL(signal_RoleCorrect()),lobbyWindow,SLOT(setWaitingWindow()));
-//    connect(xmlManager,SIGNAL(signal_NoRoleCorrect()),lobbyWindow->lobbyRegisterRole,SLOT(slot_wrong_role()));
+    connect(&client,SIGNAL(registerStatus(SELECT_TYPE)),lobbyWindow,SLOT(setSelectWindow(SELECT_TYPE)));
+    connect(&client,SIGNAL(updatePlayers(QMap<QString,PlayerInfo>&)),lobbyWindow,SLOT(updatePlayerList(QMap<QString,PlayerInfo>)));
 
-//    connect(lobbyWindow->lobbyRegisterName,SIGNAL(sendNewName(QString,QString)),xmlManager,SLOT(slot_sendNewName(QString,QString)));
-//    connect(lobbyWindow->lobbyRegisterRole,SIGNAL(changeRole(QString,QString)),xmlManager,SLOT(slot_sendNewName(QString,QString)));
+    connect(&client,SIGNAL(updateInit(INIT_TYPE)),gameWindow,SLOT(UpdateInit(INIT_TYPE)));
+    connect(&client,SIGNAL(updateActions(QVector<TurnObject>)),gameWindow,SLOT(updateActions(QVector<TurnObject>)));
+    connect(&client,SIGNAL(updateEvents(QVector<EventInfo>)),gameWindow,SLOT(UpdateEvents(QVector<EventInfo>)));
+    connect(&client,SIGNAL(startVoting(QString,QStringList)),gameWindow,SLOT(StartVoting(QString,QStringList)));
+    connect(&client,SIGNAL(updateVoting(QMap<QString,QPair<int,QString> >)),gameWindow,SLOT(UpdateVoting(QMap<QString,QPair<int,QString> >)));
+    connect(&client,SIGNAL(endVoting(QString,QString,QString)),gameWindow,SLOT(EndVoting(QString,QString,QString)));
+    connect(&client,SIGNAL(updateItems(QMap<QString,int>&)),gameWindow,SLOT(UpdateItems(QMap<QString,int>&)));
+    connect(&client,SIGNAL(updateStat(CurrectPlayerInfo&)),gameWindow,SLOT(UpdateStat(CurrectPlayerInfo&)));
+
+
 }
 
 MainWindow::~MainWindow()
@@ -45,11 +47,20 @@ MainWindow::~MainWindow()
 
 void MainWindow::GoLobbyWindow(){
     if(stackedWidget->currentIndex()==0) stackedWidget->setCurrentIndex(1);
+    connect(&client,SIGNAL(updateInit(INIT_TYPE)),this,SLOT(GoGameWindow()));
+    disconnect(&client,SIGNAL(updatePlayers(QMap<QString,PlayerInfo>&)),this,SLOT(GoLobbyWindow()));
+}
+
+void MainWindow::GoGameWindow(){
+    gameWindow->StartGame(client.players);
+    if(stackedWidget->currentIndex()==1) stackedWidget->setCurrentIndex(2);
+    disconnect(&client,SIGNAL(updateInit(INIT_TYPE)),this,SLOT(GoGameWindow()));
 }
 
 void MainWindow::Disconnect(){
     stackedWidget->setCurrentIndex(0);
     startWindow->setLabelText("Disconnect!..");
+    connect(&client,SIGNAL(updatePlayers(QMap<QString,PlayerInfo>&)),this,SLOT(GoLobbyWindow()));
 }
 
 AlienClient MainWindow::client;

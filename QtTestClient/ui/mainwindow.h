@@ -24,6 +24,7 @@ public:
 
 public slots:
     void GoLobbyWindow();
+    void GoGameWindow();
     void Disconnect();
     
 private:

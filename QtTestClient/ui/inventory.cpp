@@ -12,3 +12,11 @@ Inventory::~Inventory()
 {
     delete ui;
 }
+
+void Inventory::AddButton(QPushButton* button){
+    ui->horizontalLayout->addWidget(button);
+}
+
+void Inventory::RemoveButton(QPushButton* button){
+    ui->horizontalLayout->removeWidget(button);
+}

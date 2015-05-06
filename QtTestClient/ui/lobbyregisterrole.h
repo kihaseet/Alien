@@ -2,6 +2,7 @@
 #define LOBBYREGISTERROLE_H
 
 #include <QWidget>
+#include "types.h"
 
 namespace Ui {
 class LobbyRegisterRole;
@@ -14,7 +15,7 @@ class LobbyRegisterRole : public QWidget
 public:
     explicit LobbyRegisterRole(QWidget *parent = 0);
     ~LobbyRegisterRole();
-    void updateButtons(QList<QString> player);
+    void updateButtons(QList<PlayerInfo> player);
     QString CurrRole;
 
 public slots:
