@@ -62,7 +62,7 @@ struct TurnObject {
     TURN_TYPE type;
     QStringList targets;
     QString item;
-    QPushButton* button;
+    //QPushButton* button;
     bool curr;
 
     TurnObject(TURN_TYPE type, QStringList targets, QString item)
@@ -84,6 +84,12 @@ struct TurnObject {
        return
           left.item == right.item &&
           left.type == right.type;
+    }
+    friend bool operator < (const TurnObject& left, const TurnObject& right)
+    {
+        if((left.type == TT_USE_ITEM && right.type == TT_USE_ITEM)||(left.type == TT_ULT_ITEM && right.type == TT_ULT_ITEM)){
+             return left.item < right.item;
+        }else return left.type < right.type;
     }
 signals:
     buttonclicked();

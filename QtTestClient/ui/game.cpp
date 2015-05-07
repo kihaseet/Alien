@@ -13,6 +13,7 @@ Game::Game(QWidget *parent) :
     log = new Log(this);
     status = new Status(this);
     playerlist = new PlayerList(this);
+    targets = new Targets(this);
 
     stackedWidgetInventory = new QStackedWidget(this);
     stackedWidgetInventory->addWidget(actions);
@@ -23,6 +24,7 @@ Game::Game(QWidget *parent) :
     stackedWidgetMain = new QStackedWidget(this);
     stackedWidgetMain->addWidget(playerlist);
     stackedWidgetMain->addWidget(log);
+    stackedWidgetMain->addWidget(targets);
     ui->LayoutPlayerList->addWidget(stackedWidgetMain);
     stackedWidgetMain->setCurrentIndex(0);
 
@@ -30,7 +32,7 @@ Game::Game(QWidget *parent) :
 }
 
 void Game::StartGame( QMap<QString, PlayerInfo> play){
-  //  playerlist->startGame(QMap<QString, PlayerInfo> play);
+    //  playerlist->startGame(QMap<QString, PlayerInfo> play);
 }
 
 Game::~Game()
@@ -53,69 +55,62 @@ void Game::on_pushButton_clicked()
 
 void Game::updateActions(QVector<TurnObject> ActionsVector){
     foreach (TurnObject var, ActionsVector) {
-        int index = TurnObjectPool.indexOf(var);
-        if(index!=-1){
-            TurnObjectPool[index].targets=var.targets;
-        }
-        else{
-            TurnObjectPool.append(var);
-            index = TurnObjectPool.indexOf(var);
-
-            TurnObjectPool[index].button = new QPushButton(this);
-            if(var.type==TT_USE_ITEM || var.type==TT_ULT_ITEM){
-                (var.type==TT_USE_ITEM) ?
-                            TurnObjectPool[index].button->setText(var.item)
-                          : TurnObjectPool[index].button->setText("U"+var.item);
-
-            }else{
-                QString txt;
-                switch (var.type)
-                {
-                case TT_ATTACK:
-                    txt = "Напасть";
-                    break;
-                case TT_INFECT:
-                    txt = "Заразить";
-                    break;
-                case TT_VOTE:
-                    txt = "Голосовать" ;
-                    break;
-                case TT_UNVOTE:
-                    txt = "Снять голос";
-                    break;
-                case TT_UP:
-                    txt = "Выйти из ванны" ;
-                    break;
-                case TT_DOWN:
-                    txt = "Лечь в ванну";
-                    break;
-                case TT_SKIP:
-                    txt = "Ждать" ;
-                    break;
-                }
-                TurnObjectPool[index].button->setText(txt);
+        QPushButton* tmp;
+        if(TurnObjectPool.contains(var)){
+            tmp = TurnObjectPool[var];
+            TurnObjectPool.remove(var);
+            TurnObjectPool.insert(var,tmp);
+        }else{
+            tmp = new QPushButton(this);
+            connect(tmp,SIGNAL(clicked()),this,SLOT(PrepareTurn()));
+            QString txt;
+            switch (var.type)
+            {
+            case TT_ULT_ITEM:
+                txt = "U"+var.item;
+                break;
+            case TT_USE_ITEM:
+                txt = var.item;
+                break;
+            case TT_ATTACK:
+                txt = "Напасть";
+                break;
+            case TT_INFECT:
+                txt = "Заразить";
+                break;
+            case TT_VOTE:
+                txt = "Голосовать" ;
+                break;
+            case TT_UNVOTE:
+                txt = "Снять голос";
+                break;
+            case TT_UP:
+                txt = "Выйти из ванны" ;
+                break;
+            case TT_DOWN:
+                txt = "Лечь в ванну";
+                break;
+            case TT_SKIP:
+                txt = "Ждать" ;
+                break;
             }
-
-            TurnObjectPool[index].curr=false;
-           // connect(TurnObjectPool[index].button,SIGNAL(clicked()),TurnObjectPool[index],SLOT);
+            tmp->setText(txt);
+            TurnObjectPool.insert(var,tmp);
         }
-
-
-        if(!TurnObjectPool[index].curr){
+        if(!CurrentButtons.contains(tmp)){
             (var.type==TT_USE_ITEM || var.type==TT_ULT_ITEM) ?
-                        inventory->AddButton(TurnObjectPool[index].button)
-                      : actions->AddButton(TurnObjectPool[index].button);
-            TurnObjectPool[index].curr=true;
+                        inventory->AddButton(tmp)
+                      : actions->AddButton(tmp);
+            CurrentButtons.append(tmp);
         }
     }
-
-    foreach (TurnObject var, TurnObjectPool) {
-        if(var.curr && !ActionsVector.contains(var)){
-            (var.type==TT_USE_ITEM || var.type==TT_ULT_ITEM) ?
-                        inventory->RemoveButton(var.button)
-                      : actions->RemoveButton(var.button);
-
-            var.curr=false;
+    foreach (QPushButton* button, CurrentButtons) {
+        if(!ActionsVector.contains(TurnObjectPool.key(button)))
+        {
+            (TurnObjectPool.key(button).type==TT_USE_ITEM || TurnObjectPool.key(button).type==TT_ULT_ITEM) ?
+                        inventory->RemoveButton(button)
+                      : actions->RemoveButton(button);
+            CurrentButtons.removeOne(button);
         }
     }
 }
@@ -218,6 +213,15 @@ void Game::UpdatePlayers(QMap<QString, PlayerInfo>& updated_players){
 
 }
 
-void Game::MakeTurn(){
-    //TurnObjectPool.(QPushButton)sender
+void Game::PrepareTurn(){
+    QObject* obj=QObject::sender();
+    TurnObject tmp;
+    if (QPushButton *tb=qobject_cast<QPushButton *>(obj))
+        tmp = TurnObjectPool.key(tb);
+    switch(tmp.type){
+    case TT_ATTACK:
+        foreach (QString name, tmp.targets) {
+
+        }
+    }
 }

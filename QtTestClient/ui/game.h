@@ -9,6 +9,7 @@
 #include "log.h"
 #include "status.h"
 #include "playerlist.h"
+#include "targets.h"
 
 namespace Ui {
 class Game;
@@ -34,7 +35,7 @@ public slots:
     void UpdateVoting(QMap<QString, QPair<int, QString> > votelist);
     void EndVoting(QString target, QString name, QString result);
     void UpdatePlayers(QMap<QString, PlayerInfo>& updated_players);
-    void MakeTurn();
+    void PrepareTurn();
 
 private slots:
     void on_pushButton_clicked();
@@ -50,7 +51,9 @@ private:
     Log* log;
     Status* status;
     PlayerList* playerlist;
-    QVector<TurnObject> TurnObjectPool;
+    Targets* targets;
+    QMap<TurnObject,QPushButton*> TurnObjectPool;
+    QList<QPushButton*> CurrentButtons;
 };
 
 #endif // GAME

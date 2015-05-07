@@ -30,7 +30,8 @@ SOURCES += tcpclient.cpp \
     ui/actions.cpp \
     ui/inventory.cpp \
     ui/log.cpp \
-    ui/status.cpp
+    ui/status.cpp \
+    ui/targets.cpp
 
 HEADERS  += tcpclient.h \
     xmlmanager.h \
@@ -49,7 +50,8 @@ HEADERS  += tcpclient.h \
     ui/actions.h \
     ui/inventory.h \
     ui/log.h \
-    ui/status.h
+    ui/status.h \
+    ui/targets.h
 
 FORMS    += \
     ui/game.ui \
@@ -64,4 +66,5 @@ FORMS    += \
     ui/actions.ui \
     ui/inventory.ui \
     ui/log.ui \
-    ui/status.ui
+    ui/status.ui \
+    ui/targets.ui
