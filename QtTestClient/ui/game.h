@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QStackedWidget>
 #include "types.h"
+#include "alienclient.h"
 #include "actions.h"
 #include "inventory.h"
 #include "log.h"
@@ -36,11 +37,14 @@ public slots:
     void EndVoting(QString target, QString name, QString result);
     void UpdatePlayers(QMap<QString, PlayerInfo>& updated_players);
     void PrepareTurn();
+    void EndTurn(PlayerWidget* target);
 
 private slots:
     void on_pushButton_clicked();
 
     void on_Button_log_clicked();
+
+    void on_ButtonCancer_clicked();
 
 private:
     Ui::Game *ui;
@@ -54,6 +58,9 @@ private:
     Targets* targets;
     QMap<TurnObject,QPushButton*> TurnObjectPool;
     QList<QPushButton*> CurrentButtons;
+
+    TurnObject CurrentTurn;
+    bool ButtonPressed;
 };
 
 #endif // GAME

@@ -44,3 +44,10 @@ void PlayerWidget::setVote(int v){
     }
     ui->labelVote->setText(vote);
 }
+
+void PlayerWidget::setBackColor( const QColor &c )
+{
+        QPalette p = palette();
+        p.setColor(backgroundRole(), c);
+        setPalette(p);
+}

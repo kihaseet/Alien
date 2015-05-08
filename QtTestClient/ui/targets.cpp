@@ -12,3 +12,7 @@ Targets::~Targets()
 {
     delete ui;
 }
+
+void Targets::addWidget(PlayerWidget *noob, int i, int j){
+    ui->gridLayout->addWidget(noob,i,j);
+}

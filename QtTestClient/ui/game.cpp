@@ -7,6 +7,7 @@ Game::Game(QWidget *parent) :
 {
     ui->setupUi(this);
     day=0;
+    ui->ButtonCancer->hide();
 
     inventory = new Inventory(this);
     actions = new Actions(this);
@@ -214,14 +215,44 @@ void Game::UpdatePlayers(QMap<QString, PlayerInfo>& updated_players){
 }
 
 void Game::PrepareTurn(){
-    QObject* obj=QObject::sender();
-    TurnObject tmp;
-    if (QPushButton *tb=qobject_cast<QPushButton *>(obj))
-        tmp = TurnObjectPool.key(tb);
-    switch(tmp.type){
-    case TT_ATTACK:
-        foreach (QString name, tmp.targets) {
+    ButtonPressed = true;
+    foreach (QPushButton* button, CurrentButtons) {
+        button->setDisabled(true);
+    }
+    ui->pushButton->hide();
+    ui->ButtonCancer->show();
 
+    QObject* obj=QObject::sender();
+    if (QPushButton *tb=qobject_cast<QPushButton *>(obj))
+        CurrentTurn = TurnObjectPool.key(tb);
+    switch(CurrentTurn.type){
+    case TT_ATTACK:
+        foreach (PlayerWidget* player, playerlist->playlist.values()) {
+            if(!CurrentTurn.targets.contains(player->name)){
+                player->setBackColor(player->palette().color(QPalette::Window).dark(150));
+            }else{
+                connect(player,SIGNAL(mouseClick(PlayerWidget*)),this,SLOT(EndTurn(PlayerWidget*)));
+            }
         }
     }
+}
+
+void Game::EndTurn(PlayerWidget* target){
+    foreach (PlayerWidget* player, playerlist->playlist.values()) {
+        if(!CurrentTurn.targets.contains(player->name)){
+            player->setBackColor(player->palette().color(QPalette::Window).light(150));
+            else disconnect(player,SIGNAL(mouseClick(PlayerWidget*)),this,SLOT(EndTurn(PlayerWidget*)));
+        }
+    }
+
+}
+
+void Game::on_ButtonCancer_clicked()
+{
+    foreach (QPushButton* button, CurrentButtons) {
+        button->setEnabled(true);
+    }
+
+    ui->pushButton->show();
+    ui->ButtonCancer->hide();
 }

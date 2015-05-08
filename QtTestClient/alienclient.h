@@ -11,9 +11,16 @@
 class AlienClient : public QObject
 {
     Q_OBJECT
-public:
+private:
     explicit AlienClient(QObject *parent = 0);
     ~AlienClient();
+    AlienClient(const AlienClient& root);
+    AlienClient& operator=(const AlienClient&);
+public:
+    static const AlienClient& Instance(){
+        static AlienClient theSingleInstance;
+        return theSingleInstance;
+    }
 
     bool connect_(QString addr);
     bool register_(QString name);
@@ -55,4 +62,5 @@ private slots:
 public slots:
 };
 
+#define ALIENCLIENT AlienClient::Instance()
 #endif // ALIENCLIENT_H

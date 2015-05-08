@@ -20,7 +20,7 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    static AlienClient client;
+    //AlienClient client;
 
 public slots:
     void GoLobbyWindow();

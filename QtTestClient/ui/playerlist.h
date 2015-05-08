@@ -13,9 +13,10 @@ class PlayerList;
 class PlayerList : public QWidget
 {
     Q_OBJECT
-    QMap <QString, QWidget*> playlist;
+
 
 public:
+    QMap <QString, PlayerWidget*> playlist;
     explicit PlayerList(QWidget *parent = 0);
     ~PlayerList();
     void startGame (QMap<QString,PlayerInfo> playerlist);
