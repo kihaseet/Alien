@@ -24,6 +24,7 @@ public:
     explicit Game(QWidget *parent = 0);
     ~Game();
     int day;
+    bool night;
     void StartGame(QMap<QString, PlayerInfo> play);
 
 public slots:
@@ -38,6 +39,8 @@ public slots:
     void UpdatePlayers(QMap<QString, PlayerInfo>& updated_players);
     void PrepareTurn();
     void EndTurn(PlayerWidget* target);
+    void EndTurn();
+    void EndTurn(QStringList targetlist);
 
 private slots:
     void on_pushButton_clicked();

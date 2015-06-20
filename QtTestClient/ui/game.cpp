@@ -56,54 +56,62 @@ void Game::on_pushButton_clicked()
 
 void Game::updateActions(QVector<TurnObject> ActionsVector){
     foreach (TurnObject var, ActionsVector) {
-        QPushButton* tmp;
-        if(TurnObjectPool.contains(var)){
-            tmp = TurnObjectPool[var];
-            TurnObjectPool.remove(var);
-            TurnObjectPool.insert(var,tmp);
-        }else{
-            tmp = new QPushButton(this);
-            connect(tmp,SIGNAL(clicked()),this,SLOT(PrepareTurn()));
-            QString txt;
-            switch (var.type)
-            {
-            case TT_ULT_ITEM:
-                txt = "U"+var.item;
-                break;
-            case TT_USE_ITEM:
-                txt = var.item;
-                break;
-            case TT_ATTACK:
-                txt = "Напасть";
-                break;
-            case TT_INFECT:
-                txt = "Заразить";
-                break;
-            case TT_VOTE:
-                txt = "Голосовать" ;
-                break;
-            case TT_UNVOTE:
-                txt = "Снять голос";
-                break;
-            case TT_UP:
-                txt = "Выйти из ванны" ;
-                break;
-            case TT_DOWN:
-                txt = "Лечь в ванну";
-                break;
-            case TT_SKIP:
-                txt = "Ждать" ;
-                break;
+        if(var.type!=TT_VOTE && var.type!=TT_VOTE){
+            QPushButton* tmp;
+            if(TurnObjectPool.contains(var)){
+                tmp = TurnObjectPool[var];
+                TurnObjectPool.remove(var);
+                TurnObjectPool.insert(var,tmp);
+            }else{
+                tmp = new QPushButton(this);
+                connect(tmp,SIGNAL(clicked()),this,SLOT(PrepareTurn()));
+                QString txt;
+                switch (var.type)
+                {
+                case TT_ULT_ITEM:
+                    txt = "U"+var.item;
+                    break;
+                case TT_USE_ITEM:
+                    txt = var.item;
+                    break;
+                case TT_ATTACK:
+                    txt = "Напасть";
+                    break;
+                case TT_INFECT:
+                    txt = "Заразить";
+                    break;
+                case TT_UP:
+                    txt = "Выйти из ванны" ;
+                    break;
+                case TT_DOWN:
+                    txt = "Лечь в ванну";
+                    break;
+                case TT_SKIP:
+                    txt = "Ждать" ;
+                    break;
+                }
+                tmp->setText(txt);
+                TurnObjectPool.insert(var,tmp);
             }
-            tmp->setText(txt);
-            TurnObjectPool.insert(var,tmp);
+            if(!CurrentButtons.contains(tmp)){
+                (var.type==TT_USE_ITEM || var.type==TT_ULT_ITEM) ?
+                            inventory->AddButton(tmp)
+                          : actions->AddButton(tmp);
+                CurrentButtons.append(tmp);
+            }
         }
-        if(!CurrentButtons.contains(tmp)){
-            (var.type==TT_USE_ITEM || var.type==TT_ULT_ITEM) ?
-                        inventory->AddButton(tmp)
-                      : actions->AddButton(tmp);
-            CurrentButtons.append(tmp);
-        }
+        /*else if(var.type==TT_VOTE){
+            foreach (QString player, playerlist->playlist) {
+                if(var.targets.contains(player)){
+                    playerlist->playlist[player]->showVoteButton(true);
+                }else playerlist->playlist[player]->showVoteButton(false);
+            }
+        }*/
+        /*else if(var.type==TT_UNVOTE){
+            foreach (PlayerWidget player, playerlist->playlist.values()) {
+                player.showUnVoteButton(player.YetVoting);
+            }
+        }*/
     }
     foreach (QPushButton* button, CurrentButtons) {
         if(!ActionsVector.contains(TurnObjectPool.key(button)))
@@ -133,11 +141,13 @@ void Game::UpdateInit(INIT_TYPE type){
     {
     case IT_DAYTIME:
         day++;
+        night = false;
         ui->labelTime->setText("День "+QString::number(day));
         log->appendText("");
         log->appendText("День "+QString::number(day));
         break;
     case IT_NIGHTTIME:
+        night = true;
         ui->labelTime->setText("Ночь "+QString::number(day));
         ui->labelEvent->setText("Ночные действия");
         log->appendText("");
@@ -215,7 +225,6 @@ void Game::UpdatePlayers(QMap<QString, PlayerInfo>& updated_players){
 }
 
 void Game::PrepareTurn(){
-    ButtonPressed = true;
     foreach (QPushButton* button, CurrentButtons) {
         button->setDisabled(true);
     }
@@ -223,36 +232,141 @@ void Game::PrepareTurn(){
     ui->ButtonCancer->show();
 
     QObject* obj=QObject::sender();
-    if (QPushButton *tb=qobject_cast<QPushButton *>(obj))
+    if (QPushButton *tb=qobject_cast<QPushButton *>(obj)){
         CurrentTurn = TurnObjectPool.key(tb);
-    switch(CurrentTurn.type){
-    case TT_ATTACK:
-        foreach (PlayerWidget* player, playerlist->playlist.values()) {
-            if(!CurrentTurn.targets.contains(player->name)){
-                player->setBackColor(player->palette().color(QPalette::Window).dark(150));
-            }else{
-                connect(player,SIGNAL(mouseClick(PlayerWidget*)),this,SLOT(EndTurn(PlayerWidget*)));
+        switch(CurrentTurn.type){
+        case TT_ATTACK:
+        case TT_INFECT:
+        case TT_VOTE:
+            foreach (PlayerWidget* player, playerlist->playlist.values()) {
+                if(!CurrentTurn.targets.contains(player->name)){
+                    player->setBackColor(player->palette().color(QPalette::Window).dark(150));
+                }else{
+                    connect(player,SIGNAL(mouseClick(PlayerWidget*)),this,SLOT(EndTurn(PlayerWidget*)));
+                }
+            }
+            break;
+        case TT_UP:
+        case TT_DOWN:
+        case TT_SKIP:
+        case TT_UNVOTE:
+            EndTurn();
+            break;
+        case TT_USE_ITEM:
+            if(CurrentTurn.item == "Mop" ||
+                    CurrentTurn.item == "Blaster" ||
+                    CurrentTurn.item == "Scanner" ||
+                    CurrentTurn.item == "Injector" ||
+                    CurrentTurn.item == "Notebook" ||
+                    CurrentTurn.item == "Badge"){
+                foreach (PlayerWidget* player, playerlist->playlist.values()) {
+                    if(!CurrentTurn.targets.contains(player->name)){
+                        player->setBackColor(player->palette().color(QPalette::Window).dark(150));
+                    }else{
+                        connect(player,SIGNAL(mouseClick(PlayerWidget*)),this,SLOT(EndTurn(PlayerWidget*)));
+                    }
+                }
+            }else if(CurrentTurn.item == "Battery"){
+                if(night){
+                    foreach (PlayerWidget* player, playerlist->playlist.values()) {
+                        if(!CurrentTurn.targets.contains(player->name)){
+                            player->setBackColor(player->palette().color(QPalette::Window).dark(150));
+                        }else{
+                            connect(player,SIGNAL(mouseClick(PlayerWidget*)),this,SLOT(EndTurn(PlayerWidget*)));
+                        }
+                    }
+                }else{
+                    targets->setLabel("Для использования доступны:","Зарядить");
+                    targets->addWidgetBattery(CurrentTurn.targets);
+                    connect(targets,SIGNAL(rotation(QStringList)),this,SLOT(EndTurn(QStringList)));
+                    stackedWidgetMain->setCurrentIndex(2);
+                }
+            }
+            else if(CurrentTurn.item == "Rotation"){
+                targets->setLabel("Составление графика дежурств","Утвердить");
+                targets->addWidgetRotation(CurrentTurn.targets);
+                connect(targets,SIGNAL(rotation(QStringList)),this,SLOT(EndTurn(QStringList)));
+                stackedWidgetMain->setCurrentIndex(2);
+            }
+            break;
+        case TT_ULT_ITEM:
+            if(CurrentTurn.item == "Battery"){
+                targets->setLabel("Для починки доступны:","Починить");
+                targets->addWidgetBattery(CurrentTurn.targets);
+                connect(targets,SIGNAL(rotation(QStringList)),this,SLOT(EndTurn(QStringList)));
+                stackedWidgetMain->setCurrentIndex(2);
+            }else if(CurrentTurn.item == "Badge"){
+                targets->setLabel("Для использования доступны:","Использовать");
+                targets->addWidgetBattery(CurrentTurn.targets);
+                connect(targets,SIGNAL(rotation(QStringList)),this,SLOT(EndTurn(QStringList)));
+                stackedWidgetMain->setCurrentIndex(2);
+            }
+            else if(CurrentTurn.item == "Scanner" ||
+                    CurrentTurn.item == "Injector" ||
+                    CurrentTurn.item == "Notebook"){
+
             }
         }
     }
 }
 
 void Game::EndTurn(PlayerWidget* target){
+
+    TurnObject send;
+    send.type = CurrentTurn.type;
+    send.item = CurrentTurn.item;
+    send.targets.append(target->name);
+    ALIENCLIENT.makeTurn(send);
+
     foreach (PlayerWidget* player, playerlist->playlist.values()) {
         if(!CurrentTurn.targets.contains(player->name)){
             player->setBackColor(player->palette().color(QPalette::Window).light(150));
-            else disconnect(player,SIGNAL(mouseClick(PlayerWidget*)),this,SLOT(EndTurn(PlayerWidget*)));
-        }
+
+        }else disconnect(player,SIGNAL(mouseClick(PlayerWidget*)),this,SLOT(EndTurn(PlayerWidget*)));
     }
 
-}
-
-void Game::on_ButtonCancer_clicked()
-{
     foreach (QPushButton* button, CurrentButtons) {
         button->setEnabled(true);
     }
 
     ui->pushButton->show();
     ui->ButtonCancer->hide();
+}
+
+void Game::EndTurn(){
+
+    TurnObject send;
+    send.type = CurrentTurn.type;
+
+    ALIENCLIENT.makeTurn(send);
+
+
+    foreach (QPushButton* button, CurrentButtons) {
+        button->setEnabled(true);
+    }
+
+    ui->pushButton->show();
+    ui->ButtonCancer->hide();
+}
+
+void Game::EndTurn(QStringList targetlist){
+
+    TurnObject send;
+    send.type = CurrentTurn.type;
+    send.targets=targetlist;
+    ALIENCLIENT.makeTurn(send);
+    disconnect(targets,SIGNAL(rotation(QStringList)),this,SLOT(EndTurn(QStringList)));
+    stackedWidgetMain->setCurrentIndex(0);
+    foreach (QPushButton* button, CurrentButtons) {
+        button->setEnabled(true);
+    }
+
+    ui->pushButton->show();
+    ui->ButtonCancer->hide();
+}
+
+
+void Game::on_ButtonCancer_clicked()
+{
+
 }

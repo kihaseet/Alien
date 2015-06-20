@@ -2,6 +2,7 @@
 #define START_H
 
 #include <QWidget>
+#include "alienclient.h"
 
 namespace Ui {
 class start;

@@ -1,5 +1,6 @@
 #include "lobbyregisterrole.h"
 #include "ui_lobbyregisterrole.h"
+#include "alienclient.h"
 
 LobbyRegisterRole::LobbyRegisterRole(QWidget *parent) :
     QWidget(parent),
@@ -30,14 +31,11 @@ void LobbyRegisterRole::slot_wrong_role(){
     ui->label->setText("Роль указана неверно или уже занята");
 }
 
-void LobbyRegisterRole::updateButtons(QList<PlayerInfo> player){
+void LobbyRegisterRole::updateButtons(QList<QString> player){
     foreach (QWidget* but, buttons) {
         but->setEnabled(true);
     }
-    foreach (PlayerInfo r, player) {
-        QString role;
-        if(!r.role.isEmpty()) role = r.role.first();
-
+    foreach (QString role, player) {
         if(role=="Captain"){
             ui->Button_Cap->setDisabled(true);
             continue;}
@@ -69,6 +67,7 @@ void LobbyRegisterRole::updateButtons(QList<PlayerInfo> player){
 
 void LobbyRegisterRole::on_Button_Cap_clicked()
 {
+
     ui->label->setText("Капитан корабля");
     CurrRole = "Captain";
     ui->Button_Send->setEnabled(true);
@@ -153,6 +152,6 @@ void LobbyRegisterRole::on_Button_DSig_clicked()
 
 void LobbyRegisterRole::on_Button_Send_clicked()
 {
-    emit changeRole("regrole",CurrRole);
+    ALIENCLIENT.selectRole(CurrRole);
     ui->Button_Send->setDisabled(true);
 }

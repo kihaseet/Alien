@@ -49,6 +49,11 @@ void Lobby::setSelectWindow(SELECT_TYPE status){  //изменяем
 }
 
 void Lobby::updatePlayerList(  QMap<QString, QString> players){
+    for(int i = 0; i < ui->listWidget->count(); ++i)
+    {
+        QListWidgetItem* item = ui->listWidget->item(i);
+        qDebug()<<item->text();
+    }
     ui->listWidget->clear();
     lobbyRegisterRole->updateButtons(players.values());
     foreach (QString name, players.keys()) {

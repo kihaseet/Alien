@@ -15,7 +15,7 @@ class LobbyRegisterRole : public QWidget
 public:
     explicit LobbyRegisterRole(QWidget *parent = 0);
     ~LobbyRegisterRole();
-    void updateButtons(QList<PlayerInfo> player);
+    void updateButtons(QList<QString> player);
     QString CurrRole;
 
 public slots:

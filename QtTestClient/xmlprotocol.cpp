@@ -71,10 +71,10 @@ void XmlProtocol::sendAction(TURN_TYPE action, QString item, QStringList targets
     {
         QDomNode multiTarget = domElement.appendChild(makeElement(doc, "use", "item", "", item));
 
-        for (auto& target : targets)
+        /*for (auto& target : targets)
         {
             multiTarget.appendChild(makeElement(doc, target, "", "", ""));
-        }
+        }*/
     }
 
     connection->sendData(doc.toString());
@@ -92,7 +92,7 @@ void XmlProtocol::sendVote(QString name, bool unvote)
 void XmlProtocol::GetData(QString data)
 {
     QStringList list = data.split("\n\n");
-    for (QString& m: list) {
+    /*for (QString& m: list) {
         QDomDocument domDoc;
         if(domDoc.setContent(m)) {
             QDomElement domElement= domDoc.documentElement();
@@ -112,11 +112,12 @@ void XmlProtocol::GetData(QString data)
                 init(domElement);
             }
         }
-    }
+    }*/
 }
 
 void XmlProtocol::select(QDomElement node){
 
+    onSelectInfo info;
     SELECT_TYPE type;
 
     node = node.firstChildElement();
@@ -135,19 +136,19 @@ void XmlProtocol::select(QDomElement node){
             type = SRT_NAME_INCORRECT;
         }
         else if(node.tagName() == "list"){
+            type = SRT_PLAYERLIST;
             QDomElement list = node.firstChildElement();
             QMap <QString,QString> players;
             while(!list.isNull()){
                 players.insert(list.tagName(), list.text());
                 list = list.nextSiblingElement();
             }
-
-            onSelectInfo info;
-            info.type = type;
             info.players = players;
-
-            emit onSelect(info);
         }
+
+        info.type = type;
+
+        emit onSelect(info);
         node = node.nextSiblingElement();
     }
 }

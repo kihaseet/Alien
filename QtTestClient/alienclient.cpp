@@ -19,7 +19,7 @@ AlienClient::~AlienClient()
 
 }
 
-bool AlienClient::connect_(QString addr)
+bool AlienClient::connect_(const QString addr)
 {
     QStringList addr_port = addr.split(":");
     if (addr_port.count() != 2)
@@ -76,13 +76,9 @@ void AlienClient::onChange(onChangeInfo info)
 void AlienClient::onSelect(onSelectInfo info)
 {
     emit registerStatus(info.type);
-    for (QString player : info.players)
-    {
-        players[player].role.clear();
-        players[player].role.append(info.players[player]);
-        players[player].name = player;
+    if(info.type==SRT_PLAYERLIST){
+        emit updatePlayers(info.players);
     }
-    emit updatePlayers(players);
 }
 
 void AlienClient::onInit(onInitInfo info)

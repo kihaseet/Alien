@@ -51,6 +51,7 @@ enum SELECT_TYPE {
     SRT_ROLE_CORRECT,
     SRT_NAME_INCORRECT,
     SRT_ROLE_INCORRECT,
+    SRT_PLAYERLIST
 };
 
 struct EventInfo {
@@ -92,7 +93,7 @@ struct TurnObject {
         }else return left.type < right.type;
     }
 signals:
-    buttonclicked();
+    void buttonclicked();
 
 };
 

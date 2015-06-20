@@ -27,7 +27,7 @@ public:
     LobbyWaiting* lobbyWaiting;
 
 public slots:
-    void updatePlayerList(QMap<QString, PlayerInfo> players);
+    void updatePlayerList(QMap<QString, QString> players);
     void setSelectWindow(SELECT_TYPE status);
 
 private:

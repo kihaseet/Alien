@@ -16,9 +16,11 @@ start::~start()
 
 void start::on_pushButton_clicked()
 {
-    emit ConnectClicked(ui->lineEdit->text());
-    ui->label->setText("Connecting...");
-    ui->pushButton->setDisabled(true);
+    //emit ConnectClicked(ui->lineEdit->text());
+    ALIENCLIENT.server_connection->connect_(ui->lineEdit->text(),21277);
+        ui->label->setText("Connecting...");
+        ui->pushButton->setDisabled(true);
+
 }
 
 void start::setLabelText(QString msg){

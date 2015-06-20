@@ -17,12 +17,12 @@ private:
     AlienClient(const AlienClient& root);
     AlienClient& operator=(const AlienClient&);
 public:
-    static const AlienClient& Instance(){
+    static  AlienClient& Instance(){
         static AlienClient theSingleInstance;
         return theSingleInstance;
     }
 
-    bool connect_(QString addr);
+    bool connect_(const QString addr);
     bool register_(QString name);
     bool selectRole(QString name);
     void makeTurn(TurnObject &turn);
@@ -37,16 +37,16 @@ private:
     CurrectPlayerInfo currentPlayer;
 
 signals:
-    registerStatus(SELECT_TYPE status);
-    updateItems(QMap<QString, int>& updated_items);
-    updatePlayers(QMap<QString, PlayerInfo>& updated_players);
-    updateActions(QVector<TurnObject> actions);
-    updateStat(CurrectPlayerInfo& info);
-    updateEvents(QVector<EventInfo> events);
-    startVoting(QString target, QStringList playerss);
-    updateVoting(QMap<QString, QPair<int, QString> > votelist);
-    endVoting(QString target, QString name, QString result);
-    updateInit(INIT_TYPE type);
+    void registerStatus(SELECT_TYPE status);
+    void updateItems(QMap<QString, int>& updated_items);
+    void updatePlayers(QMap<QString, QString> updated_players);
+    void updateActions(QVector<TurnObject> actions);
+    void updateStat(CurrectPlayerInfo& info);
+    void updateEvents(QVector<EventInfo> events);
+    void startVoting(QString target, QStringList playerss);
+    void updateVoting(QMap<QString, QPair<int, QString> > votelist);
+    void endVoting(QString target, QString name, QString result);
+    void updateInit(INIT_TYPE type);
 
 
 private slots:

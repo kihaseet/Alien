@@ -1,5 +1,6 @@
 #include "lobbyregistername.h"
 #include "ui_lobbyregistername.h"
+#include "alienclient.h"
 
 LobbyRegisterName::LobbyRegisterName(QWidget *parent) :
     QWidget(parent),
@@ -20,7 +21,8 @@ LobbyRegisterName::~LobbyRegisterName()
 
 void LobbyRegisterName::on_pushButton_clicked()
 {
-    emit sendNewName("regname",ui->lineEdit->text());
+   // emit sendNewName("regname",ui->lineEdit->text());
+    ALIENCLIENT.register_(this->ui->lineEdit->text());
     ui->label->setText("Please, wait...");
     ui->pushButton->setDisabled(true);
 }
