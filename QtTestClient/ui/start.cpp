@@ -6,7 +6,9 @@ start::start(QWidget *parent) :
     ui(new Ui::start)
 {
     ui->setupUi(this);
-    ui->lineEdit->setText("192.168.1.162");
+    ui->lineEdit->setText("192.168.1.221");
+    // TEST
+    ui->pushButton->click();
 }
 
 start::~start()

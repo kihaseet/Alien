@@ -12,8 +12,8 @@ class PlayerWidget;
 class PlayerWidget : public QWidget
 {
     Q_OBJECT
-private:
-    void mousePressEvent ( QMouseEvent * event ){
+protected:
+    virtual void mousePressEvent ( QMouseEvent * event ){
         event->accept();
         emit mouseClick(this);
     }
@@ -29,8 +29,6 @@ public:
     QString vote;
     bool YetVoting; //если за него проголосовали
 
-    void showVoteButton(bool show);
-    void showUnVoteButton(bool show);
     void SetStatus(QString st);
     void giveRole(QString r);
     void delRole(QString r);
@@ -38,11 +36,6 @@ public:
     void setVote(int v);
 signals:
     void mouseClick(PlayerWidget* noob);
-    void Cansel_Voting(QString name);
-    void Accept_Voting(QString name);
-
-private slots:
-    void on_pushButton_clicked();
 
 private:
     Ui::PlayerWidget *ui;

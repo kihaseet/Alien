@@ -52,28 +52,3 @@ void PlayerWidget::setBackColor( const QColor &c )
     p.setColor(backgroundRole(), c);
     setPalette(p);
 }
-
-void PlayerWidget::showVoteButton(bool show = true){
-    ui->pushButton->setText("Голосовать");
-    if(show)ui->pushButton->show();
-    else ui->pushButton->hide();
-}
-
-void PlayerWidget::showUnVoteButton(bool show = true){
-    ui->pushButton->setText("Снять голос");
-    if(show)ui->pushButton->show();
-    else ui->pushButton->hide();
-}
-
-void PlayerWidget::on_pushButton_clicked()
-{
-    if(YetVoting){
-        emit Cansel_Voting(name);
-        this->showUnVoteButton(false);
-        YetVoting=false;
-    }else{
-        emit Accept_Voting(name);
-        this->showUnVoteButton();
-        YetVoting=true;
-    }
-}

@@ -92,7 +92,7 @@ void XmlProtocol::sendVote(QString name, bool unvote)
 void XmlProtocol::GetData(QString data)
 {
     QStringList list = data.split("\n\n");
-    /*for (QString& m: list) {
+    for (QString& m: list) {
         QDomDocument domDoc;
         if(domDoc.setContent(m)) {
             QDomElement domElement= domDoc.documentElement();
@@ -112,7 +112,7 @@ void XmlProtocol::GetData(QString data)
                 init(domElement);
             }
         }
-    }*/
+    }
 }
 
 void XmlProtocol::select(QDomElement node){
