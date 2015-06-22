@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ALIENCLIENT.server_connection,SIGNAL(errormess(QString)),startWindow,SLOT(setLabelText(QString)));
     connect(ALIENCLIENT.server_connection,SIGNAL(sig_disconnect()),this,SLOT(Disconnect()));
     connect(&ALIENCLIENT,SIGNAL(updatePlayers(QMap<QString,QString>)),this,SLOT(GoLobbyWindow()));
+    connect(&ALIENCLIENT, SIGNAL(updatePlayersInfo(QMap<QString,PlayerInfo>&)), gameWindow, SLOT(UpdatePlayers(QMap<QString,PlayerInfo>&)));
 
     connect(&ALIENCLIENT,SIGNAL(registerStatus(SELECT_TYPE)),lobbyWindow,SLOT(setSelectWindow(SELECT_TYPE)));
     connect(&ALIENCLIENT,SIGNAL(updatePlayers(QMap<QString,QString>)),lobbyWindow,SLOT(updatePlayerList(QMap<QString,QString>)));
@@ -46,15 +47,21 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::GoLobbyWindow(){
-    if(stackedWidget->currentIndex()==0) stackedWidget->setCurrentIndex(1);
-    connect(&ALIENCLIENT,SIGNAL(updateInit(INIT_TYPE)),this,SLOT(GoGameWindow()));
-    disconnect(&ALIENCLIENT,SIGNAL(updatePlayers(QMap<QString,QString>)),this,SLOT(GoLobbyWindow()));
+    if(stackedWidget->currentIndex()==0)
+    {
+        stackedWidget->setCurrentIndex(1);
+        connect(&ALIENCLIENT,SIGNAL(updateInit(INIT_TYPE)),this,SLOT(GoGameWindow()));
+        disconnect(&ALIENCLIENT,SIGNAL(updatePlayers(QMap<QString,QString>)),this,SLOT(GoLobbyWindow()));
+    }
 }
 
 void MainWindow::GoGameWindow(){
     gameWindow->StartGame(ALIENCLIENT.players);
-    if(stackedWidget->currentIndex()==1) stackedWidget->setCurrentIndex(2);
-    disconnect(&ALIENCLIENT,SIGNAL(updateInit(INIT_TYPE)),this,SLOT(GoGameWindow()));
+    if(stackedWidget->currentIndex()==1)
+    {
+        stackedWidget->setCurrentIndex(2);
+        disconnect(&ALIENCLIENT,SIGNAL(updateInit(INIT_TYPE)),this,SLOT(GoGameWindow()));
+    }
 }
 
 void MainWindow::Disconnect(){

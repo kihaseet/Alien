@@ -26,6 +26,7 @@ public:
     bool register_(QString name);
     bool selectRole(QString name);
     void makeTurn(TurnObject &turn);
+    const CurrectPlayerInfo& getCurrentPlayer();
     tcpclient* server_connection;
     QMap<QString, PlayerInfo> players;
 
@@ -40,6 +41,7 @@ signals:
     void registerStatus(SELECT_TYPE status);
     void updateItems(QMap<QString, int>& updated_items);
     void updatePlayers(QMap<QString, QString> updated_players);
+    void updatePlayersInfo(QMap<QString, PlayerInfo>& updated_players);
     void updateActions(QVector<TurnObject> actions);
     void updateStat(CurrectPlayerInfo& info);
     void updateEvents(QVector<EventInfo> events);

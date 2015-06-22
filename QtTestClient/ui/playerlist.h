@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <ui/playerwidget.h>
 #include <QMap>
+#include <QDebug>
 #include "types.h"
 
 namespace Ui {

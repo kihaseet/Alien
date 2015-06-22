@@ -52,3 +52,12 @@ void PlayerWidget::setBackColor( const QColor &c )
     p.setColor(backgroundRole(), c);
     setPalette(p);
 }
+
+void PlayerWidget::paintEvent(QPaintEvent *e)
+{
+    QPainter painter(this);
+
+    painter.drawRoundedRect(0,5,width()-5, height()-7,3,3);
+
+    QWidget::paintEvent(e);
+}

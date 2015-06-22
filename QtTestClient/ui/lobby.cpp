@@ -25,6 +25,11 @@ Lobby::Lobby(QWidget *parent) :
     ui->listWidget->setDragDropMode(QAbstractItemView::InternalMove);
 }
 
+void Lobby::resetLobby()
+{
+    stackedWidget->setCurrentIndex(0);
+}
+
 Lobby::~Lobby()
 {
     delete ui;

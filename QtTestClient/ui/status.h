@@ -2,6 +2,7 @@
 #define STATUS_H
 
 #include <QWidget>
+#include <types.h>
 
 namespace Ui {
 class Status;
@@ -13,6 +14,7 @@ class Status : public QWidget
 
 public:
     explicit Status(QWidget *parent = 0);
+    void updateStatus(CurrectPlayerInfo& inf);
     ~Status();
 
 private:

@@ -7,13 +7,15 @@ Game::Game(QWidget *parent) :
 {
     ui->setupUi(this);
     day=0;
-    ui->ButtonCancer->hide();
 
     inventory = new Inventory(this);
     actions = new Actions(this);
     log = new Log(this);
     status = new Status(this);
+    status->setGeometry((this->width() + status->width())/2, (this->height() + status->height())/2, status->width(), status->height());
+    status->hide();
     playerlist = new PlayerList(this);
+    qDebug() << playerlist->width() << " : " << playerlist->height() << endl;
     targets = new Targets(this);
 
     stackedWidgetInventory = new QStackedWidget(this);
@@ -22,18 +24,20 @@ Game::Game(QWidget *parent) :
     ui->LayoutActions->addWidget(stackedWidgetInventory);
     stackedWidgetInventory->setCurrentIndex(0);
 
-    stackedWidgetMain = new QStackedWidget(this);
+    stackedWidgetMain = ui->stackedWidgetMain;
     stackedWidgetMain->addWidget(playerlist);
     stackedWidgetMain->addWidget(log);
     stackedWidgetMain->addWidget(targets);
-    ui->LayoutPlayerList->addWidget(stackedWidgetMain);
+    //ui->LayoutPlayerList->addWidget(stackedWidgetMain);
     stackedWidgetMain->setCurrentIndex(0);
-
-
 }
 
 void Game::StartGame( QMap<QString, PlayerInfo> play){
-    //  playerlist->startGame(QMap<QString, PlayerInfo> play);
+    if (play.size() == 0)
+    {
+        return;
+    }
+    playerlist->startGame(play);
 }
 
 Game::~Game()
@@ -41,10 +45,82 @@ Game::~Game()
     delete ui;
 }
 
+void Game::updateCurrentTurn(TURN_TYPE type)
+{
+    updateCurrentTurn(type, CurrentTurn.targets, CurrentTurn.item);
+}
 
+void Game::updateCurrentTurn(TURN_TYPE type, QStringList targets, QString item)
+{
+    QString actionString;
+    CurrentTurn.type = type;
+    CurrentTurn.item = item;
+    CurrentTurn.targets = targets;
+
+    switch(CurrentTurn.type)
+    {
+    case TT_ULT_ITEM:
+        actionString = "Ультовать предметом";
+        break;
+    case TT_USE_ITEM:
+        actionString = "Использовать предмет";
+        break;
+    case TT_ATTACK:
+        actionString = "Напасть";
+        break;
+    case TT_INFECT:
+        actionString = "Заразить";
+        break;
+    case TT_UP:
+        actionString = "Выйти из ванны" ;
+        break;
+    case TT_DOWN:
+        actionString = "Лечь в ванну";
+        break;
+    case TT_SKIP:
+        actionString = "Ждать" ;
+        break;
+    case TT_VOTE:
+        actionString = "Голосовать" ;
+        break;
+    case TT_UNVOTE:
+        actionString = "Снять голос" ;
+        break;
+    }
+
+    if (CurrentTurn.item.length() != 0)
+    {
+        actionString += " [" + CurrentTurn.item + "]";
+    }
+
+    this->ui->lblCurrentAction->setText(actionString);
+}
 
 void Game::on_pushButton_clicked()
 {
+    if (CurrentTurn.type == TT_USE_ITEM || CurrentTurn.type == TT_ULT_ITEM)
+    {
+        if (ui->pushButton->text() == "Отмена")
+        {
+            ui->pushButton->setText("Закрыть");
+            foreach (QPushButton* button, CurrentButtons) {
+                button->setDisabled(false);
+            }
+            updateCurrentTurn(PreUseTurn.type, PreUseTurn.targets, PreUseTurn.item);
+            //CurrentTurn = PreUseTurn;
+            foreach (PlayerWidget* player, playerlist->playlist.values()) {
+                if(!CurrentTurn.targets.contains(player->name)){
+                    player->setBackColor(player->palette().color(QPalette::Window).dark(150));
+                }else{
+                    connect(player,SIGNAL(mouseClick(PlayerWidget*)),this,SLOT(EndTurn(PlayerWidget*)));
+                }
+            }
+        }
+        else
+        {
+            ui->pushButton->setText("Отмена");
+        }
+    }
     if(stackedWidgetInventory->currentIndex()==0){
         ui->pushButton->setText("Закрыть");
         stackedWidgetInventory->setCurrentIndex(1);
@@ -100,18 +176,16 @@ void Game::updateActions(QVector<TurnObject> ActionsVector){
                 CurrentButtons.append(tmp);
             }
         }
-        /*else if(var.type==TT_VOTE){
-            foreach (QString player, playerlist->playlist) {
-                if(var.targets.contains(player)){
-                    playerlist->playlist[player]->showVoteButton(true);
-                }else playerlist->playlist[player]->showVoteButton(false);
+        else if(var.type==TT_VOTE){
+            foreach (PlayerWidget* player, playerlist->playlist.values()) {
+                player->setDisabled(!var.targets.contains(player->name));
             }
-        }*/
-        /*else if(var.type==TT_UNVOTE){
-            foreach (PlayerWidget player, playerlist->playlist.values()) {
-                player.showUnVoteButton(player.YetVoting);
+        }
+        else if(var.type==TT_UNVOTE){
+            foreach (PlayerWidget* player, playerlist->playlist.values()) {
+                player->setDisabled(!var.targets.contains(player->name));
             }
-        }*/
+        }
     }
     foreach (QPushButton* button, CurrentButtons) {
         if(!ActionsVector.contains(TurnObjectPool.key(button)))
@@ -128,10 +202,10 @@ void Game::updateActions(QVector<TurnObject> ActionsVector){
 void Game::on_Button_log_clicked()
 {
     if(stackedWidgetMain->currentIndex()==0){
-        ui->pushButton->setText("Закрыть");
+        ui->Button_log->setText("Закрыть");
         stackedWidgetMain->setCurrentIndex(1);
     }else{
-        ui->pushButton->setText("Лог");
+        ui->Button_log->setText("Лог");
         stackedWidgetMain->setCurrentIndex(0);
     }
 }
@@ -201,39 +275,112 @@ void Game::UpdateEvents(QVector<EventInfo> events){
 }
 
 void Game::UpdateItems(QMap<QString, int>& updated_items){
-
+    qDebug() << "STUB: UpdateItems";
 }
 
 void Game::UpdateStat(CurrectPlayerInfo& info){
-
+    status->updateStatus(info);
+    qDebug() << "UpdateStat";
 }
 
 void Game::StartVoting(QString target, QStringList players){
+    updateCurrentTurn(TT_VOTE);
+    //CurrentTurn.type = TT_VOTE;
+    CurrentTurn.targets.clear();
+    CurrentTurn.targets.append(players);
+    currentVoting.clear();
+    this->ui->labelEvent->setText("Голосование на " + target);
+    foreach (PlayerWidget* player, playerlist->playlist.values()) {
+        currentVoting[player->name] = "";
+        if(!CurrentTurn.targets.contains(player->name)){
+            player->setBackColor(player->palette().color(QPalette::Window).dark(150));
+        }else{
+            connect(player,SIGNAL(mouseClick(PlayerWidget*)),this,SLOT(EndTurn(PlayerWidget*)));
+        }
+    }
 
+    log->appendText("Начато голосование на " + target);
+
+    qDebug() << "StartVoting";
 }
 
 void Game::UpdateVoting(QMap<QString, QPair<int, QString> > votelist){
+    QMap<QString, int> current_votes;
 
+    QString last_target = "";
+
+    foreach(QString who, votelist.keys())
+    {
+        if (votelist[who].first == 1)
+        {
+            if (currentVoting[who] != votelist[who].second)
+            {
+                currentVoting[who] = votelist[who].second;
+                log->appendText(who + " проголосовал за " + votelist[who].second);
+            }
+            current_votes[votelist[who].second] += 1;
+            if (who == ALIENCLIENT.getCurrentPlayer().name)
+            {
+                last_target = votelist[who].second;
+            }
+        }
+        else
+        {
+            if (currentVoting[who] == votelist[who].second)
+            {
+                currentVoting[who] = "";
+                log->appendText(who + " снял голос за " + votelist[who].second);
+            }
+            current_votes[votelist[who].second] += 0;
+        }
+    }
+
+    updateCurrentTurn(last_target.length() > 0 ? TT_UNVOTE : TT_VOTE);
+    //CurrentTurn.type = last_target.length() > 0 ? TT_UNVOTE : TT_VOTE;
+
+    foreach (PlayerWidget* player, playerlist->playlist.values()) {
+        player->setVote(current_votes[player->name]);
+        if (last_target.length() != 0)
+        {
+            player->setDisabled(!(player->name == last_target));
+        }
+        else
+        {
+            player->setDisabled(false);
+        }
+    }
+
+    qDebug() << "UpdateVoting";
 }
 
 void Game::EndVoting(QString target, QString name, QString result){
+    qDebug() << "EndVoting";
+    log->appendText("Результаты голосования на " + target + ": " + name + " - " + result);
+    updateCurrentTurn(TT_NOTHING);
+    //CurrentTurn.type = TT_NOTHING;
+    foreach (PlayerWidget* player, playerlist->playlist.values())
+    {
+        player->setDisabled(false);
+    }
 
 }
 
 void Game::UpdatePlayers(QMap<QString, PlayerInfo>& updated_players){
-
+    this->playerlist->startGame(updated_players);
 }
 
 void Game::PrepareTurn(){
+    PreUseTurn = CurrentTurn;
     foreach (QPushButton* button, CurrentButtons) {
         button->setDisabled(true);
     }
-    ui->pushButton->hide();
-    ui->ButtonCancer->show();
 
     QObject* obj=QObject::sender();
     if (QPushButton *tb=qobject_cast<QPushButton *>(obj)){
-        CurrentTurn = TurnObjectPool.key(tb);
+        updateCurrentTurn(TurnObjectPool.key(tb).type, TurnObjectPool.key(tb).targets, TurnObjectPool.key(tb).item);
+        //CurrentTurn = TurnObjectPool.key(tb);
+        qDebug() << "PrepareTurn: " << CurrentTurn.item;
+        qDebug() << "PrepareTurn: " << CurrentTurn.type;
         switch(CurrentTurn.type){
         case TT_ATTACK:
         case TT_INFECT:
@@ -253,6 +400,8 @@ void Game::PrepareTurn(){
             EndTurn();
             break;
         case TT_USE_ITEM:
+            this->ui->pushButton->setText("Отмена");
+
             if(CurrentTurn.item == "Mop" ||
                     CurrentTurn.item == "Blaster" ||
                     CurrentTurn.item == "Scanner" ||
@@ -290,6 +439,7 @@ void Game::PrepareTurn(){
             }
             break;
         case TT_ULT_ITEM:
+            this->ui->pushButton->setText("Отмена");
             if(CurrentTurn.item == "Battery"){
                 targets->setLabel("Для починки доступны:","Починить");
                 targets->addWidgetBattery(CurrentTurn.targets);
@@ -318,19 +468,16 @@ void Game::EndTurn(PlayerWidget* target){
     send.targets.append(target->name);
     ALIENCLIENT.makeTurn(send);
 
-    foreach (PlayerWidget* player, playerlist->playlist.values()) {
-        if(!CurrentTurn.targets.contains(player->name)){
-            player->setBackColor(player->palette().color(QPalette::Window).light(150));
+//    foreach (PlayerWidget* player, playerlist->playlist.values()) {
+//        if(!CurrentTurn.targets.contains(player->name)){
+//            player->setBackColor(player->palette().color(QPalette::Window).light(150));
 
-        }else disconnect(player,SIGNAL(mouseClick(PlayerWidget*)),this,SLOT(EndTurn(PlayerWidget*)));
-    }
+//        }else disconnect(player,SIGNAL(mouseClick(PlayerWidget*)),this,SLOT(EndTurn(PlayerWidget*)));
+//    }
 
     foreach (QPushButton* button, CurrentButtons) {
         button->setEnabled(true);
     }
-
-    ui->pushButton->show();
-    ui->ButtonCancer->hide();
 }
 
 void Game::EndTurn(){
@@ -338,21 +485,21 @@ void Game::EndTurn(){
     TurnObject send;
     send.type = CurrentTurn.type;
 
+    qDebug() << "EndTurn: Calling makeTurn with send.type == " << send.type;
+
     ALIENCLIENT.makeTurn(send);
 
 
     foreach (QPushButton* button, CurrentButtons) {
         button->setEnabled(true);
     }
-
-    ui->pushButton->show();
-    ui->ButtonCancer->hide();
 }
 
 void Game::EndTurn(QStringList targetlist){
 
     TurnObject send;
     send.type = CurrentTurn.type;
+    send.item = CurrentTurn.item;
     send.targets=targetlist;
     ALIENCLIENT.makeTurn(send);
     disconnect(targets,SIGNAL(rotation(QStringList)),this,SLOT(EndTurn(QStringList)));
@@ -360,13 +507,20 @@ void Game::EndTurn(QStringList targetlist){
     foreach (QPushButton* button, CurrentButtons) {
         button->setEnabled(true);
     }
-
-    ui->pushButton->show();
-    ui->ButtonCancer->hide();
 }
 
-
-void Game::on_ButtonCancer_clicked()
+void Game::on_Button_Status_clicked()
 {
-
+    if (status->isHidden())
+    {
+        status->show();
+        stackedWidgetInventory->hide();
+        stackedWidgetMain->hide();
+    }
+    else
+    {
+        status->hide();
+        stackedWidgetInventory->show();
+        stackedWidgetMain->show();
+    }
 }

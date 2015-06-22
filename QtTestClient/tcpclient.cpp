@@ -9,6 +9,9 @@ tcpclient::tcpclient()
             SLOT(slotError(QAbstractSocket::SocketError)));
 
     connect(serv,SIGNAL(readyRead()),SLOT(readData()));
+    buffer = "";
+    BytesReaded = 0;
+    BytesToRead = 0;
 }
 
 void tcpclient::sendData(QString document)
@@ -18,13 +21,89 @@ void tcpclient::sendData(QString document)
     serv->write(data);
 }
 
+QString tcpclient::processData(QString str)
+{
+    int currentSize = str.length();
+    if (BytesToRead == 0)
+    {
+        QString dataSizeStr = str.mid(0, str.indexOf("<!"));
+        int dataSize = dataSizeStr.toInt() - 1;
+        currentSize -= dataSizeStr.length();
+        str = str.mid(dataSizeStr.length());
+
+        if (dataSize > currentSize)
+        {
+            buffer += str;
+            BytesReaded = currentSize;
+            BytesToRead = dataSize;
+        }
+        else if (dataSize == currentSize)
+        {
+            emit GetData(str + "\n");
+        }
+        else
+        {
+            buffer = str.mid(0, dataSize);
+            GetData(buffer);
+            buffer = "";
+            return str.mid(dataSize);
+        }
+    }
+    else
+    {
+        if (BytesToRead - BytesReaded > currentSize)
+        {
+            buffer += str;
+            BytesReaded += currentSize;
+        }
+        else if (BytesToRead - BytesReaded < currentSize)
+        {
+            buffer += str.mid(0, BytesToRead - BytesReaded);
+            str = str.mid(BytesToRead - BytesReaded);
+            emit GetData(buffer + "\n");
+            buffer = "";
+            BytesReaded = 0;
+            BytesToRead = 0;
+            return str;
+        }
+        else
+        {
+            buffer += str;
+            emit GetData(buffer + "\n");
+            buffer = "";
+            BytesReaded = 0;
+            BytesToRead = 0;
+            return "";
+        }
+    }
+
+    return "";
+}
+
 void tcpclient::readData()
 {
-    if(((QTcpSocket*)sender())->canReadLine()){
-        QByteArray data = ((QTcpSocket*)sender())->readAll();
+    QTcpSocket* socket = ((QTcpSocket*)sender());
+    if(socket->canReadLine()){
+        QByteArray data = socket->readAll();
         QString tmp = data.data();
         tmp=tmp.trimmed();//полученное сообщение
-        emit GetData(tmp);
+        qDebug() << "********************************NEW TCP DATA***********************************************";
+        qDebug() << "**************************TCP DATA*************************"
+                 << tmp
+                 << endl
+                 << "**************************TCP DATA END*********************";
+
+        QString strToProcess = tmp;
+
+        while((strToProcess = processData(strToProcess)).length() != 0)
+        {
+            qDebug() << "******************** TCP CONTINUE PROCESS DATA ************************"
+                     << strToProcess
+                     << endl
+                     << "******************** TCP CONTINUE PROCESS DATA END ********************";
+        }
+
+        qDebug() << "******************************END TCP DATA**************************************************";
     }
 }
 

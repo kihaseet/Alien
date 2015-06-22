@@ -10,10 +10,14 @@ private:
     QTcpSocket* serv;
     QString nHost;
     int nPort;
+    QString buffer;
+    int BytesToRead;
+    int BytesReaded;
 public:
     tcpclient();
     void connect_(QString addr, int Port);
     void sendData(QString document);
+    QString processData(QString str);
 public slots:
     void readData();
     void slotConnected();

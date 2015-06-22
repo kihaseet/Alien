@@ -71,12 +71,16 @@ void XmlProtocol::sendAction(TURN_TYPE action, QString item, QStringList targets
     {
         QDomNode multiTarget = domElement.appendChild(makeElement(doc, "use", "item", "", item));
 
-        /*for (auto& target : targets)
+        for (auto& target : targets)
         {
             multiTarget.appendChild(makeElement(doc, target, "", "", ""));
-        }*/
+        }
     }
 
+    qDebug() << "SEND XML: ******"
+             << endl
+             << doc.toString()
+             << "****************";
     connection->sendData(doc.toString());
 }
 
@@ -86,11 +90,16 @@ void XmlProtocol::sendVote(QString name, bool unvote)
     QDomElement domElement = doc.createElement("voting");
     doc.appendChild(domElement);
     domElement.appendChild(makeElement(doc, (unvote ? "unvote" : "vote"), "", name, ""));
+    qDebug() << "SEND XML: ******"
+             << endl
+             << doc.toString()
+             << "****************";
     connection->sendData(doc.toString());
 }
 
 void XmlProtocol::GetData(QString data)
 {
+    qDebug() << "XML DATA: " << data;
     QStringList list = data.split("\n\n");
     for (QString& m: list) {
         QDomDocument domDoc;
@@ -103,7 +112,7 @@ void XmlProtocol::GetData(QString data)
             {
                 change(domElement);
             }
-            else if(domElement.tagName() == "vote")
+            else if(domElement.tagName() == "votelist")
             {
                 vote(domElement);
             }
@@ -164,6 +173,7 @@ void XmlProtocol::change(QDomElement node)
         info.updated_stats.health = stat.firstChildElement("HP").text().toInt();
         info.updated_stats.alien = !stat.firstChildElement("alien").isNull();
         info.updated_stats.infected = !stat.firstChildElement("invasion").isNull();
+        info.updated_stats.status = PS_UNKNOWS;
         QDomNodeList roles = stat.elementsByTagName("role");
 
         for (int i = 0; i < roles.length(); i++)
@@ -224,6 +234,10 @@ void XmlProtocol::change(QDomElement node)
 
                     info.avaible_actions.append(TurnObject(TT_USE_ITEM, targets, act_el.attribute("item")));
                 }
+                else if (act_el.attribute("ult") != "")
+                {
+                    info.avaible_actions.append(TurnObject(TT_ULT_ITEM, targets, act_el.attribute("ult")));
+                }
             }
         }
     }
@@ -232,6 +246,23 @@ void XmlProtocol::change(QDomElement node)
 
     if (!events.isNull())
     {
+        // GENERATE PLAYERS INFO
+
+        {
+            for (int i = 0; i < events.firstChildElement("list").childNodes().length(); i++)
+            {
+                QDomNode player = events.firstChildElement("list").childNodes().at(i);
+                info.players_info[player.toElement().tagName()].name = player.toElement().tagName();
+                info.players_info[player.toElement().tagName()].dead = false;
+            }
+
+            for (int i = 0; i < events.firstChildElement("allrole").childNodes().length(); i++)
+            {
+                QDomNode role = events.firstChildElement("allrole").childNodes().at(i);
+                info.players_info[role.toElement().text()].role.append(role.toElement().tagName());
+            }
+        }
+
         {
             EventInfo e_down;
             e_down.type = ET_DOWNED;
@@ -240,6 +271,7 @@ void XmlProtocol::change(QDomElement node)
             {
                 QDomNode downed_player = events.firstChildElement("down").childNodes().at(i);
                 e_down.message.append(downed_player.toElement().tagName());
+                info.players_info[downed_player.toElement().tagName()].status == PS_DOWN;
             }
 
             info.events.append(e_down);
@@ -253,6 +285,7 @@ void XmlProtocol::change(QDomElement node)
             {
                 QDomNode upped_player = events.firstChildElement("up").childNodes().at(i);
                 e_up.message.append(upped_player.toElement().tagName());
+                info.players_info[upped_player.toElement().tagName()].status == PS_UP;
             }
 
             info.events.append(e_up);
@@ -284,6 +317,8 @@ void XmlProtocol::change(QDomElement node)
             {
                 QDomNode died_player = events.firstChildElement("died").childNodes().at(i);
                 e_died.message.append(died_player.toElement().tagName());
+                info.players_info[died_player.toElement().tagName()].status == PS_DEAD;
+                info.players_info[died_player.toElement().tagName()].dead = true;
             }
 
             info.events.append(e_died);
@@ -332,8 +367,10 @@ void XmlProtocol::change(QDomElement node)
 
 void XmlProtocol::init(QDomElement node)
 {
+    qDebug() << "XMLProtocol: Init";
     if (!node.firstChildElement("daytime").isNull())
     {
+        qDebug() << "XMLProtocol: daytime";
         onInitInfo info;
         info.type = IT_DAYTIME;
         change(node.firstChildElement("changes"));
@@ -341,6 +378,7 @@ void XmlProtocol::init(QDomElement node)
     }
     else if (!node.firstChildElement("nighttime").isNull())
     {
+        qDebug() << "XMLProtocol: nighttime";
         onInitInfo info;
         info.type = IT_NIGHTTIME;
         change(node.firstChildElement("changes"));
@@ -348,6 +386,7 @@ void XmlProtocol::init(QDomElement node)
     }
     else if (!node.firstChildElement("voting").isNull())
     {
+        qDebug() << "XMLProtocol: voting";
         QDomElement e_voting = node.firstChildElement("voting");
         onInitInfo info;
 
@@ -365,7 +404,7 @@ void XmlProtocol::init(QDomElement node)
         for (int i = 0; i < e_voting.childNodes().length(); i++)
         {
             QDomNode player = e_voting.childNodes().at(i);
-            info.data.append(player.toElement().text());
+            info.data.append(player.toElement().tagName());
         }
 
         emit onInit(info);

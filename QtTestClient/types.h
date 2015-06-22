@@ -7,7 +7,10 @@
 #include <QVector>
 #include <QPushButton>
 
+struct PlayerInfo;
+
 enum TURN_TYPE {
+    TT_NOTHING = -1,
     TT_USE_ITEM = 0,
     TT_ULT_ITEM,
     TT_VOTE,
@@ -28,10 +31,12 @@ enum EVENT_TYPE {
     ET_SETTED_ROLE,
     ET_REMOVED_ROLE,
     ET_DUTIED,
-    ET_MESSAGE
+    ET_MESSAGE,
+    ET_ALLROLE,
 };
 
 enum PLAYER_STATUS {
+    PS_UNKNOWS = -1,
     PS_UP = 0,
     PS_DOWN,
     PS_DEAD
@@ -107,13 +112,34 @@ struct CurrectPlayerInfo
     bool alien;
     bool onDuty;
     bool dead;
+
+    void update(CurrectPlayerInfo& inf)
+    {
+        if (inf.name != name)
+        {
+            return;
+        }
+
+        name = inf.name.length() > 0 ? inf.name : name;
+        if (inf.role.size() > 0)
+        {
+            role.clear();
+            role.append(inf.role);
+        }
+        status = inf.status != PS_UNKNOWS ? inf.status : status;
+        dead = status == PS_DEAD;
+        onDuty = inf.onDuty;
+        health = inf.health;
+        alien = inf.alien;
+        infected = inf.infected;
+    }
 };
 
 struct onChangeInfo {
     CurrectPlayerInfo updated_stats;
     QVector<EventInfo> events;
     QVector<TurnObject> avaible_actions;
-//    QMap<QString, QStringList> update_list;
+    QMap<QString, PlayerInfo> players_info;
 };
 
 struct onSelectInfo {

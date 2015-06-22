@@ -19,6 +19,7 @@ class Lobby : public QWidget
 
 public:
     explicit Lobby(QWidget *parent = 0);
+    void resetLobby();
     ~Lobby();
 
    // QMap <QString,QString>* players;

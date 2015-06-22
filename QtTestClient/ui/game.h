@@ -20,6 +20,10 @@ class Game : public QWidget
 {
     Q_OBJECT
 
+private:
+    void updateCurrentTurn(TURN_TYPE type);
+    void updateCurrentTurn(TURN_TYPE type, QStringList targets, QString item);
+
 public:
     explicit Game(QWidget *parent = 0);
     ~Game();
@@ -47,7 +51,7 @@ private slots:
 
     void on_Button_log_clicked();
 
-    void on_ButtonCancer_clicked();
+    void on_Button_Status_clicked();
 
 private:
     Ui::Game *ui;
@@ -64,6 +68,8 @@ private:
 
     TurnObject CurrentTurn;
     bool ButtonPressed;
+    TurnObject PreUseTurn;
+    QMap<QString, QString> currentVoting;
 };
 
 #endif // GAME

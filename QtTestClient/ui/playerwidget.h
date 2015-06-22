@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QMouseEvent>
+#include <QPainter>
 
 
 namespace Ui {
@@ -13,7 +14,7 @@ class PlayerWidget : public QWidget
 {
     Q_OBJECT
 protected:
-    virtual void mousePressEvent ( QMouseEvent * event ){
+    virtual void mouseReleaseEvent( QMouseEvent * event ){
         event->accept();
         emit mouseClick(this);
     }
@@ -34,6 +35,7 @@ public:
     void delRole(QString r);
     void setHP(int h);
     void setVote(int v);
+    void paintEvent(QPaintEvent *e);
 signals:
     void mouseClick(PlayerWidget* noob);
 

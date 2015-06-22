@@ -26,7 +26,7 @@
     <string>ПОРТРЕТ</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_2">
+  <widget class="QLabel" name="lblRoles">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -36,10 +36,10 @@
     </rect>
    </property>
    <property name="text">
-    <string>Роли</string>
+    <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="label_3">
+  <widget class="QLabel" name="lblStatus">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -49,10 +49,10 @@
     </rect>
    </property>
    <property name="text">
-    <string>В ванне</string>
+    <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="label_4">
+  <widget class="QLabel" name="lblHealth">
    <property name="geometry">
     <rect>
      <x>110</x>
@@ -62,10 +62,10 @@
     </rect>
    </property>
    <property name="text">
-    <string>HP</string>
+    <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="label_5">
+  <widget class="QLabel" name="lblHuman">
    <property name="geometry">
     <rect>
      <x>110</x>
@@ -75,23 +75,23 @@
     </rect>
    </property>
    <property name="text">
-    <string>Человек</string>
+    <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="label_6">
+  <widget class="QLabel" name="lblInfected">
    <property name="geometry">
     <rect>
-     <x>130</x>
-     <y>20</y>
+     <x>110</x>
+     <y>40</y>
      <width>41</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>Яйцо</string>
+    <string/>
    </property>
   </widget>
-  <widget class="QLabel" name="label_7">
+  <widget class="QLabel" name="lblOnDuty">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -101,7 +101,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Дежурный</string>
+    <string/>
    </property>
   </widget>
  </widget>

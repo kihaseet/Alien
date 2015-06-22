@@ -22,7 +22,11 @@
      <height>531</height>
     </rect>
    </property>
-   <layout class="QGridLayout" name="gridLayout"/>
+   <layout class="QGridLayout" name="gridLayout" rowminimumheight="110" columnminimumwidth="110">
+    <property name="horizontalSpacing">
+     <number>6</number>
+    </property>
+   </layout>
   </widget>
  </widget>
  <resources/>
