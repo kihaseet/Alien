@@ -23,7 +23,7 @@ public:
     bool hardresolve; //true если во время голосования решение принимает капитан
     QString mopper;//дежурный
 
-    ingame_event* _event;//объект текущего события
+    TurnObject* _event;//объект текущего события
     voting* _currvoting;//объект текущего голосования
     QQueue <ingame_event*> _nightque;//очередь ночных событий
     game();
@@ -43,14 +43,17 @@ public:
     bool makeNightActoins();
     void player_death(player *dead);
     void check_for_role(QString role);
-    void check_HP(QString who);
+    void check_HP(player *w);
     void day_end_curr_voting(QString winner);
     void make_actionlist(player* who);
     void getItemByRoleAll();
-    bool make_events_check(ingame_event* _event);
+    bool make_events_check(QString who, TurnObject TO);
     void day_check_over();
+    void do_events(TurnObject TO);
 //обязательно понадобится проверка на изменение количества игроков во время голосования (убийство, дисконнект)
     //и собственно динамическое изменение голосов
+    
+    void slot_attack(TurnObject TO);
 
 signals:
     void GuiUpdatePlayerlist(QList<player*>list);
@@ -78,12 +81,12 @@ public slots:
     void registerRolebyPlayer(int _na, QString role);
     void slotSendRolelist();
     void slot_disconnected(int na);
-    void slot_attack(QString who, QString whom);
-    void slot_infect(QString who, QString whom);
-    void slot_wait(QString who);
-    void slot_up(QString who);
-    void slot_down(QString who);
-    void slot_alien(QString who);
+    
+    void slot_infect(TurnObject TO);
+    void slot_wait(TurnObject TO);
+    void slot_up(TurnObject TO);
+    void slot_down(TurnObject TO);
+    void slot_alien(TurnObject TO);
     void slot_getitem(QString who,QString useit,QString power);
     void slot_vote(QString who,QString whom);
     void slot_unvote(QString who);

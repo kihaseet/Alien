@@ -4,6 +4,9 @@
 #include "item.h"
 
 class item;
+
+
+
 class player
 {
 public:
@@ -23,8 +26,9 @@ public:
     bool simplebath;//true если не покидал биованну этой ночью
     bool infecting;//true если уже заражал этой ночью
     QList <QString> rolelist;
-    QList <QPair<QString,QList<QString> > > actionlist;
+    QList <TurnObject> actionlist;
     QMap <QString,item*> itemlist; //дескриптор-указатель
 };
+
 
 #endif // PLAYER_H
