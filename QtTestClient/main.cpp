@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QtGlobal>
+#include <QString>
 
 void myMessageHandler(QtMsgType type, const QMessageLogContext& context, const QString& msg)
 {

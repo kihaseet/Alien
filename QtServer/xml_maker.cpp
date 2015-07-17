@@ -9,104 +9,118 @@ xml_maker::xml_maker()
 
 void xml_maker::new_analise(int _name,const QString input){
 
-    if(input!="New connection") {
+    if(input!="New connection")
+    {
         QDomDocument domDoc;
-        xml_msg _xml;
+
         //qDebug() <<"[XMLmaker:input]" <<input;
-        if(domDoc.setContent(input)) {
+        if(domDoc.setContent(input))
+        {
             QDomElement domElement= domDoc.documentElement();
 
-            _xml=traverseNode(domElement,_xml,domDoc.doctype().name());
-        }
-        if(_xml.what=="regname"){
-            emit newname(_name,_xml.whom,_xml.how);
-        }else{
-            if(_xml.what=="regrole"){
-                emit registerRolebyPlayer(_name,_xml.whom);
-            }else{
+            TurnObject turn = traverseNode(domElement);
 
-                if (!_xml.rotation.isEmpty())
-                    emit xml_create(_name,_xml.what,_xml.whom,_xml.how,_xml.rotation);
-                else
-                    xml_create_norot(_name,_xml.what,_xml.whom,_xml.how);
+            switch (turn.type) {
+            case TT_NOTHING:
+                break;
+            case TT_REGNAME:
+                emit newname(_name,turn);
+                break;
+            case TT_REGROLE:
+                emit registerRolebyPlayer(_name,turn);
+                break;
+            default:
+                emit xml_create(_name,turn);
+                break;
             }
-        }
 
+        }
         //qDebug()  <<"[XMLmaker:to game]"<< _xml.what << _xml.whom << _xml.how << _xml.rotation;
     }
 }
 
-xml_msg xml_maker::traverseNode(const QDomNode& node,xml_msg _xml, QString mod)
+TurnObject xml_maker::traverseNode(const QDomNode& node)
 {
+    TurnObject _xml;
     QDomNode domNode = node.firstChild();
-    while(!domNode.isNull()) {
+    while(!domNode.isNull())
+    {
         if(domNode.isElement()) {
             QDomElement domElement = domNode.toElement();
-            if(!domElement.isNull()) {
-                //qDebug()  << mod;
-                if (mod=="selecting"){
-
-                    if((domElement.tagName() == "regname") || (domElement.tagName() == "regrole" )) {
-                        _xml.what=domElement.tagName();
-                        _xml.whom=domElement.text();
-                        _xml.how=domElement.attribute("avatar","");
-                        //qDebug()  << domElement.tagName() << domElement.text();
-                    }
-                }
-                if (mod=="voting"){
-                    if(domElement.tagName() == "vote") {
-                        _xml.what = domElement.tagName();
-                        _xml.whom = domElement.text();
-                        //qDebug()  << domElement.tagName() << domElement.text();
-                    }
-                    if(domElement.tagName() == "unvote") {
-                        _xml.what = domElement.tagName();
-                        //qDebug()  << domElement.tagName() << domElement.text();
-                    }
-                }
-                if (mod == "changing") {
-                    if((domElement.tagName() == "attack") || (domElement.tagName() == "infect")) {
-                        _xml.what = domElement.tagName();
-                        _xml.whom = domElement.text();
-                        //qDebug()  << domElement.tagName() << domElement.text();
-                    }
-                    if((domElement.tagName() == "wait")||(domElement.tagName()=="up")||(domElement.tagName()=="down")){
-                        _xml.what=domElement.tagName();
-                        //qDebug()  << domElement.tagName();
-                    }
-                    if(domElement.tagName() == "use"){
-                        if(domElement.attribute("item","")!=""){
-                            _xml.what="useitem";
-                            _xml.how=domElement.attribute("item","");
-                            // qDebug()  << domElement.tagName() << domElement.attribute("item","");
-                            if(_xml.how=="Rotation"){
-                                _xml.rotation=makeRotation(domNode);
-                            }
-                            else _xml.whom=domElement.text();
-
-                        }
-                        if(domElement.attribute("ult","")!=""){
-                            _xml.what="useult";
-                            _xml.whom=domElement.text();
-                            _xml.how=domElement.attribute("ult","");
-                            //qDebug()  << domElement.tagName() << domElement.attribute("ult","") << domElement.text();
-                        }
-                        if(domElement.attribute("badge","")!=""){
-
-                            // qDebug()  << domElement.tagName() << domElement.attribute("item","");
-                            if(_xml.how!="Rotation" && _xml.how!="Badge"){
-                                _xml.what="useitemCap";
-                                _xml.how=domElement.attribute("badge","");
-                                _xml.whom=domElement.text();
-
-                            } else _xml.what="bad_action";
-
-                        }
-                    }
+            if(!domElement.isNull())
+            {
+                if(domElement.tagName() == "regname") {
+                    _xml.type = TT_REGNAME;
+                    _xml.item = domElement.text();
+                    // _xml.how=domElement.attribute("avatar","");
+                } else if (domElement.tagName() == "regrole" ){
+                    _xml.type = TT_REGROLE;
+                    _xml.item = domElement.text();
                 }
             }
+            else if(domElement.tagName() == "vote") {
+                _xml.type = TT_VOTE;
+                _xml.item = domElement.text();
+                //qDebug()  << domElement.tagName() << domElement.text();
+            }
+            else if(domElement.tagName() == "unvote") {
+                _xml.type = TT_UNVOTE;
+                //qDebug()  << domElement.tagName() << domElement.text();
+            }
+
+            else if(domElement.tagName() == "attack")
+            {
+                _xml.type = TT_ATTACK;
+                _xml.item = domElement.text();
+            }
+            else if(domElement.tagName() == "infect")
+            {
+                _xml.type = TT_INFECT;
+                _xml.item = domElement.text();
+            }
+            else if(domElement.tagName() == "wait")
+            {
+                _xml.type = TT_SKIP;
+            }
+            else if(domElement.tagName() == "up")
+            {
+                _xml.type = TT_UP;
+            }
+            else if(domElement.tagName() == "down")
+            {
+                _xml.type = TT_DOWN;
+            }
+            else if(domElement.tagName() == "use")
+            {
+                if(domElement.attribute("item","") != "")
+                {
+                    _xml.type = TT_USE_ITEM;
+                    _xml.item = domElement.attribute("item","");
+                    if(_xml.item == "Rotation")
+                    {
+                        _xml.targets = makeRotation(domNode);
+                    }
+                    else
+                        _xml.targets.append(domElement.text());
+                }
+                else if(domElement.attribute("ult","") != "")
+                {
+                    _xml.type = TT_ULT_ITEM;
+                    _xml.targets.append(domElement.text());
+                    _xml.item = domElement.attribute("ult","");
+                }
+                else if(domElement.attribute("badge","") != "")
+                {
+                    _xml.type = TT_USE_BADGE;
+                    _xml.targets.append(domElement.text());
+                    _xml.item = domElement.attribute("badge","");
+                }
+                else
+                    _xml.type = TT_NOTHING;
+            }
+            else
+                _xml.type = TT_NOTHING;
         }
-        traverseNode(domNode,_xml,mod);
         domNode = domNode.nextSibling();
     }
     return _xml;
@@ -568,7 +582,7 @@ void xml_maker::nonamecorrect(int tempname){
     domElement.appendChild(doc.createElement("nonamecorrect"));
 
     emit sendtoclient(tempname,doc.toString());
- //   emit noVerifyClientName(tempname);
+    //   emit noVerifyClientName(tempname);
 }
 
 void xml_maker::rolecorrect(int _name){

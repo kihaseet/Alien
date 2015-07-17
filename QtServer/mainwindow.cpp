@@ -25,13 +25,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(_serv,SIGNAL(client_disconnected(int)),_game,SLOT(slot_disconnected(int)));
     connect(_serv,SIGNAL(client_connected()),_game,SLOT(slotSendRolelist()));
 
-    connect(_xmlmaker,SIGNAL(newname(int,QString,QString)),_game,SLOT(register_new_player(int,QString,QString)));
-    connect(_xmlmaker,SIGNAL(registerRolebyPlayer(int,QString)),_game,SLOT(registerRolebyPlayer(int,QString)));
+    connect(_xmlmaker,SIGNAL(newname(int,TurnObject)),_game,SLOT(register_new_player(int,TurnObject));
+    connect(_xmlmaker,SIGNAL(registerRolebyPlayer(int,TurnObject)),_game,SLOT(registerRolebyPlayer(int,TurnObject));
    // connect(_xmlmaker,SIGNAL(noVerifyClientName(QString)),_serv,SLOT(noVerifyClientName(int)));
     connect(_xmlmaker,SIGNAL(sendtoclient(int,QString)),_serv,SLOT(slotsendToClient(int,QString)));
     connect(_xmlmaker,SIGNAL(send_to_all(QString)),_serv,SLOT(send2all(QString)));
-    connect(_xmlmaker,SIGNAL(xml_create(int,QString,QString,QString,QQueue<QString>)),
-            _game,SLOT(make_events(int,QString,QString,QString,QQueue<QString>)));
+    connect(_xmlmaker,SIGNAL(xml_create(int,TurnObject)),
+            _game,SLOT(make_events(int,TurnObject)));
     connect(_xmlmaker,SIGNAL(xml_create_norot(int,QString,QString,QString)),
             _game,SLOT(make_events(int,QString,QString,QString)));
 

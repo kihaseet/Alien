@@ -21,7 +21,7 @@ class xml_maker:public QObject
 Q_OBJECT
 public:
     xml_maker();
-    xml_msg traverseNode(const QDomNode& node, xml_msg _xml,QString mod);
+    TurnObject traverseNode(const QDomNode& node);
     QQueue <QString> makeRotation(const QDomNode& node);
 
 
@@ -56,13 +56,13 @@ public slots:
     void updaterolelist(QList<player *> NameRolelist);
 
 signals:
-    void xml_create(int who,QString what,QString whom,QString how,QQueue<QString>rota);
+    void xml_create(int who,TurnObject turn);
     void xml_create_norot(int who,QString what,QString whom,QString how);
-    void newname(int _tempname,QString who,QString avatar);
+    void newname(int _tempname,TurnObject turn);
     void newrole(QString who);
     void sendtoclient(int _name,QString _xmldoc);
     void send_to_all(QString _xmldoc);
-    void registerRolebyPlayer(int _name, QString role);
+    void registerRolebyPlayer(int _name, TurnObject turn);
     void votebyPlayer(QString _name,QString whom);
     void unvotebyPlayer(QString _name);
 

@@ -1,94 +1,15 @@
 #include "event.h"
 
-ingame_event::ingame_event(QString wh, QString whm, QString wht, QString it, QQueue<QString> rot)
+QMap<QString, ITEM> TurnObject::initColumnNames()
 {
-    if(wh!="")this->who=wh;
-    if(whm!="")this->whom=whm;
-    if(wht!="")this->what=wht;
-    if(it!="")useit=it;
-    if(!rot.isEmpty())rota=rot;
-}
-ingame_event::ingame_event(QString wh, QString whm, QString wht, QString it)
-{
-    if(wh!="")this->who=wh;
-    if(whm!="")this->whom=whm;
-    if(wht!="")this->what=wht;
-    if(it!="")useit=it;
+    QMap<QString, ITEM> map;
+    map.insert("Badge",IT_BADGE);
+    map.insert("Injector",IT_INJECTOR);
+    map.insert("Scanner",IT_SCANNER);
+    map.insert("Mop",IT_MOP);
+    map.insert("Battery",IT_BATTERY);
+    map.insert("Blaster",IT_BLASTER);
+    return map;
 }
 
-void TurnObject::do_event(){
-    qDebug()<<"ingame_event::do_event()"<<this->who<<this->what<<whom<<useit;
-
-//    switch (this->type) {
-//    case TT_ALIEN:
-//        emit event_alien(this->who);
-//        break;
-//    case TT_ATTACK:
-//        emit event_attack(this->who,this->whom);
-//        break;
-//    case TT_USE_ITEM:
-//        emit event_useitem(this->who,this->whom,this->useit);
-//        break;
-//    case TT_ATTACK:
-//        emit event_attack(this->who,this->whom);
-//        break;
-//    case TT_ATTACK:
-//        emit event_attack(this->who,this->whom);
-//        break;
-//    case TT_ATTACK:
-//        emit event_attack(this->who,this->whom);
-//        break;
-//    case TT_ATTACK:
-//        emit event_attack(this->who,this->whom);
-//        break;
-//    case TT_ATTACK:
-//        emit event_attack(this->who,this->whom);
-//        break;
-//    case TT_ATTACK:
-//        emit event_attack(this->who,this->whom);
-//        break;
-//    case TT_ATTACK:
-//        emit event_attack(this->who,this->whom);
-//        break;
-//    case TT_ATTACK:
-//        emit event_attack(this->who,this->whom);
-//        break;
-//    default:
-//        break;
-//    }
-
-
-//    if(this->what=="useitem")
-//    {
-//        //if(rota.isEmpty())
-//            emit event_useitem(this->who,this->whom,this->useit);
-//        //else emit event_useitemrot(this->rota);
-//    }
-
-//    if(this->what=="useitemCap")
-//    {emit event_useitemcap(this->who,this->whom,this->useit);}
-
-//    if(this->what=="useult")
-//    {emit event_ultitem(this->who,this->whom,this->useit);}
-
-//    if(this->what=="wait")
-//    {emit event_wait(this->who);}
-
-//    if(this->what=="up")
-//    {emit event_up(this->who);}
-
-//    if(this->what=="down")
-//    {emit event_down(this->who);}
-
-//    if(this->what=="infect")
-//    {emit event_infect(this->who,this->whom);}
-
-//    if(this->what=="vote")
-//    {emit event_vote(this->who,this->whom);}
-
-//    if(this->what=="unvote")
-//    {emit event_unvote(this->who);}
-
-//    if(this->what=="getitem")
-//    {emit event_getitem(this->who,this->useit,this->whom);}//whom - заряд
-}
+QMap <QString, ITEM> TurnObject::ItemDescr = initColumnNames();

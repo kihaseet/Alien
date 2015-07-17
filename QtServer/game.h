@@ -25,9 +25,9 @@ public:
 
     TurnObject* _event;//объект текущего события
     voting* _currvoting;//объект текущего голосования
-    QQueue <ingame_event*> _nightque;//очередь ночных событий
+    QQueue <TurnObject> _nightque;//очередь ночных событий
     game();
-    QMap <int,QString> connectedName; //дескриптор сокета - имя ДЛЯ ЗАРЕГАННЫХ
+    QMap <int,QString> connectedName; //дескриптор сокета - имя ДЛЯ ОНЛАЙН
     QMap <QString,player*>* playerlist;//имя-игрок!!!
     QMap <QString,item*> itemlist;//название-указатель
     QList <QString> brokeitemlist;
@@ -47,7 +47,7 @@ public:
     void day_end_curr_voting(QString winner);
     void make_actionlist(player* who);
     void getItemByRoleAll();
-    bool make_events_check(QString who, TurnObject TO);
+    bool make_events_check(TurnObject turn);
     void day_check_over();
     void do_events(TurnObject TO);
 //обязательно понадобится проверка на изменение количества игроков во время голосования (убийство, дисконнект)
@@ -77,8 +77,8 @@ signals:
 
 
 public slots:
-    void register_new_player(int tempname, QString name, QString avatar);
-    void registerRolebyPlayer(int _na, QString role);
+    void register_new_player(int tempname, TurnObject turn);
+    void registerRolebyPlayer(int _na, TurnObject turn);
     void slotSendRolelist();
     void slot_disconnected(int na);
     
@@ -87,13 +87,13 @@ public slots:
     void slot_up(TurnObject TO);
     void slot_down(TurnObject TO);
     void slot_alien(TurnObject TO);
-    void slot_getitem(QString who,QString useit,QString power);
-    void slot_vote(QString who,QString whom);
-    void slot_unvote(QString who);
+    void slot_getitem(TurnObject turn);
+    void slot_vote(TurnObject turn);
+    void slot_unvote(TurnObject turn);
     void add_role(player *whom, QString what);
     void delete_role(player *whom, QString what);
-    void slot_use_item(QString who, QString whom, QString useit);
-    void slot_ult_item(QString who,QString whom,QString useit);
+    void slot_use_item(TurnObject turn);
+    void slot_ult_item(TurnObject turn);
     void add_item(){}
     void delete_item(){}
     void start();
@@ -105,8 +105,8 @@ public slots:
     void night_start();
     bool night();
     void make_events(int wwh, QString what, QString whom, QString how, QQueue<QString> rota);
-    void make_events(int wwh, QString what, QString whom, QString how);
-    void slot_use_item_cap(QString who, QString whom, QString useit);
+    void make_events(int wwh, TurnObject turn);
+    void slot_use_item_cap(TurnObject turn);
     void day_canseled_voting();
     void slot_game_over();
 

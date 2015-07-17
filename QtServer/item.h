@@ -26,9 +26,9 @@ public:
     game* _game;
 
 public slots:
-    virtual void use_item_day(QString whom){}
-    virtual void use_item_night(QString whom){}
-    virtual void ult_item(QString whom){}
+    virtual void use_item_day(QQueue<QString> whom){}
+    virtual void use_item_night(QQueue<QString> whom){}
+    virtual void ult_item(QQueue<QString> whom){}
 signals:
     void item_heal_all();
     void item_scan_all();
@@ -48,7 +48,7 @@ class Rotation:public item
 {
 public:
     Rotation(game* _g);
-    void use_item_day(QString whom);
+    void use_item_day(QQueue<QString> whom);
     void use_item_night();
     void ult_item();
 };
@@ -58,44 +58,44 @@ class Blaster:public item
 public:
     Blaster(game *_g);
     void use_item_day();
-    void use_item_night(QString whom);
-    void ult_item(QString whom);
+    void use_item_night(QQueue<QString> whom);
+    void ult_item(QQueue<QString> whom);
 };
 
 class Injector:public item
 {
 public:
     Injector(game *_g);
-    void use_item_day(QString whom);
-    void use_item_night(QString whom);
-    void ult_item(QString whom);
+    void use_item_day(QQueue<QString> whom);
+    void use_item_night(QQueue<QString> whom);
+    void ult_item(QQueue<QString> whom);
 };
 
 class Notebook:public item
 {
 public:
     Notebook(game *_g);
-    void use_item_day(QString whom);
-    void use_item_night(QString whom);
-    void ult_item(QString whom);
+    void use_item_day(QQueue<QString> whom);
+    void use_item_night(QQueue<QString> whom);
+    void ult_item(QQueue<QString> whom);
 };
 
 class Battery:public item
 {
 public:
     Battery(game *_g);
-    void use_item_day(QString whom);
-    void use_item_night(QString whom);
-    void ult_item(QString whom);
+    void use_item_day(QQueue<QString> whom);
+    void use_item_night(QQueue<QString> whom);
+    void ult_item(QQueue<QString> whom);
 };
 
 class Scanner:public item
 {
 public:
     Scanner(game *_g);
-    void use_item_day(QString whom);
-    void use_item_night(QString whom);
-    void ult_item(QString whom);
+    void use_item_day(QQueue<QString> whom);
+    void use_item_night(QQueue<QString> whom);
+    void ult_item(QQueue<QString> whom);
 };
 
 class Mop:public item
@@ -103,7 +103,7 @@ class Mop:public item
 public:
     Mop(game *_g);
     void use_item_day();
-    void use_item_night(QString whom);
+    void use_item_night(QQueue<QString> whom);
     void ult_item();
 };
 #endif // ITEM_H
