@@ -33,7 +33,8 @@ HEADERS  += mainwindow.h \
     voting.h \
     event.h \
     clientsocket.h \
-    config.h
+    config.h \
+    types.h
 
 FORMS    += mainwindow.ui \
     config.ui

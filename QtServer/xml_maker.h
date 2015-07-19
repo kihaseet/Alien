@@ -35,7 +35,7 @@ public:
     QDomElement append_stats(QDomDocument &domDoc, player* player);
     void event_maker(QDomDocument doc, QDomElement domStat,
                      QDomElement domEvents, player* it, QMap<QString, player *> playerlist,
-                     ingame_event* _eve);
+                     TurnObject _eve);
 
     QDomElement name_role_list(QDomDocument& domDoc,QMap <QString,player*> playerlist,QList<QString>_rolelist);
     QDomElement name_role_list(QDomDocument& domDoc, QList<player *> *playerlist);

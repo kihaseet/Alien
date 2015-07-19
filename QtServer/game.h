@@ -6,9 +6,10 @@
 #include "player.h"
 #include "voting.h"
 #include "event.h"
+#include "types.h"
 #include <QDebug>
 
-class ingame_event;
+struct TurnObject;
 class player;
 class item;
 class voting;
@@ -29,8 +30,8 @@ public:
     game();
     QMap <int,QString> connectedName; //дескриптор сокета - имя ДЛЯ ОНЛАЙН
     QMap <QString,player*>* playerlist;//имя-игрок!!!
-    QMap <QString,item*> itemlist;//название-указатель
-    QList <QString> brokeitemlist;
+    QMap <ITEM,item*> itemlist;//название-указатель
+    QList <ITEM> brokeitemlist;
     QQueue <voting*> votingque;//очередь дневных голосований
     QQueue <QString> nightrotation; //очередь ночных дежурств
     QMultiMap <QString,player*> rolelist;//роль-игрок
@@ -73,7 +74,7 @@ signals:
     void send_changes(player* who);
     void send_events(player* who);
     void send_votelist(player* who);
-    void send_nightmare(QQueue <ingame_event*>_n,QList <player*> p);
+    void send_nightmare(QQueue <TurnObject>_n,QList <player*> p);
 
 
 public slots:

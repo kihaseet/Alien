@@ -6,7 +6,6 @@
 class item;
 
 
-
 class player
 {
 public:
@@ -27,7 +26,7 @@ public:
     bool infecting;//true если уже заражал этой ночью
     QList <QString> rolelist;
     QList <TurnObject> actionlist;
-    QMap <QString,item*> itemlist; //дескриптор-указатель
+    QList <item*> itemlist; //дескриптор-указатель
 };
 
 

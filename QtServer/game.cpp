@@ -149,217 +149,290 @@ void game::make_actionlist(player* who){
     //qDebug()<<"game::make_actionlist(player* who)"<<who->name;
     who->actionlist.clear();
     QList<QString> tmp;
-    if(daytime){
-        foreach (item* var, who->itemlist.values()) {
-            if(var->handle == "Blaster"){
-                if(var->power==0){
-                    who->actionlist.append(TurnObject(TT_ULT_ITEM,playerlist->keys(),var->handle));
-                    //who->actionlist.append(qMakePair(QString("ultBlaster"),playerlist->keys()));
+    if(daytime)
+    {
+        foreach (item* var, who->itemlist)
+        {
+            switch (var->ID) {
+            case IT_BLASTER:
+                if(var->power == 0)
+                {
+                    who->actionlist.append(TurnObject(TT_ULT_ITEM,playerlist->keys(),var->ID));
                 }
-                continue;}
-            if(var->handle == "Injector"){
-                if(var->power==0){
-                    who->actionlist.append(TurnObject(TT_USE_ITEM,playerlist->keys(),var->handle));
-                    who->actionlist.append(TurnObject(TT_ULT_ITEM,var->handle));
-                    //who->actionlist.append(qMakePair(QString("useInjector"),playerlist->keys()));
-                    //who->actionlist.append(qMakePair(QString("ultInjector"),tmp));
+                break;
+            case IT_INJECTOR:
+                if(var->power == 0)
+                {
+                    who->actionlist.append(TurnObject(TT_USE_ITEM,playerlist->keys(),var->ID));
+                    who->actionlist.append(TurnObject(TT_ULT_ITEM,var->ID));
                 }
-                continue;
+                break;
+            case IT_NOTEBOOK:
+                if(!_currvoting->is_over || hardresolve)
+                {
+                    who->actionlist.append(TurnObject(TT_ULT_ITEM,var->ID));
+                    if(var->power == 0 && !_currvoting->is_over)
+                    {
+                        who->actionlist.append(TurnObject(TT_USE_ITEM,_currvoting->electlist,var->ID));
+                    }
+                }
+                break;
+            case IT_BATTERY:
+                TurnObject turn1(TT_ULT_ITEM,IT_BATTERY);
+                foreach (ITEM item, itemlist)
+                {
+                    if (itemlist[item]->power == -1)
+                    {
+                        turn1.targets.append(itemlist[item]->handle);
+                    }
+                }
+                who->actionlist.append(turn1);
+
+
+                if(var->power == 0)
+                {
+                    TurnObject turn2(TT_USE_ITEM,IT_BATTERY);
+                    foreach (ITEM item, itemlist)
+                    {
+                        switch (item) {
+                        case IT_BADGE:
+                        case IT_ROTATION:
+                        case IT_BATTERY:
+                        case IT_FETUS:
+                        case IT_MOP:
+                            break;
+                        default:
+                            turn2.targets.append(itemlist[item]->handle);
+                            break;
+                        }
+
+                    }
+                    who->actionlist.append(turn2);
+                }
+                break;
+            case IT_SCANNER:
+                if(var->power == 0)
+                {
+                    who->actionlist.append(TurnObject(TT_ULT_ITEM,var->ID));
+                    who->actionlist.append(TurnObject(TT_USE_ITEM,playerlist->keys(),var->ID));
+                }
+                break;
+            case IT_BADGE:
+                if(_currvoting->is_over && hardresolve)
+                {
+                    who->actionlist.append(TurnObject(TT_USE_ITEM,_currvoting->winners,var->ID));
+                }
+                if(var->power == 0)
+                {
+                    TurnObject turn;
+                    turn.type = TT_USE_BADGE;
+                    foreach (ITEM item, itemlist)
+                    {
+                        if(!brokeitemlist.contains(item)){
+                            switch (item) {
+                            case IT_BATTERY:
+                                turn.item = IT_BATTERY;
+                                foreach (ITEM item1, itemlist)
+                                {
+                                    switch (item1) {
+                                    case IT_BADGE:
+                                    case IT_ROTATION:
+                                    case IT_BATTERY:
+                                    case IT_FETUS:
+                                    case IT_MOP:
+                                        break;
+                                    default:
+                                        turn.targets.append(itemlist[item1]->handle);
+                                        break;
+                                    }
+
+                                }
+                                who->actionlist.append(turn);
+                                break;
+                            case IT_BLASTER:
+                            case IT_INJECTOR:
+                            case IT_SCANNER:
+                                turn.item = item;
+                                turn.targets = playerlist->keys();
+                                who->actionlist.append(turn);
+                                break;
+                            case IT_NOTEBOOK:
+                                if(!_currvoting->is_over && !hardresolve)
+                                {
+                                    turn.item = IT_NOTEBOOK;
+                                    turn.targets.append(_currvoting->electlist);
+                                    who->actionlist.append(turn);
+                                }
+                                break;
+                            default:
+                                break;
+                            }
+                        }
+                    }
+                }
+                break;
+            case IT_ROTATION:
+                if(nightrotation.isEmpty())
+                {
+                    foreach (player* gr, playerlist->values())
+                    {
+                        gr->ImDuty = false;
+                    }
+                    QList<QString>deprole;
+                    QList<QString>cand;//готовим список дежурных
+                    deprole <<"Deputy of Doctor"<<"Deputy of Gunmen"<<"Deputy of Engineer"
+                           <<"Deputy of Scientist"<<"Deputy of Signalmen"<<"Assistant";
+                    foreach (player* it, playerlist->values())
+                    {
+                        if(it->ImDuty == false){
+                            foreach (QString r, it->rolelist)
+                            {
+                                if(deprole.contains(r)&&(!cand.contains(it->name) &&
+                                                         (!it->rolelist.contains("Captain"))))
+                                {
+                                    cand.append(it->name);
+                                }
+                            }
+                        }
+                    }
+                    foreach (QString hth, passengerlist)
+                    {
+                        if(playerlist->value(hth)->ImDuty == false)
+                        {
+                            cand.append(hth);
+                        }
+                    }
+                    if(cand.count() <= 1)
+                    {
+                        foreach (player* jt, playerlist->values())
+                        {
+                            if(!jt->rolelist.contains("Captain")&&
+                                    (!cand.contains(jt->name) && jt->ImDuty == false))
+                            {
+                                cand.append(jt->name);
+                            }
+                        }
+                    }
+                    who->actionlist.append(TurnObject(TT_USE_ITEM,cand,var->ID));
+                }
+                break;
+
+            default:
+                break;
             }
-            if(var->handle == "Notebook"){
-                if(_currvoting->is_over!=true || hardresolve==true){
-                    who->actionlist.append(TurnObject(TT_ULT_ITEM,var->handle));
-                    //who->actionlist.append(qMakePair(QString("ultNotebook"),tmp));}
-                    if(var->power==0 && _currvoting->is_over!=true){
-                        who->actionlist.append(TurnObject(TT_USE_ITEM,_currvoting->electlist,var->handle));
-                        //who->actionlist.append(qMakePair(QString("useNotebook"),_currvoting->electlist));
-                    }
-                    continue;}
-                if(var->handle == "Battery"){
-                    who->actionlist.append(TurnObject(TT_ULT_ITEM,brokeitemlist,var->handle));
-                    //who->actionlist.append(qMakePair(QString("ultBattery"),brokeitemlist));
-                    if(var->power==0){
-                        QList<QString> gtr;
-                        foreach (QString st, itemlist.keys()) {
-                            if(st!="Badge" && st!="Rotation" && st!="Battery")
-                                gtr.append(st);
+        }
+
+        if(!_currvoting->is_over)
+        {
+            if(_currvoting->votelist.value(who->name).second == 0)
+                who->actionlist.append(TurnObject(TT_VOTE,_currvoting->electlist));
+            if(_currvoting->votelist.value(who->name).second == 1)
+                who->actionlist.append(TurnObject(TT_UNVOTE));
+        }
+        if(who->status == 2){
+            if(who->healthy)
+                who->actionlist.append(TurnObject(TT_DOWN));
+            else
+                who->actionlist.append(TurnObject(TT_UP));
+        }
+
+    }
+    else
+    {//если ночь
+        if(!who->waiting)
+        {
+            who->actionlist.append(TurnObject(TT_SKIP));
+            if(!who->use_night_item)
+            {
+                foreach (item* var, who->itemlist.values())
+                {
+                    switch (var->ID) {
+                    case IT_BLASTER:
+                        if(var->power == 0)
+                        {
+                            who->actionlist.append(TurnObject(TT_USE_ITEM,playerlist->keys(),var->ID));
+                            who->actionlist.append(TurnObject(TT_ULT_ITEM,playerlist->keys(),var->ID));
                         }
-                        who->actionlist.append(TurnObject(TT_USE_ITEM,gtr,var->handle));
-                        //who->actionlist.append(qMakePair(QString("useBattery"),gtr));
-                    }
-                    continue;}
-                if(var->handle == "Scanner"){
-                    if(var->power==0){
-                        who->actionlist.append(TurnObject(TT_ULT_ITEM,var->handle));
-                        //who->actionlist.append(qMakePair(QString("ultScanner"),tmp));
-                        
-                        who->actionlist.append(TurnObject(TT_USE_ITEM,playerlist->keys(),var->handle));
-                        //who->actionlist.append(qMakePair(QString("useScanner"),playerlist->keys()));
-                    }
-                    continue;}
-                if(var->handle == "Badge"){
-                    if(_currvoting->is_over==true && hardresolve==true){
-                        who->actionlist.append(TurnObject(TT_USE_ITEM,_currvoting->winners,var->handle));
-                        //who->actionlist.append(qMakePair(QString("useBadge"),_currvoting->winners));
-                    }
-                    if(var->power==0){
-                        QList<QString> gtr;
-                        foreach (QString st, itemlist.keys()) {
-                            if(!brokeitemlist.contains(st)&&st!="Badge"&&st!="Rotation")
-                                gtr.append(st);
+                        break;
+                    case IT_INJECTOR:
+                    case IT_SCANNER:
+                        if(var->power == 0)
+                        {
+                            who->actionlist.append(TurnObject(TT_USE_ITEM,playerlist->keys(),var->ID));
+                            who->actionlist.append(TurnObject(TT_ULT_ITEM,var->ID));
                         }
-                        who->actionlist.append(TurnObject(TT_ULT_ITEM,gtr,var->handle));
-                        //who->actionlist.append(qMakePair(QString("ultBadge"),gtr));
-                    }
-                    continue;}
-                if(var->handle == "Rotation"){
-                    if(nightrotation.isEmpty()){
-                        foreach (player* gr, playerlist->values()) {
-                            gr->ImDuty=false;
+                        break;
+                    case IT_BATTERY:
+                        if(!brokeitemlist.isEmpty())
+                            who->actionlist.append(TurnObject(TT_ULT_ITEM,brokeitemlist,var->ID));
+
+                        if(var->power == 0)
+                        {
+                            who->actionlist.append(TurnObject(TT_USE_ITEM,var->ID));
                         }
-                        QList<QString>deprole;
-                        QList<QString>cand;//готовим список дежурных
-                        deprole <<"Deputy of Doctor"<<"Deputy of Gunmen"<<"Deputy of Engineer"
-                               <<"Deputy of Scientist"<<"Deputy of Signalmen"<<"Assistant";
-                        foreach (player* it, playerlist->values()) {
-                            if(it->ImDuty==false){
-                                foreach (QString r, it->rolelist) {
-                                    if(deprole.contains(r)&&(!cand.contains(it->name)&&
-                                                             (!it->rolelist.contains("Captain")))){
-                                        cand.append(it->name);
-                                        //it->ImDuty=true;
+                        break;
+                    case IT_BADGE:
+                        if(var->power == 0)
+                        {
+                            foreach (ITEM item, itemlist)
+                            {
+                                if(!brokeitemlist.contains(item))
+                                {
+                                    TurnObject turn;
+                                    turn.type = TT_USE_BADGE;
+                                    switch (item) {
+                                    case IT_BATTERY:
+                                        turn.item = IT_BATTERY;
+                                        who->actionlist.append(turn);
+                                        break;
+                                    case IT_BLASTER:
+                                    case IT_INJECTOR:
+                                    case IT_SCANNER:
+                                    case IT_MOP:
+                                        turn.item = item;
+                                        turn.targets = playerlist->keys();
+                                        who->actionlist.append(turn);
+                                        break;
+                                    default:
+                                        break;
                                     }
                                 }
                             }
                         }
-                        foreach (QString hth, passengerlist) {
-                            if(playerlist->value(hth)->ImDuty==false){
-                                cand.append(hth);
-                                //it->ImDuty=true;
-                            }
-                        }
-                        if(cand.count()<=1){
-                            foreach (player* jt, playerlist->values()) {
-                                if(!jt->rolelist.contains("Captain")&&(!cand.contains(jt->name)&&jt->ImDuty==false)){
-                                    cand.append(jt->name);
-                                    //jt->ImDuty=true;
-                                }
-                            }
-                        }
-                        who->actionlist.append(TurnObject(TT_USE_ITEM,cand,var->handle));
-                        //who->actionlist.append(qMakePair(QString("useRotation"),cand));
-                    }
-                    continue;//если добавить дефолт, то там буде обработка ошибок
-                }
-                
-            }
-            if(_currvoting->is_over!=true){
-                if(_currvoting->votelist.value(who->name).second==0)
-                    who->actionlist.append(TurnObject(TT_VOTE,_currvoting->electlist));
-                //who->actionlist.append(qMakePair(QString("vote"),_currvoting->electlist));
-                if(_currvoting->votelist.value(who->name).second==1)
-                    who->actionlist.append(TurnObject(TT_UNVOTE));
-                //who->actionlist.append(qMakePair(QString("unvote"),tmp));
-            }
-            if(who->status==2){
-                if(who->healthy==true)
-                    who->actionlist.append(TurnObject(TT_DOWN));
-                //who->actionlist.append(qMakePair(QString("down"),tmp));
-                else
-                    who->actionlist.append(TurnObject(TT_UP));
-                //who->actionlist.append(qMakePair(QString("up"),tmp));
-            }
-        }
-    }else{//если ночь
-        if(who->waiting==false){
-            who->actionlist.append(TurnObject(TT_SKIP));
-            //who->actionlist.append(qMakePair(QString("wait"),tmp));
-            if(who->use_night_item==false){
-                foreach (item* var, who->itemlist.values()) {
-                    if(var->handle == "Blaster"){
-                        if(var->power==0){
-                            who->actionlist.append(TurnObject(TT_USE_ITEM,playerlist->keys(),var->handle));
-                            who->actionlist.append(TurnObject(TT_ULT_ITEM,playerlist->keys(),var->handle));
-                            //who->actionlist.append(qMakePair(QString("useBlaster"),playerlist->keys()));
-                            //who->actionlist.append(qMakePair(QString("ultBlaster"),playerlist->keys()));
-                        }
-                        continue;}
-                    if(var->handle == "Injector"){
-                        if(var->power==0){
-                            who->actionlist.append(TurnObject(TT_USE_ITEM,playerlist->keys(),var->handle));
-                            who->actionlist.append(TurnObject(TT_ULT_ITEM,var->handle));
-                            //who->actionlist.append(qMakePair(QString("useInjector"),playerlist->keys()));
-                            //who->actionlist.append(qMakePair(QString("ultInjector"),tmp));
-                            
-                        }
-                        continue;}
-                    if(var->handle == "Battery"){
-                        if(!brokeitemlist.isEmpty())
-                            who->actionlist.append(TurnObject(TT_ULT_ITEM,brokeitemlist,var->handle));
-                        //who->actionlist.append(qMakePair(QString("ultBattery"),brokeitemlist));
-                        if(var->power==0){
-                            QList <QString> tmp;
-                            tmp.append(who->name);
-                            who->actionlist.append(TurnObject(TT_USE_ITEM,var->handle));
-                            //who->actionlist.append(qMakePair(QString("useBattery"),tmp));
-                        }
-                        continue;}
-                    if(var->handle == "Scanner"){
-                        if(var->power==0){
-                            who->actionlist.append(TurnObject(TT_ULT_ITEM,var->handle));
-                            who->actionlist.append(TurnObject(TT_USE_ITEM,playerlist->keys(),var->handle));
-                            //who->actionlist.append(qMakePair(QString("ultScanner"),tmp));
-                            //who->actionlist.append(qMakePair(QString("useScanner"),playerlist->keys()));
-                        }
-                        continue;}
-                    if(var->handle == "Badge"){
-                        if(var->power==0){
-                            QList <QString> iitemlist;
-                            foreach (QString iitem, itemlist.keys()) {
-                                if(iitem!="Rotation" && iitem!="Badge" && iitem!="Notebook"){
-                                    iitemlist.append(iitem);
-                                }
-                            }
-                            who->actionlist.append(TurnObject(TT_ULT_ITEM,iitemlist,var->handle));
-                            //who->actionlist.append(qMakePair(QString("ultBadge"),iitemlist));
-                        }
-                        continue;}
-                    if(var->handle == "Mop"){
-                        who->actionlist.append(TurnObject(TT_USE_ITEM,playerlist->keys(),var->handle));
-                        //who->actionlist.append(qMakePair(QString("useMop"),playerlist->keys()));
-                        continue;
+                        break;
+                    case IT_MOP:
+                        who->actionlist.append(TurnObject(TT_USE_ITEM,playerlist->keys(),var->ID));
+                        break;
+                    default:
+                        break;
                     }
                 }
-                
             }
-            if(who->status==2)
+            if(who->status == 2)
             {
-                if(who->attack_thisnight==false){
+                if(!who->attack_thisnight)
+                {
                     who->actionlist.append(TurnObject(TT_ATTACK,playerlist->keys()));
-                    //who->actionlist.append(qMakePair(QString("attack"),playerlist->keys()));
                 }
-                if(who->infecting==false) {
-                    if(who->invasion==0 || who->success_attack==2 ||
-                            (who->success_attack==1 && who->attack_thisnight==true)){
+                if(!who->infecting)
+                {
+                    if(who->invasion == 0 || who->success_attack == 2 ||
+                            (who->success_attack == 1 && who->attack_thisnight))
+                    {
                         who->actionlist.append(TurnObject(TT_INFECT,playerlist->keys()));
-                        // who->actionlist.append(qMakePair(QString("infect"),playerlist->keys()));
                     }
                 }
-                if(who->healthy==true)
+                if(who->healthy)
                     who->actionlist.append(TurnObject(TT_DOWN));
-                //who->actionlist.append(qMakePair(QString("down"),tmp));
                 else
                     who->actionlist.append(TurnObject(TT_UP));
-                //who->actionlist.append(qMakePair(QString("up"),tmp));
             }
         }
-        //тут возможна вставка автоматической отправки события wait, если игрок ничего не может сделать ночью
-        if(who->actionlist.count()==1){
+        if(who->actionlist.count() == 1)
+        {
             who->actionlist.clear();
-            who->waiting=true;
+            who->waiting = true;
         }
-        
-        //emit send_actionlist(who);
     }
 }
 
@@ -684,7 +757,7 @@ void game::StartRandomEvasion_testing(){
 void game::slot_attack(TurnObject TO)
 {
     qDebug()<<"game::slot_attack"<<who<<" "<<whom;
-    GuiMess2Log(who,"атаковал игрока "+whom);
+    //GuiMess2Log(who,"атаковал игрока "+whom);
     if(TO.wh->HP < 5)
         TO.wh->HP += 1;
     playerlist->value(TO.targets.dequeue())->HP -= 2;
@@ -748,7 +821,7 @@ void game::slot_alien(TurnObject TO)
 void game::slot_vote(TurnObject turn){
     qDebug()<<"game::slot_vote(QString who,QString whom)";
     if(!_currvoting->is_over)
-        _currvoting->on_voting(turn.wh->name,turn.item);
+        _currvoting->on_voting(turn.wh->name,turn.targets.first());
 }
 void game::slot_unvote(TurnObject turn){
     //qDebug()<<"game::slot_unvote(QString who)";
@@ -787,8 +860,8 @@ void game::add_role(player* whom,QString what){
     rolelist.insertMulti(what,whom);
     whom->rolelist.append(what);
     foreach (item* var, itemlist.values()) {
-        if(var->role==what){
-            whom->itemlist.insert(var->handle,var);
+        if(var->role == what){
+            whom->itemlist.append(var);
         }
     }
     make_actionlist(whom);
@@ -803,9 +876,9 @@ void game::delete_role(player* whom,QString what){
     rolelist.remove(what,whom);
     if(rolelist.count(what)==0)rolelist.remove(what);
     whom->rolelist.removeOne(what);
-    foreach (item* var, itemlist.values()) {
-        if(var->role==what){
-            whom->itemlist.remove(var->handle);
+    foreach (item* var, whom->itemlist) {
+        if(var->role == what){
+            whom->itemlist.removeAll(var);
         }
     }
     if(mainrole.contains(what)){
@@ -846,7 +919,7 @@ void game::slot_use_item(TurnObject turn){
 void game::slot_use_item_cap(TurnObject turn)
 {
     GuiMess2Log(turn.wh->name," как капитан, использовал "+turn.item+" на "+turn.targets);
-    if(turn.wh->itemlist.value("Badge")->power != -1)
+    if(turn.wh->itemlist.value("Badge")->power != -2)
     {
         if(itemlist.value(turn.item)->power == 0)
         {
@@ -859,7 +932,7 @@ void game::slot_use_item_cap(TurnObject turn)
                 turn.wh->HP -= 1;
                 check_HP(turn.wh);
             }
-            turn.wh->itemlist.value("Badge")->power = -1;
+            turn.wh->itemlist.value("Badge")->power = -2;
         }
     }
 }
@@ -931,29 +1004,30 @@ bool game::make_events_check(TurnObject turn)
     if(!playerlist->contains(turn.wh->name))
         return false;
 
-    if(turn.type == TT_DOWN && turn.wh->healthy == false)
-    {
+    switch (turn.type) {
+    case TT_DOWN:
+        if(turn.wh->healthy == false)
+            return false;
+        break;
+    case TT_UP:
+        if(turn.wh->healthy == true)
+            return false;
+        break;
+    case TT_NOTHING:
         return false;
-    }
-
-    if(turn.type == TT_UP && turn.wh->healthy == true)
-    {
-        return false;
+    case TT_ATTACK:
+    case TT_INFECT:
+    case TT_VOTE:
+        if(turn.targets.isEmpty())
+            return false;
+        break;
+    default:
+        break;
     }
 
     if(turn.wh->actionlist.contains(turn)){
         return true;
     }
-    //QPair <QString,QList<QString> > tmp;
-    //foreach (TurnObject tmp, turn.wh->actionlist) {
-    /* if (tmp.first==check_first){
-            if(!tmp.second.isEmpty() && check_first!="useRotation"){
-                if(tmp.second.contains(check_second))return true;
-                else return false;
-            }else return true;//тут проверка роты
-        }*/
-
-    //}
     return false;
 }
 
@@ -1011,29 +1085,30 @@ void game::make_events(int wwh,TurnObject turn)
 
 
 
-bool game::makeNightActoins(){//true - продолжать игру, false - game over
+bool game::makeNightActoins()
+{//true - продолжать игру, false - game over
     qDebug()<<"game::makeNightActoins()";
     sortNightActions();
     QQueue <TurnObject> _night = _nightque;
     while(!_nightque.isEmpty())
     {
-        TurnObject _eve=_nightque.dequeue();
-        //_event=_nightque.dequeue();
-        do_events(_eve);
+        do_events(_nightque.dequeue());
     }
     
-    foreach (player* it, playerlist->values()) {
-        if(it->HP<=0){
+    foreach (player* it, playerlist->values())
+    {
+        if(it->HP <= 0){
             player_death(it);
             continue;
         }
         
-        if(it->simplebath==true && it->healthy==false){
-            it->HP+=1;
+        if(it->simplebath == true && it->healthy == false)
+        {
+            it->HP += 1;
         }
-        if(it->status==1){
-            it->invasion-=1;
-            if(it->invasion==0){
+        if(it->status == 1){
+            it->invasion -= 1;
+            if(it->invasion == 0){
                 slot_alien(it->name);
             }
         }
@@ -1529,7 +1604,8 @@ void game::sortNightActions()
             _nightque.enqueue(_eve);
             continue;
         }
-        if(_eve.type == TT_INFECT){
+        if(_eve.type == TT_INFECT)
+        {
             _nightque.enqueue(_eve);
             continue;
         }

@@ -14,6 +14,7 @@ void item::counter(){
 }
 
 Badge::Badge(game *_g){
+    ID = IT_BADGE;
     name="Значок";
     handle="Badge";
     role="Captain";
@@ -32,11 +33,13 @@ void Badge::ult_item(){
     qDebug()<<"Badge::ult_item()";
 }
 
-Rotation::Rotation(game *_g){
-    name="График";
-    handle="Rotation";
-    role="Assistant";
-    _game=_g;
+Rotation::Rotation(game *_g)
+{
+    ID = IT_ROTATION;
+    name = "График";
+    handle = "Rotation";
+    role = "Assistant";
+    _game = _g;
 }
 
 void Rotation::use_item_day(QQueue<QString> whom){
@@ -60,11 +63,13 @@ void Rotation::ult_item(){
     qDebug()<<"Rotation::ult_item()";
 }
 
-Blaster::Blaster(game *_g){
-    name="Бластер";
-    handle="Blaster";
-    role="Gunmen";
-    _game=_g;
+Blaster::Blaster(game *_g)
+{
+    ID = IT_BLASTER;
+    name = "Бластер";
+    handle = "Blaster";
+    role = "Gunmen";
+    _game = _g;
 }
 
 void Blaster::use_item_day(){
@@ -85,11 +90,13 @@ void Blaster::ult_item(QQueue<QString> whom){
     this->power=-1;
 }
 
-Injector::Injector(game *_g){
-    name="Шприц";
-    handle="Injector";
-    role="Doctor";
-    _game=_g;
+Injector::Injector(game *_g)
+{
+    ID = IT_INJECTOR;
+    name = "Шприц";
+    handle = "Injector";
+    role = "Doctor";
+    _game = _g;
 }
 
 void Injector::use_item_day(QQueue<QString> whom){
@@ -130,7 +137,9 @@ void Injector::ult_item(QQueue<QString> whom){
     this->power=-1;
 }
 
-Notebook::Notebook(game *_g){
+Notebook::Notebook(game *_g)
+{
+    ID = IT_NOTEBOOK;
     name="Ноутбук";
     handle="Notebook";
     role="Signalmen";
@@ -153,7 +162,9 @@ void Notebook::ult_item(QQueue<QString> whom){
     this->power=-1;
 }
 
-Battery::Battery(game *_g){
+Battery::Battery(game *_g)
+{
+    ID = IT_BATTERY;
     name="Батарейка";
     handle="Battery";
     role="Engineer";
@@ -180,7 +191,9 @@ void Battery::ult_item(QQueue<QString> whom){
     this->power=-1;
 }
 
-Scanner::Scanner(game *_g){
+Scanner::Scanner(game *_g)
+{
+    ID = IT_SCANNER;
     name="Сканер";
     handle="Scanner";
     role="Scientist";
@@ -217,7 +230,9 @@ void Scanner::ult_item(QQueue<QString> whom){
     this->power=-1;
 }
 
-Mop::Mop(game *_g){
+Mop::Mop(game *_g)
+{
+    ID = IT_MOP;
     name="Швабра";
     handle="Mop";
     _game=_g;

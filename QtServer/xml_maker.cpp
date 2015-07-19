@@ -51,16 +51,16 @@ TurnObject xml_maker::traverseNode(const QDomNode& node)
             {
                 if(domElement.tagName() == "regname") {
                     _xml.type = TT_REGNAME;
-                    _xml.item = domElement.text();
+                    _xml.targets.append(domElement.text());
                     // _xml.how=domElement.attribute("avatar","");
                 } else if (domElement.tagName() == "regrole" ){
                     _xml.type = TT_REGROLE;
-                    _xml.item = domElement.text();
+                    _xml.targets.append(domElement.text());
                 }
             }
             else if(domElement.tagName() == "vote") {
                 _xml.type = TT_VOTE;
-                _xml.item = domElement.text();
+                _xml_xml.targets.append(domElement.text());
                 //qDebug()  << domElement.tagName() << domElement.text();
             }
             else if(domElement.tagName() == "unvote") {
@@ -71,12 +71,12 @@ TurnObject xml_maker::traverseNode(const QDomNode& node)
             else if(domElement.tagName() == "attack")
             {
                 _xml.type = TT_ATTACK;
-                _xml.item = domElement.text();
+                _xml.targets.append(domElement.text());
             }
             else if(domElement.tagName() == "infect")
             {
                 _xml.type = TT_INFECT;
-                _xml.item = domElement.text();
+                _xml.targets.append(domElement.text());
             }
             else if(domElement.tagName() == "wait")
             {
@@ -95,28 +95,37 @@ TurnObject xml_maker::traverseNode(const QDomNode& node)
                 if(domElement.attribute("item","") != "")
                 {
                     _xml.type = TT_USE_ITEM;
-                    _xml.item = domElement.attribute("item","");
-                    if(_xml.item == "Rotation")
-                    {
-                        _xml.targets = makeRotation(domNode);
-                    }
-                    else
-                        _xml.targets.append(domElement.text());
+                    _xml.item = TurnObject::ItemDescr.value(domElement.attribute("item",""),IT_UNKNOW);
                 }
                 else if(domElement.attribute("ult","") != "")
                 {
                     _xml.type = TT_ULT_ITEM;
                     _xml.targets.append(domElement.text());
-                    _xml.item = domElement.attribute("ult","");
+                    _xml.item = TurnObject::ItemDescr.value(domElement.attribute("ult",""),IT_UNKNOW);
+
                 }
                 else if(domElement.attribute("badge","") != "")
                 {
                     _xml.type = TT_USE_BADGE;
                     _xml.targets.append(domElement.text());
-                    _xml.item = domElement.attribute("badge","");
+                    _xml.item = TurnObject::ItemDescr.value(domElement.attribute("badge",""),IT_UNKNOW);
                 }
                 else
+                {
                     _xml.type = TT_NOTHING;
+                    continue;
+                }
+                switch (_xml.item) {
+                case IT_ROTATION:
+                    _xml.targets = makeRotation(domNode);
+                    break;
+                case IT_UNKNOW:
+                    _xml.type = TT_NOTHING;
+                    break;
+                default:
+                    _xml.targets.append(domElement.text());
+                    break;
+                }
             }
             else
                 _xml.type = TT_NOTHING;
@@ -215,9 +224,9 @@ void xml_maker::nightmare(QQueue<ingame_event*> _que,QList <player*> playerlist)
 }
 
 
-void xml_maker::event_maker(QDomDocument doc,QDomElement domStat,
-                            QDomElement domEvents,player* it,QMap <QString,player*> playerlist,
-                            ingame_event* _eve){
+void xml_maker::event_maker(QDomDocument doc, QDomElement domStat,
+                            QDomElement domEvents, player* it, QMap <QString,player*> playerlist,
+                            TurnObject _eve){
     if(_eve->what=="alien"){
         if(it->name==_eve->who){
             domStat.appendChild(makeElement(doc,"alien","","",""));

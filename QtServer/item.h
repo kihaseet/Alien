@@ -13,6 +13,7 @@ class item:public QObject
 Q_OBJECT
 public:
     QQueue <QString> rotation;
+    ITEM ID;
     QString name;
     QString handle;
     QString note; //описание
