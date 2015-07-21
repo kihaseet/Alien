@@ -42,7 +42,7 @@ public:
 
 public slots:
     void new_analise(int _name, const QString input);
-    void slotSendVotelist(QList<VoteObject> votelist);
+    void slotSendVotelist(QList<VoteObject *> votelist);
    // void send_to_all(ingame_event *_eve, QMap<QString, player *> playerlist, QMap<QString, item *> itemlist);
     void slotnamecorrect(int tempname);
     void nonamecorrect(int tempname);

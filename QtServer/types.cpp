@@ -1,8 +1,9 @@
 #include "types.h"
 
-QMap<QString, ROLE> RegisterObject::initColumnNames()
+QMap<QString, ROLE> RegisterObject::initColumn()
 {
     QMap<QString, ROLE> map;
+    map.insert("alien",         RT_ALIEN);
     map.insert("Passenger",     RT_PASSENGER);
     map.insert("Captain",       RT_CAPTAIN);
     map.insert("Assistant",     RT_ASSISTANT);
@@ -20,5 +21,5 @@ QMap<QString, ROLE> RegisterObject::initColumnNames()
     return map;
 }
 
-QMap <QString, ROLE> RegisterObject::RoleDescr = RegisterObject::initColumnNames();
+QMap <QString, ROLE> RegisterObject::RoleDescr = initColumn();
 

@@ -48,11 +48,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(_game,SIGNAL(startvote(ROLE,QList<QString>)),_xmlmaker,SLOT(slotStartVoting(ROLE,QList<QString>)));
     connect(_game,SIGNAL(endvote(ROLE,QString,QString)),_xmlmaker,SLOT(slotEndVoting(ROLE,QString,QString)));
 
-    connect(_game,SIGNAL(send_votelist(QList<VoteObject>)),_xmlmaker,SLOT(slotSendVotelist(QList<VoteObject>)));
+    connect(_game,SIGNAL(send_votelist(QList<VoteObject*>)),_xmlmaker,SLOT(slotSendVotelist(QList<VoteObject*>)));
     connect(_game,SIGNAL(send_changes(TurnObject)),_xmlmaker,SLOT(sendTurn(TurnObject)));
+    connect(_game,SIGNAL(send_stat(TurnObject)),_xmlmaker,SLOT(sendStat(TurnObject)));
 
     connect(_game,SIGNAL(GuiUpdatePlayerlist(QList<player*>)),this,SLOT(updatePlayerlist(QList<player*>)));
-    connect(_game,SIGNAL(GuiUpdateVotelist(QMap <QString,QPair<QString,int> >)),this,SLOT(UpdateVotelist(QMap <QString,QPair<QString,int> >)));
+    connect(_game,SIGNAL(GuiUpdateVotelist()),this,SLOT(UpdateVotelist()));
     connect(_game,SIGNAL(GuiMess2Log(QString,QString)),this,SLOT(onAddLogToGui(QString,QString)));
 
     connect(_game,SIGNAL(send_nightmare(QQueue<TurnObject>,QMap<QString,player*>)),
@@ -115,7 +116,7 @@ void MainWindow::updatePlayerlist(QList <player*> playerlist){
         foreach (ROLE v, var->rolelist) {
             //s.append("["+v.left(3)+"]");
         }
-        play.append(s+var->name);
+        play.append(var->name);
     }
     ui->playerlist->clear();
     ui->playerlist->addItems(play);
@@ -131,8 +132,8 @@ void MainWindow::UpdateVotelist(){
     ui->text_info->clear();
     ui->text_log->append("Голосование:");
     //QPair<QString,int> var;
-    foreach (VoteObject var, _game->_currvoting->votelist) {
-        ui->text_log->append(var.who+": "+var.whom+" ("
-                              +QString::number(var.status)+")");
+    foreach (VoteObject* var, _game->_currvoting->votelist) {
+        ui->text_log->append(var->who+": "+var->whom+" ("
+                              +QString::number(var->status)+")");
     }
 }

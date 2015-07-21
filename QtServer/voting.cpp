@@ -27,12 +27,12 @@ void voting::on_voting(QString who, QString whom){
     qDebug()<<"void voting::on_voting(QString who, QString whom)";
     if(electlist.contains(whom))
     {
-        foreach (VoteObject vote, votelist)
+        foreach (VoteObject* vote, votelist)
         {
-            if(vote.who == who && vote.status == 0)
+            if(vote->who == who && vote->status == 0)
             {
-                    vote.whom = whom;
-                    vote.status = 1;
+                    vote->whom = whom;
+                    vote->status = 1;
                     break;
             }
         }
@@ -46,11 +46,11 @@ void voting::on_voting(QString who, QString whom){
 
 void voting::off_voting(QString who){
 
-    foreach (VoteObject vote, votelist)
+    foreach (VoteObject* vote, votelist)
     {
-        if(vote.who == who && vote.status == 1)
+        if(vote->who == who && vote->status == 1)
         {
-            vote.status = 0;
+            vote->status = 0;
             break;
         }
     }
@@ -59,10 +59,10 @@ void voting::off_voting(QString who){
 
 bool voting::is_vote(QString who)
 {
-    foreach (VoteObject vote, votelist) {
-        if(vote.who == who)
+    foreach (VoteObject* vote, votelist) {
+        if(vote->who == who)
         {
-            if(vote.status == 1)
+            if(vote->status == 1)
                 return true;
             else return false;
         }
@@ -72,9 +72,9 @@ bool voting::is_vote(QString who)
 
 bool voting::is_complite()
 {
-    foreach (VoteObject tmp, votelist)
+    foreach (VoteObject* tmp, votelist)
     {
-        if(tmp.status == 0)
+        if(tmp->status == 0)
             return false;
     }
     return true;
@@ -85,10 +85,10 @@ void voting::calc_votes(){
     winners.clear();
 
     QMap <QString,int> result;
-    foreach (VoteObject var, votelist)
+    foreach (VoteObject* var, votelist)
     {
-        int i = result.value(var.whom,-1);
-        result.insert(var.whom, i + 1);
+        int i = result.value(var->whom,-1);
+        result.insert(var->whom, i + 1);
     }
     if(electlist.contains(noteName))
     {

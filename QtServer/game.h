@@ -59,7 +59,7 @@ public:
 
 signals:
     void GuiUpdatePlayerlist(QList<player*>list);
-    void GuiUpdateVotelist(QMap <QString,QPair<QString,int> > votelist);
+    void GuiUpdateVotelist();
     void GuiMess2Log(QString name,QString msg);
     void startnewsessionenable(bool check);
 
@@ -68,8 +68,9 @@ signals:
     void startnight(int night);
     void startvote(ROLE tar,QList<QString>list);
     void endvote(ROLE role,QString name,QString result);
-    void send_votelist(QList<VoteObject>list);
+    void send_votelist(QList<VoteObject*>list);
     void send_changes(TurnObject turn);
+    void send_stat(TurnObject turn);
 
     void namecorrect(int name);
     void nonamecorrect(int name);

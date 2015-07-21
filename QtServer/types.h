@@ -68,7 +68,7 @@ public:
     int ID;
 
     static QMap <QString, ROLE> RoleDescr;
-    static QMap <QString, ROLE> initColumnNames();
+    static QMap <QString, ROLE> initColumn();
 
     RegisterObject(int id,QString n = QString()){
         ID = id;
@@ -93,9 +93,19 @@ public:
     }
     friend bool operator == (const VoteObject& left, const VoteObject& right)
     {
-       return left.who == right.who;
+        return left.who == right.who &&
+                left.whom == right.whom &&
+                left.status == right.status;
+    }
+    VoteObject& operator=(const VoteObject& right){
+        if (this == &right) {
+            return *this;
+        }
+        who = right.who;
+        whom = right.whom;
+        status = right.status;
+        return *this;
     }
 };
-
 
 #endif // TYPES_H

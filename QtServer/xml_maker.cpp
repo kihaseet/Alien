@@ -11,32 +11,35 @@ void xml_maker::new_analise(int _name,const QString input){
 
     if(input!="New connection")
     {
-        QDomDocument domDoc;
+        QStringList list = input.split("\n\n");
+        foreach (QString m, list) {
+            QDomDocument domDoc;
 
-        //qDebug() <<"[XMLmaker:input]" <<input;
-        if(domDoc.setContent(input))
-        {
-            QDomElement domElement= domDoc.documentElement();
+            //qDebug() <<"[XMLmaker:input]" <<input;
+            if(domDoc.setContent(m))
+            {
+                QDomElement domElement= domDoc.documentElement();
 
-            TurnObject turn = traverseNode(domElement);
-            ROLE r;
-            switch (turn.type) {
-            case TT_NOTHING:
-                break;
-            case TT_REGNAME:
-                emit newname(RegisterObject(_name,turn.targets.first()));
-                break;
-            case TT_REGROLE:
-                r = RegisterObject::RoleDescr.value(turn.targets.first(), RT_UNKNOWN);
-                if (r != RT_UNKNOWN) {
-                    emit registerRolebyPlayer(RegisterObject(_name,RegisterObject::RoleDescr.value(turn.targets.first())));
+                TurnObject turn = traverseNode(domElement);
+                ROLE r;
+                switch (turn.type) {
+                case TT_NOTHING:
+                    break;
+                case TT_REGNAME:
+                    emit newname(RegisterObject(_name,turn.targets.first()));
+                    break;
+                case TT_REGROLE:
+                    r = RegisterObject::RoleDescr.value(turn.targets.first(), RT_UNKNOWN);
+                    if (r != RT_UNKNOWN) {
+                        emit registerRolebyPlayer(RegisterObject(_name,RegisterObject::RoleDescr.value(turn.targets.first())));
+                    }
+                    break;
+                default:
+                    emit xml_create(_name,turn);
+                    break;
                 }
-                break;
-            default:
-                emit xml_create(_name,turn);
-                break;
-            }
 
+            }
         }
         //qDebug()  <<"[XMLmaker:to game]"<< _xml.what << _xml.whom << _xml.how << _xml.rotation;
     }
@@ -60,78 +63,79 @@ TurnObject xml_maker::traverseNode(const QDomNode& node)
                     _xml.type = TT_REGROLE;
                     _xml.targets.append(domElement.text());
                 }
-            }
-            else if(domElement.tagName() == "vote") {
-                _xml.type = TT_VOTE;
-                _xml.targets.append(domElement.text());
-                //qDebug()  << domElement.tagName() << domElement.text();
-            }
-            else if(domElement.tagName() == "unvote") {
-                _xml.type = TT_UNVOTE;
-                //qDebug()  << domElement.tagName() << domElement.text();
-            }
 
-            else if(domElement.tagName() == "attack")
-            {
-                _xml.type = TT_ATTACK;
-                _xml.targets.append(domElement.text());
-            }
-            else if(domElement.tagName() == "infect")
-            {
-                _xml.type = TT_INFECT;
-                _xml.targets.append(domElement.text());
-            }
-            else if(domElement.tagName() == "wait")
-            {
-                _xml.type = TT_SKIP;
-            }
-            else if(domElement.tagName() == "up")
-            {
-                _xml.type = TT_UP;
-            }
-            else if(domElement.tagName() == "down")
-            {
-                _xml.type = TT_DOWN;
-            }
-            else if(domElement.tagName() == "use")
-            {
-                if(domElement.attribute("item","") != "")
-                {
-                    _xml.type = TT_USE_ITEM;
-                    _xml.item = TurnObject::ItemDescr.value(domElement.attribute("item",""),IT_UNKNOW);
-                }
-                else if(domElement.attribute("ult","") != "")
-                {
-                    _xml.type = TT_ULT_ITEM;
+                else if(domElement.tagName() == "vote") {
+                    _xml.type = TT_VOTE;
                     _xml.targets.append(domElement.text());
-                    _xml.item = TurnObject::ItemDescr.value(domElement.attribute("ult",""),IT_UNKNOW);
+                    //qDebug()  << domElement.tagName() << domElement.text();
+                }
+                else if(domElement.tagName() == "unvote") {
+                    _xml.type = TT_UNVOTE;
+                    //qDebug()  << domElement.tagName() << domElement.text();
+                }
 
-                }
-                else if(domElement.attribute("badge","") != "")
+                else if(domElement.tagName() == "attack")
                 {
-                    _xml.type = TT_USE_BADGE;
+                    _xml.type = TT_ATTACK;
                     _xml.targets.append(domElement.text());
-                    _xml.item = TurnObject::ItemDescr.value(domElement.attribute("badge",""),IT_UNKNOW);
+                }
+                else if(domElement.tagName() == "infect")
+                {
+                    _xml.type = TT_INFECT;
+                    _xml.targets.append(domElement.text());
+                }
+                else if(domElement.tagName() == "wait")
+                {
+                    _xml.type = TT_SKIP;
+                }
+                else if(domElement.tagName() == "up")
+                {
+                    _xml.type = TT_UP;
+                }
+                else if(domElement.tagName() == "down")
+                {
+                    _xml.type = TT_DOWN;
+                }
+                else if(domElement.tagName() == "use")
+                {
+                    if(domElement.attribute("item","") != "")
+                    {
+                        _xml.type = TT_USE_ITEM;
+                        _xml.item = TurnObject::ItemDescr.value(domElement.attribute("item",""),IT_UNKNOW);
+                    }
+                    else if(domElement.attribute("ult","") != "")
+                    {
+                        _xml.type = TT_ULT_ITEM;
+                        _xml.targets.append(domElement.text());
+                        _xml.item = TurnObject::ItemDescr.value(domElement.attribute("ult",""),IT_UNKNOW);
+
+                    }
+                    else if(domElement.attribute("badge","") != "")
+                    {
+                        _xml.type = TT_USE_BADGE;
+                        _xml.targets.append(domElement.text());
+                        _xml.item = TurnObject::ItemDescr.value(domElement.attribute("badge",""),IT_UNKNOW);
+                    }
+                    else
+                    {
+                        _xml.type = TT_NOTHING;
+                        continue;
+                    }
+                    switch (_xml.item) {
+                    case IT_ROTATION:
+                        _xml.targets = makeRotation(domNode);
+                        break;
+                    case IT_UNKNOW:
+                        _xml.type = TT_NOTHING;
+                        break;
+                    default:
+                        _xml.targets.append(domElement.text());
+                        break;
+                    }
                 }
                 else
-                {
                     _xml.type = TT_NOTHING;
-                    continue;
-                }
-                switch (_xml.item) {
-                case IT_ROTATION:
-                    _xml.targets = makeRotation(domNode);
-                    break;
-                case IT_UNKNOW:
-                    _xml.type = TT_NOTHING;
-                    break;
-                default:
-                    _xml.targets.append(domElement.text());
-                    break;
-                }
             }
-            else
-                _xml.type = TT_NOTHING;
         }
         domNode = domNode.nextSibling();
     }
@@ -158,16 +162,16 @@ QQueue<QString> xml_maker::makeRotation(const QDomNode& node){
 
 
 
-void xml_maker::slotSendVotelist(QList<VoteObject> votelist)
+void xml_maker::slotSendVotelist(QList<VoteObject*> votelist)
 {
 
     QDomDocument doc("vote");
     QDomElement domVote = doc.createElement("votelist");
     doc.appendChild(domVote);
-    foreach (VoteObject vote, votelist) {
-        if(vote.status == 1)
+    foreach (VoteObject* vote, votelist) {
+        if(vote->status == 1)
         {
-            QDomElement domVotes = makeElement(doc,"vote","name",vote.whom,vote.who);
+            QDomElement domVotes = makeElement(doc,"vote","name",vote->whom,vote->who);
             domVote.appendChild(domVotes);
         }
     }
@@ -206,8 +210,8 @@ void xml_maker::sendStat(TurnObject turn)
     default:
         break;
     }
-
-    emit send_to_all(doc.toString());
+    domStat.appendChild(domEv);
+    emit sendtoclient(turn.wh->SocketId,doc.toString());
 }
 
 void xml_maker::sendTurn(TurnObject turn)
@@ -219,6 +223,8 @@ void xml_maker::sendTurn(TurnObject turn)
 
     QDomElement domEv = doc.createElement("event");
     domEv.setAttribute("name",turn.wh->name);
+    domChanges.appendChild(domEv);
+
     switch (turn.type) {
     case TT_USE_ITEM:
     case TT_USE_BADGE:
@@ -226,38 +232,43 @@ void xml_maker::sendTurn(TurnObject turn)
         foreach (QString name, turn.targets) {
             domEv.appendChild(doc.createElement(name));
         }
+        emit send_to_all(doc.toString());
         break;
     case TT_ULT_ITEM:
         domEv.setAttribute("useult",TurnObject::ItemDescr.key(turn.item));
         foreach (QString name, turn.targets) {
             domEv.appendChild(doc.createElement(name));
         }
+        emit send_to_all(doc.toString());
         break;
     case TT_UP:
         domEv.setAttribute("status","up");
+        emit send_to_all(doc.toString());
         break;
     case TT_DOWN:
         domEv.setAttribute("status","down");
+        emit send_to_all(doc.toString());
         break;
     case TT_DIED:
         domEv.setAttribute("status","died");
+        emit send_to_all(doc.toString());
         break;
     case TT_DUTY:
         domEv.setAttribute("status","duty");
+        emit send_to_all(doc.toString());
         break;
     case TT_GETROLE:
         domEv.setAttribute("getrole",turn.targets.first());
+        emit send_to_all(doc.toString());
         break;
     case TT_DELROLE:
         domEv.setAttribute("delrole",turn.targets.first());
+        emit send_to_all(doc.toString());
         break;
     default:
         break;
     }
 
-    domChanges.appendChild(domEv);
-
-    emit send_to_all(doc.toString());
 }
 
 
@@ -274,7 +285,7 @@ void xml_maker::slotStartGame(QList<player*>playerlist)
     domElement.appendChild(domElementList);
 
     foreach (player* corpse, playerlist) {
-        QDomElement body = makeElement(doc,corpse->name,"status","",QString::number(corpse->status+1));
+        QDomElement body = makeElement(doc,corpse->name,"status","",QString::number(corpse->healthy+1));
         if(corpse->rolelist.size() > 1)
         {
             foreach (ROLE role, corpse->rolelist) {
@@ -321,6 +332,7 @@ void xml_maker::slotStartVoting(ROLE target,QList<QString>list)
     doc.appendChild(domElement);
     QDomElement domVoting = doc.createElement("voting");
     domElement.appendChild(domVoting);
+    QString tt = RegisterObject::RoleDescr.key(target);
     domVoting.setAttribute("for",RegisterObject::RoleDescr.key(target));
 
     foreach (QString body, list) {

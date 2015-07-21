@@ -9,6 +9,8 @@ QMap<QString, ITEM> TurnObject::initColumnNames()
     map.insert("Mop",IT_MOP);
     map.insert("Battery",IT_BATTERY);
     map.insert("Blaster",IT_BLASTER);
+    map.insert("Rotation",IT_ROTATION);
+    map.insert("Notebook",IT_NOTEBOOK);
     return map;
 }
 

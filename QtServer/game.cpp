@@ -109,6 +109,11 @@ void game::getItemByRoleAll()
             default:
                 break;
             }
+            TurnObject turn(TT_GETITEM);
+            turn.wh = var;
+            turn.item = bb->ID;
+            turn.targets.append(QString::number(bb->power));
+            emit send_stat(turn);
         }
     }
 }
@@ -458,7 +463,7 @@ void game::day_next_voting(){
     //QPair<QString,int>  ttmp;
     _currvoting->votelist.clear();
     foreach (player* v,playerlist->values()) {
-        _currvoting->votelist.append(VoteObject(v->name));
+        _currvoting->votelist.append(new VoteObject(v->name));
     }
     foreach (QString trt, _currvoting->electlist) {
         if(!playerlist->contains(trt)){
@@ -761,6 +766,8 @@ void game::slot_alien(TurnObject TO)
     TO.wh->invasion = -1;
     TO.wh->HP += (TO.wh->HP - 1);
     TO.wh->success_attack = 1;
+
+    emit send_stat(TO);
     //make_actionlist(TO.wh);
 }
 
@@ -850,6 +857,9 @@ void game::delete_role(player* whom,ROLE what)
         if(var->role == what)
         {
             whom->itemlist.removeAll(var->ID);
+            turn.type = TT_DELITEM;
+            turn.item = var->ID;
+            emit send_stat(turn);
         }
     }
     if(mainrole.contains(what))
@@ -1241,15 +1251,15 @@ void game::player_death(player* dead)
     if(!_currvoting->is_over)
     {
         _currvoting->electlist.removeOne(dead->name);
-        foreach (VoteObject vote, _currvoting->votelist) {
-            if(vote.who == dead->name)
+        foreach (VoteObject* vote, _currvoting->votelist) {
+            if(vote->who == dead->name)
             {
                 _currvoting->votelist.removeAll(vote);
             }
-            else if(vote.whom == dead->name)
+            else if(vote->whom == dead->name)
             {
-                vote.status = 0;
-                vote.whom = vote.who;
+                vote->status = 0;
+                vote->whom = vote->who;
             }
 
         }
@@ -1309,7 +1319,11 @@ void game::check_HP(player* w)
     }
     if(w->status == 2)
     {
-        //для чужих
+        TurnObject turn(TT_HP);
+        turn.wh = w;
+        turn.targets.append(QString::number(w->HP));
+        emit send_stat(turn);
+
         if(w->HP >= 5)
         {
             w->HP = 5;
@@ -1665,12 +1679,18 @@ void game::do_events(TurnObject TO){
         break;
     case TT_USE_ITEM:
         slot_use_item(TO);
+        TO.type = TT_CORRECT;
+        emit send_stat(TO);
         break;
     case TT_USE_BADGE:
         slot_use_item_cap(TO);
+        TO.type = TT_CORRECT;
+        emit send_stat(TO);
         break;
     case TT_ULT_ITEM:
         slot_ult_item(TO);
+        TO.type = TT_CORRECT;
+        emit send_stat(TO);
         break;
     case TT_INFECT:
         slot_infect(TO);
