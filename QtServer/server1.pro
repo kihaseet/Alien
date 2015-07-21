@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     voting.cpp \
     event.cpp \
     clientsocket.cpp \
-    config.cpp
+    config.cpp \
+    types.cpp
 
 HEADERS  += mainwindow.h \
     game.h \

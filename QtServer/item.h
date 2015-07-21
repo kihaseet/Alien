@@ -4,6 +4,7 @@
 #include <QtCore>
 #include "player.h"
 #include "game.h"
+#include "types.h"
 
 class player;
 class game;
@@ -17,10 +18,10 @@ public:
     QString name;
     QString handle;
     QString note; //описание
-    QString forrepower;//предмет для батарейки
-    QString role;//чей предмет
+    ITEM forrepower;//предмет для батарейки
+    ROLE role;//чей предмет
     QPair<QString,int> lastscan;//статус последней просканированной цели
-    int power; /*!=0 незаряжен, -1 сломан*/
+    int power; /*!=0 незаряжен, -1 сломан -2 для капитанского значка*/
     void counter();
     void reforge(int i);
     item();//добавить playerlist
@@ -40,7 +41,7 @@ class Badge:public item
 {
 public:
     Badge(game* _g);
-    void use_item_day();
+    void use_item_day(QQueue<QString> whom);
     void use_item_night();
     void ult_item();
 };

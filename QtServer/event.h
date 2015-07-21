@@ -2,11 +2,9 @@
 #define EVENT_H
 #include <QtCore>
 #include "player.h"
+#include "types.h"
 
 class player;
-
-
-
 
 struct TurnObject{
 public:

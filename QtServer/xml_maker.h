@@ -30,7 +30,6 @@ public:
                              const QString strAttr,
                              const QString strText, const QString strAttrText);
 
-    QDomElement append_actions(QDomDocument &domDoc, player* player);
     QDomElement append_events(QDomDocument &domDoc, QMap <QString,player*> playerlist);
     QDomElement append_stats(QDomDocument &domDoc, player* player);
     void event_maker(QDomDocument doc, QDomElement domStat,
@@ -39,15 +38,11 @@ public:
 
     QDomElement name_role_list(QDomDocument& domDoc,QMap <QString,player*> playerlist,QList<QString>_rolelist);
     QDomElement name_role_list(QDomDocument& domDoc, QList<player *> *playerlist);
-    void send_actionlist(player* who);
     void send_stat(player* who);
 
 public slots:
-    void day_event(ingame_event* _eve,QMap <QString,player*> playerlist);
     void new_analise(int _name, const QString input);
-    void nightmare(QQueue<ingame_event *> _que, QList<player *> playerlist);
-    void end_of_day(QMap<QString, player *> playerlist, QMap<QString, item *> itemlist);
-    void send_votelist_to_all(QMap <QString,player*> playerlist,QMap <QString,QPair<QString,int> > votelist);
+    void slotSendVotelist(QList<VoteObject> votelist);
    // void send_to_all(ingame_event *_eve, QMap<QString, player *> playerlist, QMap<QString, item *> itemlist);
     void slotnamecorrect(int tempname);
     void nonamecorrect(int tempname);
@@ -55,14 +50,22 @@ public slots:
     void norolecorrect(int _name);
     void updaterolelist(QList<player *> NameRolelist);
 
+    void slotStartGame(QList<player*>playerlist);
+    void slotStartDay(int day);
+    void slotStartNight(int day);
+    void slotStartVoting(ROLE target,QList<QString>list);
+    void slotEndVoting(ROLE target,QString name,QString result);
+    void sendTurn(TurnObject turn);
+    void sendStat(TurnObject turn);
+
 signals:
     void xml_create(int who,TurnObject turn);
     void xml_create_norot(int who,QString what,QString whom,QString how);
-    void newname(int _tempname,TurnObject turn);
+    void newname(RegisterObject turn);
     void newrole(QString who);
     void sendtoclient(int _name,QString _xmldoc);
     void send_to_all(QString _xmldoc);
-    void registerRolebyPlayer(int _name, TurnObject turn);
+    void registerRolebyPlayer(RegisterObject turn);
     void votebyPlayer(QString _name,QString whom);
     void unvotebyPlayer(QString _name);
 

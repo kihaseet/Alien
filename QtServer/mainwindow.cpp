@@ -25,8 +25,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(_serv,SIGNAL(client_disconnected(int)),_game,SLOT(slot_disconnected(int)));
     connect(_serv,SIGNAL(client_connected()),_game,SLOT(slotSendRolelist()));
 
-    connect(_xmlmaker,SIGNAL(newname(int,TurnObject)),_game,SLOT(register_new_player(int,TurnObject));
-    connect(_xmlmaker,SIGNAL(registerRolebyPlayer(int,TurnObject)),_game,SLOT(registerRolebyPlayer(int,TurnObject));
+    connect(_xmlmaker,SIGNAL(newname(RegisterObject)),_game,SLOT(register_new_player(RegisterObject)));
+    connect(_xmlmaker,SIGNAL(registerRolebyPlayer(RegisterObject)),_game,SLOT(registerRolebyPlayer(RegisterObject)));
    // connect(_xmlmaker,SIGNAL(noVerifyClientName(QString)),_serv,SLOT(noVerifyClientName(int)));
     connect(_xmlmaker,SIGNAL(sendtoclient(int,QString)),_serv,SLOT(slotsendToClient(int,QString)));
     connect(_xmlmaker,SIGNAL(send_to_all(QString)),_serv,SLOT(send2all(QString)));
@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(_xmlmaker,SIGNAL(xml_create_norot(int,QString,QString,QString)),
             _game,SLOT(make_events(int,QString,QString,QString)));
 
-    connect(_game,SIGNAL(send_actionlist(player*)),_xmlmaker,SLOT());
+    connect(_game,SIGNAL(startgame(QList<player*>)),_xmlmaker,SLOT(slotStartGame(QList<player*>)));
     connect(_game,SIGNAL(namecorrect(int)),_xmlmaker,SLOT(slotnamecorrect(int)));
     connect(_game,SIGNAL(nonamecorrect(int)),_xmlmaker,SLOT(nonamecorrect(int)));
     connect(_game,SIGNAL(sendrolelist2all (QList <player*>)),_xmlmaker,SLOT(updaterolelist(QList <player*>)));
@@ -43,13 +43,20 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(_game,SIGNAL(norolecorrect(int)),_xmlmaker,SLOT(norolecorrect(int)));
     connect(_game,SIGNAL(startnewsessionenable(bool)),this,SLOT(newGameSessionStatus(bool)));
 
-    //connect(_game,SIGNAL(startday()),_game,SLOT(day()));
+    connect(_game,SIGNAL(startday(int)),_xmlmaker,SLOT(slotStartDay(int)));
+    connect(_game,SIGNAL(startnight(int)),_xmlmaker,SLOT(slotStartNight(int)));
+    connect(_game,SIGNAL(startvote(ROLE,QList<QString>)),_xmlmaker,SLOT(slotStartVoting(ROLE,QList<QString>)));
+    connect(_game,SIGNAL(endvote(ROLE,QString,QString)),_xmlmaker,SLOT(slotEndVoting(ROLE,QString,QString)));
+
+    connect(_game,SIGNAL(send_votelist(QList<VoteObject>)),_xmlmaker,SLOT(slotSendVotelist(QList<VoteObject>)));
+    connect(_game,SIGNAL(send_changes(TurnObject)),_xmlmaker,SLOT(sendTurn(TurnObject)));
+
     connect(_game,SIGNAL(GuiUpdatePlayerlist(QList<player*>)),this,SLOT(updatePlayerlist(QList<player*>)));
     connect(_game,SIGNAL(GuiUpdateVotelist(QMap <QString,QPair<QString,int> >)),this,SLOT(UpdateVotelist(QMap <QString,QPair<QString,int> >)));
     connect(_game,SIGNAL(GuiMess2Log(QString,QString)),this,SLOT(onAddLogToGui(QString,QString)));
 
-    connect(_game,SIGNAL(send_nightmare(QQueue<ingame_event*>,QMap<QString,player*>)),
-            _xmlmaker,SLOT(nightmare(QQueue<ingame_event*>,QMap<QString,player*>)));
+    connect(_game,SIGNAL(send_nightmare(QQueue<TurnObject>,QMap<QString,player*>)),
+            _xmlmaker,SLOT(nightmare(QQueue<TurnObject>,QMap<QString,player*>)));
 
 
 }
@@ -66,22 +73,22 @@ void MainWindow::onAddLogToGui(QString name,QString string)
 
 void MainWindow::updateInventory(QListWidgetItem* ss){
     ui->itemlist->clear();
-    foreach (item* var, _game->playerlist->value(ss->text())->itemlist.values()) {//пока что убраны должности в списке игроков, подумать над обрезанием
-        ui->itemlist->addItem(var->name);
+    foreach (ITEM var, _game->playerlist->value(ss->text())->itemlist) {//пока что убраны должности в списке игроков, подумать над обрезанием
+        ui->itemlist->addItem(TurnObject::ItemDescr.key(var));
     }
     ui->text_info->clear();
-    foreach (QString var, _game->playerlist->value(ss->text())->rolelist){
-            ui->text_info->append(var);
+    foreach (ROLE var, _game->playerlist->value(ss->text())->rolelist){
+            ui->text_info->append(RegisterObject::RoleDescr.key(var));
     }
     ui->text_info->append("HP: "+QString::number(_game->playerlist->value(ss->text())->HP));
     if(_game->playerlist->value(ss->text())->healthy==false)ui->text_info->append("В биованне");
     ui->text_info->append("Status: "+QString::number(_game->playerlist->value(ss->text())->status));
     ui->text_info->append("Invasion: "+QString::number(_game->playerlist->value(ss->text())->invasion));
-    QPair<QString,QList<QString> > varr;
-    foreach (varr, _game->playerlist->value(ss->text())->actionlist) {
-        ui->text_info->append("Action: "+varr.first);
-        foreach (QString vav,varr.second){
-            ui->text_info->append("Action: "+varr.first+" - "+vav);
+
+    foreach (TurnObject varr, _game->playerlist->value(ss->text())->actionlist) {
+        //ui->text_info->append("Action: "+varr.type + " "+varr.item);
+        foreach (QString vav,varr.targets){
+           // ui->text_info->append("Action: "+varr.type + " "+varr.item+" - "+vav);
         }
     }
 }
@@ -105,7 +112,7 @@ void MainWindow::updatePlayerlist(QList <player*> playerlist){
     QStringList play;
     foreach (player* var, playerlist) {
         QString s;
-        foreach (QString v, var->rolelist) {
+        foreach (ROLE v, var->rolelist) {
             //s.append("["+v.left(3)+"]");
         }
         play.append(s+var->name);
@@ -124,8 +131,8 @@ void MainWindow::UpdateVotelist(){
     ui->text_info->clear();
     ui->text_log->append("Голосование:");
     //QPair<QString,int> var;
-    foreach (QString var, _game->_currvoting->votelist.keys()) {
-        ui->text_log->append(var+": "+_game->_currvoting->votelist.value(var).first+" ("
-                              +QString::number(_game->_currvoting->votelist.value(var).second)+")");
+    foreach (VoteObject var, _game->_currvoting->votelist) {
+        ui->text_log->append(var.who+": "+var.whom+" ("
+                              +QString::number(var.status)+")");
     }
 }
