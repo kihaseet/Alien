@@ -265,6 +265,15 @@ void xml_maker::sendTurn(TurnObject turn)
         domEv.setAttribute("delrole",turn.targets.first());
         emit send_to_all(doc.toString());
         break;
+    case TT_VOTE:
+        domEv.setAttribute("voting","up");
+        domEv.appendChild(doc.createElement(turn.targets.first()));
+        emit send_to_all(doc.toString());
+        break;
+    case TT_UNVOTE:
+        domEv.setAttribute("voting","down");
+        emit send_to_all(doc.toString());
+        break;
     default:
         break;
     }

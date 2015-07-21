@@ -95,13 +95,15 @@ void voting::calc_votes(){
         ++result[noteName];
     }
 
-    QList <int> val = result.values();
-    qSort(val.begin(),val.end());
-    int i = val.last();
+    int i = 0;
     foreach (QString name, result.keys())
     {
-        if(result[name] == i)
+        if(result[name] > i)
         {
+            winners.clear();
+            winners.append(name);
+            i = result[name];
+        }else if(result[name] == i){
             winners.append(name);
         }
     }

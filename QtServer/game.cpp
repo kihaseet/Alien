@@ -776,7 +776,7 @@ void game::slot_vote(TurnObject turn){
     if(!_currvoting->is_over)
     {
         _currvoting->on_voting(turn.wh->name,turn.targets.first());
-        emit send_votelist(_currvoting->votelist);
+        //emit send_votelist(_currvoting->votelist);
     }
 }
 
@@ -785,7 +785,7 @@ void game::slot_unvote(TurnObject turn){
     if(!_currvoting->is_over)
     {
         _currvoting->off_voting(turn.wh->name);
-        emit send_votelist(_currvoting->votelist);
+        //emit send_votelist(_currvoting->votelist);
     }
 }
 
