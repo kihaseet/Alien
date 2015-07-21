@@ -55,7 +55,7 @@ void game::start(){
     
     _event=new TurnObject();
     _currvoting=new voting();
-    StartRandomEvasion();
+    StartRandomEvasion_testing();
     unclame_rolelist.clear();
     emit startgame(playerlist->values());
     getItemByRoleAll();
@@ -146,7 +146,7 @@ void game::make_actionlist(player* who){
                 if(!_currvoting->is_over || hardresolve)
                 {
                     who->actionlist.append(TurnObject(TT_ULT_ITEM,var));
-                    if(itemlist[var]->power == 0 && !_currvoting->is_over)
+                    if(itemlist[var]->power == 0)
                     {
                         who->actionlist.append(TurnObject(TT_USE_ITEM,_currvoting->electlist,var));
                     }
@@ -534,18 +534,18 @@ void game::day_end_curr_voting(QString winner)
             emit endvote(_currvoting->target,winner,"");
         }
 
-    foreach (player* var, playerlist->values()) {
-        make_actionlist(var);
-    }
-    _currvoting->is_over = true;
-    hardresolve = false;
-    
-    disconnect (_currvoting,SIGNAL(voting_over(QList<QString>)),this,SLOT(day_resolve_curr_voting(QList<QString>)));
-    disconnect (_currvoting,SIGNAL(voting_canseled()),this,SLOT(day_canseled_voting()));
+        foreach (player* var, playerlist->values()) {
+            make_actionlist(var);
+        }
+        _currvoting->is_over = true;
+        hardresolve = false;
+
+        disconnect (_currvoting,SIGNAL(voting_over(QList<QString>)),this,SLOT(day_resolve_curr_voting(QList<QString>)));
+        disconnect (_currvoting,SIGNAL(voting_canseled()),this,SLOT(day_canseled_voting()));
 
 
-    
-    day_check_over();
+
+        day_check_over();
     }
 }
 
@@ -561,18 +561,15 @@ void game::day_resolve_curr_voting(QList<QString> win){
     if(win.count()==1){
         day_end_curr_voting(win.first());
     }
-    if(win.count()>1){
+    if(win.count()>1 && rolelist.keys().contains(RT_CAPTAIN)){
         //connect (_event,SIGNAL(event_useitem(QString,QString,QString)),this,SLOT(day_cap_curr_voting(QString,QString,QString)));
         //тут будет предложение капитану определить итог голосования лично
         emit GuiMess2Log("[Game]","Капитан должен сделать решающий выбор");
         hardresolve=true;
-        
-    }
-    
-    foreach (player* var, playerlist->values()) {
-        make_actionlist(var);
-    }
-    
+        foreach (player* var, playerlist->values()) {
+            make_actionlist(var);
+        }
+    }else day_canseled_voting();
 }
 
 
@@ -580,6 +577,7 @@ void game::day_canseled_voting(){
     qDebug()<<"game::day_canseled_voting()";
     emit GuiMess2Log("[Game]","Голосование было отменено по техническим причинам!");
     _currvoting->is_over = true;
+    hardresolve = false;
 
     disconnect (_currvoting,SIGNAL(voting_over(QList<QString>)),this,SLOT(day_resolve_curr_voting(QList<QString>)));
     disconnect (_currvoting,SIGNAL(voting_canseled()),this,SLOT(day_canseled_voting()));
@@ -700,6 +698,38 @@ void game::StartRandomEvasion(){
         a2++;
     }
     
+}
+
+void game::StartRandomEvasion_testing()
+{
+    int a1=1;//первый чужой
+    int a2=0;
+    int a3=2;//первый зараженный
+    int a4=2;//первый раненый
+    foreach (player* play, playerlist->values())
+    {
+        if (a2 == a1)
+        {
+            TurnObject eve(TT_ALIEN);
+            eve.wh = play;
+            play->invasionday=-1;
+            _nightque.enqueue(eve);
+        }
+        if (a2 == a3)
+        {
+            play->status=1;
+            play->invasion=2;
+            TurnObject eve(TT_INFECT);
+            eve.targets.append(play->name);
+            eve.wh = play;
+            _nightque.enqueue(eve);
+        }
+        if(a2 == a4)
+        {
+            play->HP = 1;
+        }
+        a2++;
+    }
 }
 
 void game::slot_attack(TurnObject TO)
@@ -1020,48 +1050,50 @@ void game::make_events(int wwh,TurnObject turn)
     {
         QString who = connectedName.value(wwh);
         //qDebug()<<"game::make_events "<<who<<" "<<what<<" "<<how<<" "<<whom;
-
-        turn.wh = playerlist->value(who);
-        if(make_events_check(turn))
+        if(playerlist->keys().contains(who))
         {
-            if (this->daytime)
+            turn.wh = playerlist->value(who);
+            if(make_events_check(turn))
             {
-                do_events(turn);
-                make_actionlist(turn.wh);
-                emit send_changes(turn);
-            }
-            else
-            {
-                _nightque.enqueue(turn);
-                switch (turn.type) {
-                case TT_ATTACK:
-                    turn.wh->attack_thisnight = true;
-                    break;
-                case TT_USE_ITEM:
-                case TT_USE_BADGE:
-                case TT_ULT_ITEM:
-                    turn.wh->use_night_item = true;
-                    break;
-                case TT_SKIP:
-                    turn.wh->waiting = true;
-                    break;
-                case TT_INFECT:
-                    turn.wh->invasion = -1;
-                    turn.wh->infecting = true;
-                    break;
-                case TT_UP:
-                    slot_up(turn);
-                    break;
-                case TT_DOWN:
-                    slot_down(turn);
-                    break;
-                default:
-                    break;
+                if (this->daytime)
+                {
+                    do_events(turn);
+                    make_actionlist(turn.wh);
+                    emit send_changes(turn);
                 }
-                if(night()){
-                    day();
-                }
+                else
+                {
+                    _nightque.enqueue(turn);
+                    switch (turn.type) {
+                    case TT_ATTACK:
+                        turn.wh->attack_thisnight = true;
+                        break;
+                    case TT_USE_ITEM:
+                    case TT_USE_BADGE:
+                    case TT_ULT_ITEM:
+                        turn.wh->use_night_item = true;
+                        break;
+                    case TT_SKIP:
+                        turn.wh->waiting = true;
+                        break;
+                    case TT_INFECT:
+                        turn.wh->invasion = -1;
+                        turn.wh->infecting = true;
+                        break;
+                    case TT_UP:
+                        slot_up(turn);
+                        break;
+                    case TT_DOWN:
+                        slot_down(turn);
+                        break;
+                    default:
+                        break;
+                    }
+                    if(night()){
+                        day();
+                    }
 
+                }
             }
         }
     }
@@ -1237,12 +1269,14 @@ void game::player_death(player* dead)
         foreach (player* v, rolelist.values(var))
             if(v == dead)
             {
-                if(mainroles.contains(var)){
+                if(mainroles.contains(var))
+                {
                     unclame_rolelist.append(var);
                     rolelist.remove(var);
                     check_for_role(var);
                 }
                 else rolelist.remove(var,dead);
+                break;
             }
     }
     passengerlist.removeAll(dead->name);

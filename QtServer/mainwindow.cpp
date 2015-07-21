@@ -87,9 +87,9 @@ void MainWindow::updateInventory(QListWidgetItem* ss){
     ui->text_info->append("Invasion: "+QString::number(_game->playerlist->value(ss->text())->invasion));
 
     foreach (TurnObject varr, _game->playerlist->value(ss->text())->actionlist) {
-        //ui->text_info->append("Action: "+varr.type + " "+varr.item);
+        ui->text_info->append("Action: "+TurnObject::TurnDescr.key(varr.type) + " "+TurnObject::ItemDescr.key(varr.item));
         foreach (QString vav,varr.targets){
-           // ui->text_info->append("Action: "+varr.type + " "+varr.item+" - "+vav);
+           //ui->text_info->append("Action: "+TurnObject::TurnDescr.key(varr.type) + " - "+vav);
         }
     }
 }

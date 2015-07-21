@@ -106,7 +106,6 @@ TurnObject xml_maker::traverseNode(const QDomNode& node)
                     else if(domElement.attribute("ult","") != "")
                     {
                         _xml.type = TT_ULT_ITEM;
-                        _xml.targets.append(domElement.text());
                         _xml.item = TurnObject::ItemDescr.value(domElement.attribute("ult",""),IT_UNKNOW);
 
                     }

@@ -15,7 +15,9 @@ public:
     player* wh;
 
     static QMap <QString, ITEM> ItemDescr;
+    static QMap <QString, TURN_TYPE> TurnDescr;
     static QMap<QString, ITEM> initColumnNames();
+    static QMap<QString, TURN_TYPE> initColumnT();
   
     TurnObject(TURN_TYPE type, 
                QStringList targets = QQueue<QString>(),
