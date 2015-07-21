@@ -469,7 +469,7 @@ void game::day_next_voting(){
         if(!playerlist->contains(trt)){
             _currvoting->electlist.removeOne(trt);
         }
-    }  
+    }
     connect (_currvoting,SIGNAL(voting_over(QList<QString>)),this,SLOT(day_resolve_curr_voting(QList<QString>)));
     connect (_currvoting,SIGNAL(voting_canseled()),this,SLOT(day_canseled_voting()));
 
@@ -487,7 +487,7 @@ void game::day_next_voting(){
 
 void game::day_cap_curr_voting(QString win){
     qDebug()<<"game::day_cap_curr_voting";
-    if(! _currvoting->is_over && hardresolve && _currvoting->winners.contains(win))
+    if(hardresolve && _currvoting->winners.contains(win))
     {
         day_end_curr_voting(win);
         emit GuiMess2Log("[Game]","Капитан отдал решающий голос в пользу "+win);
@@ -533,16 +533,12 @@ void game::day_end_curr_voting(QString winner)
 
             emit endvote(_currvoting->target,winner,"");
         }
-    }
+
     foreach (player* var, playerlist->values()) {
         make_actionlist(var);
     }
     _currvoting->is_over = true;
     hardresolve = false;
-    /*disconnect (_event,SIGNAL(event_useitem(QString,QString,QString)),_currvoting,SLOT(use_notebook(QString,QString,QString)));
-    disconnect (_event,SIGNAL(event_useitem(QString,QString,QString)),this,SLOT(day_cap_curr_voting(QString,QString,QString)));
-    
-    disconnect (_event,SIGNAL(event_ultitem(QString,QString,QString)),_currvoting,SLOT(ult_notebook(QString,QString,QString)));*/
     
     disconnect (_currvoting,SIGNAL(voting_over(QList<QString>)),this,SLOT(day_resolve_curr_voting(QList<QString>)));
     disconnect (_currvoting,SIGNAL(voting_canseled()),this,SLOT(day_canseled_voting()));
@@ -550,6 +546,7 @@ void game::day_end_curr_voting(QString winner)
 
     
     day_check_over();
+    }
 }
 
 
@@ -580,7 +577,7 @@ void game::day_resolve_curr_voting(QList<QString> win){
 
 
 void game::day_canseled_voting(){
-    qDebug()<<"game::day_canseled_voting()";    
+    qDebug()<<"game::day_canseled_voting()";
     emit GuiMess2Log("[Game]","Голосование было отменено по техническим причинам!");
     _currvoting->is_over = true;
 
@@ -892,7 +889,8 @@ void game::slot_use_item(TurnObject turn){
         {
             itemlist.value(turn.item)->use_item_night(turn.targets);
         }
-        if(turn.wh->status < 2 && turn.wh->healthy == false)
+        if(turn.wh->status < 2 && !turn.wh->healthy &&
+                (turn.item != IT_BADGE && turn.item != IT_ROTATION))
         {
             turn.wh->HP-=1;
             check_HP(turn.wh);
@@ -1098,7 +1096,7 @@ bool game::makeNightActoins()
             {
                 TurnObject event(TT_ALIEN);
                 event.targets.append(it->name);
-                event.wh = it->whoinvas;
+                event.wh = it;
                 slot_alien(event);
             }
         }
@@ -1270,10 +1268,14 @@ void game::player_death(player* dead)
     }
     if(hardresolve)
     {
-        _currvoting->winners.removeOne(dead->name);
-        if(_currvoting->winners.count() == 1)
-        {
-            day_end_curr_voting(_currvoting->winners.first());
+        if(dead->rolelist.contains(RT_CAPTAIN))
+            day_canseled_voting();
+        else {
+            _currvoting->winners.removeOne(dead->name);
+            if(_currvoting->winners.count() == 1)
+            {
+                day_end_curr_voting(_currvoting->winners.first());
+            }
         }
     }
     emit GuiUpdatePlayerlist(playerlist->values());

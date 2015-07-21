@@ -149,7 +149,7 @@ QQueue<QString> xml_maker::makeRotation(const QDomNode& node){
         if(domNode.isElement()) {
             QDomElement domElement = domNode.toElement();
             if(!domElement.isNull()) {
-                rotation.enqueue(domElement.tagName().mid(2));
+                rotation.enqueue(domElement.tagName());
             }
         }
         domNode = domNode.nextSibling();

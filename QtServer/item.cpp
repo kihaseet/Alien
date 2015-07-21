@@ -48,8 +48,9 @@ Rotation::Rotation(game *_g)
 
 void Rotation::use_item_day(QQueue<QString> whom){
     qDebug()<<"Rotation::use_item_day()";
-    if(_game->nightrotation.isEmpty()){
-        _game->nightrotation = whom;
+    if(_game->nightrotation.isEmpty())
+    {
+        _game->nightrotation.append(whom);
         foreach (player* gtr, _game->playerlist->values()){
             if(_game->nightrotation.contains(gtr->name)){
                 gtr->ImDuty = true;
@@ -155,8 +156,17 @@ Notebook::Notebook(game *_g)
 
 void Notebook::use_item_day(QQueue<QString> whom){
     qDebug()<<"Notebook::use_item_day(QString whom)"<<whom;
-    _game->_currvoting->use_notebook(whom.first());
-    this->power=2;
+    if(!_game->_currvoting->is_over)
+    {
+        _game->_currvoting->noteName = whom.first();
+        this->power = 2;
+
+    }
+    else if(_game->hardresolve)
+    {
+        this->power = 2;
+        _game->day_end_curr_voting(whom.first());
+    }
 }
 
 void Notebook::use_item_night(QQueue<QString> whom){
@@ -166,8 +176,11 @@ void Notebook::use_item_night(QQueue<QString> whom){
 
 void Notebook::ult_item(QQueue<QString> whom){
     qDebug()<<"Notebook::ult_item()";
-    _game->_currvoting->ult_notebook();
-    this->power=-1;
+    if(!_game->_currvoting->is_over || _game->hardresolve)
+    {
+        this->power=-1;
+        _game->day_canseled_voting();
+    }
 }
 
 Battery::Battery(game *_g)

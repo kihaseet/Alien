@@ -93,14 +93,12 @@ public:
     }
     friend bool operator == (const VoteObject& left, const VoteObject& right)
     {
-        return left.who == right.who &&
-                left.whom == right.whom &&
-                left.status == right.status;
+        return left.who == right.who;
     }
     VoteObject& operator=(const VoteObject& right){
-        if (this == &right) {
+        /*if (this == &right) {
             return *this;
-        }
+        }*/
         who = right.who;
         whom = right.whom;
         status = right.status;
