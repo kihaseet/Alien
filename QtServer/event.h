@@ -28,6 +28,15 @@ public:
         this->type = type;
     }
 
+    TurnObject(TURN_TYPE type,
+               QString target,
+               ITEM item = IT_UNKNOW)
+    {
+        this->item = item;
+        this->targets.append(target);
+        this->type = type;
+    }
+
     TurnObject(TURN_TYPE type, ITEM item)
     {
         this->item = item;

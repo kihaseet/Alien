@@ -444,6 +444,7 @@ void game::day(){
     //qDebug()<<"game::day()";
     if(makeNightActoins()){
         daytime = true;
+        forrepowered = IT_UNKNOW;
         foreach (player* v, playerlist->values()) {
             check_HP(v);
         }
@@ -617,6 +618,7 @@ void game::night_start(){
     emit GuiMess2Log("[Game]","Началась ночь "+QString::number(currentday));
     qDebug()<<"game::night_start()";
     daytime = false;
+    forrepowered = IT_UNKNOW;
     mopper = "";
     while(mopper == "" && !nightrotation.isEmpty())
     {
@@ -736,9 +738,9 @@ void game::slot_attack(TurnObject TO)
 {
     //qDebug()<<"game::slot_attack"<<who<<" "<<whom;
     //GuiMess2Log(who,"атаковал игрока "+whom);
-    if(TO.wh->HP < 5)
+    if(TO.wh->HP < 3)
         TO.wh->HP += 1;
-    playerlist->value(TO.targets.dequeue())->HP -= 2;
+    playerlist->value(TO.targets.dequeue())->HP -= 1;
     if(TO.wh->success_attack < 2)
         TO.wh->success_attack += 1;
     
@@ -767,7 +769,7 @@ void game::slot_infect(TurnObject TO){
         }
         if(whom->status == 2){
             //GuiMess2Log(whom,"поглощает эмбрион");
-            whom->HP += 2;
+            whom->HP += 1;
             check_HP(whom);
         }
     }
@@ -791,7 +793,7 @@ void game::slot_alien(TurnObject TO)
     
     TO.wh->status = 2;
     TO.wh->invasion = -1;
-    TO.wh->HP += (TO.wh->HP - 1);
+    TO.wh->HP += 1;
     TO.wh->success_attack = 1;
 
     emit send_stat(TO);
@@ -827,14 +829,20 @@ void game::slot_wait(TurnObject TO){
 
 void game::slot_up(TurnObject TO){
     qDebug()<<"game::slot_up "<<TO.wh->name;
-    TO.wh->healthy = true;
+    if(TO.targets.isEmpty())
+        TO.wh->healthy = true;
+    else
+        playerlist->value(TO.targets.first())->healthy = true;
     if(daytime)
         emit GuiMess2Log(TO.wh->name,"встал из биованны");
 }
 
 void game::slot_down(TurnObject TO){
     qDebug()<<"game::slot_down "<<TO.wh->name;
-    TO.wh->healthy = false;
+    if(TO.targets.isEmpty())
+        TO.wh->healthy = false;
+    else
+        playerlist->value(TO.targets.first())->healthy = false;
     if(daytime)
         emit GuiMess2Log(TO.wh->name,"в биованне");
 }
@@ -908,23 +916,33 @@ void game::delete_role(player* whom,ROLE what)
 void game::slot_use_item(TurnObject turn){
     //qDebug()<<"game::slot_use_item "<<who<<" "<<whom<<" "<<useit;
     //GuiMess2Log(who,"использовал "+useit+" на "+whom);
-    
-    if(itemlist.value(turn.item)->power == 0)
     {
         if(daytime)
         {
-            itemlist.value(turn.item)->use_item_day(turn.targets);
+            if(turn.item == forrepowered)
+            {
+                itemlist.value(turn.item)->use_item_day(turn.targets);
+                forrepowered = IT_UNKNOW;
+                itemlist.value(IT_BATTERY)->power = 2;
+
+                TurnObject t(TT_CORRECT,IT_BATTERY);
+                t.wh = rolelist.value(RT_ENGINEER);
+                emit send_stat(t);
+            }
+            else if(itemlist.value(turn.item)->power == 0)
+                itemlist.value(turn.item)->use_item_day(turn.targets);
         }
         else
         {
             itemlist.value(turn.item)->use_item_night(turn.targets);
         }
-        if(turn.wh->status < 2 && !turn.wh->healthy &&
+
+        if(!turn.wh->healthy &&
                 (turn.item != IT_BADGE && turn.item != IT_ROTATION))
         {
-            turn.wh->HP-=2;
+            player_death(turn.wh);
         }
-        check_HP(turn.wh);
+        //check_HP(turn.wh);
     }
 }
 
@@ -933,19 +951,8 @@ void game::slot_use_item_cap(TurnObject turn)
     //GuiMess2Log(turn.wh->name," как капитан, использовал "+itemlist.value(turn.item)->name+" на "+turn.targets);
     if(itemlist.value(IT_BADGE)->power != -2)
     {
-        if(itemlist.value(turn.item)->power == 0)
-        {
-            if(daytime == true)
-                itemlist.value(turn.item)->use_item_day(turn.targets);
-            else
-                itemlist.value(turn.item)->use_item_night(turn.targets);
-            if(turn.wh->status < 2 && !turn.wh->healthy)
-            {
-                turn.wh->HP -= 1;
-                check_HP(turn.wh);
-            }
-            itemlist.value(IT_BADGE)->power = -2;
-        }
+        slot_use_item(turn);
+        itemlist.value(IT_BADGE)->power = -2;
     }
 }
 
@@ -1320,91 +1327,48 @@ void game::player_death(player* dead)
 
 void game::check_HP(player* w)
 {
-    if(w->status<=1)
-    {
-        //для людей и зараженных
-        if(w->HP>=3)
+    if(w->HP < 0)
+        w->HP = 0;
+    switch (w->HP) {
+    case 0:
+        if(w->itemlist.contains(IT_INJECTOR) && itemlist[IT_INJECTOR]->power == 0)
         {
-            w->HP=3;
-            if(!w->healthy)
-            {
-                TurnObject turn(TT_UP);
-                turn.wh = w;
-                slot_up(turn);
-                emit send_changes(turn);
-            }
-        }
-        if(w->HP<=0)
+            do_events(TurnObject(TT_USE_ITEM,w->name,IT_INJECTOR));
+        } else if (w->status == 2 && w->invasion == 0)
         {
-            if(w->itemlist.contains(IT_INJECTOR))
-            {
-                if(itemlist.value(IT_INJECTOR)->power == 0)
-                {
-                    w->HP = 2;
-                    itemlist.value(IT_INJECTOR)->power = 2;
-                }
-            } else
-                player_death(w);
-        }
-        if(w->HP < 3 && w->HP > 0){
-            if(w->healthy)
-            {
-                TurnObject turn(TT_DOWN);
-                turn.wh = w;
-                slot_down(turn);
-                emit send_changes(turn);
-            }
-        }
-    }
-    if(w->status == 2)
-    {
-        TurnObject turn(TT_HP);
-        turn.wh = w;
-        turn.targets.append(QString::number(w->HP));
-        emit send_stat(turn);
-
-        if(w->HP >= 5)
+            w->invasion = -1;
+            w->HP = 1;
+        } else
+            player_death(w);
+        break;
+    case 1:
+        if(w->healthy && w->status <= 1)
         {
-            w->HP = 5;
-            if(daytime && w->healthy==false){
-                TurnObject turn(TT_UP);
-                turn.wh = w;
-                slot_up(turn);
-                emit send_changes(turn);
-            }
+            TurnObject turn(TT_DOWN);
+            turn.wh = w;
+            slot_down(turn);
+            emit send_changes(turn);
         }
+        break;
+    case 2:
+        if(!w->healthy && w->status <= 1)
+        {
+            TurnObject turn(TT_DOWN);
+            turn.wh = w;
+            slot_up(turn);
+            emit send_changes(turn);
+        }
+        break;
+    default:
+        if(w->status<=1)
+            w->HP = 2;
         else
-            if(w->HP > 0 && w->HP < 5){
-                if(daytime && w->healthy)
-                {
-                    TurnObject turn(TT_DOWN);
-                    turn.wh = w;
-                    slot_down(turn);
-                    emit send_changes(turn);
-                }
-            }
-            else
-            {
-                if(w->HP <= 0)
-                {
-                    if(w->itemlist.contains(IT_INJECTOR))
-                    {
-                        if(itemlist.value(IT_INJECTOR)->power == 0)
-                        {
-                            w->HP = 2;
-                            itemlist.value(IT_INJECTOR)->power = 2;
-                        }
-                    }else
-                        if(w->invasion == 0)
-                        {
-                            w->invasion = -1;
-                            w->HP = 2;
-                        }
-                        else
-                            player_death(w);
-                }
-            }
+            w->HP = 3;
+        break;
     }
+    TurnObject turn(TT_HP,QString::number(w->HP));
+    turn.wh = w;
+    emit send_stat(turn);
 }
 
 void game::check_for_role_capDecision(QString whom){//капитан выбирает старпома из числа пассажиров
@@ -1590,7 +1554,7 @@ void game::sortNightActions()
         {
             if((!AAA && BBB) || (!BBB && AAA))
             {
-                _eve.wh->HP -= 2;
+                _eve.wh->HP -= 1;
                 continue;
             }
         }

@@ -23,6 +23,7 @@ public:
     int currentday;
     bool hardresolve; //true если во время голосования решение принимает капитан
     QString mopper;//дежурный
+    ITEM forrepowered; //предмет, который можно юзать за счет батарейки
 
     TurnObject* _event;//объект текущего события
     voting* _currvoting;//объект текущего голосования

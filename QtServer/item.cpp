@@ -83,16 +83,19 @@ void Blaster::use_item_day(){
 
 void Blaster::use_item_night(QQueue<QString> whom){
     qDebug()<<"Blaster::use_item_night(QString whom)" <<whom;
-    _game->playerlist->value(whom.first())->HP-=2;
+    _game->playerlist->value(whom.first())->HP -= 1;
     _game->check_HP(_game->playerlist->value(whom.first()));
-    this->power=2;
+    this->power = 2;
 }
 
 void Blaster::ult_item(QQueue<QString> whom){
     qDebug()<<"Blaster::ult_item(QString whom)"<<whom;
-    _game->playerlist->value(whom.first())->HP-=2;
+    _game->playerlist->value(whom.first())->HP -= 1;
+    if(_game->daytime)
+        _game->slot_down(TurnObject(TT_DOWN,whom));
     _game->check_HP(_game->playerlist->value(whom.first()));
-    this->power=-1;
+
+    this->power = -1;
 }
 
 Injector::Injector(game *_g)
@@ -104,19 +107,14 @@ Injector::Injector(game *_g)
     _game = _g;
 }
 
-void Injector::use_item_day(QQueue<QString> whom){
+void Injector::use_item_day(QQueue<QString> whom)
+{
     qDebug()<<"Injector::use_item_day(QString whom)"<<whom;
-    _game->playerlist->value(whom.first())->HP+=2;
-    //    if(_game->playerlist.value(whom)->HP>3 && _game->playerlist.value(whom)->status!=2){
-    //        _game->playerlist.value(whom)->HP=3;
-    //    }
-
-    //    if(_game->playerlist.value(whom)->HP>5 && _game->playerlist.value(whom)->status==2){
-    //        _game->playerlist.value(whom)->HP=5;
-    //    }
+    _game->playerlist->value(whom.first())->HP += 1;
     _game->check_HP(_game->playerlist->value(whom.first()));
-    this->power=2;
-
+    if(_game->daytime && _game->playerlist->value(whom.first())->status == 2)
+        _game->slot_up(TurnObject(TT_UP,whom));
+    this->power = 2;
 }
 
 void Injector::use_item_night(QQueue<QString> whom){
@@ -129,20 +127,17 @@ void Injector::ult_item(QQueue<QString> whom){
     //emit item_heal_all();
     foreach (player* v, _game->playerlist->values()) {
         if(v->status<2){
-            v->HP=3;
+            v->HP=2;
         }
         if(v->status==2){
-            v->HP=5;
+            v->HP=3;
         }
-        if(v->healthy==false)
+        if(!v->healthy)
         {
-            TurnObject turn;
-            turn.wh = v;
-            _game->slot_up(turn);
+            _game->slot_up(TurnObject(TT_UP,v->name));
         }
-        _game->check_HP(v);
     }
-    this->power=-1;
+    this->power = -1;
 }
 
 Notebook::Notebook(game *_g)
@@ -194,23 +189,24 @@ Battery::Battery(game *_g)
 
 void Battery::use_item_day(QQueue<QString> whom){
     qDebug()<<"Battery::use_item_day(QString whom)"<<whom;
-    this->forrepower = TurnObject::ItemDescr.value(whom.first());
+    _game->forrepowered = TurnObject::ItemDescr.value(whom.first());
 }
 
 void Battery::use_item_night(QQueue<QString> whom){
     qDebug()<<"Battery::use_item_night()";
-    this->power=2;
+    this->power = 2;
 }
 
 void Battery::ult_item(QQueue<QString> whom){
     //qDebug()<<"Battery::ult_item(item *whom)";
+    _game->forrepowered = IT_UNKNOW;
     ITEM what = TurnObject::ItemDescr.value(whom.first());
     _game->itemlist.value(what)->reforge(this->power);
 
     _game->brokeitemlist.removeOne(what);
     if(_game->unclame_rolelist.contains(_game->itemlist.value(what)->role))
         _game->check_for_role(_game->itemlist.value(what)->role);
-    this->power=-1;
+    this->power = -1;
 }
 
 Scanner::Scanner(game *_g)
@@ -235,26 +231,24 @@ void Scanner::use_item_night(QQueue<QString> whom){
 }
 
 void Scanner::ult_item(QQueue<QString> whom){
-    //emit item_scan_all();
+
     qDebug()<<"Scanner::ult_item()";
     foreach (player* var, _game->playerlist->values()) {
         if(!var->itemlist.contains(IT_SCANNER))
         {
-            if(var->status<2){
-                var->HP-=1;
+            if(var->status < 2){
+                var->HP -= 1;
             }else{
-                var->HP-=3;
+                var->HP -= 2;
                 if(_game->daytime)
                 {
-                    TurnObject turn;
-                    turn.wh = var;
-                    _game->slot_down(turn);
+                    _game->slot_down(TurnObject(TT_DOWN,var->name));
                 }
             }
         }
         _game->check_HP(var);
     }
-    this->power=-1;
+    this->power = -1;
 }
 
 Mop::Mop(game *_g)
