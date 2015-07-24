@@ -922,9 +922,9 @@ void game::slot_use_item(TurnObject turn){
         if(turn.wh->status < 2 && !turn.wh->healthy &&
                 (turn.item != IT_BADGE && turn.item != IT_ROTATION))
         {
-            turn.wh->HP-=1;
-            check_HP(turn.wh);
+            turn.wh->HP-=2;
         }
+        check_HP(turn.wh);
     }
 }
 
@@ -1303,7 +1303,10 @@ void game::player_death(player* dead)
     if(hardresolve)
     {
         if(dead->rolelist.contains(RT_CAPTAIN))
+        {
+            votingque.append(new voting(playerlist->keys(),RT_ALIEN));
             day_canseled_voting();
+        }
         else {
             _currvoting->winners.removeOne(dead->name);
             if(_currvoting->winners.count() == 1)
