@@ -197,7 +197,8 @@ void game::make_actionlist(player* who){
                 if(_currvoting->is_over && hardresolve)
                 {
                     who->actionlist.append(TurnObject(TT_USE_ITEM,_currvoting->winners,var));
-                } else if(!hardresolve && !passengerlist.isEmpty()){
+                } else if(!hardresolve && !passengerlist.isEmpty() && unclame_rolelist.contains(RT_ASSISTANT))
+                {
                     who->actionlist.append(TurnObject(TT_USE_ITEM,passengerlist,var));
                 }
                 if(itemlist[var]->power == 0)
