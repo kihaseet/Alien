@@ -1,0 +1,149 @@
+<Project>
+  <Name>Alien</Name>
+  <ProjectItem type="NClass.DiagramEditor.ClassDiagram.Diagram" assembly="NClass.DiagramEditor, Version=2.4.1823.0, Culture=neutral, PublicKeyToken=null">
+    <Name>Client Diagram</Name>
+    <Language>CSharp</Language>
+    <Entities>
+      <Entity type="Class">
+        <Name>GameClient</Name>
+        <Access>Public</Access>
+        <Location left="21" top="16" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Method">public bool connect()</Member>
+        <Member type="Method">public bool registerName()</Member>
+        <Member type="Method">public bool registerRole()</Member>
+        <Member type="Method">public bool doAction()</Member>
+        <Member type="Method">public virtual void reconnect()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Enum">
+        <Name>Status</Name>
+        <Access>Public</Access>
+        <Location left="302" top="661" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Value>UP</Value>
+        <Value>DOWN</Value>
+        <Value>DIED</Value>
+        <Value>DUTY</Value>
+        <Value>ONLINE</Value>
+        <Value>OFFLINE</Value>
+      </Entity>
+      <Entity type="Enum">
+        <Name>PlayerImage</Name>
+        <Access>Public</Access>
+        <Location left="302" top="423" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Value>CAPTAIN</Value>
+        <Value>DOCTOR</Value>
+        <Value>GUNMEN</Value>
+        <Value>ASSISTANT</Value>
+        <Value>ENGINEER</Value>
+        <Value>SCIENTIST</Value>
+        <Value>SIGNALMEN</Value>
+        <Value>DUPUTY</Value>
+        <Value>PASSENGER</Value>
+      </Entity>
+      <Entity type="Class">
+        <Name>ITarget</Name>
+        <Access>Public</Access>
+        <Location left="1020" top="152" />
+        <Size width="185" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">protected QString name</Member>
+        <Member type="Method">public virtual QString getName()</Member>
+        <Member type="Method">public virtual void setName(QStirng name)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Player</Name>
+        <Access>Public</Access>
+        <Location left="770" top="467" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">Status status</Member>
+        <Member type="Field">QStringList roles</Member>
+        <Member type="Field">PlayerImage image</Member>
+        <Member type="Method">public Status getStatus()</Member>
+        <Member type="Method">public void setStatus(Status status)</Member>
+        <Member type="Method">public QStringList getRoles()</Member>
+        <Member type="Method">public void setRole(QStringList roles)</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>CurrentPlayer</Name>
+        <Access>Public</Access>
+        <Location left="770" top="752" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Property">public int HP { get; set; }</Member>
+        <Member type="Property">public bool isAlien { get; set; }</Member>
+        <Member type="Property">public QVector&lt;Item&gt; items { get; set; }</Member>
+        <Member type="Property">public QVector&lt;Action&gt; actions { get; set; }</Member>
+        <Member type="Method">public void recalcActions()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Item</Name>
+        <Access>Public</Access>
+        <Location left="1085" top="467" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Property">public int chargeLevel { get; set; }</Member>
+        <Member type="Method">public bool canUse()</Member>
+        <Member type="Method">public bool canUlt()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+      <Entity type="Class">
+        <Name>Action</Name>
+        <Access>Public</Access>
+        <Location left="1447" top="152" />
+        <Size width="162" height="216" />
+        <Collapsed>False</Collapsed>
+        <Member type="Field">ITarget user</Member>
+        <Member type="Field">ITarget item</Member>
+        <Member type="Field">QVector&lt;ITarget&gt; targets</Member>
+        <Member type="Method">public CurrentPlayer getUser()</Member>
+        <Member type="Method">public Item getItem()</Member>
+        <Member type="Method">public QVector&lt;ITarget&gt; getTargets()</Member>
+        <Modifier>None</Modifier>
+      </Entity>
+    </Entities>
+    <Relationships>
+      <Relationship type="Generalization" first="4" second="3">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+        <BendPoint relativeToStartShape="False">
+          <X>1045</X>
+          <Y>393</Y>
+        </BendPoint>
+      </Relationship>
+      <Relationship type="Generalization" first="5" second="4">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Generalization" first="6" second="3">
+        <StartOrientation>Vertical</StartOrientation>
+        <EndOrientation>Vertical</EndOrientation>
+      </Relationship>
+      <Relationship type="Association" first="4" second="2">
+        <Label>
+        </Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Aggregation</AssociationType>
+      </Relationship>
+      <Relationship type="Association" first="4" second="1">
+        <Label>
+        </Label>
+        <StartOrientation>Horizontal</StartOrientation>
+        <EndOrientation>Horizontal</EndOrientation>
+        <Direction>Unidirectional</Direction>
+        <AssociationType>Aggregation</AssociationType>
+      </Relationship>
+    </Relationships>
+  </ProjectItem>
+</Project>

@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/main">
+        <file alias="background.png">resources/blackground.png</file>
+        <file alias="lobby_background.png">resources/fon.png</file>
+    </qresource>
+</RCC>
