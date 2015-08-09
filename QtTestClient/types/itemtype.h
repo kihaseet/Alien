@@ -1,7 +1,7 @@
 #ifndef ITEMTYPE_H
 #define ITEMTYPE_H
 
-#endif // ITEMTYPE_H
+#include <QString>
 
 enum ItemType
 {
@@ -16,3 +16,10 @@ enum ItemType
     IT_ROTATION,
     IT_FETUS
 };
+
+namespace ItemTypeProcess
+{
+    ItemType ItemTypeByName(QString it);
+}
+
+#endif // ITEMTYPE_H

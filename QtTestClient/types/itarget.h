@@ -11,7 +11,7 @@ public:
     ITarget();
     ITarget(QString name);
 
-    QString getName();
+    QString getName() const;
     void setName(QString name);
 };
 

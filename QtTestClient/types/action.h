@@ -21,6 +21,7 @@ public:
     ITarget getItem();
     ActionType getActionType();
     QVector<ITarget> getTargets();
+    void setTargets(QVector<ITarget> targets);
 };
 
 #endif // ACTION_H

@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 #include <QString>
+#include <QMessageBox>
+#include <QVector>
+#include <QLabel>
 
 #include "gameclient.h"
 #include "protocol/xmlprotocol/xmlprotocol.h"
@@ -13,6 +16,7 @@
 #include "statupdate/istatupdate.h"
 #include "events/ievent.h"
 #include "gametabs.h"
+#include "factories/actionfactory.h"
 
 namespace Ui {
 class MainWindow;
@@ -27,10 +31,18 @@ public:
     ~MainWindow();
 
 private:
+    void recalcActions();
+    void updateItemsAndActions();
+    void log(QString text);
+
+private:
     CurrentPlayer* currentPlayer;
     GameClient* gameClient;
     IProtocol* protocol;
     GameTabs tabs;
+    QVector<QLabel*> itemsLabels;
+    int currentDay;
+    bool InventoryMode;
 
 private slots:
     void on_bConnect_clicked();
@@ -51,7 +63,7 @@ public slots:
     void nameIncorrect();
     void roleCorrect();
     void roleIncorrect();
-    void dayTime();
+    void dayTime(int day);
     void nightTime();
     void startVote(Vote vote);
     void endVote(EndVote endvote);

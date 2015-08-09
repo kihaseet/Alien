@@ -12,7 +12,7 @@ class CurrentPlayer : public Player
 private:
     int hp;
     bool _isAlien;
-    bool isInfected;
+    bool _isInfected;
     bool yetVote;
     bool yetAttacked;
     QString lastAttacked;
@@ -21,7 +21,6 @@ private:
     bool yetUsed;
     bool yetWait;
     QVector<Action> didActions;
-    QVector<Item> items;
     QVector<Action> actions;
 public:
     CurrentPlayer(QString name
@@ -34,14 +33,15 @@ public:
     int getHP();
     void setHP(int hp);
     bool isAlien();
+    bool isInfected();
     void setAlien(bool _isAlien);
-    QVector<Item> getItems();
-    void setItems(QVector<Item> items);
     QVector<Action> getActions();
     void setActions(QVector<Action> actions);
     bool getYetAttack();
     bool getYetInfect();
     bool getYetUsed();
+    bool getYetWait();
+    bool getYetVote();
 };
 
 #endif // CURRENTPLAYER_H

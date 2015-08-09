@@ -21,7 +21,14 @@ void StatUsedItem::apply(CurrentPlayer &player)
                 }
                 else
                 {
-                    _item.setChargeLevel(2);
+                    if (_item.getBatteryBlessing())
+                    {
+                        _item.setBatteryBlessing(false);
+                    }
+                    else
+                    {
+                        _item.setChargeLevel(2);
+                    }
                 }
             }
         }

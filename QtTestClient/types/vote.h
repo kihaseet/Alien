@@ -14,6 +14,8 @@ class Vote
 public:
     Vote(QString votingFor, QStringList targets);
     QStringList getTargets();
+    QString getVotingFor();
+    Player* getCurrentTarget();
 };
 
 #endif // VOTE_H

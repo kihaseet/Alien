@@ -10,3 +10,13 @@ QStringList Vote::getTargets()
 {
     return this->targets;
 }
+
+QString Vote::getVotingFor()
+{
+    return this->votingFor;
+}
+
+Player *Vote::getCurrentTarget()
+{
+    return this->currentTarget;
+}

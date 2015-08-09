@@ -22,13 +22,23 @@ void GameTabs::addSecTabWidget(QLabel *tab)
     this->secondaryTabs.push_back(tab);
 }
 
-void GameTabs::updateDay(QString day, QString info)
+void GameTabs::updateDay(QString day)
 {
     for (QPair<TabType, GameTab>& tab: tabs)
     {
         if (tab.first == TAB_DAY)
         {
             tab.second.name = day;
+        }
+    }
+}
+
+void GameTabs::updateDayInfo(QString info)
+{
+    for (QPair<TabType, GameTab>& tab: tabs)
+    {
+        if (tab.first == TAB_DAY)
+        {
             tab.second.addInfo = info;
         }
     }

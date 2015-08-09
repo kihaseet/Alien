@@ -43,7 +43,10 @@ SOURCES += main.cpp \
     statupdate/statuseditem.cpp \
     types/status.cpp \
     qclickablelabel.cpp \
-    gametabs.cpp
+    gametabs.cpp \
+    qplayerwidget.cpp \
+    statupdate/statchargeitem.cpp \
+    types/itemtype.cpp
 
 HEADERS  += gameclient.h \
     types/action.h \
@@ -77,10 +80,13 @@ HEADERS  += gameclient.h \
     events/eventduty.h \
     statupdate/statuseditem.h \
     qclickablelabel.h \
-    gametabs.h
+    gametabs.h \
+    qplayerwidget.h \
+    statupdate/statchargeitem.h
 
 FORMS    += \
-    mainwindow.ui
+    mainwindow.ui \
+    player.ui
 
 RESOURCES += \
     alienresources.qrc

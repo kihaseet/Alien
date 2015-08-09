@@ -9,6 +9,7 @@ class Item : public ITarget
 private:
     int charge;
     bool isActive;                  // Avaiable to use right now
+    bool batteryBlessing;
     ItemType type;
 public:
     Item();
@@ -17,6 +18,8 @@ public:
     int getChargeLevel();
     ItemType getType() const;
     void setChargeLevel(int charge);
+    void setBatteryBlessing(bool blessing);
+    bool getBatteryBlessing();
     bool canUse();
     bool canUlt();
     void setActive(bool isActive);

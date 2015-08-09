@@ -10,7 +10,7 @@ ITarget::ITarget(QString name)
     this->name = name;
 }
 
-QString ITarget::getName()
+QString ITarget::getName() const
 {
     return this->name;
 }

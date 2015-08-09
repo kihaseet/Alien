@@ -35,3 +35,8 @@ QVector<ITarget> Action::getTargets()
 {
     return this->targets;
 }
+
+void Action::setTargets(QVector<ITarget> targets)
+{
+    this->targets = targets;
+}

@@ -9,8 +9,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     gameClient = new GameClient();
     protocol = new XmlProtocol();
+    currentDay = 0;
+    InventoryMode = false;
 
     ui->fBottom->layout()->setContentsMargins(0, 15, 0, 15);
+    ui->fItemsAndActions->layout()->setContentsMargins(0, 15, 0, 15);
 
     tabs.addMainTabWidget(ui->lCurrentTab, ui->lAddCurrentTab_2, ui->fAddInfo);
     tabs.addSecTabWidget(ui->lTab2);
@@ -19,11 +22,35 @@ MainWindow::MainWindow(QWidget *parent) :
     tabs.addTab(TAB_DAY, GameTab("DAY: 1", "Голосование на операцию"));
     tabs.addTab(TAB_PROFILE, GameTab("Профиль", ""));
     tabs.addTab(TAB_LOG, GameTab("Лог", ""));
+
+    itemsLabels.push_back(ui->lItem1);
+    ui->lItem1->setProperty("id", QVariant(1));
+    itemsLabels.push_back(ui->lItem2);
+    ui->lItem2->setProperty("id", QVariant(2));
+    itemsLabels.push_back(ui->lItem3);
+    ui->lItem3->setProperty("id", QVariant(3));
+    itemsLabels.push_back(ui->lItem4);
+    ui->lItem4->setProperty("id", QVariant(4));
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::recalcActions()
+{
+    updateItemsAndActions();
+}
+
+void MainWindow::updateItemsAndActions()
+{
+
+}
+
+void MainWindow::log(QString text)
+{
+   ui->lLog->addItem(text);
 }
 
 void MainWindow::on_bConnect_clicked()
@@ -51,37 +78,44 @@ void MainWindow::nameCorrect()
 
 void MainWindow::nameIncorrect()
 {
-
+    QMessageBox("Sign In", "Incorrect name.", QMessageBox::Critical, QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton, this).exec();
 }
 
 void MainWindow::roleCorrect()
 {
-
+    // Okay
 }
 
 void MainWindow::roleIncorrect()
 {
-
+    QMessageBox("Sign In", "Incorrect role.", QMessageBox::Critical, QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton, this).exec();
 }
 
-void MainWindow::dayTime()
+void MainWindow::dayTime(int day)
 {
-
+    this->recalcActions();
+    tabs.updateDay("DAY: " + QString(day));
+    tabs.updateDayInfo("Нет");
 }
 
 void MainWindow::nightTime()
 {
-
+    this->recalcActions();
+    tabs.updateDay("NIGHT: " + QString(this->gameClient->getCurrentDay()));
+    tabs.updateDayInfo("Нет");
 }
 
 void MainWindow::startVote(Vote vote)
 {
-
+    tabs.updateDayInfo("Голосование на " + vote.getVotingFor());
+    this->recalcActions();
 }
 
 void MainWindow::endVote(EndVote endvote)
 {
-
+    tabs.updateDayInfo("Нет");
+    log(endvote.getDisplayMsg());
+    this->recalcActions();
 }
 
 void MainWindow::playersUpdate(QVector<Player> players)

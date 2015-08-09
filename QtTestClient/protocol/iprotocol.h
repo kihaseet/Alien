@@ -29,10 +29,11 @@ signals:
     void nameIncorrect();
     void roleCorrect();
     void roleIncorrect();
-    void dayTime();
+    void dayTime(int day);
     void nightTime();
     void startVote(Vote vote);
     void endVote(EndVote endvote);
+    void playerUlted(ItemType item);
     void playersUpdate(QVector<Player> players);
     void statUpdate(IStatUpdate stat);
     void event(IEvent event);

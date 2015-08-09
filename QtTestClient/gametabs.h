@@ -47,7 +47,8 @@ public:
     void addTab(TabType id, GameTab tab);
     void addMainTabWidget(QLabel* mainTab, QLabel* mainTabInfo, QWidget* infoWidget);
     void addSecTabWidget(QLabel* tab);
-    void updateDay(QString day, QString info);
+    void updateDay(QString day);
+    void updateDayInfo(QString info);
     TabType getActiveTab();
     void onClick(int tab_num);
 };

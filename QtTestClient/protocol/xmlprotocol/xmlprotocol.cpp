@@ -212,13 +212,16 @@ void XmlProtocol::change(QDomElement node)
             {
                 ItemType item = (ItemType)eventEl.attribute("useitem").toInt();
                 QString target = eventEl.text();
+
                 emit event(EventFactory::Item("использовал", name, target, Item(item, 0)));
             }
             else if (eventEl.hasAttribute("useult"))
             {
                 ItemType item = (ItemType)eventEl.attribute("useult").toInt();
                 QString target = eventEl.text();
+
                 emit event(EventFactory::Item("ультанул", name, target, Item(item, 0)));
+                emit playerUlted(item);
             }
             else if (eventEl.hasAttribute("status"))
             {
@@ -239,12 +242,14 @@ void XmlProtocol::change(QDomElement node)
             else if (eventEl.hasAttribute("getrole"))
             {
                 QString role = eventEl.attribute("getrole");
+
                 emit event(EventFactory::Role(role, name, true));
 
             }
             else if (eventEl.hasAttribute("delrole"))
             {
                 QString role = eventEl.attribute("delrole");
+
                 emit event(EventFactory::Role(role, name, false));
 
             }

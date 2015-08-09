@@ -90,19 +90,14 @@ bool CurrentPlayer::isAlien()
     return this->_isAlien;
 }
 
+bool CurrentPlayer::isInfected()
+{
+    return this->_isInfected;
+}
+
 void CurrentPlayer::setAlien(bool isAlien)
 {
     this->_isAlien = isAlien;
-}
-
-QVector<Item> CurrentPlayer::getItems()
-{
-    return this->items;
-}
-
-void CurrentPlayer::setItems(QVector<Item> items)
-{
-    this->items = items;
 }
 
 QVector<Action> CurrentPlayer::getActions()
@@ -128,4 +123,14 @@ bool CurrentPlayer::getYetInfect()
 bool CurrentPlayer::getYetUsed()
 {
     return this->yetUsed;
+}
+
+bool CurrentPlayer::getYetWait()
+{
+    return this->yetWait;
+}
+
+bool CurrentPlayer::getYetVote()
+{
+    return this->yetVote;
 }

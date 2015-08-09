@@ -3,4 +3,17 @@
         <file alias="background.png">resources/blackground.png</file>
         <file alias="lobby_background.png">resources/fon.png</file>
     </qresource>
+    <qresource prefix="/player_widget">
+        <file alias="border.png">resources/ramka.png</file>
+    </qresource>
+    <qresource prefix="/player_avatar">
+        <file alias="0">resources/solder.png</file>
+    </qresource>
+    <qresource prefix="/player_status">
+        <file alias="online">resources/online.png</file>
+        <file alias="offline">resources/offline.png</file>
+    </qresource>
+    <qresource prefix="/roles">
+        <file alias="Captain">resources/roles/Captain.png</file>
+    </qresource>
 </RCC>

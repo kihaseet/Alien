@@ -9,6 +9,8 @@ Item::Item(ItemType type, int charge)
 {
     this->type = type;
     this->charge = charge;
+    this->isActive = true;
+    this->batteryBlessing = false;
 
     switch(type)
     {
@@ -60,14 +62,24 @@ void Item::setChargeLevel(int charge)
     this->charge = charge;
 }
 
+void Item::setBatteryBlessing(bool blessing)
+{
+    this->batteryBlessing = blessing;
+}
+
+bool Item::getBatteryBlessing()
+{
+    return this->batteryBlessing;
+}
+
 bool Item::canUse()
 {
-    return this->isActive && this->charge == 0;
+    return this->batteryBlessing || (this->isActive && this->charge == 0);
 }
 
 bool Item::canUlt()
 {
-    return this->charge == 0 && this->type != ItemType::IT_ROTATION && this->type != ItemType::IT_MOP;
+    return (this->batteryBlessing || this->charge == 0) && this->type != ItemType::IT_ROTATION && this->type != ItemType::IT_MOP;
 }
 
 void Item::setActive(bool isActive)
