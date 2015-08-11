@@ -8,14 +8,15 @@
 class voting:public QObject
 {
     Q_OBJECT
+private:
+    QString noteName;   //голос ноутбука
 public:
     ROLE target;
     bool is_over;//true когда голосование уже закончилось
-    // QMap <player*,QMap<player*,int>> votelist;//кто голосует
     QList <VoteObject*> votelist;
     QList<QString> electlist;//против кого голосуют
     QList<QString> winners;
-    QString noteName;   //голос ноутбука
+
 
 
     voting(QList<QString> mapwhom, ROLE tar);
@@ -25,11 +26,10 @@ public:
     void start();
     void calc_votes();
     void send_voting_over(QList<QString> v);
-public slots:
     void on_voting(QString who, QString whom);
     void off_voting(QString who);
-    void use_notebook(QString whom);
-    void ult_notebook();
+
+    void setNoteName(QString n);
 signals:
     void voting_over(QList<QString> v);
     void voting_canseled();

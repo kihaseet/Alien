@@ -2,7 +2,32 @@
 
 item::item()
 {
-    this->power=0;
+    this->power = 0;
+}
+
+ITEM item::getID()
+{
+    return this->ID;
+}
+
+QString item::getHandle()
+{
+    return this->handle;
+}
+
+QPair<QString, int> item::getLastScan()
+{
+    return this->lastscan;
+}
+
+int item::getPower()
+{
+    return this->power;
+}
+
+void item::setPower(int charge)
+{
+    this->power = charge;
 }
 
 void item::reforge(int i){
@@ -15,9 +40,7 @@ void item::counter(){
 
 Badge::Badge(game *_g){
     ID = IT_BADGE;
-    name = "Значок";
     handle = "Badge";
-    role = RT_CAPTAIN;
     _game = _g;
 }
 
@@ -29,20 +52,18 @@ void Badge::use_item_day(QQueue<QString> whom){
     qDebug()<<"Badge::use_item_day()";
 }
 
-void Badge::use_item_night(){
-    qDebug()<<"Badge::use_item_night()";
-}
+//void Badge::use_item_night(QQueue<QString> whom){
+//    qDebug()<<"Badge::use_item_night()";
+//}
 
-void Badge::ult_item(){
-    qDebug()<<"Badge::ult_item()";
-}
+//void Badge::ult_item(){
+//    qDebug()<<"Badge::ult_item()";
+//}
 
 Rotation::Rotation(game *_g)
 {
     ID = IT_ROTATION;
-    name = "График";
     handle = "Rotation";
-    role = RT_ASSISTANT;
     _game = _g;
 }
 
@@ -60,25 +81,12 @@ void Rotation::use_item_day(QQueue<QString> whom){
     _game->day_check_over();
 }
 
-void Rotation::use_item_night(){
-    qDebug()<<"Rotation::use_item_night()";
-}
-
-void Rotation::ult_item(){
-    qDebug()<<"Rotation::ult_item()";
-}
 
 Blaster::Blaster(game *_g)
 {
     ID = IT_BLASTER;
-    name = "Бластер";
     handle = "Blaster";
-    role = RT_GUNMEN;
     _game = _g;
-}
-
-void Blaster::use_item_day(){
-    qDebug()<<"Blaster::use_item_day()";
 }
 
 void Blaster::use_item_night(QQueue<QString> whom){
@@ -101,9 +109,7 @@ void Blaster::ult_item(QQueue<QString> whom){
 Injector::Injector(game *_g)
 {
     ID = IT_INJECTOR;
-    name = "Шприц";
     handle = "Injector";
-    role = RT_DOCTOR;
     _game = _g;
 }
 
@@ -143,9 +149,7 @@ void Injector::ult_item(QQueue<QString> whom){
 Notebook::Notebook(game *_g)
 {
     ID = IT_NOTEBOOK;
-    name="Ноутбук";
     handle="Notebook";
-    role = RT_SIGNALMEN;
     _game=_g;
 }
 
@@ -153,7 +157,7 @@ void Notebook::use_item_day(QQueue<QString> whom){
     qDebug()<<"Notebook::use_item_day(QString whom)"<<whom;
     if(!_game->_currvoting->is_over)
     {
-        _game->_currvoting->noteName = whom.first();
+        _game->_currvoting->setNoteName(whom.first());
         this->power = 2;
 
     }
@@ -164,10 +168,6 @@ void Notebook::use_item_day(QQueue<QString> whom){
     }
 }
 
-void Notebook::use_item_night(QQueue<QString> whom){
-    qDebug()<<"Notebook::use_item_night()";
-
-}
 
 void Notebook::ult_item(QQueue<QString> whom){
     qDebug()<<"Notebook::ult_item()";
@@ -181,9 +181,7 @@ void Notebook::ult_item(QQueue<QString> whom){
 Battery::Battery(game *_g)
 {
     ID = IT_BATTERY;
-    name="Батарейка";
     handle="Battery";
-    role = RT_ENGINEER;
     _game=_g;
 }
 
@@ -204,17 +202,15 @@ void Battery::ult_item(QQueue<QString> whom){
     _game->itemlist.value(what)->reforge(this->power);
 
     _game->brokeitemlist.removeOne(what);
-    if(_game->unclame_rolelist.contains(_game->itemlist.value(what)->role))
-        _game->check_for_role(_game->itemlist.value(what)->role);
+    if(_game->unclame_rolelist.contains(TurnObject::RoleItem.key(what)))
+        _game->check_for_role(TurnObject::RoleItem.key(what));
     this->power = -1;
 }
 
 Scanner::Scanner(game *_g)
 {
     ID = IT_SCANNER;
-    name="Сканер";
     handle="Scanner";
-    role = RT_SCIENTIST;
     _game=_g;
 }
 
@@ -254,19 +250,11 @@ void Scanner::ult_item(QQueue<QString> whom){
 Mop::Mop(game *_g)
 {
     ID = IT_MOP;
-    name="Швабра";
     handle="Mop";
     _game=_g;
-}
-
-void Mop::use_item_day(){
-    qDebug()<<"Mop::use_item_day()";
 }
 
 void Mop::use_item_night(QQueue<QString> whom){
     qDebug()<<"Mop::use_item_night()"<<whom;
 }
 
-void Mop::ult_item(){
-    qDebug()<<"Mop::ult_item()";
-}

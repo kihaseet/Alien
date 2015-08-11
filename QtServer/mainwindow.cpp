@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->setupUi(this);
 
 
-    _serv=new Server(21277,this);
+    _serv=new Server(21277);
     _xmlmaker = new xml_maker();
     _game=new game();
 
@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
    // connect(_xmlmaker,SIGNAL(noVerifyClientName(QString)),_serv,SLOT(noVerifyClientName(int)));
     connect(_xmlmaker,SIGNAL(sendtoclient(int,QString)),_serv,SLOT(slotsendToClient(int,QString)));
     connect(_xmlmaker,SIGNAL(send_to_all(QString)),_serv,SLOT(send2all(QString)));
-    connect(_xmlmaker,SIGNAL(xml_create(int,TurnObject)),
+    connect(_xmlmaker,SIGNAL(turn_create(int,TurnObject)),
             _game,SLOT(make_events(int,TurnObject)));
     connect(_xmlmaker,SIGNAL(xml_create_norot(int,QString,QString,QString)),
             _game,SLOT(make_events(int,QString,QString,QString)));
@@ -97,10 +97,10 @@ void MainWindow::updateInventory(QListWidgetItem* ss){
 void MainWindow::updateInventoryInfo(QListWidgetItem* ss){
     ui->text_info->clear();
     foreach (item* var, _game->itemlist) {
-        if(ss->text()==var->name){
-             ui->text_info->append(var->name);
+        if(ss->text()==var->getHandle()){
+             ui->text_info->append(var->getHandle());
              ui->text_info->append(var->note);
-             if(var->handle!="Rotation")ui->text_info->append("Заряд: "+QString::number(var->power));
+             if(var->getID() != IT_ROTATION)ui->text_info->append("Заряд: "+QString::number(var->getPower()));
              else foreach (QString vvar, _game->nightrotation) {
                   ui->text_info->append(vvar);
              }

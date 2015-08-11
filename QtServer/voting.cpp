@@ -57,6 +57,11 @@ void voting::off_voting(QString who){
     //тут будет отправка сообщения всем о снятии голоса
 }
 
+void voting::setNoteName(QString n)
+{
+    this->noteName = n;
+}
+
 bool voting::is_vote(QString who)
 {
     foreach (VoteObject* vote, votelist) {
@@ -107,13 +112,4 @@ void voting::calc_votes(){
             winners.append(name);
         }
     }
-}
-
-void voting::use_notebook(QString whom){
-    noteName = whom;
-}
-
-void voting::ult_notebook()
-{
-    emit voting_canseled();
 }

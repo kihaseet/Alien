@@ -30,5 +30,19 @@ QMap<QString, TURN_TYPE> TurnObject::initColumnT()
     return map;
 }
 
+QMap<ROLE, ITEM> TurnObject::initColumnRT()
+{
+    QMap<ROLE, ITEM> map;
+    map.insert(RT_CAPTAIN,IT_BADGE);
+    map.insert(RT_ASSISTANT,IT_ROTATION);
+    map.insert(RT_DOCTOR,IT_INJECTOR);
+    map.insert(RT_ENGINEER,IT_BATTERY);
+    map.insert(RT_GUNMEN,IT_BLASTER);
+    map.insert(RT_SCIENTIST,IT_SCANNER);
+    map.insert(RT_SIGNALMEN,IT_NOTEBOOK);
+    return map;
+}
+
 QMap <QString, ITEM> TurnObject::ItemDescr = initColumnNames();
 QMap <QString, TURN_TYPE> TurnObject::TurnDescr = initColumnT();
+QMap <ROLE, ITEM> TurnObject::RoleItem = initColumnRT();

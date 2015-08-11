@@ -26,16 +26,16 @@ void xml_maker::new_analise(int _name,const QString input){
                 case TT_NOTHING:
                     break;
                 case TT_REGNAME:
-                    emit newname(RegisterObject(_name,turn.targets.first()));
+                    emit newname(RegisterObject(_name,TT_REGNAME,turn.targets.first()));
                     break;
                 case TT_REGROLE:
                     r = RegisterObject::RoleDescr.value(turn.targets.first(), RT_UNKNOWN);
                     if (r != RT_UNKNOWN) {
-                        emit registerRolebyPlayer(RegisterObject(_name,RegisterObject::RoleDescr.value(turn.targets.first())));
+                        emit registerRolebyPlayer(RegisterObject(_name,TT_REGROLE,RegisterObject::RoleDescr.value(turn.targets.first())));
                     }
                     break;
                 default:
-                    emit xml_create(_name,turn);
+                    emit turn_create(_name,turn);
                     break;
                 }
 

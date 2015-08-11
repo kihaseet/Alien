@@ -7,26 +7,21 @@ class qLe
 public:
     inline bool operator()(TurnObject& t1, TurnObject& t2) const
     {
-        if(t1.type == TT_ATTACK && t2.type == TT_ATTACK){
-            if(t1.wh->HP < t2.wh->HP){
-                return false;
-            }else{
-                if (t1.wh->HP == t2.wh->HP){
-                    if(t1.wh->invasionday < t2.wh->invasionday){
-                        return false;
+        if(t1.type == t2.type)
+            if(t1.type == TT_ATTACK){
+                if(t1.wh->HP != t2.wh->HP){
+                    return t1.wh->HP < t2.wh->HP;
+                }else{
+                    if(t1.wh->invasionday != t2.wh->invasionday){
+                        return t1.wh->invasionday < t2.wh->invasionday;
                     } else{
-                        if(t1.wh->invasionday == t2.wh->invasionday){
-                            if(t1.wh->whoinvas->invasionday < t2.wh->whoinvas->invasionday){
-                                return false;
-                            }
-                        }
+                        return t1.wh->whoinvas->invasionday < t2.wh->whoinvas->invasionday;
                     }
                 }
             }
-        }
-        
         return t1 < t2;
     }
+
 };
 
 
@@ -93,7 +88,7 @@ void game::getItemByRoleAll()
                 break;
             case RT_ENGINEER:
                 bb = new Battery(this);
-                bb->power = 2;
+                bb->setPower(2);
                 var->itemlist.append(IT_BATTERY);
                 itemlist.insert(IT_BATTERY,bb);
                 break;
@@ -111,8 +106,8 @@ void game::getItemByRoleAll()
             }
             TurnObject turn(TT_GETITEM);
             turn.wh = var;
-            turn.item = bb->ID;
-            turn.targets.append(QString::number(bb->power));
+            turn.item = bb->getID();
+            turn.targets.append(QString::number(bb->getPower()));
             emit send_stat(turn);
         }
     }
@@ -130,13 +125,13 @@ void game::make_actionlist(player* who){
         {
             switch (var) {
             case IT_BLASTER:
-                if(itemlist[var]->power == 0)
+                if(itemlist[var]->getPower() == 0)
                 {
                     who->actionlist.append(TurnObject(TT_ULT_ITEM,playerlist->keys(),var));
                 }
                 break;
             case IT_INJECTOR:
-                if(itemlist[var]->power == 0)
+                if(itemlist[var]->getPower() == 0)
                 {
                     who->actionlist.append(TurnObject(TT_USE_ITEM,playerlist->keys(),var));
                     who->actionlist.append(TurnObject(TT_ULT_ITEM,var));
@@ -146,7 +141,7 @@ void game::make_actionlist(player* who){
                 if(!_currvoting->is_over || hardresolve)
                 {
                     who->actionlist.append(TurnObject(TT_ULT_ITEM,var));
-                    if(itemlist[var]->power == 0)
+                    if(itemlist[var]->getPower() == 0)
                     {
                         who->actionlist.append(TurnObject(TT_USE_ITEM,_currvoting->electlist,var));
                     }
@@ -157,15 +152,15 @@ void game::make_actionlist(player* who){
                 turn1.item = IT_BATTERY;
                 foreach (ITEM item, itemlist.keys())
                 {
-                    if (itemlist[item]->power == -1)
+                    if (itemlist[item]->getPower() == -1)
                     {
-                        turn1.targets.append(itemlist[item]->handle);
+                        turn1.targets.append(itemlist[item]->getHandle());
                     }
                 }
                 who->actionlist.append(turn1);
 
 
-                if(itemlist[var]->power == 0)
+                if(itemlist[var]->getPower() == 0)
                 {
                     TurnObject turn2(TT_USE_ITEM,IT_BATTERY);
                     foreach (ITEM item, itemlist.keys())
@@ -178,7 +173,7 @@ void game::make_actionlist(player* who){
                         case IT_MOP:
                             break;
                         default:
-                            turn2.targets.append(itemlist[item]->handle);
+                            turn2.targets.append(itemlist[item]->getHandle());
                             break;
                         }
 
@@ -187,7 +182,7 @@ void game::make_actionlist(player* who){
                 }
                 break;
             case IT_SCANNER:
-                if(itemlist[var]->power == 0)
+                if(itemlist[var]->getPower() == 0)
                 {
                     who->actionlist.append(TurnObject(TT_ULT_ITEM,var));
                     who->actionlist.append(TurnObject(TT_USE_ITEM,playerlist->keys(),var));
@@ -201,7 +196,7 @@ void game::make_actionlist(player* who){
                 {
                     who->actionlist.append(TurnObject(TT_USE_ITEM,passengerlist,var));
                 }
-                if(itemlist[var]->power == 0)
+                if(itemlist[var]->getPower() == 0)
                 {
                     TurnObject turn;
                     turn.type = TT_USE_BADGE;
@@ -221,7 +216,7 @@ void game::make_actionlist(player* who){
                                     case IT_MOP:
                                         break;
                                     default:
-                                        turn.targets.append(itemlist[item1]->handle);
+                                        turn.targets.append(itemlist[item1]->getHandle());
                                         break;
                                     }
 
@@ -329,7 +324,7 @@ void game::make_actionlist(player* who){
                 {
                     switch (var) {
                     case IT_BLASTER:
-                        if(itemlist[var]->power == 0)
+                        if(itemlist[var]->getPower() == 0)
                         {
                             who->actionlist.append(TurnObject(TT_USE_ITEM,playerlist->keys(),var));
                             who->actionlist.append(TurnObject(TT_ULT_ITEM,playerlist->keys(),var));
@@ -337,7 +332,7 @@ void game::make_actionlist(player* who){
                         break;
                     case IT_INJECTOR:
                     case IT_SCANNER:
-                        if(itemlist[var]->power == 0)
+                        if(itemlist[var]->getPower() == 0)
                         {
                             who->actionlist.append(TurnObject(TT_USE_ITEM,playerlist->keys(),var));
                             who->actionlist.append(TurnObject(TT_ULT_ITEM,var));
@@ -351,13 +346,13 @@ void game::make_actionlist(player* who){
                             }
                             who->actionlist.append(TurnObject(TT_ULT_ITEM,templist,var));
                         }
-                        if(itemlist[var]->power == 0)
+                        if(itemlist[var]->getPower() == 0)
                         {
                             who->actionlist.append(TurnObject(TT_USE_ITEM,var));
                         }
                         break;
                     case IT_BADGE:
-                        if(itemlist[var]->power == 0)
+                        if(itemlist[var]->getPower() == 0)
                         {
                             foreach (ITEM item, itemlist.keys())
                             {
@@ -785,7 +780,7 @@ void game::slot_getitem(TurnObject turn){
             var->itemlist.removeOne(turn.item);
         }
     }
-    itemlist.value(turn.item)->power = turn.targets.dequeue().toInt();
+    itemlist.value(turn.item)->setPower(turn.targets.dequeue().toInt());
     turn.wh->itemlist.append(turn.item);
 }
 
@@ -864,12 +859,8 @@ void game::add_role(player* whom,ROLE what)
         unclame_rolelist.removeOne(what);
     rolelist.insertMulti(what,whom);
     whom->rolelist.append(what);
-    foreach (item* var, itemlist.values())
-    {
-        if(var->role == what){
-            whom->itemlist.append(var->ID);
-        }
-    }
+    if(what <= 7)
+        whom->itemlist.append(TurnObject::RoleItem[what]);
     make_actionlist(whom);
 }
 
@@ -892,11 +883,11 @@ void game::delete_role(player* whom,ROLE what)
     whom->rolelist.removeOne(what);
     foreach (item* var, itemlist.values())
     {
-        if(var->role == what)
+        if(what <= 7)
         {
-            whom->itemlist.removeAll(var->ID);
+            whom->itemlist.removeAll(TurnObject::RoleItem[what]);
             turn.type = TT_DELITEM;
-            turn.item = var->ID;
+            turn.item = TurnObject::RoleItem[what];
             emit send_stat(turn);
         }
     }
@@ -926,13 +917,13 @@ void game::slot_use_item(TurnObject turn){
             {
                 itemlist.value(turn.item)->use_item_day(turn.targets);
                 forrepowered = IT_UNKNOW;
-                itemlist.value(IT_BATTERY)->power = 2;
+                itemlist.value(IT_BATTERY)->setPower(2);
 
                 TurnObject t(TT_CORRECT,IT_BATTERY);
                 t.wh = rolelist.value(RT_ENGINEER);
                 emit send_stat(t);
             }
-            else if(itemlist.value(turn.item)->power == 0)
+            else if(itemlist.value(turn.item)->getPower() == 0)
                 itemlist.value(turn.item)->use_item_day(turn.targets);
         }
         else
@@ -952,10 +943,10 @@ void game::slot_use_item(TurnObject turn){
 void game::slot_use_item_cap(TurnObject turn)
 {
     //GuiMess2Log(turn.wh->name," как капитан, использовал "+itemlist.value(turn.item)->name+" на "+turn.targets);
-    if(itemlist.value(IT_BADGE)->power != -2)
+    if(itemlist.value(IT_BADGE)->getPower() != -2)
     {
         slot_use_item(turn);
-        itemlist.value(IT_BADGE)->power = -2;
+        itemlist.value(IT_BADGE)->setPower(-2);
     }
 }
 
@@ -964,7 +955,7 @@ void game::slot_ult_item(TurnObject turn)
     itemlist.value(turn.item)->ult_item(turn.targets);
     brokeitemlist.append(turn.item);
 
-    delete_role(turn.wh,itemlist.value(turn.item)->role);
+    delete_role(turn.wh,TurnObject::RoleItem.key(turn.item));
     if(turn.wh->status < 2 && turn.wh->healthy == false)
     {
         turn.wh->HP -= 1;
@@ -1307,7 +1298,7 @@ void game::player_death(player* dead)
         }
         if(_currvoting->electlist.count() == 1)
         {
-            _currvoting->send_voting_over(_currvoting->electlist);
+            day_resolve_curr_voting(_currvoting->electlist);
         }
     }
     if(hardresolve)
@@ -1334,7 +1325,7 @@ void game::check_HP(player* w)
         w->HP = 0;
     switch (w->HP) {
     case 0:
-        if(w->itemlist.contains(IT_INJECTOR) && itemlist[IT_INJECTOR]->power == 0)
+        if(w->itemlist.contains(IT_INJECTOR) && itemlist[IT_INJECTOR]->getPower() == 0)
         {
             do_events(TurnObject(TT_USE_ITEM,w->name,IT_INJECTOR));
         } else if (w->status == 2 && w->invasion == 0)
@@ -1562,8 +1553,8 @@ void game::sortNightActions()
             }
         }
         if(_eve.type == TT_USE_BADGE &&
-                itemlist.value(IT_BADGE)->power == 0 &&
-                itemlist.value(_eve.item)->power == 0)
+                itemlist.value(IT_BADGE)->getPower() == 0 &&
+                itemlist.value(_eve.item)->getPower() == 0)
         {
             if(_eve.item == IT_MOP)
             {

@@ -16,10 +16,12 @@ public:
 
     static QMap <QString, ITEM> ItemDescr;
     static QMap <QString, TURN_TYPE> TurnDescr;
+    static QMap <ROLE, ITEM> RoleItem;
     static QMap<QString, ITEM> initColumnNames();
     static QMap<QString, TURN_TYPE> initColumnT();
-  
-    TurnObject(TURN_TYPE type, 
+    static QMap<ROLE, ITEM> initColumnRT();
+
+    TurnObject(TURN_TYPE type,
                QStringList targets = QQueue<QString>(),
                ITEM item = IT_UNKNOW)
     {
@@ -42,7 +44,7 @@ public:
         this->item = item;
         this->type = type;
     }
-    
+
     TurnObject()
     {
         item = IT_UNKNOW;
@@ -69,20 +71,22 @@ public:
                 t = false;
             }
         }
-       return
-          left.item == right.item &&
-          left.type == right.type &&
-          t;
+        return
+                left.item == right.item &&
+                left.type == right.type &&
+                t;
     }
     friend bool operator < (const TurnObject& left, const TurnObject& right)
     {
+
         if((left.type == TT_USE_ITEM && right.type == TT_USE_ITEM) ||
                 (left.type == TT_ULT_ITEM && right.type == TT_ULT_ITEM))
         {
-             return left.item < right.item;
+            return left.item < right.item;
         }else
             return left.type < right.type;
     }
+
 };
 
 #endif // EVENT_H

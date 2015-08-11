@@ -29,7 +29,7 @@ public:
     bool infecting;//true если уже заражал этой ночью
     QList <ROLE> rolelist;
     QList <TurnObject> actionlist;
-    
+
     QList <ITEM> itemlist; //дескриптор-указатель
 };
 

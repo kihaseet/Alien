@@ -11,7 +11,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = server1
 TEMPLATE = app
 
-
 SOURCES += main.cpp\
         mainwindow.cpp \
     game.cpp \
@@ -35,7 +34,10 @@ HEADERS  += mainwindow.h \
     event.h \
     clientsocket.h \
     config.h \
-    types.h
+    types.h \
+    protocol.h
 
 FORMS    += mainwindow.ui \
     config.ui
+
+LIBS += libqjson.dll

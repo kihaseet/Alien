@@ -9,17 +9,12 @@
 
 class QTcpSocket;
 
-struct xml_msg
-{
-    QString who,whom,what,how;
-    QQueue <QString>rotation;
-};
-
 
 class xml_maker:public QObject
 {
 Q_OBJECT
 public:
+
     xml_maker();
     TurnObject traverseNode(const QDomNode& node);
     QQueue <QString> makeRotation(const QDomNode& node);
@@ -30,15 +25,6 @@ public:
                              const QString strAttr,
                              const QString strText, const QString strAttrText);
 
-    QDomElement append_events(QDomDocument &domDoc, QMap <QString,player*> playerlist);
-    QDomElement append_stats(QDomDocument &domDoc, player* player);
-    void event_maker(QDomDocument doc, QDomElement domStat,
-                     QDomElement domEvents, player* it, QMap<QString, player *> playerlist,
-                     TurnObject _eve);
-
-    QDomElement name_role_list(QDomDocument& domDoc,QMap <QString,player*> playerlist,QList<QString>_rolelist);
-    QDomElement name_role_list(QDomDocument& domDoc, QList<player *> *playerlist);
-    void send_stat(player* who);
 
 public slots:
     void new_analise(int _name, const QString input);
@@ -59,15 +45,11 @@ public slots:
     void sendStat(TurnObject turn);
 
 signals:
-    void xml_create(int who,TurnObject turn);
-    void xml_create_norot(int who,QString what,QString whom,QString how);
+    void turn_create(int who,TurnObject turn);
     void newname(RegisterObject turn);
-    void newrole(QString who);
     void sendtoclient(int _name,QString _xmldoc);
     void send_to_all(QString _xmldoc);
     void registerRolebyPlayer(RegisterObject turn);
-    void votebyPlayer(QString _name,QString whom);
-    void unvotebyPlayer(QString _name);
 
 };
 

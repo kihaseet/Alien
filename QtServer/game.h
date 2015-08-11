@@ -18,6 +18,7 @@ class voting;
 class game:public QObject
 {
 Q_OBJECT
+
 public:
     bool daytime;
     int currentday;

@@ -47,7 +47,7 @@ enum ROLE{
     RT_ALIEN = -2,  //для голосований
     RT_UNKNOWN = -1,
     RT_PASSENGER = 0,
-    RT_CAPTAIN,
+    RT_CAPTAIN = 1,
     RT_ASSISTANT,
     RT_GUNMEN,
     RT_SCIENTIST,
@@ -63,6 +63,7 @@ enum ROLE{
 
 struct RegisterObject{
 public:
+    TURN_TYPE target;
     ROLE role;
     QString name;
     int ID;
@@ -70,12 +71,14 @@ public:
     static QMap <QString, ROLE> RoleDescr;
     static QMap <QString, ROLE> initColumn();
 
-    RegisterObject(int id,QString n = QString()){
+    RegisterObject(int id, TURN_TYPE tar, QString n = QString()){
         ID = id;
+        target = tar;
         name = n;
     }
-    RegisterObject(int id, ROLE r = RT_UNKNOWN){
+    RegisterObject(int id, TURN_TYPE tar,ROLE r = RT_UNKNOWN){
         ID = id;
+        target = tar;
         role = r;
     }
 };

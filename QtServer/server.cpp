@@ -4,10 +4,9 @@
 #include <QtGui>
 
 
-Server::Server(int nPort, QWidget* pwgt /*=0*/) : m_nNextBlockSize(0)
+Server::Server(int nPort) : m_nNextBlockSize(0)
 {
     m_ptcpServer = new QTcpServer(this);
-    _widget=pwgt;
     
     if (!m_ptcpServer->listen(QHostAddress::Any, nPort))
     {
