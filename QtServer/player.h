@@ -15,6 +15,7 @@ public:
     int avatar;//пятизначное число, цифра - вариант. голова-прическа-одежда-волосы-кожа
     player(QString n, int id);
     bool ImDuty;//true - дежурил в текужем графике ротации
+    bool online;
     int success_attack;
     int HP,status;
     int invasion; //замена фетуса. -1  отсутствует, 2 выставляется сразу после внедрения, каждое утро уменьшается на 1,

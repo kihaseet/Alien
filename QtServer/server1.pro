@@ -39,5 +39,3 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui \
     config.ui
-
-LIBS += libqjson.dll

@@ -1,3 +1,4 @@
 ~$ien_xml_1_1.docx
 QtServer/libqjson.dll
 *.a
+*.o

@@ -6,11 +6,12 @@
 #include <qdebug.h>
 #include "event.h"
 #include "player.h"
+#include "protocol.h"
 
 class QTcpSocket;
 
 
-class xml_maker:public QObject
+class xml_maker:public Protocol
 {
 Q_OBJECT
 public:
@@ -27,29 +28,26 @@ public:
 
 
 public slots:
-    void new_analise(int _name, const QString input);
-    void slotSendVotelist(QList<VoteObject *> votelist);
-   // void send_to_all(ingame_event *_eve, QMap<QString, player *> playerlist, QMap<QString, item *> itemlist);
-    void slotnamecorrect(int tempname);
-    void nonamecorrect(int tempname);
-    void rolecorrect(int _name);
-    void norolecorrect(int _name);
-    void updaterolelist(QList<player *> NameRolelist);
+    void newAnalise(int _name, const QString input);
+    void slotSendVoteList(QList<VoteObject *> votelist);
+    void slotNameCorrect(int tempname, bool isCorrect);
+    void slotRoleCorrect(int _name, bool isCorrect);
+    void slotUpdateRoleList(QList<player *> NameRolelist);
+    void slotDisconnected(QList<player *> playerlist){}
 
     void slotStartGame(QList<player*>playerlist);
-    void slotStartDay(int day);
-    void slotStartNight(int day);
+    void slotStartPhase(bool isDay, int dayNo);
     void slotStartVoting(ROLE target,QList<QString>list);
     void slotEndVoting(ROLE target,QString name,QString result);
-    void sendTurn(TurnObject turn);
-    void sendStat(TurnObject turn);
+    void slotSendTurn(TurnObject turn);
+    void slotSendStat(TurnObject turn);
 
 signals:
-    void turn_create(int who,TurnObject turn);
+    /*void turn_create(int who,TurnObject turn);
     void newname(RegisterObject turn);
     void sendtoclient(int _name,QString _xmldoc);
     void send_to_all(QString _xmldoc);
-    void registerRolebyPlayer(RegisterObject turn);
+    void registerRolebyPlayer(RegisterObject turn);*/
 
 };
 

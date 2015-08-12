@@ -3,13 +3,11 @@
 #include <QObject>
 #include "player.h"
 #include "event.h"
-#include
 
 class Protocol:public QObject
 {
     Q_OBJECT
 public:
-    QJSON_MAKEDLL
     Protocol(){}
 public slots:
     virtual void newAnalise(int _name, const QString input) = 0;

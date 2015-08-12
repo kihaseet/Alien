@@ -20,46 +20,34 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->itemlist,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(updateInventoryInfo(QListWidgetItem*)));
 
 
-    connect(_serv, SIGNAL(sendToAnalise(int,QString)), _xmlmaker, SLOT(new_analise(int,const QString)));
+    connect(_serv, SIGNAL(sendToAnalise(int,QString)), _xmlmaker, SLOT(newAnalise(int,QString)));
     connect(_serv,SIGNAL(addLogToGui(QString,QString)),this,SLOT(onAddLogToGui(QString,QString)));
     connect(_serv,SIGNAL(client_disconnected(int)),_game,SLOT(slot_disconnected(int)));
     connect(_serv,SIGNAL(client_connected()),_game,SLOT(slotSendRolelist()));
 
-    connect(_xmlmaker,SIGNAL(newname(RegisterObject)),_game,SLOT(register_new_player(RegisterObject)));
-    connect(_xmlmaker,SIGNAL(registerRolebyPlayer(RegisterObject)),_game,SLOT(registerRolebyPlayer(RegisterObject)));
-   // connect(_xmlmaker,SIGNAL(noVerifyClientName(QString)),_serv,SLOT(noVerifyClientName(int)));
-    connect(_xmlmaker,SIGNAL(sendtoclient(int,QString)),_serv,SLOT(slotsendToClient(int,QString)));
-    connect(_xmlmaker,SIGNAL(send_to_all(QString)),_serv,SLOT(send2all(QString)));
-    connect(_xmlmaker,SIGNAL(turn_create(int,TurnObject)),
+    connect(_xmlmaker,SIGNAL(sigRegisterCreate(RegisterObject)),_game,SLOT(register_new_player(RegisterObject)));
+    connect(_xmlmaker,SIGNAL(sigSendToClient(int,QString)),_serv,SLOT(slotsendToClient(int,QString)));
+    connect(_xmlmaker,SIGNAL(sigSendToAll(QString)),_serv,SLOT(send2all(QString)));
+    connect(_xmlmaker,SIGNAL(sigTurnCreate(int,TurnObject)),
             _game,SLOT(make_events(int,TurnObject)));
-    connect(_xmlmaker,SIGNAL(xml_create_norot(int,QString,QString,QString)),
-            _game,SLOT(make_events(int,QString,QString,QString)));
 
     connect(_game,SIGNAL(startgame(QList<player*>)),_xmlmaker,SLOT(slotStartGame(QList<player*>)));
-    connect(_game,SIGNAL(namecorrect(int)),_xmlmaker,SLOT(slotnamecorrect(int)));
-    connect(_game,SIGNAL(nonamecorrect(int)),_xmlmaker,SLOT(nonamecorrect(int)));
+    connect(_game,SIGNAL(namecorrect(int,bool)),_xmlmaker,SLOT(slotNameCorrect(int,bool)));
     connect(_game,SIGNAL(sendrolelist2all (QList <player*>)),_xmlmaker,SLOT(updaterolelist(QList <player*>)));
-    connect(_game,SIGNAL(rolecorrect(int)),_xmlmaker,SLOT(rolecorrect(int)));
-    connect(_game,SIGNAL(norolecorrect(int)),_xmlmaker,SLOT(norolecorrect(int)));
+    connect(_game,SIGNAL(rolecorrect(int,bool)),_xmlmaker,SLOT(slotRoleCorrect(int,bool)));
     connect(_game,SIGNAL(startnewsessionenable(bool)),this,SLOT(newGameSessionStatus(bool)));
 
-    connect(_game,SIGNAL(startday(int)),_xmlmaker,SLOT(slotStartDay(int)));
-    connect(_game,SIGNAL(startnight(int)),_xmlmaker,SLOT(slotStartNight(int)));
+    connect(_game,SIGNAL(startPhase(int,bool)),_xmlmaker,SLOT(slotStartPhase(bool,int)));
     connect(_game,SIGNAL(startvote(ROLE,QList<QString>)),_xmlmaker,SLOT(slotStartVoting(ROLE,QList<QString>)));
     connect(_game,SIGNAL(endvote(ROLE,QString,QString)),_xmlmaker,SLOT(slotEndVoting(ROLE,QString,QString)));
 
-    connect(_game,SIGNAL(send_votelist(QList<VoteObject*>)),_xmlmaker,SLOT(slotSendVotelist(QList<VoteObject*>)));
-    connect(_game,SIGNAL(send_changes(TurnObject)),_xmlmaker,SLOT(sendTurn(TurnObject)));
-    connect(_game,SIGNAL(send_stat(TurnObject)),_xmlmaker,SLOT(sendStat(TurnObject)));
+    connect(_game,SIGNAL(send_votelist(QList<VoteObject*>)),_xmlmaker,SLOT(slotSendVoteList(QList<VoteObject*>)));
+    connect(_game,SIGNAL(send_changes(TurnObject)),_xmlmaker,SLOT(slotSendTurn(TurnObject)));
+    connect(_game,SIGNAL(send_stat(TurnObject)),_xmlmaker,SLOT(slotSendStat(TurnObject)));
 
     connect(_game,SIGNAL(GuiUpdatePlayerlist(QList<player*>)),this,SLOT(updatePlayerlist(QList<player*>)));
     connect(_game,SIGNAL(GuiUpdateVotelist()),this,SLOT(UpdateVotelist()));
     connect(_game,SIGNAL(GuiMess2Log(QString,QString)),this,SLOT(onAddLogToGui(QString,QString)));
-
-    connect(_game,SIGNAL(send_nightmare(QQueue<TurnObject>,QMap<QString,player*>)),
-            _xmlmaker,SLOT(nightmare(QQueue<TurnObject>,QMap<QString,player*>)));
-
-
 }
 
 MainWindow::~MainWindow()

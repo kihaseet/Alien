@@ -7,7 +7,7 @@ xml_maker::xml_maker()
 
 
 
-void xml_maker::new_analise(int _name,const QString input){
+void xml_maker::newAnalise(int _name,const QString input){
 
     if(input!="New connection")
     {
@@ -26,16 +26,16 @@ void xml_maker::new_analise(int _name,const QString input){
                 case TT_NOTHING:
                     break;
                 case TT_REGNAME:
-                    emit newname(RegisterObject(_name,TT_REGNAME,turn.targets.first()));
+                    emit sigRegisterCreate(RegisterObject(_name,TT_REGNAME,turn.targets.first()));
                     break;
                 case TT_REGROLE:
                     r = RegisterObject::RoleDescr.value(turn.targets.first(), RT_UNKNOWN);
                     if (r != RT_UNKNOWN) {
-                        emit registerRolebyPlayer(RegisterObject(_name,TT_REGROLE,RegisterObject::RoleDescr.value(turn.targets.first())));
+                        emit sigRegisterCreate(RegisterObject(_name,TT_REGROLE,RegisterObject::RoleDescr.value(turn.targets.first())));
                     }
                     break;
                 default:
-                    emit turn_create(_name,turn);
+                    emit sigTurnCreate(_name,turn);
                     break;
                 }
 
@@ -161,7 +161,7 @@ QQueue<QString> xml_maker::makeRotation(const QDomNode& node){
 
 
 
-void xml_maker::slotSendVotelist(QList<VoteObject*> votelist)
+void xml_maker::slotSendVoteList(QList<VoteObject*> votelist)
 {
 
     QDomDocument doc("vote");
@@ -174,10 +174,10 @@ void xml_maker::slotSendVotelist(QList<VoteObject*> votelist)
             domVote.appendChild(domVotes);
         }
     }
-    emit send_to_all(doc.toString());
+    emit sigSendToAll(doc.toString());
 }
 
-void xml_maker::sendStat(TurnObject turn)
+void xml_maker::slotSendStat(TurnObject turn)
 {
     QDomDocument doc("stat");
     QDomElement domStat = doc.createElement("stat");
@@ -188,17 +188,27 @@ void xml_maker::sendStat(TurnObject turn)
     switch (turn.type) {
     case TT_GETITEM:
         domEv = doc.createElement("additem");
-        domEv.setAttribute("name",TurnObject::ItemDescr.key(turn.item));
+        domEv.setAttribute("item",TurnObject::ItemDescr.key(turn.item));
         domEv.setAttribute("power",turn.targets.first().toInt());
         break;
     case TT_DELITEM:
         domEv = doc.createElement("delitem");
-        domEv.setAttribute("name",TurnObject::ItemDescr.key(turn.item));
+        domEv.setAttribute("item",TurnObject::ItemDescr.key(turn.item));
         break;
     case TT_CORRECT:
         domEv = doc.createElement("useditem");
-        domEv.setAttribute("name",TurnObject::ItemDescr.key(turn.item));
+        domEv.setAttribute("item",TurnObject::ItemDescr.key(turn.item));
         break;
+    case TT_ATTACK:
+    case TT_INFECT:
+        domEv = doc.createElement("useaction");
+        domEv.setAttribute("action",TurnObject::TurnDescr.key(turn.type));
+        break;
+    case TT_CHARGERED:
+        domEv = doc.createElement("chargeitem");
+        domEv.setAttribute("item",TurnObject::ItemDescr.key(turn.item));
+        break;
+
     case TT_ALIEN:
         domEv = doc.createElement("alien");
         break;
@@ -210,10 +220,10 @@ void xml_maker::sendStat(TurnObject turn)
         break;
     }
     domStat.appendChild(domEv);
-    emit sendtoclient(turn.wh->SocketId,doc.toString());
+    emit sigSendToClient(turn.wh->SocketId,doc.toString());
 }
 
-void xml_maker::sendTurn(TurnObject turn)
+void xml_maker::slotSendTurn(TurnObject turn)
 {
     QDomDocument doc("change");
 
@@ -226,57 +236,51 @@ void xml_maker::sendTurn(TurnObject turn)
 
     switch (turn.type) {
     case TT_USE_ITEM:
-    case TT_USE_BADGE:
         domEv.setAttribute("useitem",TurnObject::ItemDescr.key(turn.item));
         foreach (QString name, turn.targets) {
             domEv.appendChild(doc.createElement(name));
         }
-        emit send_to_all(doc.toString());
+        break;
+        case TT_USE_BADGE:
+        domEv.setAttribute("usebadge",TurnObject::ItemDescr.key(turn.item));
+        if(!turn.targets.isEmpty())
+            domEv.appendChild(doc.createElement(turn.targets.first()));
         break;
     case TT_ULT_ITEM:
         domEv.setAttribute("useult",TurnObject::ItemDescr.key(turn.item));
         foreach (QString name, turn.targets) {
             domEv.appendChild(doc.createElement(name));
         }
-        emit send_to_all(doc.toString());
         break;
     case TT_UP:
         domEv.setAttribute("status","up");
-        emit send_to_all(doc.toString());
         break;
     case TT_DOWN:
         domEv.setAttribute("status","down");
-        emit send_to_all(doc.toString());
         break;
     case TT_DIED:
         domEv.setAttribute("status","died");
-        emit send_to_all(doc.toString());
         break;
     case TT_DUTY:
         domEv.setAttribute("status","duty");
-        emit send_to_all(doc.toString());
         break;
     case TT_GETROLE:
         domEv.setAttribute("getrole",turn.targets.first());
-        emit send_to_all(doc.toString());
         break;
     case TT_DELROLE:
         domEv.setAttribute("delrole",turn.targets.first());
-        emit send_to_all(doc.toString());
         break;
     case TT_VOTE:
         domEv.setAttribute("voting","up");
         domEv.appendChild(doc.createElement(turn.targets.first()));
-        emit send_to_all(doc.toString());
         break;
     case TT_UNVOTE:
         domEv.setAttribute("voting","down");
-        emit send_to_all(doc.toString());
         break;
     default:
         break;
     }
-
+    emit sigSendToAll(doc.toString());
 }
 
 
@@ -294,42 +298,34 @@ void xml_maker::slotStartGame(QList<player*>playerlist)
 
     foreach (player* corpse, playerlist) {
         QDomElement body = makeElement(doc,corpse->name,"status","",QString::number(corpse->healthy+1));
-        if(corpse->rolelist.size() > 1)
         {
             foreach (ROLE role, corpse->rolelist) {
                 body.appendChild(doc.createElement(RegisterObject::RoleDescr.key(role)));
             }
-        }else
-        {
-            QDomAttr domAttr = doc.createAttribute("role");
-            domAttr.setValue(RegisterObject::RoleDescr.key(corpse->rolelist.first()));
-            body.setAttributeNode(domAttr);
+            body.setAttribute("online",1);
+            body.setAttribute("onduty",0);
+            body.setAttribute("avatar",0);
+
+            domElementList.appendChild(body);
         }
-        domElementList.appendChild(body);
     }
-    emit send_to_all(doc.toString());
+        emit sigSendToAll(doc.toString());
 }
 
-void xml_maker::slotStartDay(int day)
+void xml_maker::slotStartPhase(bool isDay, int dayNo)
 {
     QDomDocument doc("init");
 
     QDomElement domElement = doc.createElement("init");
     doc.appendChild(domElement);
 
-    domElement.appendChild(makeElement(doc,"daytime","N","",QString::number(day)));
-    emit send_to_all(doc.toString());
-}
-
-void xml_maker::slotStartNight(int day)
-{
-    QDomDocument doc("init");
-
-    QDomElement domElement = doc.createElement("init");
-    doc.appendChild(domElement);
-
-    domElement.appendChild(makeElement(doc,"nighttime","N","",QString::number(day)));
-    emit send_to_all(doc.toString());
+    if(isDay)
+        domElement.appendChild(
+                    makeElement(doc,"daytime","N","",QString::number(dayNo)));
+    else
+        domElement.appendChild(
+                    makeElement(doc,"nighttime","N","",QString::number(dayNo)));
+    emit sigSendToAll(doc.toString());
 }
 
 void xml_maker::slotStartVoting(ROLE target,QList<QString>list)
@@ -344,9 +340,9 @@ void xml_maker::slotStartVoting(ROLE target,QList<QString>list)
     domVoting.setAttribute("for",RegisterObject::RoleDescr.key(target));
 
     foreach (QString body, list) {
-        domVoting.appendChild(doc.createElement(body));
+        domVoting.appendChild(makeElement(doc,body,"vote","","0"));
     }
-    emit send_to_all(doc.toString());
+    emit sigSendToAll(doc.toString());
 }
 
 void xml_maker::slotEndVoting(ROLE target,QString name,QString result = QString())
@@ -368,56 +364,41 @@ void xml_maker::slotEndVoting(ROLE target,QString name,QString result = QString(
             domEl.setAttribute("result",result);
         }
     }
-    emit send_to_all(doc.toString());
+    emit sigSendToAll(doc.toString());
 }
 
 
-void xml_maker::slotnamecorrect(int tempname){
+void xml_maker::slotNameCorrect(int tempname, bool isCorrect) {
     QDomDocument doc("select");
 
     QDomElement domElement = doc.createElement("select");
     doc.appendChild(domElement);
 
-    domElement.appendChild(doc.createElement("namecorrect"));
-    emit sendtoclient(tempname,doc.toString());
+    if(isCorrect)
+        domElement.appendChild(doc.createElement("namecorrect"));
+    else
+        domElement.appendChild(doc.createElement("nonamecorrect"));
+    emit sigSendToClient(tempname,doc.toString());
 }
 
 
-void xml_maker::nonamecorrect(int tempname){
+
+void xml_maker::slotRoleCorrect(int _name, bool isCorrect) {
     QDomDocument doc("select");
 
     QDomElement domElement = doc.createElement("select");
     doc.appendChild(domElement);
 
-    domElement.appendChild(doc.createElement("nonamecorrect"));
+    if(isCorrect)
+        domElement.appendChild(doc.createElement("rolecorrect"));
+    else
+        domElement.appendChild(doc.createElement("norolecorrect"));
 
-    emit sendtoclient(tempname,doc.toString());
-}
-
-void xml_maker::rolecorrect(int _name){
-    QDomDocument doc("select");
-
-    QDomElement domElement = doc.createElement("select");
-    doc.appendChild(domElement);
-
-    domElement.appendChild(doc.createElement("rolecorrect"));
-
-    emit sendtoclient(_name,doc.toString());
-}
-
-void xml_maker::norolecorrect(int _name){
-    QDomDocument doc("select");
-
-    QDomElement domElement = doc.createElement("select");
-    doc.appendChild(domElement);
-
-    domElement.appendChild(doc.createElement("norolecorrect"));
-
-    emit sendtoclient(_name,doc.toString());
+    emit sigSendToClient(_name,doc.toString());
 }
 
 
-void xml_maker::updaterolelist(QList <player*> NameRolelist){
+void xml_maker::slotUpdateRoleList(QList <player*> NameRolelist){
     QDomDocument doc("select");
     QDomElement domEl = doc.createElement("select");
     doc.appendChild(domEl);
@@ -428,8 +409,10 @@ void xml_maker::updaterolelist(QList <player*> NameRolelist){
         domElement.appendChild(domP);
         if(!jt->rolelist.isEmpty())
             domP.appendChild(makeElement(doc,"role","",RegisterObject::RoleDescr.key(jt->rolelist.first()),""));
+        else
+            domP.appendChild(makeElement(doc,"role","","none",""));
     }
-    emit send_to_all(doc.toString());
+    emit sigSendToAll(doc.toString());
 }
 
 

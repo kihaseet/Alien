@@ -447,7 +447,7 @@ void game::day(){
             check_HP(v);
         }
         currentday++;
-        emit startday(currentday);
+        emit startPhase(currentday, daytime);
         emit GuiMess2Log("[Game]","Start Day "+QString::number(currentday));
         day_check_over();
     }else emit game_over();
@@ -650,7 +650,7 @@ void game::night_start(){
         v->infecting = false;
         make_actionlist(v);
     }
-    emit startnight(currentday);
+    emit startPhase(currentday, daytime);
 }
 
 void game::StartRandomEvasion(){
@@ -1158,19 +1158,22 @@ bool game::makeNightActoins()
 
 void game::register_new_player(RegisterObject reg)//(int tempname, TurnObject turn)
 {
-    if(!playerlist->contains(reg.name))
-    {
-        connectedName.insert(reg.ID,reg.name);
-        player* noob = new player(reg.name,reg.ID);
-        playerlist->insert(noob->name,noob);
-        emit namecorrect(reg.ID);
+    if(reg.target == TT_REGNAME) {
+        bool ok = playerlist->contains(reg.name);
+        if(!ok)
+        {
+            connectedName.insert(reg.ID,reg.name);
+            player* noob = new player(reg.name,reg.ID);
+            playerlist->insert(noob->name,noob);
+        }
+            emit namecorrect(reg.ID,ok);
+
+        slotSendRolelist();
+
+        emit GuiUpdatePlayerlist(playerlist->values());
     }
     else
-        emit nonamecorrect(reg.ID);
-
-    slotSendRolelist();
-    
-    emit GuiUpdatePlayerlist(playerlist->values());
+        registerRolebyPlayer(reg);
 }
 
 void game::slotSendRolelist(){
@@ -1198,15 +1201,15 @@ void game::registerRolebyPlayer(RegisterObject reg)
     {
         if(playerlist->value(reg.name)->rolelist.isEmpty())
         {
-            if(unclame_rolelist.contains(reg.role))
+            bool ok = unclame_rolelist.contains(reg.role);
+            if(ok)
             {
                 unclame_rolelist.removeOne(reg.role);
                 rolelist.insertMulti(reg.role,playerlist->value(reg.name));
                 playerlist->value(reg.name)->rolelist.append(reg.role);
                 passengerlist.removeOne(reg.name);
-                emit rolecorrect(reg.ID);
             }
-            else norolecorrect(reg.ID);
+            rolecorrect(reg.ID,ok);
         }
         else
         {
@@ -1217,7 +1220,7 @@ void game::registerRolebyPlayer(RegisterObject reg)
                 unclame_rolelist.append(var);
             }
             playerlist->value(reg.name)->rolelist.append(reg.role);
-            emit rolecorrect(reg.ID);
+            emit rolecorrect(reg.ID,true);
         }
         
         if(unclame_rolelist.isEmpty())
@@ -1233,7 +1236,7 @@ void game::registerRolebyPlayer(RegisterObject reg)
     {
         passengerlist.append(reg.name);
         playerlist->value(reg.name)->rolelist.append(reg.role);
-        emit rolecorrect(reg.ID);
+        emit rolecorrect(reg.ID,true);
     }
     slotSendRolelist();
     emit GuiUpdatePlayerlist(playerlist->values());

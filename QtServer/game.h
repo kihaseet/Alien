@@ -66,18 +66,15 @@ signals:
     void startnewsessionenable(bool check);
 
     void startgame(QList<player*>list);
-    void startday(int day);
-    void startnight(int night);
+    void startPhase(int dayNo,bool day);
     void startvote(ROLE tar,QList<QString>list);
     void endvote(ROLE role,QString name,QString result);
     void send_votelist(QList<VoteObject*>list);
     void send_changes(TurnObject turn);
     void send_stat(TurnObject turn);
 
-    void namecorrect(int name);
-    void nonamecorrect(int name);
-    void rolecorrect(int name);
-    void norolecorrect(int name);
+    void namecorrect(int name, bool isCorr);
+    void rolecorrect(int name, bool isCorr);
     void sendrolelist2all(QList <player*> pllst);
     void game_over();
 

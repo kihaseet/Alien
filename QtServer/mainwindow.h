@@ -25,7 +25,7 @@ public:
 private:
     Ui::MainWindow *ui;
     Server* _serv;
-    xml_maker* _xmlmaker;
+    Protocol* _xmlmaker;
     game* _game;
 
 public slots:
