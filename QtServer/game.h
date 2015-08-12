@@ -26,7 +26,6 @@ public:
     QString mopper;//дежурный
     ITEM forrepowered; //предмет, который можно юзать за счет батарейки
 
-    TurnObject* _event;//объект текущего события
     voting* _currvoting;//объект текущего голосования
     QQueue <TurnObject> _nightque;//очередь ночных событий
     game();
@@ -48,16 +47,16 @@ public:
     void player_death(player *dead);
     void check_for_role(ROLE role);
     void check_HP(player *w);
-    void day_end_curr_voting(QString winner);
+    void dayEndCurrVoting(QString winner);
     void make_actionlist(player* who);
     void getItemByRoleAll();
     bool make_events_check(TurnObject turn);
     void day_check_over();
-    void do_events(TurnObject TO);
+    void doEvents(TurnObject TO);
 //обязательно понадобится проверка на изменение количества игроков во время голосования (убийство, дисконнект)
     //и собственно динамическое изменение голосов
     
-    void slot_attack(TurnObject TO);
+    void slotAttack(TurnObject TO);
 
 signals:
     void GuiUpdatePlayerlist(QList<player*>list);
@@ -65,13 +64,13 @@ signals:
     void GuiMess2Log(QString name,QString msg);
     void startnewsessionenable(bool check);
 
-    void startgame(QList<player*>list);
+    void startGame(QList<player*>list);
     void startPhase(int dayNo,bool day);
     void startvote(ROLE tar,QList<QString>list);
     void endvote(ROLE role,QString name,QString result);
     void send_votelist(QList<VoteObject*>list);
     void send_changes(TurnObject turn);
-    void send_stat(TurnObject turn);
+    void sendStat(TurnObject turn);
 
     void namecorrect(int name, bool isCorr);
     void rolecorrect(int name, bool isCorr);
@@ -85,37 +84,37 @@ signals:
 
 
 public slots:
-    void register_new_player(RegisterObject reg);
-    void registerRolebyPlayer(RegisterObject reg);
+    void registerNewPlayer(RegisterObject reg);
+    void registerRoleByPlayer(RegisterObject reg);
     void slotSendRolelist();
-    void slot_disconnected(int na);
+    void slotDisconnected(int na);
     
-    void slot_infect(TurnObject TO);
-    void slot_wait(TurnObject TO);
-    void slot_up(TurnObject TO);
-    void slot_down(TurnObject TO);
-    void slot_alien(TurnObject TO);
-    void slot_getitem(TurnObject turn);
-    void slot_vote(TurnObject turn);
-    void slot_unvote(TurnObject turn);
-    void add_role(player *whom, ROLE what);
-    void delete_role(player *whom, ROLE what);
-    void slot_use_item(TurnObject turn);
-    void slot_ult_item(TurnObject turn);
+    void slotInfect(TurnObject TO);
+    void slotWait(TurnObject TO);
+    void slotUp(TurnObject TO);
+    void slotDown(TurnObject TO);
+    void slotAlien(TurnObject TO);
+    void slotGetItem(TurnObject turn);
+    void slotVote(TurnObject turn);
+    void slotUnvote(TurnObject turn);
+    void addRole(player *whom, ROLE what);
+    void deleteRole(player *whom, ROLE what);
+    void slotUseItem(TurnObject turn);
+    void slotUltItem(TurnObject turn);
     void add_item(){}
     void delete_item(){}
     void start();
     void day();
-    void day_next_voting();
-    void day_resolve_curr_voting(QList<QString> win);
-    void day_cap_curr_voting(QString win);
+    void dayNextVoting();
+    void dayResolveCurrVoting(QList<QString> win);
+    void dayCapCurrVoting(QString win);
     void check_for_role_capDecision(QString whom);
     void night_start();
     bool night();
     void make_events(int wwh, TurnObject turn);
-    void slot_use_item_cap(TurnObject turn);
-    void day_canseled_voting();
-    void slot_game_over();
+    void slotUseItemCap(TurnObject turn);
+    void dayCanseledVoting();
+    void slotGameOver();
 
 };
 

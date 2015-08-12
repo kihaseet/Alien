@@ -25,13 +25,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(_serv,SIGNAL(client_disconnected(int)),_game,SLOT(slot_disconnected(int)));
     connect(_serv,SIGNAL(client_connected()),_game,SLOT(slotSendRolelist()));
 
-    connect(_xmlmaker,SIGNAL(sigRegisterCreate(RegisterObject)),_game,SLOT(register_new_player(RegisterObject)));
+    connect(_xmlmaker,SIGNAL(sigRegisterCreate(RegisterObject)),_game,SLOT(registerNewPlayer(RegisterObject)));
     connect(_xmlmaker,SIGNAL(sigSendToClient(int,QString)),_serv,SLOT(slotsendToClient(int,QString)));
     connect(_xmlmaker,SIGNAL(sigSendToAll(QString)),_serv,SLOT(send2all(QString)));
     connect(_xmlmaker,SIGNAL(sigTurnCreate(int,TurnObject)),
             _game,SLOT(make_events(int,TurnObject)));
 
-    connect(_game,SIGNAL(startgame(QList<player*>)),_xmlmaker,SLOT(slotStartGame(QList<player*>)));
+    connect(_game,SIGNAL(startGame(QList<player*>)),_xmlmaker,SLOT(slotStartGame(QList<player*>)));
     connect(_game,SIGNAL(namecorrect(int,bool)),_xmlmaker,SLOT(slotNameCorrect(int,bool)));
     connect(_game,SIGNAL(sendrolelist2all (QList <player*>)),_xmlmaker,SLOT(updaterolelist(QList <player*>)));
     connect(_game,SIGNAL(rolecorrect(int,bool)),_xmlmaker,SLOT(slotRoleCorrect(int,bool)));

@@ -46,7 +46,7 @@ Badge::Badge(game *_g){
 
 void Badge::use_item_day(QQueue<QString> whom){
     if(_game->hardresolve)
-        _game->day_cap_curr_voting(whom.first());
+        _game->dayCapCurrVoting(whom.first());
     else
         _game->check_for_role_capDecision(whom.first());
     qDebug()<<"Badge::use_item_day()";
@@ -100,7 +100,7 @@ void Blaster::ult_item(QQueue<QString> whom){
     qDebug()<<"Blaster::ult_item(QString whom)"<<whom;
     _game->playerlist->value(whom.first())->HP -= 1;
     if(_game->daytime)
-        _game->slot_down(TurnObject(TT_DOWN,whom));
+        _game->slotDown(TurnObject(TT_DOWN,whom));
     _game->check_HP(_game->playerlist->value(whom.first()));
 
     this->power = -1;
@@ -119,7 +119,7 @@ void Injector::use_item_day(QQueue<QString> whom)
     _game->playerlist->value(whom.first())->HP += 1;
     _game->check_HP(_game->playerlist->value(whom.first()));
     if(_game->daytime && _game->playerlist->value(whom.first())->status == 2)
-        _game->slot_up(TurnObject(TT_UP,whom));
+        _game->slotUp(TurnObject(TT_UP,whom));
     this->power = 2;
 }
 
@@ -140,7 +140,7 @@ void Injector::ult_item(QQueue<QString> whom){
         }
         if(!v->healthy)
         {
-            _game->slot_up(TurnObject(TT_UP,v->name));
+            _game->slotUp(TurnObject(TT_UP,v->name));
         }
     }
     this->power = -1;
@@ -164,7 +164,7 @@ void Notebook::use_item_day(QQueue<QString> whom){
     else if(_game->hardresolve)
     {
         this->power = 2;
-        _game->day_end_curr_voting(whom.first());
+        _game->dayEndCurrVoting(whom.first());
     }
 }
 
@@ -174,7 +174,7 @@ void Notebook::ult_item(QQueue<QString> whom){
     if(!_game->_currvoting->is_over || _game->hardresolve)
     {
         this->power=-1;
-        _game->day_canseled_voting();
+        _game->dayCanseledVoting();
     }
 }
 
@@ -238,7 +238,7 @@ void Scanner::ult_item(QQueue<QString> whom){
                 var->HP -= 2;
                 if(_game->daytime)
                 {
-                    _game->slot_down(TurnObject(TT_DOWN,var->name));
+                    _game->slotDown(TurnObject(TT_DOWN,var->name));
                 }
             }
         }

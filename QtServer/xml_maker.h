@@ -41,14 +41,6 @@ public slots:
     void slotEndVoting(ROLE target,QString name,QString result);
     void slotSendTurn(TurnObject turn);
     void slotSendStat(TurnObject turn);
-
-signals:
-    /*void turn_create(int who,TurnObject turn);
-    void newname(RegisterObject turn);
-    void sendtoclient(int _name,QString _xmldoc);
-    void send_to_all(QString _xmldoc);
-    void registerRolebyPlayer(RegisterObject turn);*/
-
 };
 
 

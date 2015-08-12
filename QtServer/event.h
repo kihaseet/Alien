@@ -9,7 +9,7 @@ class player;
 struct TurnObject{
 public:
     TURN_TYPE type;
-    QQueue<QString> targets;
+    QVariant targets;
     ITEM item;
     
     player* wh;
@@ -22,20 +22,11 @@ public:
     static QMap<ROLE, ITEM> initColumnRT();
 
     TurnObject(TURN_TYPE type,
-               QStringList targets = QQueue<QString>(),
+               QVariant targets = QVariant(),
                ITEM item = IT_UNKNOW)
     {
         this->item = item;
-        this->targets.append(targets);
-        this->type = type;
-    }
-
-    TurnObject(TURN_TYPE type,
-               QString target,
-               ITEM item = IT_UNKNOW)
-    {
-        this->item = item;
-        this->targets.append(target);
+        this->targets = targets;
         this->type = type;
     }
 
@@ -48,14 +39,14 @@ public:
     TurnObject()
     {
         item = IT_UNKNOW;
-        targets = QQueue<QString>();
+        targets = QVariant();
         type = TT_SKIP;
     }
 
     friend bool operator == (const TurnObject& left, const TurnObject& right)
     {
         bool t = true;
-        if(! (right.targets.isEmpty() || left.targets.isEmpty()))
+        if(! (right.targets.toList().isEmpty() || left.targets.toList().isEmpty()))
         {
             foreach (QString name, right.targets)
             {
@@ -66,7 +57,7 @@ public:
                 }
             }
             if((right.item == IT_ROTATION && left.item == IT_ROTATION) &&
-                    (right.targets.count() != left.targets.count()))
+                    (right.targets.toList().count() != left.targets.toList().count()))
             {
                 t = false;
             }
