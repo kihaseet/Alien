@@ -19,7 +19,7 @@ public slots:
     virtual void slotDisconnected(QList<player*>playerlist) = 0;
 
     virtual void slotStartGame(QList<player*>playerlist) = 0;
-    virtual void slotStartPhase(bool isDay, int dayNo) = 0;
+    virtual void slotStartPhase(int dayNo, bool isDay) = 0;
     virtual void slotStartVoting(ROLE target,QList<QString>list) = 0;
     virtual void slotEndVoting(ROLE target,QString name,QString result) = 0;
 

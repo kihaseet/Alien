@@ -33,11 +33,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
     connect(_game,SIGNAL(startgame(QList<player*>)),_xmlmaker,SLOT(slotStartGame(QList<player*>)));
     connect(_game,SIGNAL(namecorrect(int,bool)),_xmlmaker,SLOT(slotNameCorrect(int,bool)));
-    connect(_game,SIGNAL(sendrolelist2all (QList <player*>)),_xmlmaker,SLOT(updaterolelist(QList <player*>)));
+    connect(_game,SIGNAL(sendrolelist2all (QList <player*>)),_xmlmaker,SLOT(slotUpdateRoleList(QList<player*>)));
     connect(_game,SIGNAL(rolecorrect(int,bool)),_xmlmaker,SLOT(slotRoleCorrect(int,bool)));
     connect(_game,SIGNAL(startnewsessionenable(bool)),this,SLOT(newGameSessionStatus(bool)));
 
-    connect(_game,SIGNAL(startPhase(int,bool)),_xmlmaker,SLOT(slotStartPhase(bool,int)));
+    connect(_game,SIGNAL(startPhase(int,bool)),_xmlmaker,SLOT(slotStartPhase(int, bool)));
     connect(_game,SIGNAL(startvote(ROLE,QList<QString>)),_xmlmaker,SLOT(slotStartVoting(ROLE,QList<QString>)));
     connect(_game,SIGNAL(endvote(ROLE,QString,QString)),_xmlmaker,SLOT(slotEndVoting(ROLE,QString,QString)));
 

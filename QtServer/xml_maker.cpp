@@ -312,7 +312,7 @@ void xml_maker::slotStartGame(QList<player*>playerlist)
         emit sigSendToAll(doc.toString());
 }
 
-void xml_maker::slotStartPhase(bool isDay, int dayNo)
+void xml_maker::slotStartPhase(int dayNo, bool isDay)
 {
     QDomDocument doc("init");
 

@@ -36,7 +36,7 @@ public slots:
     void slotDisconnected(QList<player *> playerlist){}
 
     void slotStartGame(QList<player*>playerlist);
-    void slotStartPhase(bool isDay, int dayNo);
+    void slotStartPhase(int dayNo, bool isDay);
     void slotStartVoting(ROLE target,QList<QString>list);
     void slotEndVoting(ROLE target,QString name,QString result);
     void slotSendTurn(TurnObject turn);
