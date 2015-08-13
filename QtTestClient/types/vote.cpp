@@ -16,7 +16,12 @@ QString Vote::getVotingFor()
     return this->votingFor;
 }
 
-Player *Vote::getCurrentTarget()
+QString Vote::getCurrentTarget()
 {
     return this->currentTarget;
+}
+
+void Vote::setCurrentTarget(QString name)
+{
+    this->currentTarget = name;
 }

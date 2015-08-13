@@ -7,3 +7,10 @@ IEvent::IEvent(QString what, QString who, QString target)
     this->target = target;
 }
 
+IEvent::IEvent(IEvent &e)
+{
+    this->who = e.getWho();
+    this->what = e.getWhat();
+    this->target = e.getTarget();
+}
+

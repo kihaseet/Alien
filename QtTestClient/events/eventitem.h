@@ -12,7 +12,8 @@ class EventItem : public IEvent
     ITarget item;
 public:
     EventItem(QString what, QString who, QString target, ITarget item);
-    virtual QString getDisplayMsg();
+    EventItem(const EventItem& e);
+    virtual QString getDisplayMsg() const;
 };
 
 #endif // EVENTITEM_H

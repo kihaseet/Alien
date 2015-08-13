@@ -9,9 +9,9 @@
 
 enum TabType
 {
-    TAB_DAY,
-    TAB_PROFILE,
-    TAB_LOG
+    TAB_DAY = 0,
+    TAB_PROFILE = 1,
+    TAB_LOG = 2
 };
 
 struct GameTab

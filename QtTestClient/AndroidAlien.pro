@@ -46,7 +46,8 @@ SOURCES += main.cpp \
     gametabs.cpp \
     qplayerwidget.cpp \
     statupdate/statchargeitem.cpp \
-    types/itemtype.cpp
+    types/itemtype.cpp \
+    gameconfig.cpp
 
 HEADERS  += gameclient.h \
     types/action.h \
@@ -82,7 +83,9 @@ HEADERS  += gameclient.h \
     qclickablelabel.h \
     gametabs.h \
     qplayerwidget.h \
-    statupdate/statchargeitem.h
+    statupdate/statchargeitem.h \
+    gameconfig.h \
+    types/eventtype.h
 
 FORMS    += \
     mainwindow.ui \

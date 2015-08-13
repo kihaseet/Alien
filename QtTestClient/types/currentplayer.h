@@ -36,6 +36,7 @@ public:
     bool isInfected();
     void setAlien(bool _isAlien);
     QVector<Action> getActions();
+    Action* getAction(ActionType actionType);
     void setActions(QVector<Action> actions);
     bool getYetAttack();
     bool getYetInfect();

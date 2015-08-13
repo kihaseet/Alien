@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QtGui>
 #include <QtCore>
+#include <QMainWindow>
 
 
 #include "server.h"

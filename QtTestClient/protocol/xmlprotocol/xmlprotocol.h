@@ -11,7 +11,7 @@
 #include <QWaitCondition>
 #include <QMutex>
 
-class XmlProtocol : public QObject, public IProtocol
+class XmlProtocol : public IProtocol
 {
     Q_OBJECT
 public:
@@ -35,26 +35,11 @@ private:
                              const QString strAttr = QString(),
                              const QString strText = QString(),
                              const QString strAttrText = QString());
-
-signals:
-    void nameCorrect();
-    void nameIncorrect();
-    void roleCorrect();
-    void roleIncorrect();
-    void dayTime(int day);
-    void nightTime();
-    void startVote(Vote vote);
-    void endVote(EndVote endvote);
-    void playerUlted(ItemType item);
-    void playersUpdate(QVector<Player> players);
-    void statUpdate(IStatUpdate stat);
-    void event(IEvent event);
-    void errorMessage(QString message);
-    void disconnected();
 public slots:
     void GetData(QString msg);
     void errormess(QString mess);
     void sig_disconnect();
+    void sig_connected();
 };
 
 #endif // XMLPROTOCOL_H

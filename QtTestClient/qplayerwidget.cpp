@@ -3,10 +3,15 @@
 
 void QPlayerWidget::mouseReleaseEvent(QMouseEvent *)
 {
-    emit clicked();
+    emit clicked(this->player.getName());
 }
 
-QPlayerWidget::QPlayerWidget(QWidget *parent) :
+QPlayerWidget::QPlayerWidget(QWidget *parent) : QPlayerWidget(Player(), parent)
+{
+
+}
+
+QPlayerWidget::QPlayerWidget(Player p, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::QPlayerWidget)
 {
@@ -15,6 +20,9 @@ QPlayerWidget::QPlayerWidget(QWidget *parent) :
     roleWidgets.push_back(ui->lRole1);
     roleWidgets.push_back(ui->lRole2);
     roleWidgets.push_back(ui->lRole3);
+
+    this->setPlayer(p);
+    this->setVote(-1);
 }
 
 QPlayerWidget::~QPlayerWidget()
@@ -36,6 +44,11 @@ void QPlayerWidget::setPlayer(Player &p)
     ui->fPlayerImage->setStyleSheet("#fPlayerImage {background-image: url(:/player_avatar/0);}");
 }
 
+Player &QPlayerWidget::getPlayer()
+{
+    return this->player;
+}
+
 void QPlayerWidget::setVote(int vote)
 {
     if (vote == -1)
@@ -44,6 +57,11 @@ void QPlayerWidget::setVote(int vote)
     }
     else
     {
-        ui->lVotes->setText(QString(vote));
+        ui->lVotes->setText(QString::number(vote));
     }
+}
+
+void QPlayerWidget::makeSelectable(bool selectable)
+{
+    this->setEnabled(selectable);
 }

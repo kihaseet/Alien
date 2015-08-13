@@ -2,10 +2,13 @@
 
 EventDuty::EventDuty(QString who) : IEvent("", who, "")
 {
-
 }
 
-QString EventDuty::getDisplayMsg()
+EventDuty::EventDuty(const EventDuty &e) : IEvent(e.getWhat(), e.getWho(), e.getTarget())
+{
+}
+
+QString EventDuty::getDisplayMsg() const
 {
     return who + " ыстал на дежурство.";
 }

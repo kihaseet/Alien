@@ -17,9 +17,12 @@ enum ItemType
     IT_FETUS
 };
 
+#define ITEMTYPE_LAST 8
+
 namespace ItemTypeProcess
 {
     ItemType ItemTypeByName(QString it);
+    QString ItemTypeToString(ItemType item);
 }
 
 #endif // ITEMTYPE_H

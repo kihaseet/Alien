@@ -16,6 +16,7 @@ public:
 
 signals:
     void onclick();
+    void onMouseClick(QPoint point);
 };
 
 #endif // QCLICKABLELABEL_H

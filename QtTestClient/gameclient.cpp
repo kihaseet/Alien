@@ -1,5 +1,6 @@
 #include "gameclient.h"
 #include "types/currentplayer.h"
+#include <typeinfo>
 
 void GameClient::recalcActions()
 {
@@ -85,6 +86,8 @@ Player *GameClient::getPlayer(QString name)
             return &this->players[i];
         }
     }
+
+    return nullptr;
 }
 
 GameClient::GameClient()
@@ -96,6 +99,23 @@ GameClient::GameClient()
     this->voteTargets.clear();
     this->vote = nullptr;
     this->currentPlayer = new CurrentPlayer("", UP, QStringList(), PASSENGER);
+
+    ActionFactory::currentPlayer = this->currentPlayer;
+
+    QObject::connect(protocol, SIGNAL(dayTime(int)), this, SLOT(dayTime(int)));
+    QObject::connect(protocol, SIGNAL(disconnected()), this, SLOT(disconnected()));
+    QObject::connect(protocol, SIGNAL(connected()), this, SLOT(sig_connected()));
+    QObject::connect(protocol, SIGNAL(endVote(EndVote)), this, SLOT(endVote(EndVote)));
+    QObject::connect(protocol, SIGNAL(errorMessage(QString)), this, SLOT(errorMessage(QString)));
+    QObject::connect(protocol, SIGNAL(event(const IEvent&)), this, SLOT(sig_event(const IEvent&)));
+    QObject::connect(protocol, SIGNAL(nameCorrect()), this, SLOT(nameCorrect()));
+    QObject::connect(protocol, SIGNAL(nameIncorrect()), this, SLOT(nameIncorrect()));
+    QObject::connect(protocol, SIGNAL(nightTime()), this, SLOT(nightTime()));
+    QObject::connect(protocol, SIGNAL(playersUpdate(QVector<Player>)), this, SLOT(playersUpdate(QVector<Player>)));
+    QObject::connect(protocol, SIGNAL(playerUlted(ItemType)), this, SLOT(playerUlted(ItemType)));
+    QObject::connect(protocol, SIGNAL(roleCorrect()), this, SLOT(roleCorrect()));
+    QObject::connect(protocol, SIGNAL(startVote(Vote)), this, SLOT(startVote(Vote)));
+    QObject::connect(protocol, SIGNAL(statUpdate(IStatUpdate)), this, SLOT(statUpdate(IStatUpdate)));
 }
 
 Vote *GameClient::getCurrentVoting()
@@ -108,6 +128,20 @@ QVector<Player> GameClient::getPlayers()
     return this->players;
 }
 
+Player GameClient::getPlayerByName(QString name)
+{
+    Player* p = this->getPlayer(name);
+
+    if (p == nullptr)
+    {
+        throw std::exception();
+    }
+    else
+    {
+        return *p;
+    }
+}
+
 QVector<Player> GameClient::getVoteTargets()
 {
     return this->voteTargets.keys().toVector();
@@ -118,12 +152,22 @@ QVector<Player> GameClient::getOnDutyPlayers()
     return this->onDutyPlayers;
 }
 
+CurrentPlayer *GameClient::getCurrentPlayer()
+{
+    return this->currentPlayer;
+}
+
+QVector<ItemType> &GameClient::getWreckedItems()
+{
+    return this->ultedItems;
+}
+
 int GameClient::getCurrentDay()
 {
     return this->currentDay;
 }
 
-bool GameClient::connect(QString address)
+bool GameClient::connectToServer(QString address)
 {
     return protocol->_connect(address);
 }
@@ -144,19 +188,20 @@ bool GameClient::doAction(Action action)
 {
     if (action.getActionType() == TT_VOTE)
     {
-        this->lastVote = action.getTargets()[0];
+        this->vote->setCurrentTarget(action.getTargets()[0].getName());
     }
     else if (action.getActionType() == TT_UNVOTE)
     {
         QVector<ITarget> targets;
-        targets.push_back(this->lastVote);
+        targets.push_back(ITarget(this->vote->getCurrentTarget()));
         action.setTargets(targets);
+        this->vote->setCurrentTarget("");
     }
     protocol->doAction(action);
     return true;
 }
 
-void GameClient::disconnect()
+void GameClient::disconnectFromServer()
 {
     protocol->_disconnect();
 }
@@ -262,9 +307,45 @@ void GameClient::statUpdate(IStatUpdate stat)
     emit updateItems(this->currentPlayer->getItems());
 }
 
-void GameClient::event(IEvent event)
+void GameClient::sig_event(const IEvent &e)
 {
-    emit log(event.getDisplayMsg());
+    emit log(e.getDisplayMsg());
+
+    if (typeid(e) == typeid(EventVoting))
+    {
+        const EventVoting* event = ((const EventVoting*)&e);
+        for (auto& targetPlayer: this->voteTargets.keys())
+        {
+            if (targetPlayer.getName() == event->getTarget())
+            {
+                this->voteTargets[targetPlayer] += (event->getVoteUp() ? 1 : -1);
+                emit voteUpdate(targetPlayer.getName(), this->voteTargets[targetPlayer]);
+                break;
+            }
+        }
+    }
+    else if (typeid(e) == typeid(EventRole))
+    {
+        EventRole* event = ((EventRole*)&e);
+
+        Player* p = this->getPlayer(event->getTarget());
+
+        if (p != nullptr)
+        {
+            QStringList roles = p->getRoles();
+            if (event->gotRole())
+            {
+                roles.append(event->getRoleUpdate());
+            }
+            else
+            {
+                roles.removeAll(event->getRoleUpdate());
+            }
+            p->setRoles(roles);
+        }
+
+        emit updatePlayers(this->players);
+    }
 }
 
 void GameClient::errorMessage(QString message)
@@ -275,5 +356,10 @@ void GameClient::errorMessage(QString message)
 void GameClient::disconnected()
 {
     emit log("Disconnected for server.");
+}
+
+void GameClient::sig_connected()
+{
+    emit connected();
 }
 

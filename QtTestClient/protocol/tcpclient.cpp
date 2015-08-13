@@ -16,6 +16,9 @@ tcpclient::tcpclient()
 
 void tcpclient::sendData(QString document)
 {
+    qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
+    qDebug() << document;
+    qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
     QString tmp = document +'\n';
     QByteArray data = tmp.toLocal8Bit();
     serv->write(data);
@@ -44,7 +47,7 @@ QString tcpclient::processData(QString str)
         else
         {
             buffer = str.mid(0, dataSize);
-            GetData(buffer);
+            emit GetData(buffer);
             buffer = "";
             return str.mid(dataSize);
         }
@@ -87,23 +90,23 @@ void tcpclient::readData()
         QByteArray data = socket->readAll();
         QString tmp = data.data();
         tmp=tmp.trimmed();//полученное сообщение
-        qDebug() << "********************************NEW TCP DATA***********************************************";
-        qDebug() << "**************************TCP DATA*************************"
+        qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+        qDebug() << "**************************BULK START*************************"
                  << tmp
                  << endl
-                 << "**************************TCP DATA END*********************";
+                 << "**************************BULK END***************************";
 
         QString strToProcess = tmp;
 
         while((strToProcess = processData(strToProcess)).length() != 0)
         {
-            qDebug() << "******************** TCP CONTINUE PROCESS DATA ************************"
+            qDebug() << "******************** BLOCK START ************************"
                      << strToProcess
                      << endl
-                     << "******************** TCP CONTINUE PROCESS DATA END ********************";
+                     << "******************** BLOCK END **************************";
         }
 
-        qDebug() << "******************************END TCP DATA**************************************************";
+        qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
     }
 }
 
@@ -119,7 +122,7 @@ void tcpclient::slotError(QAbstractSocket::SocketError err)
 void tcpclient::slotConnected()
 {
     connect(serv,SIGNAL(disconnected()),this,SLOT(slotDisconect()));
-    emit errormess("Loading player's list...");
+    emit sig_connected();
 }
 
 void tcpclient::connect_(QString addr, int Port){

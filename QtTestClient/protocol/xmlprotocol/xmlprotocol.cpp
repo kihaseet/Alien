@@ -1,8 +1,10 @@
 #include "xmlprotocol.h"
 
-XmlProtocol::XmlProtocol() : QObject(0)
+XmlProtocol::XmlProtocol()
 {
-
+    connect(&tcpClient, SIGNAL(GetData(QString)), this, SLOT(GetData(QString)));
+    connect(&tcpClient, SIGNAL(sig_connected()), this, SLOT(sig_connected()));
+    connect(&tcpClient, SIGNAL(sig_disconnect()), this, SLOT(sig_disconnect()));
 }
 
 XmlProtocol::~XmlProtocol()
@@ -12,7 +14,7 @@ XmlProtocol::~XmlProtocol()
 
 bool XmlProtocol::_connect(QString &address)
 {
-    tcpClient.connect_(address, 27255);
+    tcpClient.connect_(address, 21277);
     return true;
 }
 
@@ -97,10 +99,6 @@ void XmlProtocol::doAction(Action &action)
         }
     }
 
-    qDebug() << "SEND XML: ******"
-             << endl
-             << doc.toString()
-             << "****************";
     tcpClient.sendData(doc.toString());
 }
 
@@ -112,11 +110,6 @@ void XmlProtocol::_disconnect()
 
     domElement.appendChild(makeElement(doc, "disconnect", "", "", ""));
 
-    qDebug() << "SEND XML: ******"
-             << endl
-             << doc.toString()
-             << "****************";
-
     tcpClient.sendData(doc.toString());
 }
 
@@ -127,7 +120,7 @@ void XmlProtocol::reconnect(QString &address)
 
 void XmlProtocol::GetData(QString data)
 {
-    qDebug() << "XML DATA: " << data;
+    qDebug() << "XmlProtocol: XML DATA: \n" << data;
     QStringList list = data.split("\n\n");
     for (QString& m: list) {
         QDomDocument domDoc;
@@ -162,6 +155,11 @@ void XmlProtocol::sig_disconnect()
     emit disconnected();
 }
 
+void XmlProtocol::sig_connected()
+{
+    emit connected();
+}
+
 void XmlProtocol::select(QDomElement node){
     node = node.firstChildElement();
 
@@ -173,10 +171,10 @@ void XmlProtocol::select(QDomElement node){
             emit roleCorrect();
         }
         else if(node.tagName() == "norolecorrect"){
-            emit nameIncorrect();
+            emit roleIncorrect();
         }
         else if (node.tagName() == "nonamecorrect") {
-            emit roleIncorrect();
+            emit nameIncorrect();
         }
         else if(node.tagName() == "list")
         {
@@ -256,7 +254,7 @@ void XmlProtocol::change(QDomElement node)
             else if (eventEl.hasAttribute("voting"))
             {
                 QString votingStatus = eventEl.attribute("voting");
-                QString target = eventEl.text();
+                QString target = eventEl.firstChildElement().tagName();
                 emit event(EventFactory::Voting(name, target, votingStatus == "up"));
             }
         }

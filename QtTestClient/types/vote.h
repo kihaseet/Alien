@@ -9,13 +9,14 @@
 class Vote
 {
     QString votingFor;
-    Player* currentTarget;
+    QString currentTarget;
     QStringList targets;
 public:
     Vote(QString votingFor, QStringList targets);
     QStringList getTargets();
     QString getVotingFor();
-    Player* getCurrentTarget();
+    QString getCurrentTarget();
+    void setCurrentTarget(QString name);
 };
 
 #endif // VOTE_H

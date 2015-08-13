@@ -10,7 +10,11 @@ class EventVoting : public IEvent
     QString result;
 public:
     EventVoting(QString who, QString target, bool VoteUp);
-    virtual QString getDisplayMsg();
+    EventVoting(const EventVoting& e);
+
+    virtual bool getVoteUp() const;
+
+    virtual QString getDisplayMsg() const;
 };
 
 #endif // EVENTVOTING_H

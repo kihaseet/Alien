@@ -24,12 +24,16 @@ protected:
 
 public:
     explicit QPlayerWidget(QWidget *parent = 0);
+    explicit QPlayerWidget(Player p, QWidget *parent = 0);
     ~QPlayerWidget();
 
     void setPlayer(Player& p);
+    Player& getPlayer();
     void setVote(int vote);
+
+    void makeSelectable(bool selectable);
 signals:
-    void clicked();
+    void clicked(QString name);
 private:
     Ui::QPlayerWidget *ui;
 };

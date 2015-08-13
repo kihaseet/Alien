@@ -9,7 +9,8 @@ class EventStatus : public IEvent
     Status status;
 public:
     EventStatus(QString who, Status status);
-    virtual QString getDisplayMsg();
+    EventStatus(const EventStatus& e);
+    virtual QString getDisplayMsg() const;
 };
 
 #endif // EVENTSTATUS_H

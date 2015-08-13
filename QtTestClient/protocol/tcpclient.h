@@ -27,6 +27,7 @@ signals:
     void GetData(QString msg);
     void errormess(QString mess);
     void sig_disconnect();
+    void sig_connected();
 };
 
 #endif // TCPCLIENT_H

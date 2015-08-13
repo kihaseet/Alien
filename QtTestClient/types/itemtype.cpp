@@ -39,3 +39,31 @@ ItemType ItemTypeProcess::ItemTypeByName(QString it)
         return IT_ROTATION;
     }
 }
+
+
+QString ItemTypeProcess::ItemTypeToString(ItemType item)
+{
+    switch(item)
+    {
+    case IT_BADGE:
+        return "Badge";
+    case IT_BATTERY:
+        return "Battery";
+    case IT_BLASTER:
+        return "Blaster";
+    case IT_FETUS:
+        return "Fetus";
+    case IT_INJECTOR:
+        return "Injector";
+    case IT_MOP:
+        return "Mop";
+    case IT_NOTEBOOK:
+        return "Notebook";
+    case IT_ROTATION:
+        return "Rotation";
+    case IT_SCANNER:
+        return "Scanner";
+    case IT_UNKNOW:
+        return "Unknown";
+    }
+}

@@ -17,13 +17,12 @@ class GameClient : public QObject
     bool Night;
     Vote* vote;
     QMap<Player, int> voteTargets;
-    ITarget lastVote;
     CurrentPlayer* currentPlayer;
     QString address;
     QVector<Player> players;
     QVector<Player> onDutyPlayers;
     QVector<ItemType> ultedItems;
-    IProtocol* protocol;
+    XmlProtocol* protocol;
     int currentDay;
 
 private:
@@ -33,27 +32,32 @@ public:
     GameClient();
     Vote* getCurrentVoting();
     QVector<Player> getPlayers();
+    Player getPlayerByName(QString name);
     QVector<Player> getVoteTargets();
     QVector<Player> getOnDutyPlayers();
+    CurrentPlayer* getCurrentPlayer();
+    QVector<ItemType>& getWreckedItems();
     int getCurrentDay();
-    bool connect(QString address);
+    bool connectToServer(QString address);
     bool registerName(QString name);
     bool registerRole(QString role);
     bool doAction(Action action);
-    void disconnect();
+    void disconnectFromServer();
     bool reconnect();
 
 signals:
+    void connected();
     void registerNameStatus(bool isCorrect);
     void registerRoleStatus(bool isCorrect);
     void dayUpdate(int day, bool isDay);
-    void startVoting(const Vote& vote);
+    void startVoting(Vote& vote);
     void endVoting();
     void updateActions(QVector<Action> actions);
     void updateItems(QVector<Item> items);
     void updatePlayers(QVector<Player> players);
     void log(QString text);
     void errorLog(QString text);
+    void voteUpdate(QString playerName, int votes);
 
 private slots:
     void nameCorrect();
@@ -67,9 +71,10 @@ private slots:
     void playerUlted(ItemType item);
     void playersUpdate(QVector<Player> players);
     void statUpdate(IStatUpdate stat);
-    void event(IEvent event);
+    void sig_event(const IEvent& e);
     void errorMessage(QString message);
     void disconnected();
+    void sig_connected();
 };
 
 #endif // GAMECLIENT_H

@@ -12,7 +12,10 @@ class EventRole : public IEvent
     bool getRole;
 public:
     EventRole(QString who, QString role, bool getRole);
-    virtual QString getDisplayMsg();
+    EventRole(const EventRole& e);
+    QString getRoleUpdate();
+    bool gotRole();
+    virtual QString getDisplayMsg() const;
 };
 
 #endif // EVENTROLE_H

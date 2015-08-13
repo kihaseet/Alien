@@ -9,7 +9,8 @@ class EventDuty : public IEvent
 {
 public:
     EventDuty(QString who);
-    virtual QString getDisplayMsg();
+    EventDuty(const EventDuty& e);
+    virtual QString getDisplayMsg() const;
 };
 
 #endif // EVENTDUTY_H

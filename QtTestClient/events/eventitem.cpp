@@ -5,7 +5,12 @@ EventItem::EventItem(QString what, QString who, QString target, ITarget item) : 
     this->item = item;
 }
 
-QString EventItem::getDisplayMsg()
+EventItem::EventItem(const EventItem &e) : IEvent(e.getWhat(), e.getWho(), e.getTarget())
+{
+    this->item = e.item;
+}
+
+QString EventItem::getDisplayMsg() const
 {
     return who + " " + what + " " + item.getName() + (target.length() > 0 ? target : "");
 }

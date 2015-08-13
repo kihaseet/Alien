@@ -17,11 +17,11 @@ class EventFactory
 {
 public:
     EventFactory();
-    static IEvent Item(QString what, QString who, QString target, ITarget item);
-    static IEvent StatusEvent(QString who, Status status);
-    static IEvent Duty(QString who);
-    static IEvent Role(QString what, QString who, bool getRole);
-    static IEvent Voting(QString who, QString target, bool voteUp);
+    static EventItem Item(QString what, QString who, QString target, ITarget item);
+    static EventStatus StatusEvent(QString who, Status status);
+    static EventDuty Duty(QString who);
+    static EventRole Role(QString what, QString who, bool getRole);
+    static EventVoting Voting(QString who, QString target, bool voteUp);
 };
 
 #endif // EVENTFACTORY_H

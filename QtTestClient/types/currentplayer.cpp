@@ -105,6 +105,19 @@ QVector<Action> CurrentPlayer::getActions()
     return this->actions;
 }
 
+Action *CurrentPlayer::getAction(ActionType actionType)
+{
+    for (int i = 0; i < this->actions.length(); i++)
+    {
+        if (this->actions[i].getActionType() == actionType)
+        {
+            return &this->actions[i];
+        }
+    }
+
+    return nullptr;
+}
+
 void CurrentPlayer::setActions(QVector<Action> actions)
 {
     this->actions = actions;

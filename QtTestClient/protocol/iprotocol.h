@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QVector>
+#include <QObject>
 #include "types/action.h"
 #include "types/vote.h"
 #include "types/endvote.h"
@@ -11,8 +12,9 @@
 #include "events/ievent.h"
 #include "tcpclient.h"
 
-class IProtocol
+class IProtocol: public QObject
 {
+    Q_OBJECT
 protected:
     tcpclient tcpClient;
 public:
@@ -36,14 +38,16 @@ signals:
     void playerUlted(ItemType item);
     void playersUpdate(QVector<Player> players);
     void statUpdate(IStatUpdate stat);
-    void event(IEvent event);
+    void event(const IEvent& event);
     void errorMessage(QString message);
     void disconnected();
+    void connected();
 
-public slots:
-    void GetData(QString msg);
-    void errormess(QString mess);
-    void sig_disconnect();
+//public slots:
+//    virtual void GetData(QString msg) = 0;
+//    virtual void errormess(QString mess) = 0;
+//    virtual void sig_disconnect() = 0;
+//    virtual void sig_connected() = 0;
 };
 
 #endif // IPROTOCOL_H
