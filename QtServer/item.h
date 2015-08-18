@@ -15,11 +15,11 @@ Q_OBJECT
 protected:
     ITEM ID;
     QString handle;
-    QPair<QString,int> lastscan;//статус последней просканированной цели
+   //статус последней просканированной цели
     int power; /*!=0 незаряжен, -1 сломан -2 для капитанского значка*/
 public:
     QQueue <QString> rotation;
-
+    QPair<QString,int> lastscan;
 
     QString note; //описание
     ITEM forrepower;//предмет для батарейки

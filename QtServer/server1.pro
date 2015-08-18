@@ -8,7 +8,7 @@ QT       +=  core gui network xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = server1
+targets = server1
 TEMPLATE = app
 
 SOURCES += main.cpp\

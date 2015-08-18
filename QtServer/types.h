@@ -64,7 +64,7 @@ enum ROLE{
 
 struct RegisterObject{
 public:
-    TURN_TYPE target;
+    TURN_TYPE targets;
     ROLE role;
     QString name;
     int ID;
@@ -74,12 +74,12 @@ public:
 
     RegisterObject(int id, TURN_TYPE tar, QString n = QString()){
         ID = id;
-        target = tar;
+        targets = tar;
         name = n;
     }
     RegisterObject(int id, TURN_TYPE tar,ROLE r = RT_UNKNOWN){
         ID = id;
-        target = tar;
+        targets = tar;
         role = r;
     }
 };

@@ -9,7 +9,7 @@ voting::voting(QList<QString> mapwhom, ROLE tar)
 //создает новое голосование, задавая цель, получая список всех голосующих и список против кого голосуют
 {
     //qDebug()<<"voting::voting(QList<QString> mapwho, QList<QString> mapwhom, QString tar)"<<tar;
-    target = tar;
+    targets = tar;
     electlist.clear();
     votelist.clear();
     winners.clear();

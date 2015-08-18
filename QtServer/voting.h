@@ -11,7 +11,7 @@ class voting:public QObject
 private:
     QString noteName;   //голос ноутбука
 public:
-    ROLE target;
+    ROLE targets;
     bool is_over;//true когда голосование уже закончилось
     QList <VoteObject*> votelist;
     QList<QString> electlist;//против кого голосуют

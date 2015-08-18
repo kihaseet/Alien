@@ -188,16 +188,16 @@ void xml_maker::slotSendStat(TurnObject turn)
     switch (turn.type) {
     case TT_GETITEM:
         domEv = doc.createElement("additem");
-        domEv.setAttribute("item",TurnObject::ItemDescr.key(turn.item));
+        domEv.setAttribute("item",QString::number((int)turn.item));
         domEv.setAttribute("power",turn.targets.first().toInt());
         break;
     case TT_DELITEM:
         domEv = doc.createElement("delitem");
-        domEv.setAttribute("item",TurnObject::ItemDescr.key(turn.item));
+        domEv.setAttribute("item",QString::number((int)turn.item));
         break;
     case TT_CORRECT:
         domEv = doc.createElement("useditem");
-        domEv.setAttribute("item",TurnObject::ItemDescr.key(turn.item));
+        domEv.setAttribute("item",QString::number((int)turn.item));
         break;
     case TT_ATTACK:
     case TT_INFECT:
@@ -283,6 +283,17 @@ void xml_maker::slotSendTurn(TurnObject turn)
     emit sigSendToAll(doc.toString());
 }
 
+void xml_maker::slotSendMess(player* who, QString mess)
+{
+    QDomDocument doc("change");
+
+    QDomElement domChanges = doc.createElement("change");
+    doc.appendChild(domChanges);
+
+    domChanges.appendChild(makeElement(doc,"playermess","",mess,""));
+
+    emit sigSendToClient(who->SocketId,doc.toString());
+}
 
 void xml_maker::slotStartGame(QList<player*>playerlist)
 {
@@ -312,7 +323,7 @@ void xml_maker::slotStartGame(QList<player*>playerlist)
         emit sigSendToAll(doc.toString());
 }
 
-void xml_maker::slotStartPhase(bool isDay, int dayNo)
+void xml_maker::slotStartPhase(int dayNo, bool isDay)
 {
     QDomDocument doc("init");
 
@@ -328,7 +339,7 @@ void xml_maker::slotStartPhase(bool isDay, int dayNo)
     emit sigSendToAll(doc.toString());
 }
 
-void xml_maker::slotStartVoting(ROLE target,QList<QString>list)
+void xml_maker::slotStartVoting(ROLE targets,QList<QString>list)
 {
     QDomDocument doc("init");
 
@@ -336,8 +347,8 @@ void xml_maker::slotStartVoting(ROLE target,QList<QString>list)
     doc.appendChild(domElement);
     QDomElement domVoting = doc.createElement("voting");
     domElement.appendChild(domVoting);
-    QString tt = RegisterObject::RoleDescr.key(target);
-    domVoting.setAttribute("for",RegisterObject::RoleDescr.key(target));
+    QString tt = RegisterObject::RoleDescr.key(targets);
+    domVoting.setAttribute("for",RegisterObject::RoleDescr.key(targets));
 
     foreach (QString body, list) {
         domVoting.appendChild(makeElement(doc,body,"vote","","0"));
@@ -345,7 +356,7 @@ void xml_maker::slotStartVoting(ROLE target,QList<QString>list)
     emit sigSendToAll(doc.toString());
 }
 
-void xml_maker::slotEndVoting(ROLE target,QString name,QString result = QString())
+void xml_maker::slotEndVoting(ROLE targets,QString name,QString result = QString())
 {
     QDomDocument doc("init");
 
@@ -353,13 +364,13 @@ void xml_maker::slotEndVoting(ROLE target,QString name,QString result = QString(
     doc.appendChild(domElement);
 
     QDomElement domEl = doc.createElement("endvoting");
-    domEl.setAttribute("for",RegisterObject::RoleDescr.key(target));
+    domEl.setAttribute("for",RegisterObject::RoleDescr.key(targets));
     doc.appendChild(domEl);
 
     if(name != "")
     {
         domEl.appendChild(makeElement(doc,"name","",name,""));
-        if(target == RT_ALIEN)
+        if(targets == RT_ALIEN)
         {
             domEl.setAttribute("result",result);
         }

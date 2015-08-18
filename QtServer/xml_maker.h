@@ -36,11 +36,14 @@ public slots:
     void slotDisconnected(QList<player *> playerlist){}
 
     void slotStartGame(QList<player*>playerlist);
-    void slotStartPhase(bool isDay, int dayNo);
-    void slotStartVoting(ROLE target,QList<QString>list);
-    void slotEndVoting(ROLE target,QString name,QString result);
+    void slotStartPhase(int dayNo, bool isDay);
+    void slotStartVoting(ROLE targets,QList<QString>list);
+    void slotEndVoting(ROLE targets,QString name,QString result);
     void slotSendTurn(TurnObject turn);
     void slotSendStat(TurnObject turn);
+    void slotSendMess(player *who, QString mess);
+
+
 };
 
 
