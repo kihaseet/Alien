@@ -60,6 +60,8 @@ public:
     void slot_attack(TurnObject TO);
 
     bool isHunted(QStringList playerhunt, TurnObject turn);
+    void slot_use_battery(ITEM item);
+    TurnObject makeRotationList();
 signals:
     void GuiUpdatePlayerlist(QList<player*>list);
     void GuiUpdateVotelist();

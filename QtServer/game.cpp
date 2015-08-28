@@ -248,47 +248,8 @@ void game::make_actionlist(player* who){
             case IT_ROTATION:
                 if(nightrotation.isEmpty())
                 {
-                    foreach (player* gr, playerlist->values())
-                    {
-                        gr->ImDuty = false;
-                    }
-                    QList<ROLE>deprole;
-                    QList<QString>cand;//готовим список дежурных
-                    deprole <<RT_DEP_DOCTOR<<RT_DEP_GUNMEN<<RT_DEP_ENGINEER
-                           <<RT_DEP_SCIENTIST<<RT_DEP_SIGNALMEN<<RT_ASSISTANT;
-                    foreach (player* it, playerlist->values())
-                    {
-                        if(!it->ImDuty)
-                        {
-                            foreach (ROLE r, it->rolelist)
-                            {
-                                if(deprole.contains(r)&&(!cand.contains(it->name) &&
-                                                         (!it->rolelist.contains(RT_CAPTAIN))))
-                                {
-                                    cand.append(it->name);
-                                }
-                            }
-                        }
-                    }
-                    foreach (QString hth, passengerlist)
-                    {
-                        if(!playerlist->value(hth)->ImDuty)
-                        {
-                            cand.append(hth);
-                        }
-                    }
-                    if(cand.count() <= 1)
-                    {
-                        foreach (player* jt, playerlist->values())
-                        {
-                            if(!jt->rolelist.contains(RT_CAPTAIN)&&
-                                    (!cand.contains(jt->name) && !jt->ImDuty))
-                            {
-                                cand.append(jt->name);
-                            }
-                        }
-                    }
-                    who->actionlist.append(TurnObject(TT_USE_ITEM,cand,var));
+
+                    who->actionlist.append(makeRotationList());
                 }
                 break;
 
@@ -415,6 +376,51 @@ void game::make_actionlist(player* who){
     }
 }
 
+
+TurnObject game::makeRotationList(){
+    foreach (player* gr, playerlist->values())
+    {
+        gr->ImDuty = false;
+    }
+    QList<ROLE>deprole;
+    QList<QString>cand;//готовим список дежурных
+    deprole <<RT_DEP_DOCTOR<<RT_DEP_GUNMEN<<RT_DEP_ENGINEER
+           <<RT_DEP_SCIENTIST<<RT_DEP_SIGNALMEN<<RT_ASSISTANT;
+    foreach (player* it, playerlist->values())
+    {
+        if(!it->ImDuty)
+        {
+            foreach (ROLE r, it->rolelist)
+            {
+                if(deprole.contains(r)&&(!cand.contains(it->name) &&
+                                         (!it->rolelist.contains(RT_CAPTAIN))))
+                {
+                    cand.append(it->name);
+                }
+            }
+        }
+    }
+    foreach (QString hth, passengerlist)
+    {
+        if(!playerlist->value(hth)->ImDuty)
+        {
+            cand.append(hth);
+        }
+    }
+    if(cand.count() <= 1)
+    {
+        foreach (player* jt, playerlist->values())
+        {
+            if(!jt->rolelist.contains(RT_CAPTAIN)&&
+                    (!cand.contains(jt->name) && !jt->ImDuty))
+            {
+                cand.append(jt->name);
+            }
+        }
+    }
+    return TurnObject(TT_USE_ITEM,cand,IT_ROTATION);
+}
+
 void game::day_check_over(){
     if(_currvoting->is_over && !hardresolve)
     {
@@ -427,11 +433,19 @@ void game::day_check_over(){
                     (unclame_rolelist.contains(RT_CAPTAIN) && (unclame_rolelist.contains(RT_ASSISTANT))))
             {
                 night_start();
-            }else
-                if(rolelist.value(RT_ASSISTANT) != rolelist.value(RT_CAPTAIN))
+            }else {
+                TurnObject TO = makeRotationList();
+                TO.type = TT_NEEDROTATION;
+                if(rolelist.value(RT_ASSISTANT) != rolelist.value(RT_CAPTAIN)) {
+                    TO.wh = rolelist.value(RT_ASSISTANT);
                     emit GuiMess2Log("[Game]","Помощник капитана должен назначить график дежурств!");
-                else
+                }
+                else {
                     emit GuiMess2Log("[Game]","Капитан должен назначить график дежурств!");
+                    TO.wh = rolelist.value(RT_CAPTAIN);
+                }
+                emit send_stat(TO);
+            }
         }
     }
 }
@@ -564,6 +578,11 @@ void game::day_resolve_curr_voting(QList<QString> win){
         //тут будет предложение капитану определить итог голосования лично
         emit GuiMess2Log("[Game]","Капитан должен сделать решающий выбор");
         hardresolve=true;
+
+        TurnObject TO(TT_HARDRESOLVE,win);
+        TO.wh = rolelist.value(RT_CAPTAIN);
+        emit send_stat(TO);
+
         foreach (player* var, playerlist->values()) {
             make_actionlist(var);
         }
@@ -589,9 +608,14 @@ void game::day_canseled_voting(){
 void game::slot_game_over(){
     
     if(playerlist->begin().value()->status==0){
-        //отправка всем сообщение о победе людей
+        foreach (player* man, playerlist->values()) {
+            sendMsg(man,"Humans win!");
+        }
         emit GuiMess2Log("[Game]","Игра завершена победой людей!");
     } else {
+        foreach (player* man, playerlist->values()) {
+            sendMsg(man,"Alien win!");
+        }
         //отправка всем сообщения о победе чужих
         emit GuiMess2Log("[Game]","Игра завершена победой чужих!");
     }
@@ -747,7 +771,9 @@ void game::slot_attack(TurnObject TO)
         }
         // playerlist->value(who)->success_attack=0;
     }
+    emit send_stat(TO);
     // make_actionlist(TO.wh);
+
 }
 
 void game::slot_infect(TurnObject TO){
@@ -769,6 +795,7 @@ void game::slot_infect(TurnObject TO){
             whom->HP += 1;
             check_HP(whom);
         }
+        emit send_stat(TO);
     }
 }
 
@@ -953,6 +980,18 @@ void game::slot_use_item_cap(TurnObject turn)
     {
         slot_use_item(turn);
         itemlist.value(IT_BADGE)->setPower(-2);
+    }
+}
+
+void game::slot_use_battery(ITEM item){
+    forrepowered = item;
+    TurnObject TO(TT_CHARGERED,item);
+    foreach (player* pl, playerlist->values()) {
+        if(pl->itemlist.contains(item)) {
+            TO.wh = pl;
+            emit send_stat(TO);
+            break;
+        }
     }
 }
 

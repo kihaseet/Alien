@@ -208,7 +208,18 @@ void xml_maker::slotSendStat(TurnObject turn)
         domEv = doc.createElement("chargeitem");
         domEv.setAttribute("item",TurnObject::ItemDescr.key(turn.item));
         break;
-
+    case TT_NEEDROTATION:
+        domEv = doc.createElement("needrotation");
+        while (!turn.targets.isEmpty()) {
+            domEv.appendChild(makeElement(doc,turn.targets.dequeue(),"","",""));
+        }
+        break;
+    case TT_HARDRESOLVE:
+        domEv = doc.createElement("hardresolve");
+        while (!turn.targets.isEmpty()) {
+            domEv.appendChild(makeElement(doc,turn.targets.dequeue(),"","",""));
+        }
+        break;
     case TT_ALIEN:
         domEv = doc.createElement("alien");
         break;
@@ -241,7 +252,7 @@ void xml_maker::slotSendTurn(TurnObject turn)
             domEv.appendChild(doc.createElement(name));
         }
         break;
-        case TT_USE_BADGE:
+    case TT_USE_BADGE:
         domEv.setAttribute("usebadge",TurnObject::ItemDescr.key(turn.item));
         if(!turn.targets.isEmpty())
             domEv.appendChild(doc.createElement(turn.targets.first()));
@@ -320,7 +331,7 @@ void xml_maker::slotStartGame(QList<player*>playerlist)
             domElementList.appendChild(body);
         }
     }
-        emit sigSendToAll(doc.toString());
+    emit sigSendToAll(doc.toString());
 }
 
 void xml_maker::slotStartPhase(int dayNo, bool isDay)

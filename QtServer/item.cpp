@@ -187,7 +187,7 @@ Battery::Battery(game *_g)
 
 void Battery::use_item_day(QQueue<QString> whom){
     qDebug()<<"Battery::use_item_day(QString whom)"<<whom;
-    _game->forrepowered = TurnObject::ItemDescr.value(whom.first());
+    _game->slot_use_battery(TurnObject::ItemDescr.value(whom.first()));
 }
 
 void Battery::use_item_night(QQueue<QString> whom){

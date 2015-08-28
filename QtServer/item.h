@@ -22,7 +22,6 @@ public:
     QPair<QString,int> lastscan;
 
     QString note; //описание
-    ITEM forrepower;//предмет для батарейки
 
     void counter();
     void reforge(int i);

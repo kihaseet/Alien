@@ -28,6 +28,8 @@ enum TURN_TYPE {
     TT_DELROLE,
     TT_CORRECT,//для подтверждения действий
     TT_CHARGERED, //для пометки предмета батарейки
+    TT_NEEDROTATION,
+    TT_HARDRESOLVE,
     TT_HP
 };
 
