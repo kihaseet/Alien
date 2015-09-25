@@ -70,9 +70,22 @@ bool voting::is_vote(QString who)
             if(vote->status == 1)
                 return true;
             else return false;
+            break;
         }
     }
     return false;
+}
+
+QString voting::whom_vote(QString who)
+{
+    foreach (VoteObject* vote, votelist) {
+        if(vote->who == who)
+        {
+            return vote->whom;
+            break;
+        }
+    }
+    return QString();
 }
 
 bool voting::is_complite()

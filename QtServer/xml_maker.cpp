@@ -71,7 +71,7 @@ TurnObject xml_maker::traverseNode(const QDomNode& node)
                 }
                 else if(domElement.tagName() == "unvote") {
                     _xml.type = TT_UNVOTE;
-                    //qDebug()  << domElement.tagName() << domElement.text();
+                    _xml.targets.append(domElement.text());
                 }
 
                 else if(domElement.tagName() == "attack")
@@ -287,6 +287,7 @@ void xml_maker::slotSendTurn(TurnObject turn)
         break;
     case TT_UNVOTE:
         domEv.setAttribute("voting","down");
+        domEv.appendChild(doc.createElement(turn.targets.first()));
         break;
     default:
         break;

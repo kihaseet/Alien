@@ -30,6 +30,7 @@ public:
     void off_voting(QString who);
 
     void setNoteName(QString n);
+    QString whom_vote(QString who);
 signals:
     void voting_over(QList<QString> v);
     void voting_canseled();

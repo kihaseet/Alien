@@ -265,7 +265,9 @@ void game::make_actionlist(player* who){
             if(!_currvoting->is_vote(who->name))
                 who->actionlist.append(TurnObject(TT_VOTE,_currvoting->electlist));
             else
-                who->actionlist.append(TurnObject(TT_UNVOTE));
+            {
+                who->actionlist.append(TurnObject(TT_UNVOTE,_currvoting->whom_vote(who->name)));
+            }
         }
         if(who->status == 2){
             if(who->healthy)
@@ -575,20 +577,20 @@ void game::day_resolve_curr_voting(QList<QString> win){
     if(win.count()==1){
         day_end_curr_voting(win.first());
     } else
-    if(win.count()>1 && rolelist.keys().contains(RT_CAPTAIN)){
-        //connect (_event,SIGNAL(event_useitem(QString,QString,QString)),this,SLOT(day_cap_curr_voting(QString,QString,QString)));
-        //тут будет предложение капитану определить итог голосования лично
-        emit GuiMess2Log("[Game]","Капитан должен сделать решающий выбор");
-        hardresolve=true;
+        if(win.count()>1 && rolelist.keys().contains(RT_CAPTAIN)){
+            //connect (_event,SIGNAL(event_useitem(QString,QString,QString)),this,SLOT(day_cap_curr_voting(QString,QString,QString)));
+            //тут будет предложение капитану определить итог голосования лично
+            emit GuiMess2Log("[Game]","Капитан должен сделать решающий выбор");
+            hardresolve=true;
 
-        TurnObject TO(TT_HARDRESOLVE,win);
-        TO.wh = rolelist.value(RT_CAPTAIN);
-        emit send_stat(TO);
+            TurnObject TO(TT_HARDRESOLVE,win);
+            TO.wh = rolelist.value(RT_CAPTAIN);
+            emit send_stat(TO);
 
-        foreach (player* var, playerlist->values()) {
-            make_actionlist(var);
-        }
-    }else day_canseled_voting();
+            foreach (player* var, playerlist->values()) {
+                make_actionlist(var);
+            }
+        }else day_canseled_voting();
 }
 
 
@@ -1079,6 +1081,7 @@ bool game::make_events_check(TurnObject turn)
     case TT_ATTACK:
     case TT_INFECT:
     case TT_VOTE:
+    case TT_UNVOTE:
         if(turn.targets.isEmpty())
             return false;
         break;
