@@ -103,11 +103,13 @@ void game::getItemByRoleAll()
             default:
                 break;
             }
-            TurnObject turn(TT_GETITEM);
-            turn.wh = var;
-            turn.item = bb->getID();
-            turn.targets.append(QString::number(bb->getPower()));
-            emit send_stat(turn);
+            if(role <= RT_ENGINEER && role >= RT_CAPTAIN){
+                TurnObject turn(TT_GETITEM);
+                turn.wh = var;
+                turn.item = bb->getID();
+                turn.targets.append(QString::number(bb->getPower()));
+                emit send_stat(turn);
+            }
         }
     }
 }
