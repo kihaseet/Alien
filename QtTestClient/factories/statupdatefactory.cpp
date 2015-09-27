@@ -5,27 +5,27 @@ StatUpdateFactory::StatUpdateFactory()
 
 }
 
-IStatUpdate StatUpdateFactory::addItem(Item item)
+StatAddItem StatUpdateFactory::addItem(Item item)
 {
     return StatAddItem(item);
 }
 
-IStatUpdate StatUpdateFactory::usedItem(Item item, bool success)
+StatUsedItem StatUpdateFactory::usedItem(Item item, bool success)
 {
     return StatUsedItem(item, success);
 }
 
-IStatUpdate StatUpdateFactory::delItem(Item item)
+StatDelItem StatUpdateFactory::delItem(Item item)
 {
     return StatDelItem(item);
 }
 
-IStatUpdate StatUpdateFactory::alien()
+StatAlien StatUpdateFactory::alien()
 {
     return StatAlien();
 }
 
-IStatUpdate StatUpdateFactory::changeHP(int HP)
+StatChangeHP StatUpdateFactory::changeHP(int HP)
 {
     return StatChangeHP(HP);
 }

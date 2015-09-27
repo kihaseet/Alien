@@ -5,7 +5,7 @@ StatAlien::StatAlien()
 
 }
 
-void StatAlien::apply(CurrentPlayer &player)
+void StatAlien::apply(CurrentPlayer &player) const
 {
     player.setAlien(true);
 }

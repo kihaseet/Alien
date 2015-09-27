@@ -5,7 +5,12 @@ StatAddItem::StatAddItem(Item item)
     this->item = item;
 }
 
-void StatAddItem::apply(CurrentPlayer &player)
+StatAddItem::StatAddItem(const StatAddItem &s)
+{
+    this->item = item;
+}
+
+void StatAddItem::apply(CurrentPlayer &player) const
 {
     auto items = player.getItems();
     items.push_back(this->item);

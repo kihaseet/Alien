@@ -4,33 +4,24 @@
 
 void GameClient::recalcActions()
 {
-    QVector<Action> actions;
+    QVector<ActionType> actions;
 
     if (Night)
     {
-        if (!this->currentPlayer->getYetWait())
+        if (!this->currentPlayer->didPlayerAction(ActionType::TT_SKIP))
         {
-            actions.push_back(ActionFactory::sleep());
+            actions.push_back(ActionType::TT_SKIP);
 
             if (this->currentPlayer->isAlien())
             {
-                if (!this->currentPlayer->getYetAttack())
+                if (!this->currentPlayer->didPlayerAction(ActionType::TT_ATTACK))
                 {
-                    for (auto& target: players)
-                    {
-                        if (target.getName() != this->currentPlayer->getName())
-                        {
-                            actions.push_back(ActionFactory::attack(target));
-                        }
-                    }
+                    actions.push_back(ActionType::TT_ATTACK);
                 }
 
-                if (!this->currentPlayer->getYetInfect() && this->currentPlayer->isInfected())
+                if (!this->currentPlayer->didPlayerAction(ActionType::TT_INFECT) && this->currentPlayer->isInfected())
                 {
-                    for (auto& target: players)
-                    {
-                        actions.push_back(ActionFactory::infect(target));
-                    }
+                    actions.push_back(ActionType::TT_INFECT);
                 }
             }
         }
@@ -38,8 +29,9 @@ void GameClient::recalcActions()
         auto items = this->currentPlayer->getItems();
         for (Item& item: items)
         {
-            item.setActive(!(this->currentPlayer->getYetWait()
-                             || this->currentPlayer->getYetUsed()
+            item.setActive(!(this->currentPlayer->didPlayerAction(ActionType::TT_SKIP)
+                             || this->currentPlayer->didPlayerAction(ActionType::TT_USE_ITEM)
+                             || this->currentPlayer->didPlayerAction(ActionType::TT_ULT_ITEM)
                              || item.getType() == ItemType::IT_NOTEBOOK
                              || item.getType() == ItemType::IT_ROTATION));
         }
@@ -48,21 +40,6 @@ void GameClient::recalcActions()
     }
     else
     {
-        if (this->vote != nullptr)
-        {
-            if (!this->currentPlayer->getYetVote())
-            {
-                for (auto& target: this->vote->getTargets())
-                {
-                    actions.push_back(ActionFactory::vote(*this->getPlayer(target)));
-                }
-            }
-            else
-            {
-                actions.push_back(ActionFactory::unvote());
-            }
-        }
-
         auto items = this->currentPlayer->getItems();
         for (Item& item: items)
         {
@@ -77,17 +54,25 @@ void GameClient::recalcActions()
     emit updateItems(this->currentPlayer->getItems());
 }
 
-Player *GameClient::getPlayer(QString name)
+PlayerPtr GameClient::getPlayer(QString name)
 {
     for (int i = 0; i < this->players.length(); i++)
     {
-        if (this->players[i].getName() == name)
+        if (this->players[i]->getName() == name)
         {
-            return &this->players[i];
+            return this->players[i];
         }
     }
 
     return nullptr;
+}
+
+void GameClient::brute_copy(QVector<PlayerPtr> &from, QConstPlayersVector &to)
+{
+    for (auto& f: from)
+    {
+        to.push_back(f);
+    }
 }
 
 GameClient::GameClient()
@@ -98,7 +83,7 @@ GameClient::GameClient()
     this->protocol  = new XmlProtocol();
     this->voteTargets.clear();
     this->vote = nullptr;
-    this->currentPlayer = new CurrentPlayer("", UP, QStringList(), PASSENGER);
+    this->currentPlayer.reset(new CurrentPlayer("", UP, QStringList(), PASSENGER));
 
     ActionFactory::currentPlayer = this->currentPlayer;
 
@@ -123,14 +108,16 @@ Vote *GameClient::getCurrentVoting()
     return this->vote;
 }
 
-QVector<Player> GameClient::getPlayers()
+QConstPlayersVector GameClient::getPlayers()
 {
-    return this->players;
+    QConstPlayersVector const_players;
+    brute_copy(this->players, const_players);
+    return const_players;
 }
 
-Player GameClient::getPlayerByName(QString name)
+const PlayerPtr GameClient::getPlayerByName(QString name)
 {
-    Player* p = this->getPlayer(name);
+    auto p = this->getPlayer(name);
 
     if (p == nullptr)
     {
@@ -138,26 +125,31 @@ Player GameClient::getPlayerByName(QString name)
     }
     else
     {
-        return *p;
+        return p;
     }
 }
 
-QVector<Player> GameClient::getVoteTargets()
+QConstPlayersVector GameClient::getVoteTargets()
 {
-    return this->voteTargets.keys().toVector();
+    QConstPlayersVector const_players;
+    auto vote_targets = this->voteTargets.keys().toVector();
+    brute_copy(vote_targets, const_players);
+    return const_players;
 }
 
-QVector<Player> GameClient::getOnDutyPlayers()
+QConstPlayersVector GameClient::getOnDutyPlayers()
 {
-    return this->onDutyPlayers;
+    QConstPlayersVector const_players;
+    brute_copy(onDutyPlayers, const_players);
+    return const_players;
 }
 
-CurrentPlayer *GameClient::getCurrentPlayer()
+CurrentPlayerPtr GameClient::getCurrentPlayer()
 {
     return this->currentPlayer;
 }
 
-QVector<ItemType> &GameClient::getWreckedItems()
+QVector<ItemType> GameClient::getWreckedItems()
 {
     return this->ultedItems;
 }
@@ -259,9 +251,9 @@ void GameClient::startVote(Vote vote)
     this->voteTargets.clear();
     for (QString player_name: this->vote->getTargets())
     {
-        for (Player& player: this->players)
+        for (auto& player: this->players)
         {
-            if (player.getName() == player_name)
+            if (player->getName() == player_name)
             {
                 this->voteTargets[player] = 0;
                 break;
@@ -294,12 +286,37 @@ void GameClient::playerUlted(ItemType item)
 
 void GameClient::playersUpdate(QVector<Player> players)
 {
-    this->players = players;
+    auto find_player = [&](QString name) -> PlayerPtr
+    {
+      for (auto& player: this->players)
+      {
+          if (player->getName() == name)
+          {
+              return player;
+          }
+      }
 
-    emit updatePlayers(this->players);
+      return nullptr;
+    };
+
+    for (auto& player: players)
+    {
+        PlayerPtr s_player = find_player(player.getName());
+
+        if (s_player != nullptr)
+        {
+            s_player->update(player);
+        }
+        else
+        {
+            this->players.push_back(std::make_shared<Player>(player));
+        }
+    }
+
+    emit updatePlayers(this->getPlayers());
 }
 
-void GameClient::statUpdate(IStatUpdate stat)
+void GameClient::statUpdate(const IStatUpdate &stat)
 {
     stat.apply(*this->currentPlayer);
 
@@ -314,21 +331,15 @@ void GameClient::sig_event(const IEvent &e)
     if (typeid(e) == typeid(EventVoting))
     {
         const EventVoting* event = ((const EventVoting*)&e);
-        for (auto& targetPlayer: this->voteTargets.keys())
-        {
-            if (targetPlayer.getName() == event->getTarget())
-            {
-                this->voteTargets[targetPlayer] += (event->getVoteUp() ? 1 : -1);
-                emit voteUpdate(targetPlayer.getName(), this->voteTargets[targetPlayer]);
-                break;
-            }
-        }
+        this->voteTargets[this->getPlayerByName(event->getTarget())] += (event->getVoteUp() ? 1 : -1);
+        emit voteUpdate(event->getTarget(), this->voteTargets[this->getPlayerByName(event->getTarget())]);
+
     }
     else if (typeid(e) == typeid(EventRole))
     {
         EventRole* event = ((EventRole*)&e);
 
-        Player* p = this->getPlayer(event->getTarget());
+        PlayerPtr p = this->getPlayer(event->getTarget());
 
         if (p != nullptr)
         {
@@ -344,7 +355,7 @@ void GameClient::sig_event(const IEvent &e)
             p->setRoles(roles);
         }
 
-        emit updatePlayers(this->players);
+        emit updatePlayers(this->getPlayers());
     }
 }
 
@@ -355,7 +366,7 @@ void GameClient::errorMessage(QString message)
 
 void GameClient::disconnected()
 {
-    emit log("Disconnected for server.");
+    emit log("Disconnected from server.");
 }
 
 void GameClient::sig_connected()

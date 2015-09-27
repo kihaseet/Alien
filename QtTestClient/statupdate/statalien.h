@@ -7,8 +7,9 @@ class StatAlien : public IStatUpdate
 {
 public:
     StatAlien();
+    StatAlien(const StatAlien& s) {};
 
-    virtual void apply(CurrentPlayer& player);
+    virtual void apply(CurrentPlayer& player) const;
 };
 
 #endif // STATALIEN_H

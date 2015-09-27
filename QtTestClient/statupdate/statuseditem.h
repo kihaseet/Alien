@@ -10,7 +10,9 @@ class StatUsedItem : public IStatUpdate
     bool success;
 public:
     StatUsedItem(Item item, bool success);
-    virtual void apply(CurrentPlayer& player);
+    StatUsedItem(const StatUsedItem& s);
+
+    virtual void apply(CurrentPlayer& player) const;
 };
 
 #endif // STATUSEDITEM_H

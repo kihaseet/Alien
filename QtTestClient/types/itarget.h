@@ -11,8 +11,8 @@ public:
     ITarget();
     ITarget(QString name);
 
-    QString getName() const;
-    void setName(QString name);
+    virtual QString getName() const;
+    virtual void setName(QString name);
 };
 
 #endif // ITARGET_H

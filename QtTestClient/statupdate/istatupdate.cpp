@@ -1,11 +1,11 @@
 #include "statupdate/istatupdate.h"
 
-IStatUpdate::IStatUpdate()
+IStatUpdate::IStatUpdate() : QObject(0)
 {
 
 }
 
-void IStatUpdate::apply(CurrentPlayer &)
+void IStatUpdate::apply(CurrentPlayer &) const
 {
 }
 

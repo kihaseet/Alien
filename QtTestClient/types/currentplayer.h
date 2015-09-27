@@ -1,6 +1,8 @@
 #ifndef CURRENTPLAYER_H
 #define CURRENTPLAYER_H
 
+#include <memory>
+
 #include <QString>
 #include <QVector>
 #include "player.h"
@@ -13,15 +15,11 @@ private:
     int hp;
     bool _isAlien;
     bool _isInfected;
-    bool yetVote;
-    bool yetAttacked;
-    QString lastAttacked;
-    QString currentAttacked;
-    bool yetInfect;
-    bool yetUsed;
-    bool yetWait;
+//    QString lastAttacked;
+//    QString currentAttacked;
     QVector<Action> didActions;
-    QVector<Action> actions;
+    QVector<ActionType> actions;
+    QVector<Item> items;
 public:
     CurrentPlayer(QString name
                   , Status status
@@ -29,20 +27,23 @@ public:
                   , PlayerImage image
                   , int hp = 3
                   , bool _isAlien = false);
-//    void recalcActions();
     int getHP();
     void setHP(int hp);
     bool isAlien();
     bool isInfected();
     void setAlien(bool _isAlien);
-    QVector<Action> getActions();
-    Action* getAction(ActionType actionType);
-    void setActions(QVector<Action> actions);
-    bool getYetAttack();
-    bool getYetInfect();
-    bool getYetUsed();
-    bool getYetWait();
-    bool getYetVote();
+
+    QVector<ActionType> getActions();
+    void setActions(QVector<ActionType> actions);
+
+    QVector<Item> getItems();
+    void setItems(QVector<Item> items);
+
+    void addDidAction(Action action);
+    bool didPlayerAction(Action action);
+    bool didPlayerAction(ActionType action);
 };
+
+typedef std::shared_ptr<CurrentPlayer> CurrentPlayerPtr;
 
 #endif // CURRENTPLAYER_H

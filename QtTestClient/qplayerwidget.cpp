@@ -3,15 +3,36 @@
 
 void QPlayerWidget::mouseReleaseEvent(QMouseEvent *)
 {
-    emit clicked(this->player.getName());
+    emit clicked(this->player->getName());
 }
 
-QPlayerWidget::QPlayerWidget(QWidget *parent) : QPlayerWidget(Player(), parent)
+void QPlayerWidget::paintEvent(QPaintEvent * event)
 {
+    QWidget::paintEvent(event);
 
+    if (!this->isEnabled())
+    {
+        QPainter p(this);
+
+        p.setOpacity(0.3);
+
+        p.fillRect(0, 0, this->width(), this->height(), QColor::fromRgb(0, 0, 0));
+    }
 }
 
-QPlayerWidget::QPlayerWidget(Player p, QWidget *parent) :
+QPlayerWidget::QPlayerWidget(QWidget *parent) :
+  QWidget(parent),
+  ui(new Ui::QPlayerWidget)
+{
+  ui->setupUi(this);
+
+  roleWidgets.push_back(ui->lRole1);
+  roleWidgets.push_back(ui->lRole2);
+  roleWidgets.push_back(ui->lRole3);
+
+  this->setVote(-1);
+}
+QPlayerWidget::QPlayerWidget(PlayerConstPtr &p, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::QPlayerWidget)
 {
@@ -30,21 +51,21 @@ QPlayerWidget::~QPlayerWidget()
     delete ui;
 }
 
-void QPlayerWidget::setPlayer(Player &p)
+void QPlayerWidget::setPlayer(PlayerConstPtr &p)
 {
-    this->player = p;
+    this->player = std::make_shared<Player>(*p);
 
-    ui->lPlayerName->setText(p.getName());
-    ui->lOnline->setStyleSheet("#lOnline { background-image: url(:/player_status/" + (p.isOnline() ? QString("online") : QString("offline")) + "); }");
-    for (int i = 0; i < player.getRoles().length(); i++)
+    ui->lPlayerName->setText(p->getName());
+    ui->lOnline->setPixmap(QPixmap::fromImage(QImage(":/buttons/" + (p->isOnline() ? QString("online") : QString("offline") + ".png"))));
+    for (int i = 0; i < player->getRoles().length(); i++)
     {
-        roleWidgets[i]->setStyleSheet("background-image: url(:/roles/Captain);");
+        roleWidgets[i]->setPixmap(QPixmap::fromImage(QImage(":/roles/Captain.png")));
     }
 
     ui->fPlayerImage->setStyleSheet("#fPlayerImage {background-image: url(:/player_avatar/0);}");
 }
 
-Player &QPlayerWidget::getPlayer()
+PlayerPtr QPlayerWidget::getPlayer()
 {
     return this->player;
 }
@@ -59,6 +80,11 @@ void QPlayerWidget::setVote(int vote)
     {
         ui->lVotes->setText(QString::number(vote));
     }
+}
+
+int QPlayerWidget::getVote()
+{
+    return vote;
 }
 
 void QPlayerWidget::makeSelectable(bool selectable)

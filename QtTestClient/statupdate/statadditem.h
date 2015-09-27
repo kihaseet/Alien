@@ -9,7 +9,8 @@ class StatAddItem : public IStatUpdate
     Item item;
 public:
     StatAddItem(Item item);
-    virtual void apply(CurrentPlayer& player);
+    StatAddItem(const StatAddItem& s);
+    virtual void apply(CurrentPlayer& player) const;
 };
 
 #endif // STATADDITEM_H

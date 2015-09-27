@@ -5,7 +5,7 @@ Action::Action()
 
 }
 
-Action::Action(ActionType actionType, ITarget user, QVector<ITarget> targets, ITarget item)
+Action::Action(ActionType actionType, ITarget user, QVector<ITarget> targets, Item item)
 {
     this->actionType = actionType;
     this->user = user;
@@ -14,24 +14,39 @@ Action::Action(ActionType actionType, ITarget user, QVector<ITarget> targets, IT
 }
 
 
-ITarget Action::getUser()
+ITarget Action::getUser() const
 {
     return this->user;
 }
 
+void Action::setUser(ITarget user)
+{
+    this->user = user;
+}
 
-ITarget Action::getItem()
+
+Item Action::getItem() const
 {
     return this->item;
 }
 
-ActionType Action::getActionType()
+void Action::setItem(Item item)
+{
+    this->item = item;
+}
+
+ActionType Action::getActionType() const
 {
     return this->actionType;
 }
 
+void Action::setActionType(ActionType actionType)
+{
+    this->actionType = actionType;
+}
 
-QVector<ITarget> Action::getTargets()
+
+QVector<ITarget> Action::getTargets() const
 {
     return this->targets;
 }

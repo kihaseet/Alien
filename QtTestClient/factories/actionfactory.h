@@ -16,13 +16,13 @@ public:
     static Action useBadge(Item item, QVector<ITarget> targets);
     static Action attack(Player player);
     static Action infect(Player player);
-    static Action vote(Player player);
+    static Action vote(PlayerConstPtr player);
     static Action unvote();
     static Action sleep();
     static Action up();
     static Action down();
 public:
-    static CurrentPlayer* currentPlayer;
+    static CurrentPlayerPtr currentPlayer;
 };
 
 #endif // ACTIONFACTORY_H

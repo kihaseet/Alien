@@ -10,33 +10,37 @@
 #include "protocol/xmlprotocol/xmlprotocol.h"
 #include "factories/actionfactory.h"
 
+typedef QVector<PlayerConstPtr> QConstPlayersVector;
+
 class GameClient : public QObject
 {
     Q_OBJECT
 
     bool Night;
     Vote* vote;
-    QMap<Player, int> voteTargets;
-    CurrentPlayer* currentPlayer;
+    QMap<PlayerPtr, int> voteTargets;
+    CurrentPlayerPtr currentPlayer;
     QString address;
-    QVector<Player> players;
-    QVector<Player> onDutyPlayers;
+    QVector<PlayerPtr> players;
+    QVector<PlayerPtr> onDutyPlayers;
     QVector<ItemType> ultedItems;
     XmlProtocol* protocol;
     int currentDay;
 
 private:
     void recalcActions();
-    Player* getPlayer(QString name);
+    PlayerPtr getPlayer(QString name);
+
+    void brute_copy(QVector<PlayerPtr>& from, QConstPlayersVector& to);
 public:
     GameClient();
     Vote* getCurrentVoting();
-    QVector<Player> getPlayers();
-    Player getPlayerByName(QString name);
-    QVector<Player> getVoteTargets();
-    QVector<Player> getOnDutyPlayers();
-    CurrentPlayer* getCurrentPlayer();
-    QVector<ItemType>& getWreckedItems();
+    QConstPlayersVector getPlayers();
+    const PlayerPtr getPlayerByName(QString name);
+    QConstPlayersVector getVoteTargets();
+    QConstPlayersVector getOnDutyPlayers();
+    CurrentPlayerPtr getCurrentPlayer();
+    QVector<ItemType> getWreckedItems();
     int getCurrentDay();
     bool connectToServer(QString address);
     bool registerName(QString name);
@@ -52,9 +56,9 @@ signals:
     void dayUpdate(int day, bool isDay);
     void startVoting(Vote& vote);
     void endVoting();
-    void updateActions(QVector<Action> actions);
+    void updateActions(QVector<ActionType> actions);
     void updateItems(QVector<Item> items);
-    void updatePlayers(QVector<Player> players);
+    void updatePlayers(QConstPlayersVector players);
     void log(QString text);
     void errorLog(QString text);
     void voteUpdate(QString playerName, int votes);
@@ -70,7 +74,7 @@ private slots:
     void endVote(EndVote endvote);
     void playerUlted(ItemType item);
     void playersUpdate(QVector<Player> players);
-    void statUpdate(IStatUpdate stat);
+    void statUpdate(const IStatUpdate& stat);
     void sig_event(const IEvent& e);
     void errorMessage(QString message);
     void disconnected();

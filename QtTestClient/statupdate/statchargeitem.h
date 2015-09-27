@@ -10,7 +10,9 @@ class StatChargeItem : public IStatUpdate
     Item item;
 public:
     StatChargeItem(Item item);
-    virtual void apply(CurrentPlayer& player);
+    StatChargeItem(const StatChargeItem& s);
+
+    virtual void apply(CurrentPlayer& player) const;
 };
 
 #endif // STATCHARGEITEM_H

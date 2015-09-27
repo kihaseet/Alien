@@ -5,6 +5,8 @@
 #include <QVector>
 #include <QLabel>
 #include <QMouseEvent>
+#include <QPaintEvent>
+#include <QPainter>
 
 #include "types/player.h"
 
@@ -15,21 +17,24 @@ class QPlayerWidget;
 class QPlayerWidget : public QWidget
 {
     Q_OBJECT
-    Player player;
+    PlayerPtr player;
     int vote;
 
     QVector<QLabel*> roleWidgets;
 protected:
     void mouseReleaseEvent(QMouseEvent*);
+    void paintEvent(QPaintEvent*event);
 
 public:
     explicit QPlayerWidget(QWidget *parent = 0);
-    explicit QPlayerWidget(Player p, QWidget *parent = 0);
+    explicit QPlayerWidget(PlayerConstPtr& p, QWidget *parent = 0);
     ~QPlayerWidget();
 
-    void setPlayer(Player& p);
-    Player& getPlayer();
+    void setPlayer(PlayerConstPtr &p);
+    PlayerPtr getPlayer();
+
     void setVote(int vote);
+    int getVote();
 
     void makeSelectable(bool selectable);
 signals:

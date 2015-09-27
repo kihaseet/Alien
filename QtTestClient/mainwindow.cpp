@@ -10,8 +10,8 @@ MainWindow::MainWindow(QWidget *parent) :
     gameClient = new GameClient();
     gameConfig = new GameConfig();
     InventoryMode = false;
-    selectTargetMode.currentButton = -1;
-    selectTargetMode.multiSelect = false;
+    actionMode.currentButton = nullptr;
+    actionMode.badgeUlt = false;
     colsCount = 4;
 
     ui->fBottom->layout()->setContentsMargins(0, 15, 0, 15);
@@ -44,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(gameClient, SIGNAL(startVoting(Vote)), this, SLOT(startVoting(Vote)));
     connect(gameClient, SIGNAL(updateActions(QVector<Action>)), this, SLOT(updateActions(QVector<Action>)));
     connect(gameClient, SIGNAL(updateItems(QVector<Item>)), this, SLOT(updateItems(QVector<Item>)));
-    connect(gameClient, SIGNAL(updatePlayers(QVector<Player>)), this, SLOT(updatePlayers(QVector<Player>)));
+    connect(gameClient, SIGNAL(updatePlayers(QConstPlayersVector)), this, SLOT(updatePlayers(QConstPlayersVector)));
     connect(gameClient, SIGNAL(voteUpdate(QString,int)), this, SLOT(voteUpdate(QString,int)));
 }
 
@@ -85,6 +85,56 @@ QStringList MainWindow::generateRoleList(QStringList usedRoles)
     return result;
 }
 
+QImage MainWindow::combineWithOverlay(const QImage &base, const QImage &overlay)
+{
+    QImage imageWithOverlay = QImage(base.size(), QImage::Format_ARGB32_Premultiplied);
+    QPainter painter(&imageWithOverlay);
+
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
+    painter.fillRect(imageWithOverlay.rect(), Qt::transparent);
+
+    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    painter.drawImage(0, 0, base);
+
+    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+    painter.drawImage(0, 0, overlay);
+
+    painter.end();
+
+    return imageWithOverlay;
+}
+
+bool MainWindow::isUltClicked(QPoint point, QLabel *l)
+{
+    int w = l->width();
+    int h = l->width();
+
+
+    auto pointInTriangle = [] (QPoint pt, QPoint p1, QPoint p2, QPoint p3) -> bool
+    {
+        auto sign = [](QPoint p1, QPoint p2, QPoint p3) -> float
+        {
+            return (p1.x() - p3.x()) * (p2.y() - p3.y()) - (p2.x() - p3.x()) * (p1.y() - p3.y());
+        };
+
+        bool b1, b2, b3;
+
+        b1 = sign(pt, p1, p2) < 0.0;
+        b2 = sign(pt, p2, p3) < 0.0;
+        b3 = sign(pt, p3, p1) < 0.0;
+
+        return ((b1 == b2) && (b2 == b3));
+    };
+
+    return !pointInTriangle(point, QPoint(0, 0), QPoint(w, 0), QPoint(0, h)); // not left-top
+}
+
+void MainWindow::targetsForItemSelected(QVector<ITarget> &targets)
+{
+    actionMode.action.setTargets(targets);
+    doAction();
+}
+
 void MainWindow::writeLog(QString text)
 {
     ui->lLog->addItem(text);
@@ -92,7 +142,8 @@ void MainWindow::writeLog(QString text)
 
 void MainWindow::clearSelection()
 {
-    selectTargetMode.currentButton = -1;
+    actionMode.currentButton = nullptr;
+    actionMode.badgeUlt = false;
 
     for (int i = 0; i < playersWidgets.length(); i++)
     {
@@ -105,86 +156,211 @@ void MainWindow::clearSelection()
     }
 }
 
-void MainWindow::useItem(ItemType item)
+void MainWindow::useAction()
 {
-    if (item != IT_BADGE && item != IT_BATTERY && item != IT_ROTATION)
+    if (actionMode.action.getActionType() == ActionType::TT_ATTACK || actionMode.action.getActionType() == ActionType::TT_INFECT)
     {
         for (int i = 0; i < playersWidgets.length(); i++)
         {
-            playersWidgets[i]->makeSelectable(playersWidgets[i]->getPlayer().getStatus() != DIED);
+            playersWidgets[i]->makeSelectable(playersWidgets[i]->getPlayer()->getStatus() != DIED);
         }
 
-        selectTargetMode.multiSelect = false;
+        actionMode.targets_selected = std::bind(&MainWindow::targetsForItemSelected, this, std::placeholders::_1);
     }
-    else if (item == IT_BADGE)
+    else
+    {
+        doAction();
+    }
+}
+
+void MainWindow::useItem()
+{
+    actionMode.badgeUlt = false;
+
+    if (actionMode.action.getItem().getType() == IT_BADGE)
+    {
+        QPlayerWidget* avaiable_targets[2];
+        avaiable_targets[0] = nullptr;
+        avaiable_targets[1] = nullptr;
+
+        for (int i = 0; i < playersWidgets.length(); i++)
+        {
+            playersWidgets[i]->makeSelectable(false);
+
+            if (playersWidgets[i]->getPlayer()->getStatus() == DIED)
+            {
+                continue;
+            }
+
+            if (avaiable_targets[0] == nullptr)
+            {
+                avaiable_targets[0] = playersWidgets[i];
+                continue;
+            }
+
+            if (avaiable_targets[1] == nullptr)
+            {
+                avaiable_targets[1] = playersWidgets[i];
+                continue;
+            }
+
+            if (playersWidgets[i]->getVote() > avaiable_targets[0]->getVote())
+            {
+                avaiable_targets[0] = playersWidgets[i];
+            }
+            else if (playersWidgets[i]->getVote() > avaiable_targets[1]->getVote())
+            {
+                avaiable_targets[1] = playersWidgets[i];
+            }
+        }
+
+        avaiable_targets[0]->makeSelectable(true);
+        avaiable_targets[1]->makeSelectable(true);
+
+        actionMode.targets_selected = std::bind(&MainWindow::targetsForItemSelected, this, std::placeholders::_1);
+    }
+    else if (actionMode.action.getItem().getType() == IT_BATTERY)
     {
         QStringList items;
         bool ok = false;
 
-        for (int i = 0; i <= ITEMTYPE_LAST; i++)
+        for (int i = 0; i < ITEMTYPE_LAST; i++)
         {
-            if (gameClient->getWreckedItems().indexOf((ItemType)i) == -1)
+            auto wrecked_item = std::find(gameClient->getWreckedItems().begin(), gameClient->getWreckedItems().end(), i);
+
+            if (wrecked_item == gameClient->getWreckedItems().end())
             {
                 items.append(ItemTypeProcess::ItemTypeToString((ItemType)i));
             }
         }
 
-        QString selectedItem = QInputDialog::getItem(this, "[Badge] Select item", "Item", items, 0, false, &ok);
-
-        QVector<ITarget> target;
-
-        target.push_back(Item(ItemTypeProcess::ItemTypeByName(selectedItem), 0));
+        QString selectedItem = QInputDialog::getItem(this, "[Battery] Select item for charge", "Item", items, 0, false, &ok);
 
         if (ok && !selectedItem.isEmpty())
         {
-            gameClient->doAction(ActionFactory::useBadge(Item(IT_BADGE, 0), target));
+            QVector<ITarget> targets;
+            targets.push_back(Item(ItemTypeProcess::ItemTypeByName(selectedItem), 0));
+
+            targetsForItemSelected(targets);
+
+            doAction();
         }
     }
-    else if (item == IT_BATTERY)
-    {
-        QStringList items;
-        bool ok = false;
-
-        for (int i = 0; i < gameClient->getWreckedItems().length(); i++)
-        {
-            items.append(ItemTypeProcess::ItemTypeToString(gameClient->getWreckedItems()[i]));
-        }
-
-        QString selectedItem = QInputDialog::getItem(this, "[Battery] Select item", "Item", items, 0, false, &ok);
-
-        QVector<ITarget> target;
-
-        target.push_back(Item(ItemTypeProcess::ItemTypeByName(selectedItem), 0));
-
-        if (ok && !selectedItem.isEmpty())
-        {
-            gameClient->doAction(ActionFactory::useItem(Item(IT_BATTERY, 0), target));
-        }
-    }
-    else if (item == IT_ROTATION)
+    else if (actionMode.action.getItem().getType() == IT_ROTATION)
     {
         QStringList playersNames;
 
         for (int i = 0; i < gameClient->getPlayers().length(); i++)
         {
-            playersNames << "[ " + gameClient->getPlayers()[i].getRoles().join(", ") + " ] " + gameClient->getPlayers()[i].getName();
+            playersNames << "[ " + gameClient->getPlayers()[i]->getRoles().join(", ") + " ] " + gameClient->getPlayers()[i]->getName();
         }
 
         ui->lstPlayersRotation->addItems(playersNames);
+
+        actionMode.targets_selected = std::bind(&MainWindow::targetsForItemSelected, this, std::placeholders::_1);
+    }
+    else
+    {
+        for (int i = 0; i < playersWidgets.length(); i++)
+        {
+            playersWidgets[i]->makeSelectable(playersWidgets[i]->getPlayer()->getStatus() != DIED);
+        }
+
+        actionMode.targets_selected = std::bind(&MainWindow::targetsForItemSelected, this, std::placeholders::_1);
     }
 }
 
-void MainWindow::ultItem(ItemType item)
+void MainWindow::ultItem()
 {
-    QMessageBox("TEST", "ULT", QMessageBox::Critical, QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton, this).exec();
+    actionMode.badgeUlt = false;
+
+    if (actionMode.action.getItem().getType() == IT_BADGE)
+    {
+        QStringList items;
+        bool ok = false;
+
+        for (int i = 0; i < ITEMTYPE_LAST; i++)
+        {
+            auto wrecked_item = std::find(gameClient->getWreckedItems().begin(), gameClient->getWreckedItems().end(), i);
+
+            if (wrecked_item == gameClient->getWreckedItems().end())
+            {
+                items.append(ItemTypeProcess::ItemTypeToString((ItemType)i));
+            }
+        }
+
+        QString selectedItem = QInputDialog::getItem(this, "[Badge] Select item for use", "Item", items, 0, false, &ok);
+
+        if (ok && !selectedItem.isEmpty())
+        {
+            Item item(ItemTypeProcess::ItemTypeByName(selectedItem), 0);
+
+            actionMode.action.setActionType(ActionType::TT_USE_ITEM);
+            actionMode.action.setItem(item);
+            actionMode.badgeUlt = true;
+
+            useItem();
+        }
+    }
+    else if (actionMode.action.getItem().getType() == IT_BATTERY)
+    {
+        QStringList items;
+        bool ok = false;
+
+        for (auto& wrecked_item: gameClient->getWreckedItems())
+        {
+            items.append(ItemTypeProcess::ItemTypeToString(wrecked_item));
+        }
+
+        QString selectedItem = QInputDialog::getItem(this, "[Battery] Select item for repair", "Item", items, 0, false, &ok);
+
+        if (ok && !selectedItem.isEmpty())
+        {
+            QVector<ITarget> targets;
+            targets.push_back(Item(ItemTypeProcess::ItemTypeByName(selectedItem), 0));
+
+            targetsForItemSelected(targets);
+
+            doAction();
+        }
+    }
+    else if (actionMode.action.getItem().getType() == IT_BLASTER)
+    {
+        for (int i = 0; i < playersWidgets.length(); i++)
+        {
+            playersWidgets[i]->makeSelectable(playersWidgets[i]->getPlayer()->getStatus() != DIED);
+        }
+
+        actionMode.targets_selected = std::bind(&MainWindow::targetsForItemSelected, this, std::placeholders::_1);
+    }
+    else
+    {
+        doAction();
+    }
 }
 
-void MainWindow::doAction(Action action)
+void MainWindow::doAction()
 {
-    clearSelection();
-    gameClient->doAction(action);
+    if (actionMode.action.getActionType() == ActionType::TT_ULT_ITEM || actionMode.badgeUlt)
+    {
+        if (QMessageBox("Ult Item", "Are you sure?", QMessageBox::Question, QMessageBox::Yes, QMessageBox::No, QMessageBox::NoButton, this).exec() == QMessageBox::No)
+        {
+            clearSelection();
+            return;
+        }
+    }
 
-    selectTargetMode.multiSelect = false;
+    if (actionMode.badgeUlt)
+    {
+        Action badgeUlt = ActionFactory::useBadge(actionMode.action.getItem(), actionMode.action.getTargets());
+        gameClient->doAction(badgeUlt);
+    }
+    else
+    {
+        gameClient->doAction(actionMode.action);
+    }
+
+    clearSelection();
 }
 
 void MainWindow::errorLog(QString text)
@@ -196,7 +372,7 @@ void MainWindow::voteUpdate(QString playerName, int votes)
 {
     for (QPlayerWidget* playerWidget: this->playersWidgets)
     {
-        if (playerWidget->getPlayer().getName() == playerName)
+        if (playerWidget->getPlayer()->getName() == playerName)
         {
             playerWidget->setVote(votes);
             break;
@@ -252,11 +428,9 @@ void MainWindow::onItemMouseClick(QPoint point)
 {
     QLabel* lItem = (QLabel*)QObject::sender();
 
-    int id = lItem->property("id").toInt();
-
-    if (selectTargetMode.currentButton != -1)
+    if (actionMode.currentButton != nullptr )
     {
-        if (selectTargetMode.currentButton == id)
+        if (actionMode.currentButton == lItem)
         {
             clearSelection();
         }
@@ -264,67 +438,44 @@ void MainWindow::onItemMouseClick(QPoint point)
         return;
     }
 
-    selectTargetMode.currentButton = id;
+    actionMode.currentButton = lItem;
 
     for (int i = 0; i < itemsLabels.length(); i++)
     {
-        if (i != id)
+        if (itemsLabels[i] != lItem)
         {
             itemsLabels[i]->setEnabled(false);
         }
     }
 
-    int w = ui->lItem1->width();
-    int h = ui->lItem1->width();
-
-
-    auto pointInTriangle = [] (QPoint pt, QPoint p1, QPoint p2, QPoint p3) -> bool
-    {
-        auto sign = [](QPoint p1, QPoint p2, QPoint p3) -> float
-        {
-            return (p1.x() - p3.x()) * (p2.y() - p3.y()) - (p2.x() - p3.x()) * (p1.y() - p3.y());
-        };
-
-        bool b1, b2, b3;
-
-        b1 = sign(pt, p1, p2) < 0.0;
-        b2 = sign(pt, p2, p3) < 0.0;
-        b3 = sign(pt, p3, p1) < 0.0;
-
-        return ((b1 == b2) && (b2 == b3));
-    };
-
 
     if (this->InventoryMode)
     {
-        ItemType item = (ItemType)lItem->property("type").toInt();
+        actionMode.action.setItem(Item((ItemType)lItem->property("type").toInt(), 0));
 
-        if (pointInTriangle(point, QPoint(0, 0), QPoint(w, 0), QPoint(0, h))) // if in left-top triangle
+        if (isUltClicked(point, lItem) && actionMode.action.getItem().getType() != IT_MOP
+                && actionMode.action.getItem().getType() != IT_ROTATION
+                && actionMode.action.getItem().getType() != IT_FETUS)
         {
-            useItem(item);
+            actionMode.action.setActionType(ActionType::TT_ULT_ITEM);
+            ultItem();
         }
         else
         {
-            if (item == IT_MOP)
-            {
-                useItem(item);
-            }
-            else
-            {
-                ultItem(item);
-            }
+            actionMode.action.setActionType(ActionType::TT_USE_ITEM);
+            useItem();
         }
     }
     else
     {
-        Action action = *gameClient->getCurrentPlayer()->getAction((ActionType)lItem->property("type").toInt());
-        doAction(action);
+        actionMode.action.setActionType((ActionType)lItem->property("type").toInt());
+        useAction();
     }
 }
 
 void MainWindow::onPlayerClick(QString name)
 {
-    if (!name.isEmpty() && this->gameClient->getCurrentVoting() != nullptr)
+    if (this->gameClient->getCurrentVoting() != nullptr && this->actionMode.currentButton == nullptr)
     {
         if (this->gameClient->getCurrentVoting()->getCurrentTarget().isEmpty())
         {
@@ -333,6 +484,17 @@ void MainWindow::onPlayerClick(QString name)
         else if (this->gameClient->getCurrentVoting()->getCurrentTarget() == name)
         {
             gameClient->doAction(ActionFactory::unvote());
+        }
+    }
+    else
+    {
+        if (this->actionMode.currentButton != nullptr)
+        {
+            QVector<ITarget> targets;
+
+            targets.push_back(ITarget(name));
+
+            actionMode.targets_selected(targets);
         }
     }
 }
@@ -363,7 +525,7 @@ void MainWindow::dayUpdate(int day, bool isDay)
     {
         ui->swGame->setCurrentIndex(2);
     }
-    this->tabs.updateDay((isDay ? "DAY: " : "NIGHT: ") + QString(day));
+    this->tabs.updateDay((isDay ? "DAY: " : "NIGHT: ") + QString::number(day));
 }
 
 void MainWindow::startVoting(Vote &vote)
@@ -381,20 +543,21 @@ void MainWindow::endVoting()
     }
 }
 
-void MainWindow::updateActions(QVector<Action> actions)
+void MainWindow::updateActions(QVector<ActionType> actions)
 {
     if (!this->InventoryMode)
     {
-        for (int i = 0; i < actions.length(); i++)
+        for (int i = 0; i < actions.size(); i++)
         {
-            itemsLabels[i]->setPixmap(QPixmap::fromImage(QImage(":/actions/" + QString((int)actions[i].getActionType()))));
-            itemsLabels[i]->setProperty("type", QVariant((int)actions[i].getActionType()));
+            QImage image = this->combineWithOverlay(QImage(":/buttons/action.png"), QImage(":/actions/" + QString::number((int)actions[i])));
+            itemsLabels[i]->setPixmap(QPixmap::fromImage(image));
+            itemsLabels[i]->setProperty("type", QVariant((int)actions[i]));
             itemsLabels[i]->setVisible(true);
         }
 
-        for (int i = actions.length(); i < itemsLabels.length(); i++)
+        for (int j = actions.size(); j < itemsLabels.length(); j++)
         {
-            itemsLabels[i]->setVisible(false);
+            itemsLabels[j]->setPixmap(QPixmap());
         }
     }
 }
@@ -405,26 +568,27 @@ void MainWindow::updateItems(QVector<Item> items)
     {
         for (int i = 0; i < items.length(); i++)
         {
+            QImage image = this->combineWithOverlay(QImage(":/buttons/item.png"), QImage(":/items/" + QString::number((int)items[i].getType())));
             itemsLabels[i]->setText(items[i].getName());
-            //itemsLabels[i]->setPixmap(QPixmap::fromImage(QImage(":/items/" + QString((int)items[i].getType()))));
+            itemsLabels[i]->setPixmap(QPixmap::fromImage(image));
             itemsLabels[i]->setProperty("type", QVariant((int)items[i].getType()));
             itemsLabels[i]->setVisible(true);
         }
 
         for (int i = items.length(); i < itemsLabels.length(); i++)
         {
-            itemsLabels[i]->setVisible(false);
+            itemsLabels[i]->setPixmap(QPixmap());
         }
     }
 }
 
-void MainWindow::updatePlayers(QVector<Player> players)
+void MainWindow::updatePlayers(QConstPlayersVector players)
 {
     auto findPlayer = [this](QString name) -> QPlayerWidget*
     {
         for (int i = 0; i < this->playersWidgets.length(); i++)
         {
-            if (this->playersWidgets[i]->getPlayer().getName() == name)
+            if (this->playersWidgets[i]->getPlayer()->getName() == name)
             {
                 return this->playersWidgets[i];
             }
@@ -437,7 +601,7 @@ void MainWindow::updatePlayers(QVector<Player> players)
     {
         for (int i = 0; i < players.length(); i++)
         {
-            QPlayerWidget* player = findPlayer(players[i].getName());
+            QPlayerWidget* player = findPlayer(players[i]->getName());
 
             if (player != nullptr)
             {
@@ -467,9 +631,9 @@ void MainWindow::updatePlayers(QVector<Player> players)
             ((QGridLayout*)ui->PlayersWidgets->layout())->addWidget(pw, playersWidgets.length() / colsCount, playersWidgets.length() % colsCount);
             playersWidgets.push_back(pw);
 
-            ui->lstPlayers->addItem("[" + players[i].getRoles().join(", ") + "] " + players[i].getName());
+            ui->lstPlayers->addItem("[" + players[i]->getRoles().join(", ") + "] " + players[i]->getName());
 
-            usedRoles += players[i].getRoles();
+            usedRoles += players[i]->getRoles();
         }
 
         ui->comboBox->clear();
@@ -494,7 +658,7 @@ void MainWindow::on_lInventory_onclick()
     else
     {
         ui->lInventory->setText("Инвентарь");
-        this->updateItems(gameClient->getCurrentPlayer()->getItems());
+        this->updateActions(gameClient->getCurrentPlayer()->getActions());
     }
 }
 
@@ -508,7 +672,7 @@ void MainWindow::on_bApplyRotation_clicked()
         targets.append(ITarget(playerName));
     }
 
-    doAction(ActionFactory::useItem(Item(IT_ROTATION, 0), targets));
+    // TODO: actionMode
 }
 
 void MainWindow::on_bCancelRotation_clicked()

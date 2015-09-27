@@ -120,7 +120,7 @@ void XmlProtocol::reconnect(QString &address)
 
 void XmlProtocol::GetData(QString data)
 {
-    qDebug() << "XmlProtocol: XML DATA: \n" << data;
+    qInfo() << "XmlProtocol: XML DATA: \n" << data;
     QStringList list = data.split("\n\n");
     for (QString& m: list) {
         QDomDocument domDoc;

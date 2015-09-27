@@ -5,7 +5,12 @@ StatChargeItem::StatChargeItem(Item item)
     this->item = item;
 }
 
-void StatChargeItem::apply(CurrentPlayer &player)
+StatChargeItem::StatChargeItem(const StatChargeItem &s)
+{
+    this->item = s.item;
+}
+
+void StatChargeItem::apply(CurrentPlayer &player) const
 {
     auto items = player.getItems();
     for (Item& _item: items)

@@ -37,7 +37,7 @@ signals:
     void endVote(EndVote endvote);
     void playerUlted(ItemType item);
     void playersUpdate(QVector<Player> players);
-    void statUpdate(IStatUpdate stat);
+    void statUpdate(const IStatUpdate& stat);
     void event(const IEvent& event);
     void errorMessage(QString message);
     void disconnected();

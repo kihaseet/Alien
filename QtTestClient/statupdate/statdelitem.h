@@ -9,7 +9,9 @@ class StatDelItem : public IStatUpdate
     Item item;
 public:
     StatDelItem(Item item);
-    virtual void apply(CurrentPlayer& player);
+    StatDelItem(const StatDelItem& s);
+
+    virtual void apply(CurrentPlayer& player) const;
 };
 
 #endif // STATDELITEM_H

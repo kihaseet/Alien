@@ -9,7 +9,6 @@ CurrentPlayer::CurrentPlayer(QString name, Status status, QStringList roles, Pla
     this->image = image;
     this->hp = hp;
     this->_isAlien = isAlien;
-    this->yetVote = false;
 }
 
 //void CurrentPlayer::recalcActions()
@@ -100,50 +99,53 @@ void CurrentPlayer::setAlien(bool isAlien)
     this->_isAlien = isAlien;
 }
 
-QVector<Action> CurrentPlayer::getActions()
+QVector<ActionType> CurrentPlayer::getActions()
 {
     return this->actions;
 }
 
-Action *CurrentPlayer::getAction(ActionType actionType)
-{
-    for (int i = 0; i < this->actions.length(); i++)
-    {
-        if (this->actions[i].getActionType() == actionType)
-        {
-            return &this->actions[i];
-        }
-    }
-
-    return nullptr;
-}
-
-void CurrentPlayer::setActions(QVector<Action> actions)
+void CurrentPlayer::setActions(QVector<ActionType> actions)
 {
     this->actions = actions;
 }
 
-bool CurrentPlayer::getYetAttack()
+QVector<Item> CurrentPlayer::getItems()
 {
-    return this->yetAttacked;
+    return items;
 }
 
-bool CurrentPlayer::getYetInfect()
+void CurrentPlayer::setItems(QVector<Item> items)
 {
-    return this->yetInfect;
+    this->items = items;
 }
 
-bool CurrentPlayer::getYetUsed()
+void CurrentPlayer::addDidAction(Action action)
 {
-    return this->yetUsed;
+    didActions.push_back(action);
 }
 
-bool CurrentPlayer::getYetWait()
+bool CurrentPlayer::didPlayerAction(Action action)
 {
-    return this->yetWait;
+    auto act = std::find_if(didActions.begin(), didActions.end(), [action](Action& check_act)
+    {
+        return (check_act.getActionType() == action.getActionType()
+                && ((action.getActionType() == ActionType::TT_USE_ITEM || action.getActionType() == ActionType::TT_ULT_ITEM)
+                    && (check_act.getItem().getName() == action.getItem().getName())));
+    });
+
+    return act != didActions.end();
 }
 
-bool CurrentPlayer::getYetVote()
+bool CurrentPlayer::didPlayerAction(ActionType action)
 {
-    return this->yetVote;
+    auto act = std::find_if(didActions.begin(), didActions.end(), [action](Action& check_act)
+    {
+        if (action == ActionType::TT_USE_ITEM || action == ActionType::TT_ULT_ITEM)
+        {
+            throw std::exception();
+        }
+        return (check_act.getActionType() == action);
+    });
+
+    return act != didActions.end();
 }

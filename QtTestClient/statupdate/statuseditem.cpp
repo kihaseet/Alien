@@ -6,7 +6,13 @@ StatUsedItem::StatUsedItem(Item item, bool success)
     this->success = success;
 }
 
-void StatUsedItem::apply(CurrentPlayer &player)
+StatUsedItem::StatUsedItem(const StatUsedItem &s)
+{
+    this->item = s.item;
+    this->success = s.success;
+}
+
+void StatUsedItem::apply(CurrentPlayer &player) const
 {
     if (success)
     {

@@ -13,11 +13,11 @@ class StatUpdateFactory
 {
 public:
     StatUpdateFactory();
-    static IStatUpdate addItem(Item item);
-    static IStatUpdate usedItem(Item item, bool success);
-    static IStatUpdate delItem(Item item);
-    static IStatUpdate alien();
-    static IStatUpdate changeHP(int HP);
+    static StatAddItem addItem(Item item);
+    static StatUsedItem usedItem(Item item, bool success);
+    static StatDelItem delItem(Item item);
+    static StatAlien alien();
+    static StatChangeHP changeHP(int HP);
 };
 
 #endif // STATUPDATEFACTORY_H

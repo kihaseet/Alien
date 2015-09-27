@@ -1,6 +1,8 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include <memory>
+
 #include <QString>
 #include <QStringList>
 #include <QVector>
@@ -9,6 +11,12 @@
 #include "status.h"
 #include "playerimage.h"
 #include "item.h"
+
+class Player;
+
+typedef std::shared_ptr<Player> PlayerPtr;
+typedef std::shared_ptr<Player const> PlayerConstPtr;
+
 
 class Player : public ITarget
 {
@@ -23,14 +31,16 @@ public:
     explicit Player();
     explicit Player(QString name, QStringList roles, PlayerImage image, bool onDuty = false, bool online = true, Status status = Status::UP);
 
+    void update(const Player& p);
+
     Status getStatus();
     void setStatus(Status status);
     void setOnline(bool online);
     void setOnDuty(bool onDuty);
-    QStringList getRoles();
+    QStringList getRoles() const;
     void setRoles(QStringList roles);
     void setImage(PlayerImage img);
-    bool isOnline();
+    bool isOnline() const;
     bool isOnDuty();
     void addItem(Item item);
     Item* getItem(ItemType itemType);
@@ -39,5 +49,4 @@ public:
 
     bool operator<(const Player& p) const;
 };
-
 #endif // PLAYER_H

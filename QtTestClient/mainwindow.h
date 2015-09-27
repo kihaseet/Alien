@@ -5,8 +5,11 @@
 #include <QString>
 #include <QMessageBox>
 #include <QInputDialog>
+#include <QImage>
+#include <QPainter>
 #include <QVector>
 #include <QLabel>
+#include <functional>
 
 #include "gameclient.h"
 #include "gameconfig.h"
@@ -35,12 +38,17 @@ public:
 
 private:
     QStringList generateRoleList(QStringList usedRoles);
+    QImage combineWithOverlay(const QImage& base, const QImage& overlay);
+    bool isUltClicked(QPoint point, QLabel* l);
+    void targetsForItemSelected(QVector<ITarget>& targets);
+
     void writeLog(QString text);
     void selectTargets(QVector<QString> players);
     void clearSelection();
-    void useItem(ItemType item);
-    void ultItem(ItemType item);
-    void doAction(Action action);
+    void useAction();
+    void useItem();
+    void ultItem();
+    void doAction();
 
 private:
     GameClient* gameClient;
@@ -53,9 +61,12 @@ private:
 
     struct
     {
-        int currentButton;
-        bool multiSelect;
-    } selectTargetMode;
+        QLabel* currentButton;
+        Action action;
+        bool badgeUlt;
+        std::function<void(QVector<ITarget>& targets)> targets_selected;
+
+    } actionMode;
 
     int colsCount;
 
@@ -92,9 +103,9 @@ public slots:
     void dayUpdate(int day, bool isDay);
     void startVoting(Vote& vote);
     void endVoting();
-    void updateActions(QVector<Action> actions);
+    void updateActions(QVector<ActionType> actions);
     void updateItems(QVector<Item> items);
-    void updatePlayers(QVector<Player> players);
+    void updatePlayers(QConstPlayersVector players);
     void log(QString text);
     void errorLog(QString text);
     void voteUpdate(QString playerName, int votes);

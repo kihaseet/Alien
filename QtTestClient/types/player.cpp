@@ -51,6 +51,17 @@ Player::Player(QString name, QStringList roles, PlayerImage image, bool onDuty, 
     }
 }
 
+void Player::update(const Player &p)
+{
+    this->image = p.image;
+    this->items = p.items;
+    this->name = p.name;
+    this->onDuty = p.onDuty;
+    this->online = p.online;
+    this->roles = p.roles;
+    this->status = p.status;
+}
+
 Status Player::getStatus()
 {
     return this->status;
@@ -71,7 +82,7 @@ void Player::setOnDuty(bool onDuty)
     this->onDuty = onDuty;
 }
 
-QStringList Player::getRoles()
+QStringList Player::getRoles() const
 {
     return this->roles;
 }
@@ -86,7 +97,7 @@ void Player::setImage(PlayerImage img)
     this->image = img;
 }
 
-bool Player::isOnline()
+bool Player::isOnline() const
 {
     return this->online;
 }

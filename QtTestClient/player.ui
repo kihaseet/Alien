@@ -27,7 +27,6 @@
   </property>
   <property name="styleSheet">
    <string notr="true">#QPlayerWidget {
-background-color: rgba(0, 0, 0, 0);
 background-image: url(:/player_widget/border.png);
 }</string>
   </property>
@@ -108,7 +107,7 @@ color: rgb(255, 157, 58);
 }</string>
           </property>
           <property name="text">
-           <string>99</string>
+           <string/>
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -144,10 +143,13 @@ color: rgb(255, 157, 58);
              </size>
             </property>
             <property name="styleSheet">
-             <string notr="true">#lOnline { background-image: url(:/player_status/online); }</string>
+             <string notr="true"/>
             </property>
             <property name="text">
              <string/>
+            </property>
+            <property name="pixmap">
+             <pixmap resource="alienresources.qrc">:/player_status/online</pixmap>
             </property>
            </widget>
           </item>
@@ -239,6 +241,8 @@ color: rgb(255, 157, 58);
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="alienresources.qrc"/>
+ </resources>
  <connections/>
 </ui>

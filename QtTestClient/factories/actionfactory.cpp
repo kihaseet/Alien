@@ -1,6 +1,6 @@
 #include "factories/actionfactory.h"
 
-CurrentPlayer* ActionFactory::currentPlayer = nullptr;
+CurrentPlayerPtr ActionFactory::currentPlayer = nullptr;
 
 ActionFactory::ActionFactory()
 {
@@ -41,10 +41,10 @@ Action ActionFactory::infect(Player player)
     return Action(ActionType::TT_INFECT, *currentPlayer, targets);
 }
 
-Action ActionFactory::vote(Player player)
+Action ActionFactory::vote(PlayerConstPtr player)
 {
     QVector<ITarget> targets;
-    targets.push_back(player);
+    targets.push_back(*player);
     return Action(ActionType::TT_VOTE, *currentPlayer, targets);
 }
 

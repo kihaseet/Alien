@@ -16,9 +16,9 @@ tcpclient::tcpclient()
 
 void tcpclient::sendData(QString document)
 {
-    qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
-    qDebug() << document;
-    qDebug() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
+    qInfo() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
+    qInfo() << document.toStdString().c_str();
+    qInfo() << "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<";
     QString tmp = document +'\n';
     QByteArray data = tmp.toLocal8Bit();
     serv->write(data);
@@ -90,9 +90,10 @@ void tcpclient::readData()
         QByteArray data = socket->readAll();
         QString tmp = data.data();
         tmp=tmp.trimmed();//полученное сообщение
-        qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
-        qDebug() << "**************************BULK START*************************"
-                 << tmp
+        qInfo() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+        qInfo() << "**************************BULK START*************************"
+                 << endl
+                 << tmp.toStdString().c_str()
                  << endl
                  << "**************************BULK END***************************";
 
@@ -100,13 +101,14 @@ void tcpclient::readData()
 
         while((strToProcess = processData(strToProcess)).length() != 0)
         {
-            qDebug() << "******************** BLOCK START ************************"
-                     << strToProcess
+            qInfo() << "******************** BLOCK START ************************"
+                     << endl
+                     << strToProcess.toStdString().c_str()
                      << endl
                      << "******************** BLOCK END **************************";
         }
 
-        qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
+        qInfo() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>";
     }
 }
 
