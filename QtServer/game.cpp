@@ -899,7 +899,7 @@ void game::delete_role(player* whom,ROLE what)
     QList <ROLE> mainrole;
     mainrole <<RT_CAPTAIN<<RT_DOCTOR<<RT_SIGNALMEN<<RT_GUNMEN<<RT_ASSISTANT<<RT_ENGINEER<<RT_SCIENTIST;
 
-    emit GuiMess2Log("[Game]","Игрок "+whom->name+ "потерял роль "+RegisterObject::RoleDescr.key(what));
+    emit GuiMess2Log("[Game]","Игрок "+whom->name+ " потерял роль "+RegisterObject::RoleDescr.key(what));
 
     TurnObject turn(TT_DELROLE);
     turn.wh = whom;
@@ -910,16 +910,16 @@ void game::delete_role(player* whom,ROLE what)
     if(rolelist.count(what) == 0)
         rolelist.remove(what);
     whom->rolelist.removeOne(what);
-    foreach (item* var, itemlist.values())
+    // foreach (item* var, itemlist.values())
+    // {
+    if(what <= 7)
     {
-        if(what <= 7)
-        {
-            whom->itemlist.removeAll(TurnObject::RoleItem[what]);
-            turn.type = TT_DELITEM;
-            turn.item = TurnObject::RoleItem[what];
-            emit send_stat(turn);
-        }
+        whom->itemlist.removeAll(TurnObject::RoleItem[what]);
+        turn.type = TT_DELITEM;
+        turn.item = TurnObject::RoleItem[what];
+        emit send_stat(turn);
     }
+    // }
     if(mainrole.contains(what))
     {
         unclame_rolelist.append(what);
@@ -1761,6 +1761,7 @@ void game::sortNightActions()
 }
 
 void game::do_events(TurnObject TO){
+    TurnObject TOcop = TO;
     switch (TO.type) {
     case TT_ALIEN:
         slot_alien(TO);
@@ -1769,19 +1770,22 @@ void game::do_events(TurnObject TO){
         slot_attack(TO);
         break;
     case TT_USE_ITEM:
+        TOcop.type = TT_CORRECT;
+        emit send_stat(TOcop);
+
         slot_use_item(TO);
-        TO.type = TT_CORRECT;
-        emit send_stat(TO);
         break;
     case TT_USE_BADGE:
+        TOcop.type = TT_CORRECT;
+        emit send_stat(TOcop);
+
         slot_use_item_cap(TO);
-        TO.type = TT_CORRECT;
-        emit send_stat(TO);
         break;
     case TT_ULT_ITEM:
+        TOcop.type = TT_CORRECT;
+        emit send_stat(TOcop);
+
         slot_ult_item(TO);
-        TO.type = TT_CORRECT;
-        emit send_stat(TO);
         break;
     case TT_INFECT:
         slot_infect(TO);

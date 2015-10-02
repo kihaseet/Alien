@@ -100,8 +100,8 @@ void Blaster::ult_item(QQueue<QString> whom){
     qDebug()<<"Blaster::ult_item(QString whom)"<<whom;
     _game->playerlist->value(whom.first())->HP -= 1;
     if(_game->daytime)
-        _game->slot_down(TurnObject(TT_DOWN,whom));
-    _game->check_HP(_game->playerlist->value(whom.first()));
+        //_game->slot_down(TurnObject(TT_DOWN,whom));
+        _game->check_HP(_game->playerlist->value(whom.first()));
 
     this->power = -1;
 }
