@@ -10,5 +10,5 @@ EventDuty::EventDuty(const EventDuty &e) : IEvent(e.getWhat(), e.getWho(), e.get
 
 QString EventDuty::getDisplayMsg() const
 {
-    return who + " ыстал на дежурство.";
+    return who + " встал на дежурство.";
 }
