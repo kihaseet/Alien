@@ -43,13 +43,14 @@
         <file alias="3">resources/items/mop.png</file>
         <file alias="6">resources/items/notebook.png</file>
         <file alias="2">resources/items/scanner.png</file>
+        <file alias="7">resources/items/rotation.png</file>
     </qresource>
     <qresource prefix="/actions">
         <file alias="2">resources/actions/attack.png</file>
         <file alias="6">resources/actions/down.png</file>
         <file alias="3">resources/actions/infect.png</file>
-        <file alias="9">resources/actions/rotation.png</file>
         <file alias="4">resources/actions/skip.png</file>
         <file alias="5">resources/actions/up.png</file>
+        <file alias="9">resources/actions/badge.png</file>
     </qresource>
 </RCC>

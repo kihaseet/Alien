@@ -14,9 +14,6 @@ MainWindow::MainWindow(QWidget *parent) :
     actionMode.badgeUlt = false;
     colsCount = 4;
 
-    //ui->fBottom->layout()->setContentsMargins(0, 15, 0, 15);
-    //ui->fItemsAndActions->layout()->setContentsMargins(0, 15, 0, 15);
-
     tabs.addMainTabWidget(ui->lCurrentTab, ui->lAddCurrentTab_2, ui->fAddInfo);
     tabs.addSecTabWidget(ui->lTab2);
     tabs.addSecTabWidget(ui->lTab3);
@@ -258,6 +255,7 @@ void MainWindow::useItem()
         ui->lstPlayersRotation->addItems(playersNames);
 
         actionMode.targets_selected = std::bind(&MainWindow::targetsForItemSelected, this, std::placeholders::_1);
+        ui->swPresent->setCurrentIndex(3);
     }
     else
     {
@@ -677,7 +675,8 @@ void MainWindow::on_bApplyRotation_clicked()
         targets.append(ITarget(playerName));
     }
 
-    // TODO: actionMode
+    ui->swPresent->setCurrentIndex((int)tabs.getActiveTab());
+    actionMode.targets_selected(targets);
 }
 
 void MainWindow::on_bCancelRotation_clicked()
