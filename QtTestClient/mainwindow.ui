@@ -30,7 +30,7 @@
     <item row="1" column="0">
      <widget class="QStackedWidget" name="swGame">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="pConnect">
        <property name="styleSheet">
@@ -455,7 +455,23 @@ font-famile: Terminus;</string>
                  <property name="styleSheet">
                   <string notr="true">background-color: rgba(255, 255, 255, 0);</string>
                  </property>
-                 <layout class="QGridLayout" name="gridLayout_5"/>
+                 <layout class="QGridLayout" name="gridLayout_5">
+                  <property name="leftMargin">
+                   <number>1</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>1</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>1</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>1</number>
+                  </property>
+                  <property name="spacing">
+                   <number>1</number>
+                  </property>
+                 </layout>
                 </widget>
                </widget>
               </item>
@@ -557,6 +573,9 @@ font-famile: Terminus;</string>
                 <property name="styleSheet">
                  <string notr="true">background-color: rgba(255, 255, 255, 0);
 color: rgb(255, 255, 255);</string>
+                </property>
+                <property name="autoScroll">
+                 <bool>false</bool>
                 </property>
                </widget>
               </item>
@@ -735,6 +754,9 @@ color: rgb(255, 255, 255);</string>
                 <property name="styleSheet">
                  <string notr="true">color: rgb(255, 255, 255);</string>
                 </property>
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
+                </property>
                 <property name="text">
                  <string>Инвентарь</string>
                 </property>
@@ -755,12 +777,15 @@ color: rgb(255, 255, 255);</string>
            <item>
             <widget class="QFrame" name="fItemsAndActions">
              <property name="frameShape">
-              <enum>QFrame::StyledPanel</enum>
+              <enum>QFrame::Box</enum>
              </property>
              <property name="frameShadow">
               <enum>QFrame::Raised</enum>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <property name="spacing">
+               <number>6</number>
+              </property>
               <property name="leftMargin">
                <number>0</number>
               </property>
@@ -789,6 +814,9 @@ color: rgb(255, 255, 255);</string>
                 </property>
                 <property name="focusPolicy">
                  <enum>Qt::ClickFocus</enum>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::NoFrame</enum>
                 </property>
                 <property name="text">
                  <string/>

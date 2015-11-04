@@ -8,14 +8,28 @@
         <file alias="border.png">resources/ramka.png</file>
     </qresource>
     <qresource prefix="/player_avatar">
-        <file alias="0">resources/players/solder.png</file>
+        <file alias="101">resources/players/assistant.png</file>
+        <file alias="1">resources/players/captain.png</file>
+        <file alias="2">resources/players/doctor.png</file>
+        <file alias="4">resources/players/engineer.png</file>
+        <file alias="3">resources/players/gunmen.png</file>
+        <file alias="0">resources/players/passenger.png</file>
+        <file alias="5">resources/players/scientist.png</file>
+        <file alias="6">resources/players/signalman.png</file>
     </qresource>
     <qresource prefix="/player_status">
         <file alias="online.png">resources/online.png</file>
         <file alias="offline.png">resources/offline.png</file>
     </qresource>
     <qresource prefix="/roles">
-        <file alias="Captain.png">resources/roles/Captain.png</file>
+        <file alias="Captain">resources/roles/Captain.png</file>
+        <file alias="Doctor">resources/roles/doctor.png</file>
+        <file alias="Assistant">resources/roles/assistant.png</file>
+        <file alias="Engineer">resources/roles/engenier.png</file>
+        <file alias="Gunmen">resources/roles/gunmen.png</file>
+        <file alias="Scientist">resources/roles/science.png</file>
+        <file alias="Signalman">resources/roles/signalman.png</file>
+        <file alias="dummy">resources/roles/wtf_is_this.png</file>
     </qresource>
     <qresource prefix="/buttons">
         <file alias="action.pnf">resources/buttons/action.png</file>

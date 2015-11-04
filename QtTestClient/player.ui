@@ -26,9 +26,7 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">#QPlayerWidget {
-background-image: url(:/player_widget/border.png);
-}</string>
+   <string notr="true"/>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <property name="leftMargin">
@@ -149,7 +147,7 @@ color: rgb(255, 157, 58);
              <string/>
             </property>
             <property name="pixmap">
-             <pixmap resource="alienresources.qrc">:/player_status/online</pixmap>
+             <pixmap>:/player_status/online</pixmap>
             </property>
            </widget>
           </item>
@@ -234,6 +232,12 @@ color: rgb(255, 157, 58);
         <property name="text">
          <string>Name</string>
         </property>
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <property name="indent">
+         <number>10</number>
+        </property>
        </widget>
       </item>
      </layout>
@@ -241,8 +245,6 @@ color: rgb(255, 157, 58);
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="alienresources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

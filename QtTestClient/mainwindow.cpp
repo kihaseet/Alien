@@ -14,8 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
     actionMode.badgeUlt = false;
     colsCount = 4;
 
-    ui->fBottom->layout()->setContentsMargins(0, 15, 0, 15);
-    ui->fItemsAndActions->layout()->setContentsMargins(0, 15, 0, 15);
+    //ui->fBottom->layout()->setContentsMargins(0, 15, 0, 15);
+    //ui->fItemsAndActions->layout()->setContentsMargins(0, 15, 0, 15);
 
     tabs.addMainTabWidget(ui->lCurrentTab, ui->lAddCurrentTab_2, ui->fAddInfo);
     tabs.addSecTabWidget(ui->lTab2);
@@ -41,8 +41,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(gameClient, SIGNAL(log(QString)), this, SLOT(log(QString)));
     connect(gameClient, SIGNAL(registerNameStatus(bool)), this, SLOT(registerNameStatus(bool)));
     connect(gameClient, SIGNAL(registerRoleStatus(bool)), this, SLOT(registerRoleStatus(bool)));
-    connect(gameClient, SIGNAL(startVoting(Vote)), this, SLOT(startVoting(Vote)));
-    connect(gameClient, SIGNAL(updateActions(QVector<Action>)), this, SLOT(updateActions(QVector<Action>)));
+    connect(gameClient, SIGNAL(startVoting(Vote&)), this, SLOT(startVoting(Vote&)));
+    connect(gameClient, SIGNAL(updateActions(QVector<ActionType>)), this, SLOT(updateActions(QVector<ActionType>)));
     connect(gameClient, SIGNAL(updateItems(QVector<Item>)), this, SLOT(updateItems(QVector<Item>)));
     connect(gameClient, SIGNAL(updatePlayers(QConstPlayersVector)), this, SLOT(updatePlayers(QConstPlayersVector)));
     connect(gameClient, SIGNAL(voteUpdate(QString,int)), this, SLOT(voteUpdate(QString,int)));
@@ -531,6 +531,11 @@ void MainWindow::dayUpdate(int day, bool isDay)
 void MainWindow::startVoting(Vote &vote)
 {
     this->tabs.updateDayInfo("Голосование на " + vote.getVotingFor());
+
+    for (QPlayerWidget* playerWidget: this->playersWidgets)
+    {
+        playerWidget->setVote(0);
+    }
 }
 
 void MainWindow::endVoting()

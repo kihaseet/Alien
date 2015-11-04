@@ -130,6 +130,11 @@ QVector<Item> Player::getItems()
     return this->items;
 }
 
+PlayerImage Player::getImage()
+{
+    return this->image;
+}
+
 void Player::setItems(QVector<Item> items)
 {
     this->items = items;

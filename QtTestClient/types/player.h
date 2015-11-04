@@ -45,6 +45,7 @@ public:
     void addItem(Item item);
     Item* getItem(ItemType itemType);
     QVector<Item> getItems();
+    PlayerImage getImage();
     void setItems(QVector<Item> items);
 
     bool operator<(const Player& p) const;

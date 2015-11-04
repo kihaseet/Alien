@@ -1,5 +1,6 @@
 #include "qplayerwidget.h"
 #include "ui_player.h"
+#include <QDebug>
 
 void QPlayerWidget::mouseReleaseEvent(QMouseEvent *)
 {
@@ -8,11 +9,15 @@ void QPlayerWidget::mouseReleaseEvent(QMouseEvent *)
 
 void QPlayerWidget::paintEvent(QPaintEvent * event)
 {
+    QPainter p(this);
+
+    p.drawPixmap(QPoint(0, 0), QPixmap::fromImage(QImage(":/player_widget/border.png")));
+
     QWidget::paintEvent(event);
 
     if (!this->isEnabled())
     {
-        QPainter p(this);
+
 
         p.setOpacity(0.3);
 
@@ -59,10 +64,10 @@ void QPlayerWidget::setPlayer(PlayerConstPtr &p)
     ui->lOnline->setPixmap(QPixmap::fromImage(QImage(":/buttons/" + (p->isOnline() ? QString("online") : QString("offline") + ".png"))));
     for (int i = 0; i < player->getRoles().length(); i++)
     {
-        roleWidgets[i]->setPixmap(QPixmap::fromImage(QImage(":/roles/Captain.png")));
+        roleWidgets[i]->setPixmap(QPixmap::fromImage(QImage(":/roles/" + player->getRoles()[i])));
     }
 
-    ui->fPlayerImage->setStyleSheet("#fPlayerImage {background-image: url(:/player_avatar/0);}");
+    ui->fPlayerImage->setStyleSheet("#fPlayerImage {background-image: url(:/player_avatar/" + QString::fromStdString(std::to_string(player->getImage())) + ");}");
 }
 
 PlayerPtr QPlayerWidget::getPlayer()
@@ -79,6 +84,7 @@ void QPlayerWidget::setVote(int vote)
     else
     {
         ui->lVotes->setText(QString::number(vote));
+        this->vote = vote;
     }
 }
 
