@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     ui->setupUi(this);
 
 
-    _serv=new Server(21277,this);
+    _serv=new Server(21277);
     _xmlmaker = new xml_maker();
     _game=new game();
 
@@ -20,38 +20,35 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->itemlist,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(updateInventoryInfo(QListWidgetItem*)));
 
 
-    connect(_serv, SIGNAL(sendToAnalise(int,QString)), _xmlmaker, SLOT(new_analise(int,const QString)));
+    connect(_serv, SIGNAL(sendToAnalise(int,QString)), _xmlmaker, SLOT(newAnalise(int,QString)));
     connect(_serv,SIGNAL(addLogToGui(QString,QString)),this,SLOT(onAddLogToGui(QString,QString)));
     connect(_serv,SIGNAL(client_disconnected(int)),_game,SLOT(slot_disconnected(int)));
     connect(_serv,SIGNAL(client_connected()),_game,SLOT(slotSendRolelist()));
 
-    connect(_xmlmaker,SIGNAL(newname(int,QString,QString)),_game,SLOT(register_new_player(int,QString,QString)));
-    connect(_xmlmaker,SIGNAL(registerRolebyPlayer(int,QString)),_game,SLOT(registerRolebyPlayer(int,QString)));
-   // connect(_xmlmaker,SIGNAL(noVerifyClientName(QString)),_serv,SLOT(noVerifyClientName(int)));
-    connect(_xmlmaker,SIGNAL(sendtoclient(int,QString)),_serv,SLOT(slotsendToClient(int,QString)));
-    connect(_xmlmaker,SIGNAL(send_to_all(QString)),_serv,SLOT(send2all(QString)));
-    connect(_xmlmaker,SIGNAL(xml_create(int,QString,QString,QString,QQueue<QString>)),
-            _game,SLOT(make_events(int,QString,QString,QString,QQueue<QString>)));
-    connect(_xmlmaker,SIGNAL(xml_create_norot(int,QString,QString,QString)),
-            _game,SLOT(make_events(int,QString,QString,QString)));
+    connect(_xmlmaker,SIGNAL(sigRegisterCreate(RegisterObject)),_game,SLOT(register_new_player(RegisterObject)));
+    connect(_xmlmaker,SIGNAL(sigSendToClient(int,QString)),_serv,SLOT(slotsendToClient(int,QString)));
+    connect(_xmlmaker,SIGNAL(sigSendToAll(QString)),_serv,SLOT(send2all(QString)));
+    connect(_xmlmaker,SIGNAL(sigTurnCreate(int,TurnObject)),
+            _game,SLOT(make_events(int,TurnObject)));
 
-    connect(_game,SIGNAL(send_actionlist(player*)),_xmlmaker,SLOT());
-    connect(_game,SIGNAL(namecorrect(int)),_xmlmaker,SLOT(slotnamecorrect(int)));
-    connect(_game,SIGNAL(nonamecorrect(int)),_xmlmaker,SLOT(nonamecorrect(int)));
-    connect(_game,SIGNAL(sendrolelist2all (QList <player*>)),_xmlmaker,SLOT(updaterolelist(QList <player*>)));
-    connect(_game,SIGNAL(rolecorrect(int)),_xmlmaker,SLOT(rolecorrect(int)));
-    connect(_game,SIGNAL(norolecorrect(int)),_xmlmaker,SLOT(norolecorrect(int)));
+    connect(_game,SIGNAL(startgame(QList<player*>)),_xmlmaker,SLOT(slotStartGame(QList<player*>)));
+    connect(_game,SIGNAL(namecorrect(int,bool)),_xmlmaker,SLOT(slotNameCorrect(int,bool)));
+    connect(_game,SIGNAL(sendrolelist2all (QList <player*>)),_xmlmaker,SLOT(slotUpdateRoleList(QList<player*>)));
+    connect(_game,SIGNAL(rolecorrect(int,bool)),_xmlmaker,SLOT(slotRoleCorrect(int,bool)));
     connect(_game,SIGNAL(startnewsessionenable(bool)),this,SLOT(newGameSessionStatus(bool)));
 
-    //connect(_game,SIGNAL(startday()),_game,SLOT(day()));
+    connect(_game,SIGNAL(startPhase(int,bool)),_xmlmaker,SLOT(slotStartPhase(int, bool)));
+    connect(_game,SIGNAL(startvote(ROLE,QList<QString>)),_xmlmaker,SLOT(slotStartVoting(ROLE,QList<QString>)));
+    connect(_game,SIGNAL(endvote(ROLE,QString,QString)),_xmlmaker,SLOT(slotEndVoting(ROLE,QString,QString)));
+
+    connect(_game,SIGNAL(send_votelist(QList<VoteObject*>)),_xmlmaker,SLOT(slotSendVoteList(QList<VoteObject*>)));
+    connect(_game,SIGNAL(send_changes(TurnObject)),_xmlmaker,SLOT(slotSendTurn(TurnObject)));
+    connect(_game,SIGNAL(send_stat(TurnObject)),_xmlmaker,SLOT(slotSendStat(TurnObject)));
+    connect(_game,SIGNAL(send_mess(player*,QString)),_xmlmaker,SLOT(slotSendMess(player*,QString)));
+
     connect(_game,SIGNAL(GuiUpdatePlayerlist(QList<player*>)),this,SLOT(updatePlayerlist(QList<player*>)));
-    connect(_game,SIGNAL(GuiUpdateVotelist(QMap <QString,QPair<QString,int> >)),this,SLOT(UpdateVotelist(QMap <QString,QPair<QString,int> >)));
+    connect(_game,SIGNAL(GuiUpdateVotelist()),this,SLOT(UpdateVotelist()));
     connect(_game,SIGNAL(GuiMess2Log(QString,QString)),this,SLOT(onAddLogToGui(QString,QString)));
-
-    connect(_game,SIGNAL(send_nightmare(QQueue<ingame_event*>,QMap<QString,player*>)),
-            _xmlmaker,SLOT(nightmare(QQueue<ingame_event*>,QMap<QString,player*>)));
-
-
 }
 
 MainWindow::~MainWindow()
@@ -66,22 +63,22 @@ void MainWindow::onAddLogToGui(QString name,QString string)
 
 void MainWindow::updateInventory(QListWidgetItem* ss){
     ui->itemlist->clear();
-    foreach (item* var, _game->playerlist->value(ss->text())->itemlist.values()) {//пока что убраны должности в списке игроков, подумать над обрезанием
-        ui->itemlist->addItem(var->name);
+    foreach (ITEM var, _game->playerlist->value(ss->text())->itemlist) {//пока что убраны должности в списке игроков, подумать над обрезанием
+        ui->itemlist->addItem(TurnObject::ItemDescr.key(var));
     }
     ui->text_info->clear();
-    foreach (QString var, _game->playerlist->value(ss->text())->rolelist){
-            ui->text_info->append(var);
+    foreach (ROLE var, _game->playerlist->value(ss->text())->rolelist){
+            ui->text_info->append(RegisterObject::RoleDescr.key(var));
     }
     ui->text_info->append("HP: "+QString::number(_game->playerlist->value(ss->text())->HP));
     if(_game->playerlist->value(ss->text())->healthy==false)ui->text_info->append("В биованне");
     ui->text_info->append("Status: "+QString::number(_game->playerlist->value(ss->text())->status));
     ui->text_info->append("Invasion: "+QString::number(_game->playerlist->value(ss->text())->invasion));
-    QPair<QString,QList<QString> > varr;
-    foreach (varr, _game->playerlist->value(ss->text())->actionlist) {
-        ui->text_info->append("Action: "+varr.first);
-        foreach (QString vav,varr.second){
-            ui->text_info->append("Action: "+varr.first+" - "+vav);
+
+    foreach (TurnObject varr, _game->playerlist->value(ss->text())->actionlist) {
+        ui->text_info->append("Action: "+TurnObject::TurnDescr.key(varr.type) + " "+TurnObject::ItemDescr.key(varr.item));
+        foreach (QString vav,varr.targets){
+           //ui->text_info->append("Action: "+TurnObject::TurnDescr.key(varr.type) + " - "+vav);
         }
     }
 }
@@ -89,10 +86,10 @@ void MainWindow::updateInventory(QListWidgetItem* ss){
 void MainWindow::updateInventoryInfo(QListWidgetItem* ss){
     ui->text_info->clear();
     foreach (item* var, _game->itemlist) {
-        if(ss->text()==var->name){
-             ui->text_info->append(var->name);
+        if(ss->text()==var->getHandle()){
+             ui->text_info->append(var->getHandle());
              ui->text_info->append(var->note);
-             if(var->handle!="Rotation")ui->text_info->append("Заряд: "+QString::number(var->power));
+             if(var->getID() != IT_ROTATION)ui->text_info->append("Заряд: "+QString::number(var->getPower()));
              else foreach (QString vvar, _game->nightrotation) {
                   ui->text_info->append(vvar);
              }
@@ -105,10 +102,10 @@ void MainWindow::updatePlayerlist(QList <player*> playerlist){
     QStringList play;
     foreach (player* var, playerlist) {
         QString s;
-        foreach (QString v, var->rolelist) {
+        foreach (ROLE v, var->rolelist) {
             //s.append("["+v.left(3)+"]");
         }
-        play.append(s+var->name);
+        play.append(var->name);
     }
     ui->playerlist->clear();
     ui->playerlist->addItems(play);
@@ -124,8 +121,8 @@ void MainWindow::UpdateVotelist(){
     ui->text_info->clear();
     ui->text_log->append("Голосование:");
     //QPair<QString,int> var;
-    foreach (QString var, _game->_currvoting->votelist.keys()) {
-        ui->text_log->append(var+": "+_game->_currvoting->votelist.value(var).first+" ("
-                              +QString::number(_game->_currvoting->votelist.value(var).second)+")");
+    foreach (VoteObject* var, _game->_currvoting->votelist) {
+        ui->text_log->append(var->who+": "+var->whom+" ("
+                              +QString::number(var->status)+")");
     }
 }
