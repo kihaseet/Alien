@@ -1,0 +1,56 @@
+<RCC>
+    <qresource prefix="/main">
+        <file alias="background.png">resources/blackground.png</file>
+        <file alias="lobby_background.png">resources/fon.png</file>
+        <file alias="background_main.png">resources/background_main.png</file>
+    </qresource>
+    <qresource prefix="/player_widget">
+        <file alias="border.png">resources/ramka.png</file>
+    </qresource>
+    <qresource prefix="/player_avatar">
+        <file alias="101">resources/players/assistant.png</file>
+        <file alias="1">resources/players/captain.png</file>
+        <file alias="2">resources/players/doctor.png</file>
+        <file alias="4">resources/players/engineer.png</file>
+        <file alias="3">resources/players/gunmen.png</file>
+        <file alias="0">resources/players/passenger.png</file>
+        <file alias="5">resources/players/scientist.png</file>
+        <file alias="6">resources/players/signalman.png</file>
+    </qresource>
+    <qresource prefix="/player_status">
+        <file alias="online.png">resources/online.png</file>
+        <file alias="offline.png">resources/offline.png</file>
+    </qresource>
+    <qresource prefix="/roles">
+        <file alias="Captain">resources/roles/Captain.png</file>
+        <file alias="Doctor">resources/roles/doctor.png</file>
+        <file alias="Assistant">resources/roles/assistant.png</file>
+        <file alias="Engineer">resources/roles/engenier.png</file>
+        <file alias="Gunmen">resources/roles/gunmen.png</file>
+        <file alias="Scientist">resources/roles/science.png</file>
+        <file alias="Signalman">resources/roles/signalman.png</file>
+        <file alias="dummy">resources/roles/wtf_is_this.png</file>
+    </qresource>
+    <qresource prefix="/buttons">
+        <file alias="action.pnf">resources/buttons/action.png</file>
+        <file alias="item.png">resources/buttons/item.png</file>
+    </qresource>
+    <qresource prefix="/items">
+        <file alias="0">resources/items/badge.png</file>
+        <file alias="4">resources/items/battery.png</file>
+        <file alias="5">resources/items/blaster.png</file>
+        <file alias="1">resources/items/injector.png</file>
+        <file alias="3">resources/items/mop.png</file>
+        <file alias="6">resources/items/notebook.png</file>
+        <file alias="2">resources/items/scanner.png</file>
+        <file alias="7">resources/items/rotation.png</file>
+    </qresource>
+    <qresource prefix="/actions">
+        <file alias="2">resources/actions/attack.png</file>
+        <file alias="6">resources/actions/down.png</file>
+        <file alias="3">resources/actions/infect.png</file>
+        <file alias="4">resources/actions/skip.png</file>
+        <file alias="5">resources/actions/up.png</file>
+        <file alias="9">resources/actions/badge.png</file>
+    </qresource>
+</RCC>

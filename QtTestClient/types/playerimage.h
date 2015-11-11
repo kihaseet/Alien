@@ -1,0 +1,18 @@
+#ifndef PLAYERIMAGE
+#define PLAYERIMAGE
+
+enum PlayerImage
+{
+    PASSENGER = 0,
+    CAPTAIN,
+    DOCTOR,
+    GUNMEN,
+    ENGINEER,
+    SCIENTIST,
+    SIGNALMEN,
+    DUPUTY = 100,
+    ASSISTANT = 100 + CAPTAIN
+};
+
+#endif // PLAYERIMAGE
+
