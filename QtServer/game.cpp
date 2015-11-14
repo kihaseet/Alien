@@ -1290,9 +1290,11 @@ void game::slot_disconnected(int na){
             connectedName.remove(na);
             slotSendRolelist();
         } else
-            if(started)
-                player_death(playerlist->value(name));
-        else
+            if(started) {
+                if(playerlist->contains(name))
+                    player_death(playerlist->value(name));
+            }
+            else
                 playerlist->remove(name);
     }
 
