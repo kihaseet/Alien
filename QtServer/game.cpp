@@ -33,6 +33,7 @@ game::game()
     _nightque.clear();
     currentday = 0;
     daytime = true;
+    started = false;
     playerlist = new QMap <QString,player*>();
     
     unclame_rolelist.append(RT_CAPTAIN);
@@ -47,6 +48,7 @@ game::game()
 void game::start(){
     //qDebug()<<"game::start()";
     emit startnewsessionenable(false);
+    started = true;
     
     _currvoting=new voting();
     StartRandomEvasion_testing();
@@ -426,32 +428,75 @@ TurnObject game::makeRotationList(){
 }
 
 void game::day_check_over(){
-    if(_currvoting->is_over && !hardresolve)
-    {
-        if (!votingque.isEmpty())
-        {
-            day_next_voting();
-        } else
-        {
-            if(!nightrotation.isEmpty() ||
-                    (unclame_rolelist.contains(RT_CAPTAIN) && (unclame_rolelist.contains(RT_ASSISTANT))))
+    if(playerlist->count() <= 1)    //если в живых остался один или никого
+        day_gameover();
+    else {
+        bool isover = true;
+        foreach (player* man, playerlist->values()) {
+            if(man->status!=0) {
+                isover = false;
+                break;
+            }
+        }
+        if(isover)  //если все оставшиеся в живых - люди
+            day_gameover();
+        else {
+            if(_currvoting->is_over && !hardresolve)
             {
-                night_start();
-            }else {
-                TurnObject TO = makeRotationList();
-                TO.type = TT_NEEDROTATION;
-                if(rolelist.value(RT_ASSISTANT) != rolelist.value(RT_CAPTAIN)) {
-                    TO.wh = rolelist.value(RT_ASSISTANT);
-                    emit GuiMess2Log("[Game]","Помощник капитана должен назначить график дежурств!");
+                if (!votingque.isEmpty())
+                {
+                    day_next_voting();
+                } else
+                {
+                    if(!nightrotation.isEmpty() ||
+                            (unclame_rolelist.contains(RT_CAPTAIN) && (unclame_rolelist.contains(RT_ASSISTANT))))
+                    {
+                        night_start();
+                    }else {
+                        TurnObject TO = makeRotationList();
+                        TO.type = TT_NEEDROTATION;
+                        if(rolelist.value(RT_ASSISTANT) != rolelist.value(RT_CAPTAIN)) {
+                            TO.wh = rolelist.value(RT_ASSISTANT);
+                            emit GuiMess2Log("[Game]","Помощник капитана должен назначить график дежурств!");
+                        }
+                        else {
+                            emit GuiMess2Log("[Game]","Капитан должен назначить график дежурств!");
+                            TO.wh = rolelist.value(RT_CAPTAIN);
+                        }
+                        emit send_stat(TO);
+                    }
                 }
-                else {
-                    emit GuiMess2Log("[Game]","Капитан должен назначить график дежурств!");
-                    TO.wh = rolelist.value(RT_CAPTAIN);
-                }
-                emit send_stat(TO);
             }
         }
     }
+}
+
+
+void game::day_gameover() {
+    //обработка завершения игры
+    //проверяется количество оставшихся игроков
+    //если их больше 1, то не проверяется, все ли они люди - такая проверка была раньше
+    int count = playerlist->count();
+    if(count == 0) {
+        emit GuiMess2Log("[Server]","Все погибли, игра окончена");
+    } else if (count == 1) {
+        switch (playerlist->begin().value()->status) {
+        case 0:
+            emit GuiMess2Log("[Server]","Победа людей");
+            emit GuiMess2Log("[Server]","В живых остался "+playerlist->begin().value()->name);
+            break;
+        case 1:
+        case 2:
+            emit GuiMess2Log("[Server]","Победа Чужого");
+            emit GuiMess2Log("[Server]","Последним остался "+playerlist->begin().value()->name);
+            break;
+        }
+    } else if (count >= 1) {
+        emit GuiMess2Log("[Server]","Победа людей");
+    }
+    slot_game_over();
+    emit game_over();
+    started = false;
 }
 
 
@@ -467,7 +512,8 @@ void game::day(){
         emit startPhase(currentday, daytime);
         emit GuiMess2Log("[Game]","Start Day "+QString::number(currentday));
         day_check_over();
-    }else emit game_over();
+    }else
+        day_gameover();
 }
 
 
@@ -1231,6 +1277,7 @@ void game::slotSendRolelist(){
 }
 
 void game::slot_disconnected(int na){
+
     if(connectedName.contains(na)){
         QString name = connectedName.value(na);
         if(currentday == 0) {
@@ -1243,7 +1290,10 @@ void game::slot_disconnected(int na){
             connectedName.remove(na);
             slotSendRolelist();
         } else
-            player_death(playerlist->value(name));
+            if(started)
+                player_death(playerlist->value(name));
+        else
+                playerlist->remove(name);
     }
 
     emit GuiUpdatePlayerlist(playerlist->values());
@@ -1316,57 +1366,63 @@ void game::player_death(player* dead)
     turn.wh = dead;
     emit send_changes(turn);
 
+
+
     QList <ROLE> mainroles;//проверка на запуск новой сессии (заняты ли все основные роли)
     mainroles <<RT_CAPTAIN<<RT_DOCTOR<<RT_SIGNALMEN<<RT_GUNMEN<<RT_ASSISTANT<<RT_ENGINEER<<RT_SCIENTIST;
     playerlist->remove(dead->name);
-    foreach (ROLE var, rolelist.uniqueKeys())
-    {
-        foreach (player* v, rolelist.values(var))
-            if(v == dead)
-            {
-                if(mainroles.contains(var))
+    if(playerlist->isEmpty()) {
+        day_gameover();
+    } else {
+        foreach (ROLE var, rolelist.uniqueKeys())
+        {
+            foreach (player* v, rolelist.values(var))
+                if(v == dead)
                 {
-                    unclame_rolelist.append(var);
-                    rolelist.remove(var);
-                    check_for_role(var);
+                    if(mainroles.contains(var))
+                    {
+                        unclame_rolelist.append(var);
+                        rolelist.remove(var);
+                        check_for_role(var);
+                    }
+                    else rolelist.remove(var,dead);
+                    break;
                 }
-                else rolelist.remove(var,dead);
-                break;
-            }
-    }
-    passengerlist.removeAll(dead->name);
-    if(!_currvoting->is_over)
-    {
-        _currvoting->electlist.removeOne(dead->name);
-        foreach (VoteObject* vote, _currvoting->votelist) {
-            if(vote->who == dead->name)
-            {
-                _currvoting->votelist.removeAll(vote);
-            }
-            else if(vote->whom == dead->name)
-            {
-                vote->status = 0;
-                vote->whom = vote->who;
-            }
+        }
+        passengerlist.removeAll(dead->name);
+        if(!_currvoting->is_over)
+        {
+            _currvoting->electlist.removeOne(dead->name);
+            foreach (VoteObject* vote, _currvoting->votelist) {
+                if(vote->who == dead->name)
+                {
+                    _currvoting->votelist.removeAll(vote);
+                }
+                else if(vote->whom == dead->name)
+                {
+                    vote->status = 0;
+                    vote->whom = vote->who;
+                }
 
-        }
-        if(_currvoting->electlist.count() == 1)
-        {
-            day_resolve_curr_voting(_currvoting->electlist);
-        }
-    }
-    if(hardresolve)
-    {
-        if(dead->rolelist.contains(RT_CAPTAIN))
-        {
-            votingque.append(new voting(playerlist->keys(),RT_ALIEN));
-            day_canseled_voting();
-        }
-        else {
-            _currvoting->winners.removeOne(dead->name);
-            if(_currvoting->winners.count() == 1)
+            }
+            if(_currvoting->electlist.count() == 1)
             {
-                day_end_curr_voting(_currvoting->winners.first());
+                day_resolve_curr_voting(_currvoting->electlist);
+            }
+        }
+        if(hardresolve)
+        {
+            if(dead->rolelist.contains(RT_CAPTAIN))
+            {
+                votingque.append(new voting(playerlist->keys(),RT_ALIEN));
+                day_canseled_voting();
+            }
+            else {
+                _currvoting->winners.removeOne(dead->name);
+                if(_currvoting->winners.count() == 1)
+                {
+                    day_end_curr_voting(_currvoting->winners.first());
+                }
             }
         }
     }

@@ -117,6 +117,10 @@ void MainWindow::newGameSessionStatus(bool check){
         ui->action_2->setEnabled(!check);
 }
 
+void MainWindow::gameisover() {
+
+}
+
 void MainWindow::UpdateVotelist(){
     ui->text_info->clear();
     ui->text_log->append("Голосование:");
@@ -126,3 +130,5 @@ void MainWindow::UpdateVotelist(){
                               +QString::number(var->status)+")");
     }
 }
+
+

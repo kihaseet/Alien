@@ -377,7 +377,7 @@ void xml_maker::slotEndVoting(ROLE targets,QString name,QString result = QString
 
     QDomElement domEl = doc.createElement("endvoting");
     domEl.setAttribute("for",RegisterObject::RoleDescr.key(targets));
-    doc.appendChild(domEl);
+    domElement.appendChild(domEl);
 
     if(name != "")
     {

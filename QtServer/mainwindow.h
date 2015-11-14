@@ -35,6 +35,7 @@ public slots:
     void updateInventory(QListWidgetItem* ss);
     void updateInventoryInfo(QListWidgetItem* ss);
     void UpdateVotelist();
+    void gameisover();
 };
 
 #endif // MAINWINDOW_H

@@ -20,6 +20,7 @@ class game:public QObject
 Q_OBJECT
 
 public:
+    bool started;
     bool daytime;
     int currentday;
     bool hardresolve; //true если во время голосования решение принимает капитан
@@ -62,6 +63,7 @@ public:
     bool isHunted(QStringList playerhunt, TurnObject turn);
     void slot_use_battery(ITEM item);
     TurnObject makeRotationList();
+    void day_gameover();
 signals:
     void GuiUpdatePlayerlist(QList<player*>list);
     void GuiUpdateVotelist();
