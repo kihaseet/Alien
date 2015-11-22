@@ -23,6 +23,7 @@
 #include "gametabs.h"
 #include "factories/actionfactory.h"
 #include "qplayerwidget.h"
+#include "qclickablelabel.h"
 
 namespace Ui {
 class MainWindow;
@@ -61,7 +62,7 @@ private:
 
     struct
     {
-        QLabel* currentButton;
+        QClickableLabel* currentButton;
         Action action;
         bool badgeUlt;
         std::function<void(QVector<ITarget>& targets)> targets_selected;
@@ -70,14 +71,14 @@ private:
 
     int colsCount;
 
-private slots:
+public slots:
     void on_bConnect_clicked();
 
     void on_bRegisterName_clicked();
 
-    void on_lTab2_onclick();
+    void on_lTab2_onclick(QPoint);
 
-    void on_lTab3_onclick();
+    void on_lTab3_onclick(QPoint);
 
     void onTabClick(int tab_num);
 
@@ -85,7 +86,7 @@ private slots:
 
     void onPlayerClick(QString name);
 
-    void on_lInventory_onclick();
+    void on_lInventory_onclick(QPoint);
 
     void on_bApplyRotation_clicked();
 

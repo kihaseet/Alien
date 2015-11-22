@@ -752,10 +752,10 @@ color: rgb(255, 255, 255);</string>
            <item>
             <widget class="QFrame" name="fItemsAndActions">
              <property name="frameShape">
-              <enum>QFrame::Box</enum>
+              <enum>QFrame::NoFrame</enum>
              </property>
              <property name="frameShadow">
-              <enum>QFrame::Raised</enum>
+              <enum>QFrame::Plain</enum>
              </property>
              <layout class="QHBoxLayout" name="horizontalLayout_4">
               <property name="spacing">
@@ -943,7 +943,6 @@ color: rgb(255, 255, 255);</string>
    <extends>QLabel</extends>
    <header location="global">qclickablelabel.h</header>
    <slots>
-    <signal>onclick()</signal>
     <signal>onMouseClick(QPoint)</signal>
    </slots>
   </customwidget>
@@ -1014,8 +1013,59 @@ color: rgb(255, 255, 255);</string>
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>lInventory</sender>
+   <signal>onMouseClick(QPoint)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_lInventory_onclick(QPoint)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>57</x>
+     <y>604</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>239</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lTab2</sender>
+   <signal>onMouseClick(QPoint)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_lTab2_onclick(QPoint)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>352</x>
+     <y>28</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>239</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lTab3</sender>
+   <signal>onMouseClick(QPoint)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>on_lTab3_onclick(QPoint)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>431</x>
+     <y>28</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>239</x>
+     <y>319</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>onItemMouseClick(QPoint)</slot>
+  <slot>on_lTab2_onclick(QPoint)</slot>
+  <slot>on_lTab3_onclick(QPoint)</slot>
+  <slot>on_lInventory_onclick(QPoint)</slot>
  </slots>
 </ui>

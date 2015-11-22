@@ -139,6 +139,8 @@ void MainWindow::writeLog(QString text)
 
 void MainWindow::clearSelection()
 {
+    actionMode.currentButton->setSelected(false);
+    actionMode.currentButton->repaint();
     actionMode.currentButton = nullptr;
     actionMode.badgeUlt = false;
 
@@ -149,7 +151,7 @@ void MainWindow::clearSelection()
 
     for (int i = 0; i < itemsLabels.length(); i++)
     {
-        itemsLabels[i]->setEnabled(true);
+        itemsLabels[i]->setEnabled(itemsLabels[i]->property("type") > -1);
     }
 }
 
@@ -397,12 +399,12 @@ void MainWindow::on_bRegisterName_clicked()
     //this->registerNameStatus(true);
 }
 
-void MainWindow::on_lTab2_onclick()
+void MainWindow::on_lTab2_onclick(QPoint)
 {
     onTabClick(1);
 }
 
-void MainWindow::on_lTab3_onclick()
+void MainWindow::on_lTab3_onclick(QPoint)
 {
     onTabClick(2);
 }
@@ -427,7 +429,7 @@ void MainWindow::onTabClick(int tab_num)
 
 void MainWindow::onItemMouseClick(QPoint point)
 {
-    QLabel* lItem = (QLabel*)QObject::sender();
+    QClickableLabel* lItem = (QClickableLabel*)QObject::sender();
 
     if (actionMode.currentButton != nullptr )
     {
@@ -440,6 +442,8 @@ void MainWindow::onItemMouseClick(QPoint point)
     }
 
     actionMode.currentButton = lItem;
+    lItem->setSelected(true);
+    lItem->repaint();
 
     for (int i = 0; i < itemsLabels.length(); i++)
     {
@@ -559,11 +563,14 @@ void MainWindow::updateActions(QVector<ActionType> actions)
             itemsLabels[i]->setPixmap(QPixmap::fromImage(image));
             itemsLabels[i]->setProperty("type", QVariant((int)actions[i]));
             itemsLabels[i]->setVisible(true);
+            itemsLabels[i]->setEnabled(true);
         }
 
-        for (int j = actions.size(); j < itemsLabels.length(); j++)
+        for (int i = actions.size(); i < itemsLabels.length(); i++)
         {
-            itemsLabels[j]->setPixmap(QPixmap());
+            itemsLabels[i]->setPixmap(QPixmap());
+            itemsLabels[i]->setEnabled(false);
+            itemsLabels[i]->setProperty("type", QVariant(-1));
         }
     }
 }
@@ -579,11 +586,14 @@ void MainWindow::updateItems(QVector<Item> items)
             itemsLabels[i]->setPixmap(QPixmap::fromImage(image));
             itemsLabels[i]->setProperty("type", QVariant((int)items[i].getType()));
             itemsLabels[i]->setVisible(true);
+            itemsLabels[i]->setEnabled(true);
         }
 
         for (int i = items.length(); i < itemsLabels.length(); i++)
         {
             itemsLabels[i]->setPixmap(QPixmap());
+            itemsLabels[i]->setEnabled(false);
+            itemsLabels[i]->setProperty("type", QVariant(-1));
         }
     }
 }
@@ -652,8 +662,13 @@ void MainWindow::log(QString text)
     this->writeLog(text);
 }
 
-void MainWindow::on_lInventory_onclick()
+void MainWindow::on_lInventory_onclick(QPoint)
 {
+    if (actionMode.currentButton == nullptr)
+    {
+        return;
+    }
+
     this->InventoryMode = !this->InventoryMode;
 
     if (this->InventoryMode)

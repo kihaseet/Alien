@@ -4,18 +4,24 @@
 #include <QLabel>
 #include <QObject>
 #include <QMouseEvent>
+#include <QPaintEvent>
+#include <QPainter>
 
 class QClickableLabel : public QLabel
 {
     Q_OBJECT
+
+    bool is_selected;
+
 protected:
-    void mouseReleaseEvent(QMouseEvent* event);
+    virtual void mouseReleaseEvent(QMouseEvent* event);
+    virtual void paintEvent(QPaintEvent*event);
 
 public:
     QClickableLabel(QWidget* parent = 0);
+    void setSelected(bool is_selected);
 
 signals:
-    void onclick();
     void onMouseClick(QPoint point);
 };
 
