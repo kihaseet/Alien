@@ -8,9 +8,8 @@ QT       +=  core gui network xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = server1
+targets = server1
 TEMPLATE = app
-
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -22,7 +21,8 @@ SOURCES += main.cpp\
     voting.cpp \
     event.cpp \
     clientsocket.cpp \
-    config.cpp
+    config.cpp \
+    types.cpp
 
 HEADERS  += mainwindow.h \
     game.h \
@@ -33,7 +33,9 @@ HEADERS  += mainwindow.h \
     voting.h \
     event.h \
     clientsocket.h \
-    config.h
+    config.h \
+    types.h \
+    protocol.h
 
 FORMS    += mainwindow.ui \
     config.ui

@@ -4,11 +4,10 @@
 #include <QtGui>
 
 
-Server::Server(int nPort, QWidget* pwgt /*=0*/) : m_nNextBlockSize(0)
+Server::Server(int nPort) : m_nNextBlockSize(0)
 {
     m_ptcpServer = new QTcpServer(this);
-    _widget=pwgt;
-    
+
     if (!m_ptcpServer->listen(QHostAddress::Any, nPort))
     {
         add_to_log("[Server] ","Server Error "+ m_ptcpServer->errorString());
@@ -20,7 +19,7 @@ Server::Server(int nPort, QWidget* pwgt /*=0*/) : m_nNextBlockSize(0)
 
 /*virtual*/ void Server::slotNewConnection()
 {
-    
+
     QTcpSocket* pSock = m_ptcpServer->nextPendingConnection();
     ClientSocket* pClientSocket = new ClientSocket(pSock,pSock->socketDescriptor());
     m_clients.push_back(pClientSocket);
@@ -45,7 +44,7 @@ void Server::on_disconnected(){
 }
 void Server::send2all(QString msg){
     foreach (ClientSocket* client, m_clients) {
-        QString tmp = msg+'\n';
+        QString tmp = QString::number(msg.size())+msg+'\n';
         QByteArray arrBlock = tmp.toLocal8Bit();
         client->_socket->write(arrBlock);
     }
@@ -54,7 +53,7 @@ void Server::send2all(QString msg){
 void Server::slotReadClient()
 {
     QTcpSocket* pClientSocket = (QTcpSocket*)sender();
-    
+
     QString str;
     if(pClientSocket->canReadLine()){
         QByteArray data = pClientSocket->readAll();
@@ -77,7 +76,7 @@ void Server::noVerifyClientName(int name){
             m_clients.removeOne(client);
             break;
         }
-        
+
     }
 }
 
@@ -86,7 +85,7 @@ void Server::slotsendToClient(int _name,QString msg)
 {
     foreach (ClientSocket* client, m_clients) {
         if (client->_name==_name){
-            QString tmp = msg+'\n';
+            QString tmp = QString::number(msg.size())+msg+'\n';
             QByteArray arrBlock = tmp.toLocal8Bit();
             client->_socket->write(arrBlock);
         }
@@ -95,5 +94,5 @@ void Server::slotsendToClient(int _name,QString msg)
 
 void Server::add_to_log(QString _name,QString msg){
     emit addLogToGui(_name,msg);
-    
+
 }
