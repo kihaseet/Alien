@@ -249,7 +249,10 @@ void MainWindow::useItem()
 
         for (int i = 0; i < gameClient->getPlayers().length(); i++)
         {
-            playersNames << "[ " + gameClient->getPlayers()[i]->getRoles().join(", ") + " ] " + gameClient->getPlayers()[i]->getName();
+            if (gameClient->getPlayers()[i]->getRoles().count("Captain") == 0)
+            {
+                playersNames << "[ " + gameClient->getPlayers()[i]->getRoles().join(", ") + " ] " + gameClient->getPlayers()[i]->getName();
+            }
         }
 
         ui->lstPlayersRotation->addItems(playersNames);

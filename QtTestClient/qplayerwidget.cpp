@@ -67,7 +67,7 @@ void QPlayerWidget::setPlayer(PlayerConstPtr &p)
         roleWidgets[i]->setPixmap(QPixmap::fromImage(QImage(":/roles/" + player->getRoles()[i])));
     }
 
-    ui->fPlayerImage->setStyleSheet("#fPlayerImage {background-image: url(:/player_avatar/" + QString::fromStdString(std::to_string(player->getImage())) + ");}");
+    ui->fPlayerImage->setStyleSheet("#fPlayerImage {background-image: url(:/player_avatar/" + QString::number(player->getImage()) + ");}");
 }
 
 PlayerPtr QPlayerWidget::getPlayer()
