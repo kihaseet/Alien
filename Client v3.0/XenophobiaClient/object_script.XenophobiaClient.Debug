@@ -1,0 +1,12 @@
+INPUT(
+./debug\main.o
+./debug\gamewindow.o
+./debug\client.pb.o
+./debug\server.pb.o
+./debug\types.pb.o
+./debug\rolesmodel.o
+./debug\rolesmodel.o
+./debug\qrc_qml.o
+./debug\moc_gamewindow.o
+./debug\moc_rolesmodel.o
+);

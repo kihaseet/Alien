@@ -1,0 +1,24 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>MainForm.ui.qml</file>
+    </qresource>
+    <qresource prefix="/main">
+        <file alias="background_main">resources/background_main.png</file>
+        <file alias="backgound">resources/blackground.png</file>
+        <file alias="choose_line">resources/ChoiseLine.png</file>
+        <file alias="background_simple">resources/fon.png</file>
+        <file alias="backgound_foggy">resources/fontuman.png</file>
+        <file alias="border">resources/ramka.png</file>
+        <file>resources/TextMeny.png</file>
+    </qresource>
+    <qresource prefix="/roles">
+        <file alias="101">resources/roles/assistant.png</file>
+        <file alias="1">resources/roles/captain.png</file>
+        <file alias="2">resources/roles/doctor.png</file>
+        <file alias="4">resources/roles/engenier.png</file>
+        <file alias="3">resources/roles/gunmen.png</file>
+        <file alias="5">resources/roles/science.png</file>
+        <file alias="6">resources/roles/signalman.png</file>
+    </qresource>
+</RCC>

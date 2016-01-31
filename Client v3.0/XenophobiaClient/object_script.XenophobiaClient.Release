@@ -1,0 +1,12 @@
+INPUT(
+./release\main.o
+./release\gamewindow.o
+./release\client.pb.o
+./release\server.pb.o
+./release\types.pb.o
+./release\rolesmodel.o
+./release\rolesmodel.o
+./release\qrc_qml.o
+./release\moc_gamewindow.o
+./release\moc_rolesmodel.o
+);
