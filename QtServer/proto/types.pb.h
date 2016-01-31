@@ -40,6 +40,28 @@ void protobuf_ShutdownFile_types_2eproto();
 class Event;
 class ITarget;
 
+enum ITarget_TargetType {
+  ITarget_TargetType_TAT_NAME = 0,
+  ITarget_TargetType_TAT_ITEM = 1,
+  ITarget_TargetType_TAT_ROLE = 2,
+  ITarget_TargetType_ITarget_TargetType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  ITarget_TargetType_ITarget_TargetType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool ITarget_TargetType_IsValid(int value);
+const ITarget_TargetType ITarget_TargetType_TargetType_MIN = ITarget_TargetType_TAT_NAME;
+const ITarget_TargetType ITarget_TargetType_TargetType_MAX = ITarget_TargetType_TAT_ROLE;
+const int ITarget_TargetType_TargetType_ARRAYSIZE = ITarget_TargetType_TargetType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* ITarget_TargetType_descriptor();
+inline const ::std::string& ITarget_TargetType_Name(ITarget_TargetType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    ITarget_TargetType_descriptor(), value);
+}
+inline bool ITarget_TargetType_Parse(
+    const ::std::string& name, ITarget_TargetType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<ITarget_TargetType>(
+    ITarget_TargetType_descriptor(), name, value);
+}
 enum Role {
   PASSENGER = 0,
   CAPTAIN = 1,
@@ -254,11 +276,42 @@ class ITarget : public ::google::protobuf::Message {
 
   // nested types ----------------------------------------------------
 
+  typedef ITarget_TargetType TargetType;
+  static const TargetType TAT_NAME = ITarget_TargetType_TAT_NAME;
+  static const TargetType TAT_ITEM = ITarget_TargetType_TAT_ITEM;
+  static const TargetType TAT_ROLE = ITarget_TargetType_TAT_ROLE;
+  static inline bool TargetType_IsValid(int value) {
+    return ITarget_TargetType_IsValid(value);
+  }
+  static const TargetType TargetType_MIN =
+    ITarget_TargetType_TargetType_MIN;
+  static const TargetType TargetType_MAX =
+    ITarget_TargetType_TargetType_MAX;
+  static const int TargetType_ARRAYSIZE =
+    ITarget_TargetType_TargetType_ARRAYSIZE;
+  static inline const ::google::protobuf::EnumDescriptor*
+  TargetType_descriptor() {
+    return ITarget_TargetType_descriptor();
+  }
+  static inline const ::std::string& TargetType_Name(TargetType value) {
+    return ITarget_TargetType_Name(value);
+  }
+  static inline bool TargetType_Parse(const ::std::string& name,
+      TargetType* value) {
+    return ITarget_TargetType_Parse(name, value);
+  }
+
   // accessors -------------------------------------------------------
 
-  // optional string name = 1;
+  // optional .types.ITarget.TargetType type = 1;
+  void clear_type();
+  static const int kTypeFieldNumber = 1;
+  ::types::ITarget_TargetType type() const;
+  void set_type(::types::ITarget_TargetType value);
+
+  // optional string name = 2;
   void clear_name();
-  static const int kNameFieldNumber = 1;
+  static const int kNameFieldNumber = 2;
   const ::std::string& name() const;
   void set_name(const ::std::string& value);
   void set_name(const char* value);
@@ -267,15 +320,15 @@ class ITarget : public ::google::protobuf::Message {
   ::std::string* release_name();
   void set_allocated_name(::std::string* name);
 
-  // optional .types.Item item = 2;
+  // optional .types.Item item = 3;
   void clear_item();
-  static const int kItemFieldNumber = 2;
+  static const int kItemFieldNumber = 3;
   ::types::Item item() const;
   void set_item(::types::Item value);
 
-  // optional .types.Role role = 3;
+  // optional .types.Role role = 4;
   void clear_role();
-  static const int kRoleFieldNumber = 3;
+  static const int kRoleFieldNumber = 4;
   ::types::Role role() const;
   void set_role(::types::Role value);
 
@@ -285,6 +338,7 @@ class ITarget : public ::google::protobuf::Message {
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   bool _is_default_instance_;
   ::google::protobuf::internal::ArenaStringPtr name_;
+  int type_;
   int item_;
   int role_;
   mutable int _cached_size_;
@@ -411,7 +465,21 @@ class Event : public ::google::protobuf::Message {
 #if !PROTOBUF_INLINE_NOT_IN_HEADERS
 // ITarget
 
-// optional string name = 1;
+// optional .types.ITarget.TargetType type = 1;
+inline void ITarget::clear_type() {
+  type_ = 0;
+}
+inline ::types::ITarget_TargetType ITarget::type() const {
+  // @@protoc_insertion_point(field_get:types.ITarget.type)
+  return static_cast< ::types::ITarget_TargetType >(type_);
+}
+inline void ITarget::set_type(::types::ITarget_TargetType value) {
+  
+  type_ = value;
+  // @@protoc_insertion_point(field_set:types.ITarget.type)
+}
+
+// optional string name = 2;
 inline void ITarget::clear_name() {
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -454,7 +522,7 @@ inline void ITarget::set_allocated_name(::std::string* name) {
   // @@protoc_insertion_point(field_set_allocated:types.ITarget.name)
 }
 
-// optional .types.Item item = 2;
+// optional .types.Item item = 3;
 inline void ITarget::clear_item() {
   item_ = 0;
 }
@@ -468,7 +536,7 @@ inline void ITarget::set_item(::types::Item value) {
   // @@protoc_insertion_point(field_set:types.ITarget.item)
 }
 
-// optional .types.Role role = 3;
+// optional .types.Role role = 4;
 inline void ITarget::clear_role() {
   role_ = 0;
 }
@@ -623,6 +691,11 @@ inline void Event::set_allocated_event_target(::types::ITarget* event_target) {
 namespace google {
 namespace protobuf {
 
+template <> struct is_proto_enum< ::types::ITarget_TargetType> : ::google::protobuf::internal::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::types::ITarget_TargetType>() {
+  return ::types::ITarget_TargetType_descriptor();
+}
 template <> struct is_proto_enum< ::types::Role> : ::google::protobuf::internal::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::types::Role>() {

@@ -24,6 +24,7 @@ namespace {
 const ::google::protobuf::Descriptor* ITarget_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   ITarget_reflection_ = NULL;
+const ::google::protobuf::EnumDescriptor* ITarget_TargetType_descriptor_ = NULL;
 const ::google::protobuf::Descriptor* Event_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   Event_reflection_ = NULL;
@@ -44,7 +45,8 @@ void protobuf_AssignDesc_types_2eproto() {
       "types.proto");
   GOOGLE_CHECK(file != NULL);
   ITarget_descriptor_ = file->message_type(0);
-  static const int ITarget_offsets_[3] = {
+  static const int ITarget_offsets_[4] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ITarget, type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ITarget, name_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ITarget, item_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ITarget, role_),
@@ -60,6 +62,7 @@ void protobuf_AssignDesc_types_2eproto() {
       sizeof(ITarget),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ITarget, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ITarget, _is_default_instance_));
+  ITarget_TargetType_descriptor_ = ITarget_descriptor_->enum_type(0);
   Event_descriptor_ = file->message_type(1);
   static const int Event_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Event, event_),
@@ -118,30 +121,33 @@ void protobuf_AddDesc_types_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\013types.proto\022\005types\"M\n\007ITarget\022\014\n\004name\030"
-    "\001 \001(\t\022\031\n\004item\030\002 \001(\0162\013.types.Item\022\031\n\004role"
-    "\030\003 \001(\0162\013.types.Role\"\227\001\n\005Event\022\037\n\005event\030\001"
-    " \001(\0162\020.types.EventType\022!\n\tevent_who\030\002 \001("
-    "\0132\016.types.ITarget\022$\n\014event_object\030\003 \001(\0132"
-    "\016.types.ITarget\022$\n\014event_target\030\004 \001(\0132\016."
-    "types.ITarget*\315\001\n\004Role\022\r\n\tPASSENGER\020\000\022\013\n"
-    "\007CAPTAIN\020\001\022\n\n\006DOCTOR\020\002\022\n\n\006GUNMEN\020\003\022\014\n\010EN"
-    "GINEER\020\004\022\r\n\tSCIENTIST\020\005\022\r\n\tSIGNALMEN\020\006\022\r"
-    "\n\tASSISTANT\020e\022\016\n\nDEP_DOCTOR\020f\022\016\n\nDEP_GUN"
-    "MEN\020g\022\020\n\014DEP_ENGINEER\020h\022\021\n\rDEP_SCIENTIST"
-    "\020i\022\021\n\rDEP_SIGNALMEN\020j*m\n\006Action\022\014\n\010USE_I"
-    "TEM\020\000\022\013\n\007USE_ULT\020\001\022\n\n\006ATTACK\020\002\022\n\n\006INFECT"
-    "\020\003\022\010\n\004VOTE\020\004\022\n\n\006UNVOTE\020\005\022\010\n\004WAIT\020\006\022\006\n\002UP"
-    "\020\007\022\010\n\004DOWN\020\010*v\n\004Item\022\t\n\005BADGE\020\000\022\014\n\010ROTAT"
-    "ION\020\001\022\013\n\007BLASTER\020\002\022\014\n\010INJECTOR\020\003\022\014\n\010NOTE"
-    "BOOK\020\004\022\013\n\007BATTERY\020\005\022\013\n\007SCANNER\020\006\022\007\n\003MOP\020"
-    "\007\022\t\n\005FETUS\020\010*3\n\014PlayerStatus\022\t\n\005PS_UP\020\000\022"
-    "\013\n\007PS_DOWN\020\001\022\013\n\007PS_DEAD\020\002*\234\001\n\tEventType\022"
-    "\017\n\013ET_USE_ITEM\020\000\022\016\n\nET_USE_ULT\020\001\022\020\n\014ET_U"
-    "SE_BADGE\020\002\022\024\n\020ET_CHANGE_STATUS\020\003\022\017\n\013ET_G"
-    "ET_ROLE\020\004\022\017\n\013ET_DEL_ROLE\020\005\022\020\n\014ET_VOTING_"
-    "UP\020\006\022\022\n\016ET_VOTING_DOWN\020\007*)\n\nVotingType\022\014"
-    "\n\010FOR_ROLE\020\000\022\r\n\tFOR_ALIEN\020\001b\006proto3", 955);
+    "\n\013types.proto\022\005types\"\256\001\n\007ITarget\022\'\n\004type"
+    "\030\001 \001(\0162\031.types.ITarget.TargetType\022\014\n\004nam"
+    "e\030\002 \001(\t\022\031\n\004item\030\003 \001(\0162\013.types.Item\022\031\n\004ro"
+    "le\030\004 \001(\0162\013.types.Role\"6\n\nTargetType\022\014\n\010T"
+    "AT_NAME\020\000\022\014\n\010TAT_ITEM\020\001\022\014\n\010TAT_ROLE\020\002\"\227\001"
+    "\n\005Event\022\037\n\005event\030\001 \001(\0162\020.types.EventType"
+    "\022!\n\tevent_who\030\002 \001(\0132\016.types.ITarget\022$\n\014e"
+    "vent_object\030\003 \001(\0132\016.types.ITarget\022$\n\014eve"
+    "nt_target\030\004 \001(\0132\016.types.ITarget*\315\001\n\004Role"
+    "\022\r\n\tPASSENGER\020\000\022\013\n\007CAPTAIN\020\001\022\n\n\006DOCTOR\020\002"
+    "\022\n\n\006GUNMEN\020\003\022\014\n\010ENGINEER\020\004\022\r\n\tSCIENTIST\020"
+    "\005\022\r\n\tSIGNALMEN\020\006\022\r\n\tASSISTANT\020e\022\016\n\nDEP_D"
+    "OCTOR\020f\022\016\n\nDEP_GUNMEN\020g\022\020\n\014DEP_ENGINEER\020"
+    "h\022\021\n\rDEP_SCIENTIST\020i\022\021\n\rDEP_SIGNALMEN\020j*"
+    "m\n\006Action\022\014\n\010USE_ITEM\020\000\022\013\n\007USE_ULT\020\001\022\n\n\006"
+    "ATTACK\020\002\022\n\n\006INFECT\020\003\022\010\n\004VOTE\020\004\022\n\n\006UNVOTE"
+    "\020\005\022\010\n\004WAIT\020\006\022\006\n\002UP\020\007\022\010\n\004DOWN\020\010*v\n\004Item\022\t"
+    "\n\005BADGE\020\000\022\014\n\010ROTATION\020\001\022\013\n\007BLASTER\020\002\022\014\n\010"
+    "INJECTOR\020\003\022\014\n\010NOTEBOOK\020\004\022\013\n\007BATTERY\020\005\022\013\n"
+    "\007SCANNER\020\006\022\007\n\003MOP\020\007\022\t\n\005FETUS\020\010*3\n\014Player"
+    "Status\022\t\n\005PS_UP\020\000\022\013\n\007PS_DOWN\020\001\022\013\n\007PS_DEA"
+    "D\020\002*\234\001\n\tEventType\022\017\n\013ET_USE_ITEM\020\000\022\016\n\nET"
+    "_USE_ULT\020\001\022\020\n\014ET_USE_BADGE\020\002\022\024\n\020ET_CHANG"
+    "E_STATUS\020\003\022\017\n\013ET_GET_ROLE\020\004\022\017\n\013ET_DEL_RO"
+    "LE\020\005\022\020\n\014ET_VOTING_UP\020\006\022\022\n\016ET_VOTING_DOWN"
+    "\020\007*)\n\nVotingType\022\014\n\010FOR_ROLE\020\000\022\r\n\tFOR_AL"
+    "IEN\020\001b\006proto3", 1053);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "types.proto", &protobuf_RegisterTypes);
   ITarget::default_instance_ = new ITarget();
@@ -286,7 +292,31 @@ static void MergeFromFail(int line) {
 
 // ===================================================================
 
+const ::google::protobuf::EnumDescriptor* ITarget_TargetType_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return ITarget_TargetType_descriptor_;
+}
+bool ITarget_TargetType_IsValid(int value) {
+  switch(value) {
+    case 0:
+    case 1:
+    case 2:
+      return true;
+    default:
+      return false;
+  }
+}
+
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
+const ITarget_TargetType ITarget::TAT_NAME;
+const ITarget_TargetType ITarget::TAT_ITEM;
+const ITarget_TargetType ITarget::TAT_ROLE;
+const ITarget_TargetType ITarget::TargetType_MIN;
+const ITarget_TargetType ITarget::TargetType_MAX;
+const int ITarget::TargetType_ARRAYSIZE;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int ITarget::kTypeFieldNumber;
 const int ITarget::kNameFieldNumber;
 const int ITarget::kItemFieldNumber;
 const int ITarget::kRoleFieldNumber;
@@ -314,6 +344,7 @@ void ITarget::SharedCtor() {
     _is_default_instance_ = false;
   ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
+  type_ = 0;
   name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   item_ = 0;
   role_ = 0;
@@ -364,7 +395,7 @@ void ITarget::Clear() {
            ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
 } while (0)
 
-  ZR_(item_, role_);
+  ZR_(type_, role_);
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 
 #undef ZR_HELPER_
@@ -382,9 +413,25 @@ bool ITarget::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional string name = 1;
+      // optional .types.ITarget.TargetType type = 1;
       case 1: {
-        if (tag == 10) {
+        if (tag == 8) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_type(static_cast< ::types::ITarget_TargetType >(value));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(18)) goto parse_name;
+        break;
+      }
+
+      // optional string name = 2;
+      case 2: {
+        if (tag == 18) {
+         parse_name:
           DO_(::google::protobuf::internal::WireFormatLite::ReadString(
                 input, this->mutable_name()));
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
@@ -394,13 +441,13 @@ bool ITarget::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(16)) goto parse_item;
+        if (input->ExpectTag(24)) goto parse_item;
         break;
       }
 
-      // optional .types.Item item = 2;
-      case 2: {
-        if (tag == 16) {
+      // optional .types.Item item = 3;
+      case 3: {
+        if (tag == 24) {
          parse_item:
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
@@ -410,13 +457,13 @@ bool ITarget::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(24)) goto parse_role;
+        if (input->ExpectTag(32)) goto parse_role;
         break;
       }
 
-      // optional .types.Role role = 3;
-      case 3: {
-        if (tag == 24) {
+      // optional .types.Role role = 4;
+      case 4: {
+        if (tag == 32) {
          parse_role:
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
@@ -454,26 +501,32 @@ failure:
 void ITarget::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:types.ITarget)
-  // optional string name = 1;
+  // optional .types.ITarget.TargetType type = 1;
+  if (this->type() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      1, this->type(), output);
+  }
+
+  // optional string name = 2;
   if (this->name().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->name().data(), this->name().length(),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
       "types.ITarget.name");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
-      1, this->name(), output);
+      2, this->name(), output);
   }
 
-  // optional .types.Item item = 2;
+  // optional .types.Item item = 3;
   if (this->item() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      2, this->item(), output);
+      3, this->item(), output);
   }
 
-  // optional .types.Role role = 3;
+  // optional .types.Role role = 4;
   if (this->role() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      3, this->role(), output);
+      4, this->role(), output);
   }
 
   // @@protoc_insertion_point(serialize_end:types.ITarget)
@@ -482,7 +535,13 @@ void ITarget::SerializeWithCachedSizes(
 ::google::protobuf::uint8* ITarget::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:types.ITarget)
-  // optional string name = 1;
+  // optional .types.ITarget.TargetType type = 1;
+  if (this->type() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      1, this->type(), target);
+  }
+
+  // optional string name = 2;
   if (this->name().size() > 0) {
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->name().data(), this->name().length(),
@@ -490,19 +549,19 @@ void ITarget::SerializeWithCachedSizes(
       "types.ITarget.name");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
-        1, this->name(), target);
+        2, this->name(), target);
   }
 
-  // optional .types.Item item = 2;
+  // optional .types.Item item = 3;
   if (this->item() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
-      2, this->item(), target);
+      3, this->item(), target);
   }
 
-  // optional .types.Role role = 3;
+  // optional .types.Role role = 4;
   if (this->role() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
-      3, this->role(), target);
+      4, this->role(), target);
   }
 
   // @@protoc_insertion_point(serialize_to_array_end:types.ITarget)
@@ -512,20 +571,26 @@ void ITarget::SerializeWithCachedSizes(
 int ITarget::ByteSize() const {
   int total_size = 0;
 
-  // optional string name = 1;
+  // optional .types.ITarget.TargetType type = 1;
+  if (this->type() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
+  }
+
+  // optional string name = 2;
   if (this->name().size() > 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::StringSize(
         this->name());
   }
 
-  // optional .types.Item item = 2;
+  // optional .types.Item item = 3;
   if (this->item() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->item());
   }
 
-  // optional .types.Role role = 3;
+  // optional .types.Role role = 4;
   if (this->role() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->role());
@@ -551,6 +616,9 @@ void ITarget::MergeFrom(const ::google::protobuf::Message& from) {
 
 void ITarget::MergeFrom(const ITarget& from) {
   if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
+  if (from.type() != 0) {
+    set_type(from.type());
+  }
   if (from.name().size() > 0) {
 
     name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
@@ -585,6 +653,7 @@ void ITarget::Swap(ITarget* other) {
   InternalSwap(other);
 }
 void ITarget::InternalSwap(ITarget* other) {
+  std::swap(type_, other->type_);
   name_.Swap(&other->name_);
   std::swap(item_, other->item_);
   std::swap(role_, other->role_);
@@ -603,7 +672,21 @@ void ITarget::InternalSwap(ITarget* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // ITarget
 
-// optional string name = 1;
+// optional .types.ITarget.TargetType type = 1;
+void ITarget::clear_type() {
+  type_ = 0;
+}
+ ::types::ITarget_TargetType ITarget::type() const {
+  // @@protoc_insertion_point(field_get:types.ITarget.type)
+  return static_cast< ::types::ITarget_TargetType >(type_);
+}
+ void ITarget::set_type(::types::ITarget_TargetType value) {
+  
+  type_ = value;
+  // @@protoc_insertion_point(field_set:types.ITarget.type)
+}
+
+// optional string name = 2;
 void ITarget::clear_name() {
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -646,7 +729,7 @@ void ITarget::clear_name() {
   // @@protoc_insertion_point(field_set_allocated:types.ITarget.name)
 }
 
-// optional .types.Item item = 2;
+// optional .types.Item item = 3;
 void ITarget::clear_item() {
   item_ = 0;
 }
@@ -660,7 +743,7 @@ void ITarget::clear_item() {
   // @@protoc_insertion_point(field_set:types.ITarget.item)
 }
 
-// optional .types.Role role = 3;
+// optional .types.Role role = 4;
 void ITarget::clear_role() {
   role_ = 0;
 }

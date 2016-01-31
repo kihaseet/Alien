@@ -29,6 +29,7 @@ public slots:
 signals:
     void sigTurnCreate(int who,TurnObject turn);
     void sigRegisterCreate(RegisterObject regObj);
+    void sigDisconnect(int who);
     void sigSendToClient(int _name,QString _xmldoc);
     void sigSendToAll(QString _xmldoc);
 };

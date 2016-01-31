@@ -4,6 +4,7 @@
 #include <QObject>
 #include "proto/types.pb.h"
 #include "proto/server.pb.h"
+#include "proto/client.pb.h"
 #include "protocol.h"
 
 class protobuf_maker: public Protocol

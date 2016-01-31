@@ -30,6 +30,11 @@ public:
         this->type = type;
     }
 
+    TurnObject(::types::Event event)
+    {
+        if()
+    }
+
     TurnObject(TURN_TYPE type,
                QString targets,
                ITEM item = IT_UNKNOW)

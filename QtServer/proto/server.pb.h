@@ -48,6 +48,7 @@ class InvetoryChange;
 class PlayerChange;
 class RegisterAnswer;
 class RegisterUpdate;
+class ServerMessage;
 class StartGame;
 class StartGame_PlayerInfo;
 class TimeSwitch;
@@ -182,6 +183,36 @@ inline bool ActionResult_ResultType_Parse(
     const ::std::string& name, ActionResult_ResultType* value) {
   return ::google::protobuf::internal::ParseNamedEnum<ActionResult_ResultType>(
     ActionResult_ResultType_descriptor(), name, value);
+}
+enum ServerMessageType {
+  SMT_REGISTER_ANSWER = 0,
+  SMT_REGISTER_UPDATE = 1,
+  SMT_START_GAME = 2,
+  SMT_TIME_SWITCH = 3,
+  SMT_VOTING = 4,
+  SMT_END_VOTING = 5,
+  SMT_CHANGE = 6,
+  SMT_INVENTORY_CHANGE = 7,
+  SMT_PLAYER_CHANGE = 8,
+  SMT_ACTION_REQUEST = 9,
+  SMT_ACTION_RESULT = 10,
+  ServerMessageType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  ServerMessageType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool ServerMessageType_IsValid(int value);
+const ServerMessageType ServerMessageType_MIN = SMT_REGISTER_ANSWER;
+const ServerMessageType ServerMessageType_MAX = SMT_ACTION_RESULT;
+const int ServerMessageType_ARRAYSIZE = ServerMessageType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* ServerMessageType_descriptor();
+inline const ::std::string& ServerMessageType_Name(ServerMessageType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    ServerMessageType_descriptor(), value);
+}
+inline bool ServerMessageType_Parse(
+    const ::std::string& name, ServerMessageType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<ServerMessageType>(
+    ServerMessageType_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -1420,6 +1451,194 @@ class ActionResult : public ::google::protobuf::Message {
   void InitAsDefaultInstance();
   static ActionResult* default_instance_;
 };
+// -------------------------------------------------------------------
+
+class ServerMessage : public ::google::protobuf::Message {
+ public:
+  ServerMessage();
+  virtual ~ServerMessage();
+
+  ServerMessage(const ServerMessage& from);
+
+  inline ServerMessage& operator=(const ServerMessage& from) {
+    CopyFrom(from);
+    return *this;
+  }
+
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const ServerMessage& default_instance();
+
+  void Swap(ServerMessage* other);
+
+  // implements Message ----------------------------------------------
+
+  inline ServerMessage* New() const { return New(NULL); }
+
+  ServerMessage* New(::google::protobuf::Arena* arena) const;
+  void CopyFrom(const ::google::protobuf::Message& from);
+  void MergeFrom(const ::google::protobuf::Message& from);
+  void CopyFrom(const ServerMessage& from);
+  void MergeFrom(const ServerMessage& from);
+  void Clear();
+  bool IsInitialized() const;
+
+  int ByteSize() const;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input);
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const;
+  ::google::protobuf::uint8* SerializeWithCachedSizesToArray(::google::protobuf::uint8* output) const;
+  int GetCachedSize() const { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(ServerMessage* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return _internal_metadata_.arena();
+  }
+  inline void* MaybeArenaPtr() const {
+    return _internal_metadata_.raw_arena_ptr();
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // optional .Xenophobia.ServerMessageType type = 1;
+  void clear_type();
+  static const int kTypeFieldNumber = 1;
+  ::Xenophobia::ServerMessageType type() const;
+  void set_type(::Xenophobia::ServerMessageType value);
+
+  // optional .Xenophobia.RegisterAnswer register_answer = 2;
+  bool has_register_answer() const;
+  void clear_register_answer();
+  static const int kRegisterAnswerFieldNumber = 2;
+  const ::Xenophobia::RegisterAnswer& register_answer() const;
+  ::Xenophobia::RegisterAnswer* mutable_register_answer();
+  ::Xenophobia::RegisterAnswer* release_register_answer();
+  void set_allocated_register_answer(::Xenophobia::RegisterAnswer* register_answer);
+
+  // optional .Xenophobia.RegisterUpdate register_update = 3;
+  bool has_register_update() const;
+  void clear_register_update();
+  static const int kRegisterUpdateFieldNumber = 3;
+  const ::Xenophobia::RegisterUpdate& register_update() const;
+  ::Xenophobia::RegisterUpdate* mutable_register_update();
+  ::Xenophobia::RegisterUpdate* release_register_update();
+  void set_allocated_register_update(::Xenophobia::RegisterUpdate* register_update);
+
+  // optional .Xenophobia.StartGame start_game = 4;
+  bool has_start_game() const;
+  void clear_start_game();
+  static const int kStartGameFieldNumber = 4;
+  const ::Xenophobia::StartGame& start_game() const;
+  ::Xenophobia::StartGame* mutable_start_game();
+  ::Xenophobia::StartGame* release_start_game();
+  void set_allocated_start_game(::Xenophobia::StartGame* start_game);
+
+  // optional .Xenophobia.TimeSwitch time_switch = 5;
+  bool has_time_switch() const;
+  void clear_time_switch();
+  static const int kTimeSwitchFieldNumber = 5;
+  const ::Xenophobia::TimeSwitch& time_switch() const;
+  ::Xenophobia::TimeSwitch* mutable_time_switch();
+  ::Xenophobia::TimeSwitch* release_time_switch();
+  void set_allocated_time_switch(::Xenophobia::TimeSwitch* time_switch);
+
+  // optional .Xenophobia.Voting voting = 6;
+  bool has_voting() const;
+  void clear_voting();
+  static const int kVotingFieldNumber = 6;
+  const ::Xenophobia::Voting& voting() const;
+  ::Xenophobia::Voting* mutable_voting();
+  ::Xenophobia::Voting* release_voting();
+  void set_allocated_voting(::Xenophobia::Voting* voting);
+
+  // optional .Xenophobia.EndVoting end_voting = 7;
+  bool has_end_voting() const;
+  void clear_end_voting();
+  static const int kEndVotingFieldNumber = 7;
+  const ::Xenophobia::EndVoting& end_voting() const;
+  ::Xenophobia::EndVoting* mutable_end_voting();
+  ::Xenophobia::EndVoting* release_end_voting();
+  void set_allocated_end_voting(::Xenophobia::EndVoting* end_voting);
+
+  // optional .Xenophobia.Change change = 8;
+  bool has_change() const;
+  void clear_change();
+  static const int kChangeFieldNumber = 8;
+  const ::Xenophobia::Change& change() const;
+  ::Xenophobia::Change* mutable_change();
+  ::Xenophobia::Change* release_change();
+  void set_allocated_change(::Xenophobia::Change* change);
+
+  // optional .Xenophobia.InvetoryChange inventory_change = 9;
+  bool has_inventory_change() const;
+  void clear_inventory_change();
+  static const int kInventoryChangeFieldNumber = 9;
+  const ::Xenophobia::InvetoryChange& inventory_change() const;
+  ::Xenophobia::InvetoryChange* mutable_inventory_change();
+  ::Xenophobia::InvetoryChange* release_inventory_change();
+  void set_allocated_inventory_change(::Xenophobia::InvetoryChange* inventory_change);
+
+  // optional .Xenophobia.PlayerChange player_change = 10;
+  bool has_player_change() const;
+  void clear_player_change();
+  static const int kPlayerChangeFieldNumber = 10;
+  const ::Xenophobia::PlayerChange& player_change() const;
+  ::Xenophobia::PlayerChange* mutable_player_change();
+  ::Xenophobia::PlayerChange* release_player_change();
+  void set_allocated_player_change(::Xenophobia::PlayerChange* player_change);
+
+  // optional .Xenophobia.ActionRequest action_request = 11;
+  bool has_action_request() const;
+  void clear_action_request();
+  static const int kActionRequestFieldNumber = 11;
+  const ::Xenophobia::ActionRequest& action_request() const;
+  ::Xenophobia::ActionRequest* mutable_action_request();
+  ::Xenophobia::ActionRequest* release_action_request();
+  void set_allocated_action_request(::Xenophobia::ActionRequest* action_request);
+
+  // optional .Xenophobia.ActionResult action_result = 12;
+  bool has_action_result() const;
+  void clear_action_result();
+  static const int kActionResultFieldNumber = 12;
+  const ::Xenophobia::ActionResult& action_result() const;
+  ::Xenophobia::ActionResult* mutable_action_result();
+  ::Xenophobia::ActionResult* release_action_result();
+  void set_allocated_action_result(::Xenophobia::ActionResult* action_result);
+
+  // @@protoc_insertion_point(class_scope:Xenophobia.ServerMessage)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  bool _is_default_instance_;
+  ::Xenophobia::RegisterAnswer* register_answer_;
+  ::Xenophobia::RegisterUpdate* register_update_;
+  ::Xenophobia::StartGame* start_game_;
+  ::Xenophobia::TimeSwitch* time_switch_;
+  ::Xenophobia::Voting* voting_;
+  ::Xenophobia::EndVoting* end_voting_;
+  ::Xenophobia::Change* change_;
+  ::Xenophobia::InvetoryChange* inventory_change_;
+  ::Xenophobia::PlayerChange* player_change_;
+  ::Xenophobia::ActionRequest* action_request_;
+  ::Xenophobia::ActionResult* action_result_;
+  int type_;
+  mutable int _cached_size_;
+  friend void  protobuf_AddDesc_server_2eproto();
+  friend void protobuf_AssignDesc_server_2eproto();
+  friend void protobuf_ShutdownFile_server_2eproto();
+
+  void InitAsDefaultInstance();
+  static ServerMessage* default_instance_;
+};
 // ===================================================================
 
 
@@ -1946,7 +2165,434 @@ inline void ActionResult::set_action(::types::Action value) {
   // @@protoc_insertion_point(field_set:Xenophobia.ActionResult.action)
 }
 
+// -------------------------------------------------------------------
+
+// ServerMessage
+
+// optional .Xenophobia.ServerMessageType type = 1;
+inline void ServerMessage::clear_type() {
+  type_ = 0;
+}
+inline ::Xenophobia::ServerMessageType ServerMessage::type() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ServerMessage.type)
+  return static_cast< ::Xenophobia::ServerMessageType >(type_);
+}
+inline void ServerMessage::set_type(::Xenophobia::ServerMessageType value) {
+  
+  type_ = value;
+  // @@protoc_insertion_point(field_set:Xenophobia.ServerMessage.type)
+}
+
+// optional .Xenophobia.RegisterAnswer register_answer = 2;
+inline bool ServerMessage::has_register_answer() const {
+  return !_is_default_instance_ && register_answer_ != NULL;
+}
+inline void ServerMessage::clear_register_answer() {
+  if (GetArenaNoVirtual() == NULL && register_answer_ != NULL) delete register_answer_;
+  register_answer_ = NULL;
+}
+inline const ::Xenophobia::RegisterAnswer& ServerMessage::register_answer() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ServerMessage.register_answer)
+  return register_answer_ != NULL ? *register_answer_ : *default_instance_->register_answer_;
+}
+inline ::Xenophobia::RegisterAnswer* ServerMessage::mutable_register_answer() {
+  
+  if (register_answer_ == NULL) {
+    register_answer_ = new ::Xenophobia::RegisterAnswer;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ServerMessage.register_answer)
+  return register_answer_;
+}
+inline ::Xenophobia::RegisterAnswer* ServerMessage::release_register_answer() {
+  
+  ::Xenophobia::RegisterAnswer* temp = register_answer_;
+  register_answer_ = NULL;
+  return temp;
+}
+inline void ServerMessage::set_allocated_register_answer(::Xenophobia::RegisterAnswer* register_answer) {
+  delete register_answer_;
+  register_answer_ = register_answer;
+  if (register_answer) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ServerMessage.register_answer)
+}
+
+// optional .Xenophobia.RegisterUpdate register_update = 3;
+inline bool ServerMessage::has_register_update() const {
+  return !_is_default_instance_ && register_update_ != NULL;
+}
+inline void ServerMessage::clear_register_update() {
+  if (GetArenaNoVirtual() == NULL && register_update_ != NULL) delete register_update_;
+  register_update_ = NULL;
+}
+inline const ::Xenophobia::RegisterUpdate& ServerMessage::register_update() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ServerMessage.register_update)
+  return register_update_ != NULL ? *register_update_ : *default_instance_->register_update_;
+}
+inline ::Xenophobia::RegisterUpdate* ServerMessage::mutable_register_update() {
+  
+  if (register_update_ == NULL) {
+    register_update_ = new ::Xenophobia::RegisterUpdate;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ServerMessage.register_update)
+  return register_update_;
+}
+inline ::Xenophobia::RegisterUpdate* ServerMessage::release_register_update() {
+  
+  ::Xenophobia::RegisterUpdate* temp = register_update_;
+  register_update_ = NULL;
+  return temp;
+}
+inline void ServerMessage::set_allocated_register_update(::Xenophobia::RegisterUpdate* register_update) {
+  delete register_update_;
+  register_update_ = register_update;
+  if (register_update) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ServerMessage.register_update)
+}
+
+// optional .Xenophobia.StartGame start_game = 4;
+inline bool ServerMessage::has_start_game() const {
+  return !_is_default_instance_ && start_game_ != NULL;
+}
+inline void ServerMessage::clear_start_game() {
+  if (GetArenaNoVirtual() == NULL && start_game_ != NULL) delete start_game_;
+  start_game_ = NULL;
+}
+inline const ::Xenophobia::StartGame& ServerMessage::start_game() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ServerMessage.start_game)
+  return start_game_ != NULL ? *start_game_ : *default_instance_->start_game_;
+}
+inline ::Xenophobia::StartGame* ServerMessage::mutable_start_game() {
+  
+  if (start_game_ == NULL) {
+    start_game_ = new ::Xenophobia::StartGame;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ServerMessage.start_game)
+  return start_game_;
+}
+inline ::Xenophobia::StartGame* ServerMessage::release_start_game() {
+  
+  ::Xenophobia::StartGame* temp = start_game_;
+  start_game_ = NULL;
+  return temp;
+}
+inline void ServerMessage::set_allocated_start_game(::Xenophobia::StartGame* start_game) {
+  delete start_game_;
+  start_game_ = start_game;
+  if (start_game) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ServerMessage.start_game)
+}
+
+// optional .Xenophobia.TimeSwitch time_switch = 5;
+inline bool ServerMessage::has_time_switch() const {
+  return !_is_default_instance_ && time_switch_ != NULL;
+}
+inline void ServerMessage::clear_time_switch() {
+  if (GetArenaNoVirtual() == NULL && time_switch_ != NULL) delete time_switch_;
+  time_switch_ = NULL;
+}
+inline const ::Xenophobia::TimeSwitch& ServerMessage::time_switch() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ServerMessage.time_switch)
+  return time_switch_ != NULL ? *time_switch_ : *default_instance_->time_switch_;
+}
+inline ::Xenophobia::TimeSwitch* ServerMessage::mutable_time_switch() {
+  
+  if (time_switch_ == NULL) {
+    time_switch_ = new ::Xenophobia::TimeSwitch;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ServerMessage.time_switch)
+  return time_switch_;
+}
+inline ::Xenophobia::TimeSwitch* ServerMessage::release_time_switch() {
+  
+  ::Xenophobia::TimeSwitch* temp = time_switch_;
+  time_switch_ = NULL;
+  return temp;
+}
+inline void ServerMessage::set_allocated_time_switch(::Xenophobia::TimeSwitch* time_switch) {
+  delete time_switch_;
+  time_switch_ = time_switch;
+  if (time_switch) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ServerMessage.time_switch)
+}
+
+// optional .Xenophobia.Voting voting = 6;
+inline bool ServerMessage::has_voting() const {
+  return !_is_default_instance_ && voting_ != NULL;
+}
+inline void ServerMessage::clear_voting() {
+  if (GetArenaNoVirtual() == NULL && voting_ != NULL) delete voting_;
+  voting_ = NULL;
+}
+inline const ::Xenophobia::Voting& ServerMessage::voting() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ServerMessage.voting)
+  return voting_ != NULL ? *voting_ : *default_instance_->voting_;
+}
+inline ::Xenophobia::Voting* ServerMessage::mutable_voting() {
+  
+  if (voting_ == NULL) {
+    voting_ = new ::Xenophobia::Voting;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ServerMessage.voting)
+  return voting_;
+}
+inline ::Xenophobia::Voting* ServerMessage::release_voting() {
+  
+  ::Xenophobia::Voting* temp = voting_;
+  voting_ = NULL;
+  return temp;
+}
+inline void ServerMessage::set_allocated_voting(::Xenophobia::Voting* voting) {
+  delete voting_;
+  voting_ = voting;
+  if (voting) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ServerMessage.voting)
+}
+
+// optional .Xenophobia.EndVoting end_voting = 7;
+inline bool ServerMessage::has_end_voting() const {
+  return !_is_default_instance_ && end_voting_ != NULL;
+}
+inline void ServerMessage::clear_end_voting() {
+  if (GetArenaNoVirtual() == NULL && end_voting_ != NULL) delete end_voting_;
+  end_voting_ = NULL;
+}
+inline const ::Xenophobia::EndVoting& ServerMessage::end_voting() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ServerMessage.end_voting)
+  return end_voting_ != NULL ? *end_voting_ : *default_instance_->end_voting_;
+}
+inline ::Xenophobia::EndVoting* ServerMessage::mutable_end_voting() {
+  
+  if (end_voting_ == NULL) {
+    end_voting_ = new ::Xenophobia::EndVoting;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ServerMessage.end_voting)
+  return end_voting_;
+}
+inline ::Xenophobia::EndVoting* ServerMessage::release_end_voting() {
+  
+  ::Xenophobia::EndVoting* temp = end_voting_;
+  end_voting_ = NULL;
+  return temp;
+}
+inline void ServerMessage::set_allocated_end_voting(::Xenophobia::EndVoting* end_voting) {
+  delete end_voting_;
+  end_voting_ = end_voting;
+  if (end_voting) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ServerMessage.end_voting)
+}
+
+// optional .Xenophobia.Change change = 8;
+inline bool ServerMessage::has_change() const {
+  return !_is_default_instance_ && change_ != NULL;
+}
+inline void ServerMessage::clear_change() {
+  if (GetArenaNoVirtual() == NULL && change_ != NULL) delete change_;
+  change_ = NULL;
+}
+inline const ::Xenophobia::Change& ServerMessage::change() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ServerMessage.change)
+  return change_ != NULL ? *change_ : *default_instance_->change_;
+}
+inline ::Xenophobia::Change* ServerMessage::mutable_change() {
+  
+  if (change_ == NULL) {
+    change_ = new ::Xenophobia::Change;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ServerMessage.change)
+  return change_;
+}
+inline ::Xenophobia::Change* ServerMessage::release_change() {
+  
+  ::Xenophobia::Change* temp = change_;
+  change_ = NULL;
+  return temp;
+}
+inline void ServerMessage::set_allocated_change(::Xenophobia::Change* change) {
+  delete change_;
+  change_ = change;
+  if (change) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ServerMessage.change)
+}
+
+// optional .Xenophobia.InvetoryChange inventory_change = 9;
+inline bool ServerMessage::has_inventory_change() const {
+  return !_is_default_instance_ && inventory_change_ != NULL;
+}
+inline void ServerMessage::clear_inventory_change() {
+  if (GetArenaNoVirtual() == NULL && inventory_change_ != NULL) delete inventory_change_;
+  inventory_change_ = NULL;
+}
+inline const ::Xenophobia::InvetoryChange& ServerMessage::inventory_change() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ServerMessage.inventory_change)
+  return inventory_change_ != NULL ? *inventory_change_ : *default_instance_->inventory_change_;
+}
+inline ::Xenophobia::InvetoryChange* ServerMessage::mutable_inventory_change() {
+  
+  if (inventory_change_ == NULL) {
+    inventory_change_ = new ::Xenophobia::InvetoryChange;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ServerMessage.inventory_change)
+  return inventory_change_;
+}
+inline ::Xenophobia::InvetoryChange* ServerMessage::release_inventory_change() {
+  
+  ::Xenophobia::InvetoryChange* temp = inventory_change_;
+  inventory_change_ = NULL;
+  return temp;
+}
+inline void ServerMessage::set_allocated_inventory_change(::Xenophobia::InvetoryChange* inventory_change) {
+  delete inventory_change_;
+  inventory_change_ = inventory_change;
+  if (inventory_change) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ServerMessage.inventory_change)
+}
+
+// optional .Xenophobia.PlayerChange player_change = 10;
+inline bool ServerMessage::has_player_change() const {
+  return !_is_default_instance_ && player_change_ != NULL;
+}
+inline void ServerMessage::clear_player_change() {
+  if (GetArenaNoVirtual() == NULL && player_change_ != NULL) delete player_change_;
+  player_change_ = NULL;
+}
+inline const ::Xenophobia::PlayerChange& ServerMessage::player_change() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ServerMessage.player_change)
+  return player_change_ != NULL ? *player_change_ : *default_instance_->player_change_;
+}
+inline ::Xenophobia::PlayerChange* ServerMessage::mutable_player_change() {
+  
+  if (player_change_ == NULL) {
+    player_change_ = new ::Xenophobia::PlayerChange;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ServerMessage.player_change)
+  return player_change_;
+}
+inline ::Xenophobia::PlayerChange* ServerMessage::release_player_change() {
+  
+  ::Xenophobia::PlayerChange* temp = player_change_;
+  player_change_ = NULL;
+  return temp;
+}
+inline void ServerMessage::set_allocated_player_change(::Xenophobia::PlayerChange* player_change) {
+  delete player_change_;
+  player_change_ = player_change;
+  if (player_change) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ServerMessage.player_change)
+}
+
+// optional .Xenophobia.ActionRequest action_request = 11;
+inline bool ServerMessage::has_action_request() const {
+  return !_is_default_instance_ && action_request_ != NULL;
+}
+inline void ServerMessage::clear_action_request() {
+  if (GetArenaNoVirtual() == NULL && action_request_ != NULL) delete action_request_;
+  action_request_ = NULL;
+}
+inline const ::Xenophobia::ActionRequest& ServerMessage::action_request() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ServerMessage.action_request)
+  return action_request_ != NULL ? *action_request_ : *default_instance_->action_request_;
+}
+inline ::Xenophobia::ActionRequest* ServerMessage::mutable_action_request() {
+  
+  if (action_request_ == NULL) {
+    action_request_ = new ::Xenophobia::ActionRequest;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ServerMessage.action_request)
+  return action_request_;
+}
+inline ::Xenophobia::ActionRequest* ServerMessage::release_action_request() {
+  
+  ::Xenophobia::ActionRequest* temp = action_request_;
+  action_request_ = NULL;
+  return temp;
+}
+inline void ServerMessage::set_allocated_action_request(::Xenophobia::ActionRequest* action_request) {
+  delete action_request_;
+  action_request_ = action_request;
+  if (action_request) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ServerMessage.action_request)
+}
+
+// optional .Xenophobia.ActionResult action_result = 12;
+inline bool ServerMessage::has_action_result() const {
+  return !_is_default_instance_ && action_result_ != NULL;
+}
+inline void ServerMessage::clear_action_result() {
+  if (GetArenaNoVirtual() == NULL && action_result_ != NULL) delete action_result_;
+  action_result_ = NULL;
+}
+inline const ::Xenophobia::ActionResult& ServerMessage::action_result() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ServerMessage.action_result)
+  return action_result_ != NULL ? *action_result_ : *default_instance_->action_result_;
+}
+inline ::Xenophobia::ActionResult* ServerMessage::mutable_action_result() {
+  
+  if (action_result_ == NULL) {
+    action_result_ = new ::Xenophobia::ActionResult;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ServerMessage.action_result)
+  return action_result_;
+}
+inline ::Xenophobia::ActionResult* ServerMessage::release_action_result() {
+  
+  ::Xenophobia::ActionResult* temp = action_result_;
+  action_result_ = NULL;
+  return temp;
+}
+inline void ServerMessage::set_allocated_action_result(::Xenophobia::ActionResult* action_result) {
+  delete action_result_;
+  action_result_ = action_result;
+  if (action_result) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ServerMessage.action_result)
+}
+
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
@@ -2007,6 +2653,11 @@ template <> struct is_proto_enum< ::Xenophobia::ActionResult_ResultType> : ::goo
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::Xenophobia::ActionResult_ResultType>() {
   return ::Xenophobia::ActionResult_ResultType_descriptor();
+}
+template <> struct is_proto_enum< ::Xenophobia::ServerMessageType> : ::google::protobuf::internal::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::Xenophobia::ServerMessageType>() {
+  return ::Xenophobia::ServerMessageType_descriptor();
 }
 
 }  // namespace protobuf

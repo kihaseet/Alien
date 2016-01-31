@@ -1,5 +1,6 @@
 #ifndef TYPES_H
 #define TYPES_H
+#include "proto/types.pb.h"
 #include <QString>
 #include <QMap>
 
@@ -67,7 +68,7 @@ enum ROLE{
 struct RegisterObject{
 public:
     TURN_TYPE targets;
-    ROLE role;
+    ::types::Role role;
     QString name;
     int ID;
 
@@ -79,7 +80,7 @@ public:
         targets = tar;
         name = n;
     }
-    RegisterObject(int id, TURN_TYPE tar,ROLE r = RT_UNKNOWN){
+    RegisterObject(int id, TURN_TYPE tar,::types::Role r){
         ID = id;
         targets = tar;
         role = r;

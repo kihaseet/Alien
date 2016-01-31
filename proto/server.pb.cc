@@ -65,6 +65,10 @@ const ::google::protobuf::Descriptor* ActionResult_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   ActionResult_reflection_ = NULL;
 const ::google::protobuf::EnumDescriptor* ActionResult_ResultType_descriptor_ = NULL;
+const ::google::protobuf::Descriptor* ServerMessage_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  ServerMessage_reflection_ = NULL;
+const ::google::protobuf::EnumDescriptor* ServerMessageType_descriptor_ = NULL;
 
 }  // namespace
 
@@ -276,6 +280,33 @@ void protobuf_AssignDesc_server_2eproto() {
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ActionResult, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ActionResult, _is_default_instance_));
   ActionResult_ResultType_descriptor_ = ActionResult_descriptor_->enum_type(0);
+  ServerMessage_descriptor_ = file->message_type(11);
+  static const int ServerMessage_offsets_[12] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMessage, type_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMessage, register_answer_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMessage, register_update_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMessage, start_game_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMessage, time_switch_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMessage, voting_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMessage, end_voting_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMessage, change_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMessage, inventory_change_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMessage, player_change_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMessage, action_request_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMessage, action_result_),
+  };
+  ServerMessage_reflection_ =
+    ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
+      ServerMessage_descriptor_,
+      ServerMessage::default_instance_,
+      ServerMessage_offsets_,
+      -1,
+      -1,
+      -1,
+      sizeof(ServerMessage),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMessage, _internal_metadata_),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMessage, _is_default_instance_));
+  ServerMessageType_descriptor_ = file->enum_type(0);
 }
 
 namespace {
@@ -330,6 +361,8 @@ void protobuf_RegisterTypes(const ::std::string&) {
       ActionRequest_descriptor_, &ActionRequest::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
       ActionResult_descriptor_, &ActionResult::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+      ServerMessage_descriptor_, &ServerMessage::default_instance());
 }
 
 }  // namespace
@@ -359,6 +392,8 @@ void protobuf_ShutdownFile_server_2eproto() {
   delete ActionRequest_reflection_;
   delete ActionResult::default_instance_;
   delete ActionResult_reflection_;
+  delete ServerMessage::default_instance_;
+  delete ServerMessage_reflection_;
 }
 
 void protobuf_AddDesc_server_2eproto() {
@@ -407,8 +442,29 @@ void protobuf_AddDesc_server_2eproto() {
     "ED_ROTATION\020\001\"\215\001\n\014ActionResult\0221\n\004type\030\001"
     " \001(\0162#.Xenophobia.ActionResult.ResultTyp"
     "e\022\035\n\006action\030\002 \001(\0162\r.types.Action\"+\n\nResu"
-    "ltType\022\r\n\tUSED_ITEM\020\000\022\016\n\nUSE_ACTION\020\001P\000b"
-    "\006proto3", 1567);
+    "ltType\022\r\n\tUSED_ITEM\020\000\022\016\n\nUSE_ACTION\020\001\"\274\004"
+    "\n\rServerMessage\022+\n\004type\030\001 \001(\0162\035.Xenophob"
+    "ia.ServerMessageType\0223\n\017register_answer\030"
+    "\002 \001(\0132\032.Xenophobia.RegisterAnswer\0223\n\017reg"
+    "ister_update\030\003 \001(\0132\032.Xenophobia.Register"
+    "Update\022)\n\nstart_game\030\004 \001(\0132\025.Xenophobia."
+    "StartGame\022+\n\013time_switch\030\005 \001(\0132\026.Xenopho"
+    "bia.TimeSwitch\022\"\n\006voting\030\006 \001(\0132\022.Xenopho"
+    "bia.Voting\022)\n\nend_voting\030\007 \001(\0132\025.Xenopho"
+    "bia.EndVoting\022\"\n\006change\030\010 \001(\0132\022.Xenophob"
+    "ia.Change\0224\n\020inventory_change\030\t \001(\0132\032.Xe"
+    "nophobia.InvetoryChange\022/\n\rplayer_change"
+    "\030\n \001(\0132\030.Xenophobia.PlayerChange\0221\n\016acti"
+    "on_request\030\013 \001(\0132\031.Xenophobia.ActionRequ"
+    "est\022/\n\raction_result\030\014 \001(\0132\030.Xenophobia."
+    "ActionResult*\202\002\n\021ServerMessageType\022\027\n\023SM"
+    "T_REGISTER_ANSWER\020\000\022\027\n\023SMT_REGISTER_UPDA"
+    "TE\020\001\022\022\n\016SMT_START_GAME\020\002\022\023\n\017SMT_TIME_SWI"
+    "TCH\020\003\022\016\n\nSMT_VOTING\020\004\022\022\n\016SMT_END_VOTING\020"
+    "\005\022\016\n\nSMT_CHANGE\020\006\022\030\n\024SMT_INVENTORY_CHANG"
+    "E\020\007\022\025\n\021SMT_PLAYER_CHANGE\020\010\022\026\n\022SMT_ACTION"
+    "_REQUEST\020\t\022\025\n\021SMT_ACTION_RESULT\020\nP\000b\006pro"
+    "to3", 2403);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "server.proto", &protobuf_RegisterTypes);
   RegisterAnswer::default_instance_ = new RegisterAnswer();
@@ -423,6 +479,7 @@ void protobuf_AddDesc_server_2eproto() {
   PlayerChange::default_instance_ = new PlayerChange();
   ActionRequest::default_instance_ = new ActionRequest();
   ActionResult::default_instance_ = new ActionResult();
+  ServerMessage::default_instance_ = new ServerMessage();
   RegisterAnswer::default_instance_->InitAsDefaultInstance();
   RegisterUpdate::default_instance_->InitAsDefaultInstance();
   StartGame::default_instance_->InitAsDefaultInstance();
@@ -435,6 +492,7 @@ void protobuf_AddDesc_server_2eproto() {
   PlayerChange::default_instance_->InitAsDefaultInstance();
   ActionRequest::default_instance_->InitAsDefaultInstance();
   ActionResult::default_instance_->InitAsDefaultInstance();
+  ServerMessage::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_server_2eproto);
 }
 
@@ -444,6 +502,29 @@ struct StaticDescriptorInitializer_server_2eproto {
     protobuf_AddDesc_server_2eproto();
   }
 } static_descriptor_initializer_server_2eproto_;
+const ::google::protobuf::EnumDescriptor* ServerMessageType_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return ServerMessageType_descriptor_;
+}
+bool ServerMessageType_IsValid(int value) {
+  switch(value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+      return true;
+    default:
+      return false;
+  }
+}
+
 
 namespace {
 
@@ -4288,6 +4369,1114 @@ void ActionResult::clear_action() {
   
   action_ = value;
   // @@protoc_insertion_point(field_set:Xenophobia.ActionResult.action)
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int ServerMessage::kTypeFieldNumber;
+const int ServerMessage::kRegisterAnswerFieldNumber;
+const int ServerMessage::kRegisterUpdateFieldNumber;
+const int ServerMessage::kStartGameFieldNumber;
+const int ServerMessage::kTimeSwitchFieldNumber;
+const int ServerMessage::kVotingFieldNumber;
+const int ServerMessage::kEndVotingFieldNumber;
+const int ServerMessage::kChangeFieldNumber;
+const int ServerMessage::kInventoryChangeFieldNumber;
+const int ServerMessage::kPlayerChangeFieldNumber;
+const int ServerMessage::kActionRequestFieldNumber;
+const int ServerMessage::kActionResultFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+ServerMessage::ServerMessage()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:Xenophobia.ServerMessage)
+}
+
+void ServerMessage::InitAsDefaultInstance() {
+  _is_default_instance_ = true;
+  register_answer_ = const_cast< ::Xenophobia::RegisterAnswer*>(&::Xenophobia::RegisterAnswer::default_instance());
+  register_update_ = const_cast< ::Xenophobia::RegisterUpdate*>(&::Xenophobia::RegisterUpdate::default_instance());
+  start_game_ = const_cast< ::Xenophobia::StartGame*>(&::Xenophobia::StartGame::default_instance());
+  time_switch_ = const_cast< ::Xenophobia::TimeSwitch*>(&::Xenophobia::TimeSwitch::default_instance());
+  voting_ = const_cast< ::Xenophobia::Voting*>(&::Xenophobia::Voting::default_instance());
+  end_voting_ = const_cast< ::Xenophobia::EndVoting*>(&::Xenophobia::EndVoting::default_instance());
+  change_ = const_cast< ::Xenophobia::Change*>(&::Xenophobia::Change::default_instance());
+  inventory_change_ = const_cast< ::Xenophobia::InvetoryChange*>(&::Xenophobia::InvetoryChange::default_instance());
+  player_change_ = const_cast< ::Xenophobia::PlayerChange*>(&::Xenophobia::PlayerChange::default_instance());
+  action_request_ = const_cast< ::Xenophobia::ActionRequest*>(&::Xenophobia::ActionRequest::default_instance());
+  action_result_ = const_cast< ::Xenophobia::ActionResult*>(&::Xenophobia::ActionResult::default_instance());
+}
+
+ServerMessage::ServerMessage(const ServerMessage& from)
+  : ::google::protobuf::Message(),
+    _internal_metadata_(NULL) {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:Xenophobia.ServerMessage)
+}
+
+void ServerMessage::SharedCtor() {
+    _is_default_instance_ = false;
+  _cached_size_ = 0;
+  type_ = 0;
+  register_answer_ = NULL;
+  register_update_ = NULL;
+  start_game_ = NULL;
+  time_switch_ = NULL;
+  voting_ = NULL;
+  end_voting_ = NULL;
+  change_ = NULL;
+  inventory_change_ = NULL;
+  player_change_ = NULL;
+  action_request_ = NULL;
+  action_result_ = NULL;
+}
+
+ServerMessage::~ServerMessage() {
+  // @@protoc_insertion_point(destructor:Xenophobia.ServerMessage)
+  SharedDtor();
+}
+
+void ServerMessage::SharedDtor() {
+  if (this != default_instance_) {
+    delete register_answer_;
+    delete register_update_;
+    delete start_game_;
+    delete time_switch_;
+    delete voting_;
+    delete end_voting_;
+    delete change_;
+    delete inventory_change_;
+    delete player_change_;
+    delete action_request_;
+    delete action_result_;
+  }
+}
+
+void ServerMessage::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* ServerMessage::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return ServerMessage_descriptor_;
+}
+
+const ServerMessage& ServerMessage::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_server_2eproto();
+  return *default_instance_;
+}
+
+ServerMessage* ServerMessage::default_instance_ = NULL;
+
+ServerMessage* ServerMessage::New(::google::protobuf::Arena* arena) const {
+  ServerMessage* n = new ServerMessage;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void ServerMessage::Clear() {
+  type_ = 0;
+  if (GetArenaNoVirtual() == NULL && register_answer_ != NULL) delete register_answer_;
+  register_answer_ = NULL;
+  if (GetArenaNoVirtual() == NULL && register_update_ != NULL) delete register_update_;
+  register_update_ = NULL;
+  if (GetArenaNoVirtual() == NULL && start_game_ != NULL) delete start_game_;
+  start_game_ = NULL;
+  if (GetArenaNoVirtual() == NULL && time_switch_ != NULL) delete time_switch_;
+  time_switch_ = NULL;
+  if (GetArenaNoVirtual() == NULL && voting_ != NULL) delete voting_;
+  voting_ = NULL;
+  if (GetArenaNoVirtual() == NULL && end_voting_ != NULL) delete end_voting_;
+  end_voting_ = NULL;
+  if (GetArenaNoVirtual() == NULL && change_ != NULL) delete change_;
+  change_ = NULL;
+  if (GetArenaNoVirtual() == NULL && inventory_change_ != NULL) delete inventory_change_;
+  inventory_change_ = NULL;
+  if (GetArenaNoVirtual() == NULL && player_change_ != NULL) delete player_change_;
+  player_change_ = NULL;
+  if (GetArenaNoVirtual() == NULL && action_request_ != NULL) delete action_request_;
+  action_request_ = NULL;
+  if (GetArenaNoVirtual() == NULL && action_result_ != NULL) delete action_result_;
+  action_result_ = NULL;
+}
+
+bool ServerMessage::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:Xenophobia.ServerMessage)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // optional .Xenophobia.ServerMessageType type = 1;
+      case 1: {
+        if (tag == 8) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_type(static_cast< ::Xenophobia::ServerMessageType >(value));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(18)) goto parse_register_answer;
+        break;
+      }
+
+      // optional .Xenophobia.RegisterAnswer register_answer = 2;
+      case 2: {
+        if (tag == 18) {
+         parse_register_answer:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_register_answer()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(26)) goto parse_register_update;
+        break;
+      }
+
+      // optional .Xenophobia.RegisterUpdate register_update = 3;
+      case 3: {
+        if (tag == 26) {
+         parse_register_update:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_register_update()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(34)) goto parse_start_game;
+        break;
+      }
+
+      // optional .Xenophobia.StartGame start_game = 4;
+      case 4: {
+        if (tag == 34) {
+         parse_start_game:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_start_game()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(42)) goto parse_time_switch;
+        break;
+      }
+
+      // optional .Xenophobia.TimeSwitch time_switch = 5;
+      case 5: {
+        if (tag == 42) {
+         parse_time_switch:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_time_switch()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(50)) goto parse_voting;
+        break;
+      }
+
+      // optional .Xenophobia.Voting voting = 6;
+      case 6: {
+        if (tag == 50) {
+         parse_voting:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_voting()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(58)) goto parse_end_voting;
+        break;
+      }
+
+      // optional .Xenophobia.EndVoting end_voting = 7;
+      case 7: {
+        if (tag == 58) {
+         parse_end_voting:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_end_voting()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(66)) goto parse_change;
+        break;
+      }
+
+      // optional .Xenophobia.Change change = 8;
+      case 8: {
+        if (tag == 66) {
+         parse_change:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_change()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(74)) goto parse_inventory_change;
+        break;
+      }
+
+      // optional .Xenophobia.InvetoryChange inventory_change = 9;
+      case 9: {
+        if (tag == 74) {
+         parse_inventory_change:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_inventory_change()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(82)) goto parse_player_change;
+        break;
+      }
+
+      // optional .Xenophobia.PlayerChange player_change = 10;
+      case 10: {
+        if (tag == 82) {
+         parse_player_change:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_player_change()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(90)) goto parse_action_request;
+        break;
+      }
+
+      // optional .Xenophobia.ActionRequest action_request = 11;
+      case 11: {
+        if (tag == 90) {
+         parse_action_request:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_action_request()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(98)) goto parse_action_result;
+        break;
+      }
+
+      // optional .Xenophobia.ActionResult action_result = 12;
+      case 12: {
+        if (tag == 98) {
+         parse_action_result:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_action_result()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:Xenophobia.ServerMessage)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:Xenophobia.ServerMessage)
+  return false;
+#undef DO_
+}
+
+void ServerMessage::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:Xenophobia.ServerMessage)
+  // optional .Xenophobia.ServerMessageType type = 1;
+  if (this->type() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      1, this->type(), output);
+  }
+
+  // optional .Xenophobia.RegisterAnswer register_answer = 2;
+  if (this->has_register_answer()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      2, *this->register_answer_, output);
+  }
+
+  // optional .Xenophobia.RegisterUpdate register_update = 3;
+  if (this->has_register_update()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      3, *this->register_update_, output);
+  }
+
+  // optional .Xenophobia.StartGame start_game = 4;
+  if (this->has_start_game()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      4, *this->start_game_, output);
+  }
+
+  // optional .Xenophobia.TimeSwitch time_switch = 5;
+  if (this->has_time_switch()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      5, *this->time_switch_, output);
+  }
+
+  // optional .Xenophobia.Voting voting = 6;
+  if (this->has_voting()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      6, *this->voting_, output);
+  }
+
+  // optional .Xenophobia.EndVoting end_voting = 7;
+  if (this->has_end_voting()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      7, *this->end_voting_, output);
+  }
+
+  // optional .Xenophobia.Change change = 8;
+  if (this->has_change()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      8, *this->change_, output);
+  }
+
+  // optional .Xenophobia.InvetoryChange inventory_change = 9;
+  if (this->has_inventory_change()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      9, *this->inventory_change_, output);
+  }
+
+  // optional .Xenophobia.PlayerChange player_change = 10;
+  if (this->has_player_change()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      10, *this->player_change_, output);
+  }
+
+  // optional .Xenophobia.ActionRequest action_request = 11;
+  if (this->has_action_request()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      11, *this->action_request_, output);
+  }
+
+  // optional .Xenophobia.ActionResult action_result = 12;
+  if (this->has_action_result()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      12, *this->action_result_, output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:Xenophobia.ServerMessage)
+}
+
+::google::protobuf::uint8* ServerMessage::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Xenophobia.ServerMessage)
+  // optional .Xenophobia.ServerMessageType type = 1;
+  if (this->type() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      1, this->type(), target);
+  }
+
+  // optional .Xenophobia.RegisterAnswer register_answer = 2;
+  if (this->has_register_answer()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        2, *this->register_answer_, target);
+  }
+
+  // optional .Xenophobia.RegisterUpdate register_update = 3;
+  if (this->has_register_update()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        3, *this->register_update_, target);
+  }
+
+  // optional .Xenophobia.StartGame start_game = 4;
+  if (this->has_start_game()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        4, *this->start_game_, target);
+  }
+
+  // optional .Xenophobia.TimeSwitch time_switch = 5;
+  if (this->has_time_switch()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        5, *this->time_switch_, target);
+  }
+
+  // optional .Xenophobia.Voting voting = 6;
+  if (this->has_voting()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        6, *this->voting_, target);
+  }
+
+  // optional .Xenophobia.EndVoting end_voting = 7;
+  if (this->has_end_voting()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        7, *this->end_voting_, target);
+  }
+
+  // optional .Xenophobia.Change change = 8;
+  if (this->has_change()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        8, *this->change_, target);
+  }
+
+  // optional .Xenophobia.InvetoryChange inventory_change = 9;
+  if (this->has_inventory_change()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        9, *this->inventory_change_, target);
+  }
+
+  // optional .Xenophobia.PlayerChange player_change = 10;
+  if (this->has_player_change()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        10, *this->player_change_, target);
+  }
+
+  // optional .Xenophobia.ActionRequest action_request = 11;
+  if (this->has_action_request()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        11, *this->action_request_, target);
+  }
+
+  // optional .Xenophobia.ActionResult action_result = 12;
+  if (this->has_action_result()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        12, *this->action_result_, target);
+  }
+
+  // @@protoc_insertion_point(serialize_to_array_end:Xenophobia.ServerMessage)
+  return target;
+}
+
+int ServerMessage::ByteSize() const {
+  int total_size = 0;
+
+  // optional .Xenophobia.ServerMessageType type = 1;
+  if (this->type() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
+  }
+
+  // optional .Xenophobia.RegisterAnswer register_answer = 2;
+  if (this->has_register_answer()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->register_answer_);
+  }
+
+  // optional .Xenophobia.RegisterUpdate register_update = 3;
+  if (this->has_register_update()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->register_update_);
+  }
+
+  // optional .Xenophobia.StartGame start_game = 4;
+  if (this->has_start_game()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->start_game_);
+  }
+
+  // optional .Xenophobia.TimeSwitch time_switch = 5;
+  if (this->has_time_switch()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->time_switch_);
+  }
+
+  // optional .Xenophobia.Voting voting = 6;
+  if (this->has_voting()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->voting_);
+  }
+
+  // optional .Xenophobia.EndVoting end_voting = 7;
+  if (this->has_end_voting()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->end_voting_);
+  }
+
+  // optional .Xenophobia.Change change = 8;
+  if (this->has_change()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->change_);
+  }
+
+  // optional .Xenophobia.InvetoryChange inventory_change = 9;
+  if (this->has_inventory_change()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->inventory_change_);
+  }
+
+  // optional .Xenophobia.PlayerChange player_change = 10;
+  if (this->has_player_change()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->player_change_);
+  }
+
+  // optional .Xenophobia.ActionRequest action_request = 11;
+  if (this->has_action_request()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->action_request_);
+  }
+
+  // optional .Xenophobia.ActionResult action_result = 12;
+  if (this->has_action_result()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->action_result_);
+  }
+
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void ServerMessage::MergeFrom(const ::google::protobuf::Message& from) {
+  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
+  const ServerMessage* source = 
+      ::google::protobuf::internal::DynamicCastToGenerated<const ServerMessage>(
+          &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void ServerMessage::MergeFrom(const ServerMessage& from) {
+  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
+  if (from.type() != 0) {
+    set_type(from.type());
+  }
+  if (from.has_register_answer()) {
+    mutable_register_answer()->::Xenophobia::RegisterAnswer::MergeFrom(from.register_answer());
+  }
+  if (from.has_register_update()) {
+    mutable_register_update()->::Xenophobia::RegisterUpdate::MergeFrom(from.register_update());
+  }
+  if (from.has_start_game()) {
+    mutable_start_game()->::Xenophobia::StartGame::MergeFrom(from.start_game());
+  }
+  if (from.has_time_switch()) {
+    mutable_time_switch()->::Xenophobia::TimeSwitch::MergeFrom(from.time_switch());
+  }
+  if (from.has_voting()) {
+    mutable_voting()->::Xenophobia::Voting::MergeFrom(from.voting());
+  }
+  if (from.has_end_voting()) {
+    mutable_end_voting()->::Xenophobia::EndVoting::MergeFrom(from.end_voting());
+  }
+  if (from.has_change()) {
+    mutable_change()->::Xenophobia::Change::MergeFrom(from.change());
+  }
+  if (from.has_inventory_change()) {
+    mutable_inventory_change()->::Xenophobia::InvetoryChange::MergeFrom(from.inventory_change());
+  }
+  if (from.has_player_change()) {
+    mutable_player_change()->::Xenophobia::PlayerChange::MergeFrom(from.player_change());
+  }
+  if (from.has_action_request()) {
+    mutable_action_request()->::Xenophobia::ActionRequest::MergeFrom(from.action_request());
+  }
+  if (from.has_action_result()) {
+    mutable_action_result()->::Xenophobia::ActionResult::MergeFrom(from.action_result());
+  }
+}
+
+void ServerMessage::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void ServerMessage::CopyFrom(const ServerMessage& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ServerMessage::IsInitialized() const {
+
+  return true;
+}
+
+void ServerMessage::Swap(ServerMessage* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void ServerMessage::InternalSwap(ServerMessage* other) {
+  std::swap(type_, other->type_);
+  std::swap(register_answer_, other->register_answer_);
+  std::swap(register_update_, other->register_update_);
+  std::swap(start_game_, other->start_game_);
+  std::swap(time_switch_, other->time_switch_);
+  std::swap(voting_, other->voting_);
+  std::swap(end_voting_, other->end_voting_);
+  std::swap(change_, other->change_);
+  std::swap(inventory_change_, other->inventory_change_);
+  std::swap(player_change_, other->player_change_);
+  std::swap(action_request_, other->action_request_);
+  std::swap(action_result_, other->action_result_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata ServerMessage::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = ServerMessage_descriptor_;
+  metadata.reflection = ServerMessage_reflection_;
+  return metadata;
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// ServerMessage
+
+// optional .Xenophobia.ServerMessageType type = 1;
+void ServerMessage::clear_type() {
+  type_ = 0;
+}
+ ::Xenophobia::ServerMessageType ServerMessage::type() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ServerMessage.type)
+  return static_cast< ::Xenophobia::ServerMessageType >(type_);
+}
+ void ServerMessage::set_type(::Xenophobia::ServerMessageType value) {
+  
+  type_ = value;
+  // @@protoc_insertion_point(field_set:Xenophobia.ServerMessage.type)
+}
+
+// optional .Xenophobia.RegisterAnswer register_answer = 2;
+bool ServerMessage::has_register_answer() const {
+  return !_is_default_instance_ && register_answer_ != NULL;
+}
+void ServerMessage::clear_register_answer() {
+  if (GetArenaNoVirtual() == NULL && register_answer_ != NULL) delete register_answer_;
+  register_answer_ = NULL;
+}
+const ::Xenophobia::RegisterAnswer& ServerMessage::register_answer() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ServerMessage.register_answer)
+  return register_answer_ != NULL ? *register_answer_ : *default_instance_->register_answer_;
+}
+::Xenophobia::RegisterAnswer* ServerMessage::mutable_register_answer() {
+  
+  if (register_answer_ == NULL) {
+    register_answer_ = new ::Xenophobia::RegisterAnswer;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ServerMessage.register_answer)
+  return register_answer_;
+}
+::Xenophobia::RegisterAnswer* ServerMessage::release_register_answer() {
+  
+  ::Xenophobia::RegisterAnswer* temp = register_answer_;
+  register_answer_ = NULL;
+  return temp;
+}
+void ServerMessage::set_allocated_register_answer(::Xenophobia::RegisterAnswer* register_answer) {
+  delete register_answer_;
+  register_answer_ = register_answer;
+  if (register_answer) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ServerMessage.register_answer)
+}
+
+// optional .Xenophobia.RegisterUpdate register_update = 3;
+bool ServerMessage::has_register_update() const {
+  return !_is_default_instance_ && register_update_ != NULL;
+}
+void ServerMessage::clear_register_update() {
+  if (GetArenaNoVirtual() == NULL && register_update_ != NULL) delete register_update_;
+  register_update_ = NULL;
+}
+const ::Xenophobia::RegisterUpdate& ServerMessage::register_update() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ServerMessage.register_update)
+  return register_update_ != NULL ? *register_update_ : *default_instance_->register_update_;
+}
+::Xenophobia::RegisterUpdate* ServerMessage::mutable_register_update() {
+  
+  if (register_update_ == NULL) {
+    register_update_ = new ::Xenophobia::RegisterUpdate;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ServerMessage.register_update)
+  return register_update_;
+}
+::Xenophobia::RegisterUpdate* ServerMessage::release_register_update() {
+  
+  ::Xenophobia::RegisterUpdate* temp = register_update_;
+  register_update_ = NULL;
+  return temp;
+}
+void ServerMessage::set_allocated_register_update(::Xenophobia::RegisterUpdate* register_update) {
+  delete register_update_;
+  register_update_ = register_update;
+  if (register_update) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ServerMessage.register_update)
+}
+
+// optional .Xenophobia.StartGame start_game = 4;
+bool ServerMessage::has_start_game() const {
+  return !_is_default_instance_ && start_game_ != NULL;
+}
+void ServerMessage::clear_start_game() {
+  if (GetArenaNoVirtual() == NULL && start_game_ != NULL) delete start_game_;
+  start_game_ = NULL;
+}
+const ::Xenophobia::StartGame& ServerMessage::start_game() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ServerMessage.start_game)
+  return start_game_ != NULL ? *start_game_ : *default_instance_->start_game_;
+}
+::Xenophobia::StartGame* ServerMessage::mutable_start_game() {
+  
+  if (start_game_ == NULL) {
+    start_game_ = new ::Xenophobia::StartGame;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ServerMessage.start_game)
+  return start_game_;
+}
+::Xenophobia::StartGame* ServerMessage::release_start_game() {
+  
+  ::Xenophobia::StartGame* temp = start_game_;
+  start_game_ = NULL;
+  return temp;
+}
+void ServerMessage::set_allocated_start_game(::Xenophobia::StartGame* start_game) {
+  delete start_game_;
+  start_game_ = start_game;
+  if (start_game) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ServerMessage.start_game)
+}
+
+// optional .Xenophobia.TimeSwitch time_switch = 5;
+bool ServerMessage::has_time_switch() const {
+  return !_is_default_instance_ && time_switch_ != NULL;
+}
+void ServerMessage::clear_time_switch() {
+  if (GetArenaNoVirtual() == NULL && time_switch_ != NULL) delete time_switch_;
+  time_switch_ = NULL;
+}
+const ::Xenophobia::TimeSwitch& ServerMessage::time_switch() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ServerMessage.time_switch)
+  return time_switch_ != NULL ? *time_switch_ : *default_instance_->time_switch_;
+}
+::Xenophobia::TimeSwitch* ServerMessage::mutable_time_switch() {
+  
+  if (time_switch_ == NULL) {
+    time_switch_ = new ::Xenophobia::TimeSwitch;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ServerMessage.time_switch)
+  return time_switch_;
+}
+::Xenophobia::TimeSwitch* ServerMessage::release_time_switch() {
+  
+  ::Xenophobia::TimeSwitch* temp = time_switch_;
+  time_switch_ = NULL;
+  return temp;
+}
+void ServerMessage::set_allocated_time_switch(::Xenophobia::TimeSwitch* time_switch) {
+  delete time_switch_;
+  time_switch_ = time_switch;
+  if (time_switch) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ServerMessage.time_switch)
+}
+
+// optional .Xenophobia.Voting voting = 6;
+bool ServerMessage::has_voting() const {
+  return !_is_default_instance_ && voting_ != NULL;
+}
+void ServerMessage::clear_voting() {
+  if (GetArenaNoVirtual() == NULL && voting_ != NULL) delete voting_;
+  voting_ = NULL;
+}
+const ::Xenophobia::Voting& ServerMessage::voting() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ServerMessage.voting)
+  return voting_ != NULL ? *voting_ : *default_instance_->voting_;
+}
+::Xenophobia::Voting* ServerMessage::mutable_voting() {
+  
+  if (voting_ == NULL) {
+    voting_ = new ::Xenophobia::Voting;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ServerMessage.voting)
+  return voting_;
+}
+::Xenophobia::Voting* ServerMessage::release_voting() {
+  
+  ::Xenophobia::Voting* temp = voting_;
+  voting_ = NULL;
+  return temp;
+}
+void ServerMessage::set_allocated_voting(::Xenophobia::Voting* voting) {
+  delete voting_;
+  voting_ = voting;
+  if (voting) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ServerMessage.voting)
+}
+
+// optional .Xenophobia.EndVoting end_voting = 7;
+bool ServerMessage::has_end_voting() const {
+  return !_is_default_instance_ && end_voting_ != NULL;
+}
+void ServerMessage::clear_end_voting() {
+  if (GetArenaNoVirtual() == NULL && end_voting_ != NULL) delete end_voting_;
+  end_voting_ = NULL;
+}
+const ::Xenophobia::EndVoting& ServerMessage::end_voting() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ServerMessage.end_voting)
+  return end_voting_ != NULL ? *end_voting_ : *default_instance_->end_voting_;
+}
+::Xenophobia::EndVoting* ServerMessage::mutable_end_voting() {
+  
+  if (end_voting_ == NULL) {
+    end_voting_ = new ::Xenophobia::EndVoting;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ServerMessage.end_voting)
+  return end_voting_;
+}
+::Xenophobia::EndVoting* ServerMessage::release_end_voting() {
+  
+  ::Xenophobia::EndVoting* temp = end_voting_;
+  end_voting_ = NULL;
+  return temp;
+}
+void ServerMessage::set_allocated_end_voting(::Xenophobia::EndVoting* end_voting) {
+  delete end_voting_;
+  end_voting_ = end_voting;
+  if (end_voting) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ServerMessage.end_voting)
+}
+
+// optional .Xenophobia.Change change = 8;
+bool ServerMessage::has_change() const {
+  return !_is_default_instance_ && change_ != NULL;
+}
+void ServerMessage::clear_change() {
+  if (GetArenaNoVirtual() == NULL && change_ != NULL) delete change_;
+  change_ = NULL;
+}
+const ::Xenophobia::Change& ServerMessage::change() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ServerMessage.change)
+  return change_ != NULL ? *change_ : *default_instance_->change_;
+}
+::Xenophobia::Change* ServerMessage::mutable_change() {
+  
+  if (change_ == NULL) {
+    change_ = new ::Xenophobia::Change;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ServerMessage.change)
+  return change_;
+}
+::Xenophobia::Change* ServerMessage::release_change() {
+  
+  ::Xenophobia::Change* temp = change_;
+  change_ = NULL;
+  return temp;
+}
+void ServerMessage::set_allocated_change(::Xenophobia::Change* change) {
+  delete change_;
+  change_ = change;
+  if (change) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ServerMessage.change)
+}
+
+// optional .Xenophobia.InvetoryChange inventory_change = 9;
+bool ServerMessage::has_inventory_change() const {
+  return !_is_default_instance_ && inventory_change_ != NULL;
+}
+void ServerMessage::clear_inventory_change() {
+  if (GetArenaNoVirtual() == NULL && inventory_change_ != NULL) delete inventory_change_;
+  inventory_change_ = NULL;
+}
+const ::Xenophobia::InvetoryChange& ServerMessage::inventory_change() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ServerMessage.inventory_change)
+  return inventory_change_ != NULL ? *inventory_change_ : *default_instance_->inventory_change_;
+}
+::Xenophobia::InvetoryChange* ServerMessage::mutable_inventory_change() {
+  
+  if (inventory_change_ == NULL) {
+    inventory_change_ = new ::Xenophobia::InvetoryChange;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ServerMessage.inventory_change)
+  return inventory_change_;
+}
+::Xenophobia::InvetoryChange* ServerMessage::release_inventory_change() {
+  
+  ::Xenophobia::InvetoryChange* temp = inventory_change_;
+  inventory_change_ = NULL;
+  return temp;
+}
+void ServerMessage::set_allocated_inventory_change(::Xenophobia::InvetoryChange* inventory_change) {
+  delete inventory_change_;
+  inventory_change_ = inventory_change;
+  if (inventory_change) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ServerMessage.inventory_change)
+}
+
+// optional .Xenophobia.PlayerChange player_change = 10;
+bool ServerMessage::has_player_change() const {
+  return !_is_default_instance_ && player_change_ != NULL;
+}
+void ServerMessage::clear_player_change() {
+  if (GetArenaNoVirtual() == NULL && player_change_ != NULL) delete player_change_;
+  player_change_ = NULL;
+}
+const ::Xenophobia::PlayerChange& ServerMessage::player_change() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ServerMessage.player_change)
+  return player_change_ != NULL ? *player_change_ : *default_instance_->player_change_;
+}
+::Xenophobia::PlayerChange* ServerMessage::mutable_player_change() {
+  
+  if (player_change_ == NULL) {
+    player_change_ = new ::Xenophobia::PlayerChange;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ServerMessage.player_change)
+  return player_change_;
+}
+::Xenophobia::PlayerChange* ServerMessage::release_player_change() {
+  
+  ::Xenophobia::PlayerChange* temp = player_change_;
+  player_change_ = NULL;
+  return temp;
+}
+void ServerMessage::set_allocated_player_change(::Xenophobia::PlayerChange* player_change) {
+  delete player_change_;
+  player_change_ = player_change;
+  if (player_change) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ServerMessage.player_change)
+}
+
+// optional .Xenophobia.ActionRequest action_request = 11;
+bool ServerMessage::has_action_request() const {
+  return !_is_default_instance_ && action_request_ != NULL;
+}
+void ServerMessage::clear_action_request() {
+  if (GetArenaNoVirtual() == NULL && action_request_ != NULL) delete action_request_;
+  action_request_ = NULL;
+}
+const ::Xenophobia::ActionRequest& ServerMessage::action_request() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ServerMessage.action_request)
+  return action_request_ != NULL ? *action_request_ : *default_instance_->action_request_;
+}
+::Xenophobia::ActionRequest* ServerMessage::mutable_action_request() {
+  
+  if (action_request_ == NULL) {
+    action_request_ = new ::Xenophobia::ActionRequest;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ServerMessage.action_request)
+  return action_request_;
+}
+::Xenophobia::ActionRequest* ServerMessage::release_action_request() {
+  
+  ::Xenophobia::ActionRequest* temp = action_request_;
+  action_request_ = NULL;
+  return temp;
+}
+void ServerMessage::set_allocated_action_request(::Xenophobia::ActionRequest* action_request) {
+  delete action_request_;
+  action_request_ = action_request;
+  if (action_request) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ServerMessage.action_request)
+}
+
+// optional .Xenophobia.ActionResult action_result = 12;
+bool ServerMessage::has_action_result() const {
+  return !_is_default_instance_ && action_result_ != NULL;
+}
+void ServerMessage::clear_action_result() {
+  if (GetArenaNoVirtual() == NULL && action_result_ != NULL) delete action_result_;
+  action_result_ = NULL;
+}
+const ::Xenophobia::ActionResult& ServerMessage::action_result() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ServerMessage.action_result)
+  return action_result_ != NULL ? *action_result_ : *default_instance_->action_result_;
+}
+::Xenophobia::ActionResult* ServerMessage::mutable_action_result() {
+  
+  if (action_result_ == NULL) {
+    action_result_ = new ::Xenophobia::ActionResult;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ServerMessage.action_result)
+  return action_result_;
+}
+::Xenophobia::ActionResult* ServerMessage::release_action_result() {
+  
+  ::Xenophobia::ActionResult* temp = action_result_;
+  action_result_ = NULL;
+  return temp;
+}
+void ServerMessage::set_allocated_action_result(::Xenophobia::ActionResult* action_result) {
+  delete action_result_;
+  action_result_ = action_result;
+  if (action_result) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ServerMessage.action_result)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

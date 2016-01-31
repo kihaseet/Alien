@@ -27,12 +27,13 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* RegisterRole_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   RegisterRole_reflection_ = NULL;
-const ::google::protobuf::Descriptor* Disconnect_descriptor_ = NULL;
-const ::google::protobuf::internal::GeneratedMessageReflection*
-  Disconnect_reflection_ = NULL;
 const ::google::protobuf::Descriptor* DoAction_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   DoAction_reflection_ = NULL;
+const ::google::protobuf::Descriptor* ClientMessage_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  ClientMessage_reflection_ = NULL;
+const ::google::protobuf::EnumDescriptor* ClientMessageType_descriptor_ = NULL;
 
 }  // namespace
 
@@ -73,21 +74,7 @@ void protobuf_AssignDesc_client_2eproto() {
       sizeof(RegisterRole),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RegisterRole, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RegisterRole, _is_default_instance_));
-  Disconnect_descriptor_ = file->message_type(2);
-  static const int Disconnect_offsets_[1] = {
-  };
-  Disconnect_reflection_ =
-    ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
-      Disconnect_descriptor_,
-      Disconnect::default_instance_,
-      Disconnect_offsets_,
-      -1,
-      -1,
-      -1,
-      sizeof(Disconnect),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Disconnect, _internal_metadata_),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Disconnect, _is_default_instance_));
-  DoAction_descriptor_ = file->message_type(3);
+  DoAction_descriptor_ = file->message_type(2);
   static const int DoAction_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DoAction, action_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DoAction, item_),
@@ -104,6 +91,25 @@ void protobuf_AssignDesc_client_2eproto() {
       sizeof(DoAction),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DoAction, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(DoAction, _is_default_instance_));
+  ClientMessage_descriptor_ = file->message_type(3);
+  static const int ClientMessage_offsets_[4] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClientMessage, type_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClientMessage, reg_name_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClientMessage, reg_role_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClientMessage, do_action_),
+  };
+  ClientMessage_reflection_ =
+    ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
+      ClientMessage_descriptor_,
+      ClientMessage::default_instance_,
+      ClientMessage_offsets_,
+      -1,
+      -1,
+      -1,
+      sizeof(ClientMessage),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClientMessage, _internal_metadata_),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ClientMessage, _is_default_instance_));
+  ClientMessageType_descriptor_ = file->enum_type(0);
 }
 
 namespace {
@@ -121,9 +127,9 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
       RegisterRole_descriptor_, &RegisterRole::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-      Disconnect_descriptor_, &Disconnect::default_instance());
-  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
       DoAction_descriptor_, &DoAction::default_instance());
+  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
+      ClientMessage_descriptor_, &ClientMessage::default_instance());
 }
 
 }  // namespace
@@ -133,10 +139,10 @@ void protobuf_ShutdownFile_client_2eproto() {
   delete RegisterName_reflection_;
   delete RegisterRole::default_instance_;
   delete RegisterRole_reflection_;
-  delete Disconnect::default_instance_;
-  delete Disconnect_reflection_;
   delete DoAction::default_instance_;
   delete DoAction_reflection_;
+  delete ClientMessage::default_instance_;
+  delete ClientMessage_reflection_;
 }
 
 void protobuf_AddDesc_client_2eproto() {
@@ -149,20 +155,28 @@ void protobuf_AddDesc_client_2eproto() {
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\014client.proto\022\nXenophobia\032\013types.proto\""
     "\034\n\014RegisterName\022\014\n\004name\030\001 \001(\t\")\n\014Registe"
-    "rRole\022\031\n\004role\030\001 \001(\0162\013.types.Role\"\014\n\nDisc"
-    "onnect\"e\n\010DoAction\022\035\n\006action\030\001 \001(\0162\r.typ"
-    "es.Action\022\031\n\004item\030\002 \001(\0162\013.types.Item\022\037\n\007"
-    "targets\030\003 \003(\0132\016.types.ITargetP\000b\006proto3", 239);
+    "rRole\022\031\n\004role\030\001 \001(\0162\013.types.Role\"e\n\010DoAc"
+    "tion\022\035\n\006action\030\001 \001(\0162\r.types.Action\022\031\n\004i"
+    "tem\030\002 \001(\0162\013.types.Item\022\037\n\007targets\030\003 \003(\0132"
+    "\016.types.ITarget\"\275\001\n\rClientMessage\022+\n\004typ"
+    "e\030\001 \001(\0162\035.Xenophobia.ClientMessageType\022*"
+    "\n\010reg_name\030\002 \001(\0132\030.Xenophobia.RegisterNa"
+    "me\022*\n\010reg_role\030\003 \001(\0132\030.Xenophobia.Regist"
+    "erRole\022\'\n\tdo_action\030\004 \001(\0132\024.Xenophobia.D"
+    "oAction*g\n\021ClientMessageType\022\025\n\021CMT_REGI"
+    "STER_NAME\020\000\022\024\n\020CMT_RegisterRole\020\001\022\022\n\016CMT"
+    "_DISCONNECT\020\002\022\021\n\rCMT_DO_ACTION\020\003P\000b\006prot"
+    "o3", 522);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "client.proto", &protobuf_RegisterTypes);
   RegisterName::default_instance_ = new RegisterName();
   RegisterRole::default_instance_ = new RegisterRole();
-  Disconnect::default_instance_ = new Disconnect();
   DoAction::default_instance_ = new DoAction();
+  ClientMessage::default_instance_ = new ClientMessage();
   RegisterName::default_instance_->InitAsDefaultInstance();
   RegisterRole::default_instance_->InitAsDefaultInstance();
-  Disconnect::default_instance_->InitAsDefaultInstance();
   DoAction::default_instance_->InitAsDefaultInstance();
+  ClientMessage::default_instance_->InitAsDefaultInstance();
   ::google::protobuf::internal::OnShutdown(&protobuf_ShutdownFile_client_2eproto);
 }
 
@@ -172,6 +186,22 @@ struct StaticDescriptorInitializer_client_2eproto {
     protobuf_AddDesc_client_2eproto();
   }
 } static_descriptor_initializer_client_2eproto_;
+const ::google::protobuf::EnumDescriptor* ClientMessageType_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return ClientMessageType_descriptor_;
+}
+bool ClientMessageType_IsValid(int value) {
+  switch(value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+      return true;
+    default:
+      return false;
+  }
+}
+
 
 namespace {
 
@@ -685,175 +715,6 @@ void RegisterRole::clear_role() {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
-
-Disconnect::Disconnect()
-  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
-  SharedCtor();
-  // @@protoc_insertion_point(constructor:Xenophobia.Disconnect)
-}
-
-void Disconnect::InitAsDefaultInstance() {
-  _is_default_instance_ = true;
-}
-
-Disconnect::Disconnect(const Disconnect& from)
-  : ::google::protobuf::Message(),
-    _internal_metadata_(NULL) {
-  SharedCtor();
-  MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:Xenophobia.Disconnect)
-}
-
-void Disconnect::SharedCtor() {
-    _is_default_instance_ = false;
-  _cached_size_ = 0;
-}
-
-Disconnect::~Disconnect() {
-  // @@protoc_insertion_point(destructor:Xenophobia.Disconnect)
-  SharedDtor();
-}
-
-void Disconnect::SharedDtor() {
-  if (this != default_instance_) {
-  }
-}
-
-void Disconnect::SetCachedSize(int size) const {
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-}
-const ::google::protobuf::Descriptor* Disconnect::descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return Disconnect_descriptor_;
-}
-
-const Disconnect& Disconnect::default_instance() {
-  if (default_instance_ == NULL) protobuf_AddDesc_client_2eproto();
-  return *default_instance_;
-}
-
-Disconnect* Disconnect::default_instance_ = NULL;
-
-Disconnect* Disconnect::New(::google::protobuf::Arena* arena) const {
-  Disconnect* n = new Disconnect;
-  if (arena != NULL) {
-    arena->Own(n);
-  }
-  return n;
-}
-
-void Disconnect::Clear() {
-}
-
-bool Disconnect::MergePartialFromCodedStream(
-    ::google::protobuf::io::CodedInputStream* input) {
-#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
-  ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:Xenophobia.Disconnect)
-  for (;;) {
-    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
-    tag = p.first;
-    if (!p.second) goto handle_unusual;
-  handle_unusual:
-    if (tag == 0 ||
-        ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
-        ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
-      goto success;
-    }
-    DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
-  }
-success:
-  // @@protoc_insertion_point(parse_success:Xenophobia.Disconnect)
-  return true;
-failure:
-  // @@protoc_insertion_point(parse_failure:Xenophobia.Disconnect)
-  return false;
-#undef DO_
-}
-
-void Disconnect::SerializeWithCachedSizes(
-    ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:Xenophobia.Disconnect)
-  // @@protoc_insertion_point(serialize_end:Xenophobia.Disconnect)
-}
-
-::google::protobuf::uint8* Disconnect::SerializeWithCachedSizesToArray(
-    ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:Xenophobia.Disconnect)
-  // @@protoc_insertion_point(serialize_to_array_end:Xenophobia.Disconnect)
-  return target;
-}
-
-int Disconnect::ByteSize() const {
-  int total_size = 0;
-
-  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
-  _cached_size_ = total_size;
-  GOOGLE_SAFE_CONCURRENT_WRITES_END();
-  return total_size;
-}
-
-void Disconnect::MergeFrom(const ::google::protobuf::Message& from) {
-  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
-  const Disconnect* source = 
-      ::google::protobuf::internal::DynamicCastToGenerated<const Disconnect>(
-          &from);
-  if (source == NULL) {
-    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
-  } else {
-    MergeFrom(*source);
-  }
-}
-
-void Disconnect::MergeFrom(const Disconnect& from) {
-  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
-}
-
-void Disconnect::CopyFrom(const ::google::protobuf::Message& from) {
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-void Disconnect::CopyFrom(const Disconnect& from) {
-  if (&from == this) return;
-  Clear();
-  MergeFrom(from);
-}
-
-bool Disconnect::IsInitialized() const {
-
-  return true;
-}
-
-void Disconnect::Swap(Disconnect* other) {
-  if (other == this) return;
-  InternalSwap(other);
-}
-void Disconnect::InternalSwap(Disconnect* other) {
-  _internal_metadata_.Swap(&other->_internal_metadata_);
-  std::swap(_cached_size_, other->_cached_size_);
-}
-
-::google::protobuf::Metadata Disconnect::GetMetadata() const {
-  protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::Metadata metadata;
-  metadata.descriptor = Disconnect_descriptor_;
-  metadata.reflection = Disconnect_reflection_;
-  return metadata;
-}
-
-#if PROTOBUF_INLINE_NOT_IN_HEADERS
-// Disconnect
-
-#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
-
-// ===================================================================
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int DoAction::kActionFieldNumber;
 const int DoAction::kItemFieldNumber;
 const int DoAction::kTargetsFieldNumber;
@@ -1213,6 +1074,474 @@ const ::google::protobuf::RepeatedPtrField< ::types::ITarget >&
 DoAction::targets() const {
   // @@protoc_insertion_point(field_list:Xenophobia.DoAction.targets)
   return targets_;
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int ClientMessage::kTypeFieldNumber;
+const int ClientMessage::kRegNameFieldNumber;
+const int ClientMessage::kRegRoleFieldNumber;
+const int ClientMessage::kDoActionFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+ClientMessage::ClientMessage()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:Xenophobia.ClientMessage)
+}
+
+void ClientMessage::InitAsDefaultInstance() {
+  _is_default_instance_ = true;
+  reg_name_ = const_cast< ::Xenophobia::RegisterName*>(&::Xenophobia::RegisterName::default_instance());
+  reg_role_ = const_cast< ::Xenophobia::RegisterRole*>(&::Xenophobia::RegisterRole::default_instance());
+  do_action_ = const_cast< ::Xenophobia::DoAction*>(&::Xenophobia::DoAction::default_instance());
+}
+
+ClientMessage::ClientMessage(const ClientMessage& from)
+  : ::google::protobuf::Message(),
+    _internal_metadata_(NULL) {
+  SharedCtor();
+  MergeFrom(from);
+  // @@protoc_insertion_point(copy_constructor:Xenophobia.ClientMessage)
+}
+
+void ClientMessage::SharedCtor() {
+    _is_default_instance_ = false;
+  _cached_size_ = 0;
+  type_ = 0;
+  reg_name_ = NULL;
+  reg_role_ = NULL;
+  do_action_ = NULL;
+}
+
+ClientMessage::~ClientMessage() {
+  // @@protoc_insertion_point(destructor:Xenophobia.ClientMessage)
+  SharedDtor();
+}
+
+void ClientMessage::SharedDtor() {
+  if (this != default_instance_) {
+    delete reg_name_;
+    delete reg_role_;
+    delete do_action_;
+  }
+}
+
+void ClientMessage::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* ClientMessage::descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return ClientMessage_descriptor_;
+}
+
+const ClientMessage& ClientMessage::default_instance() {
+  if (default_instance_ == NULL) protobuf_AddDesc_client_2eproto();
+  return *default_instance_;
+}
+
+ClientMessage* ClientMessage::default_instance_ = NULL;
+
+ClientMessage* ClientMessage::New(::google::protobuf::Arena* arena) const {
+  ClientMessage* n = new ClientMessage;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void ClientMessage::Clear() {
+  type_ = 0;
+  if (GetArenaNoVirtual() == NULL && reg_name_ != NULL) delete reg_name_;
+  reg_name_ = NULL;
+  if (GetArenaNoVirtual() == NULL && reg_role_ != NULL) delete reg_role_;
+  reg_role_ = NULL;
+  if (GetArenaNoVirtual() == NULL && do_action_ != NULL) delete do_action_;
+  do_action_ = NULL;
+}
+
+bool ClientMessage::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:Xenophobia.ClientMessage)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // optional .Xenophobia.ClientMessageType type = 1;
+      case 1: {
+        if (tag == 8) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_type(static_cast< ::Xenophobia::ClientMessageType >(value));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(18)) goto parse_reg_name;
+        break;
+      }
+
+      // optional .Xenophobia.RegisterName reg_name = 2;
+      case 2: {
+        if (tag == 18) {
+         parse_reg_name:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_reg_name()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(26)) goto parse_reg_role;
+        break;
+      }
+
+      // optional .Xenophobia.RegisterRole reg_role = 3;
+      case 3: {
+        if (tag == 26) {
+         parse_reg_role:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_reg_role()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(34)) goto parse_do_action;
+        break;
+      }
+
+      // optional .Xenophobia.DoAction do_action = 4;
+      case 4: {
+        if (tag == 34) {
+         parse_do_action:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_do_action()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectAtEnd()) goto success;
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0 ||
+            ::google::protobuf::internal::WireFormatLite::GetTagWireType(tag) ==
+            ::google::protobuf::internal::WireFormatLite::WIRETYPE_END_GROUP) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormatLite::SkipField(input, tag));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:Xenophobia.ClientMessage)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:Xenophobia.ClientMessage)
+  return false;
+#undef DO_
+}
+
+void ClientMessage::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:Xenophobia.ClientMessage)
+  // optional .Xenophobia.ClientMessageType type = 1;
+  if (this->type() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      1, this->type(), output);
+  }
+
+  // optional .Xenophobia.RegisterName reg_name = 2;
+  if (this->has_reg_name()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      2, *this->reg_name_, output);
+  }
+
+  // optional .Xenophobia.RegisterRole reg_role = 3;
+  if (this->has_reg_role()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      3, *this->reg_role_, output);
+  }
+
+  // optional .Xenophobia.DoAction do_action = 4;
+  if (this->has_do_action()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      4, *this->do_action_, output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:Xenophobia.ClientMessage)
+}
+
+::google::protobuf::uint8* ClientMessage::SerializeWithCachedSizesToArray(
+    ::google::protobuf::uint8* target) const {
+  // @@protoc_insertion_point(serialize_to_array_start:Xenophobia.ClientMessage)
+  // optional .Xenophobia.ClientMessageType type = 1;
+  if (this->type() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      1, this->type(), target);
+  }
+
+  // optional .Xenophobia.RegisterName reg_name = 2;
+  if (this->has_reg_name()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        2, *this->reg_name_, target);
+  }
+
+  // optional .Xenophobia.RegisterRole reg_role = 3;
+  if (this->has_reg_role()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        3, *this->reg_role_, target);
+  }
+
+  // optional .Xenophobia.DoAction do_action = 4;
+  if (this->has_do_action()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      WriteMessageNoVirtualToArray(
+        4, *this->do_action_, target);
+  }
+
+  // @@protoc_insertion_point(serialize_to_array_end:Xenophobia.ClientMessage)
+  return target;
+}
+
+int ClientMessage::ByteSize() const {
+  int total_size = 0;
+
+  // optional .Xenophobia.ClientMessageType type = 1;
+  if (this->type() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
+  }
+
+  // optional .Xenophobia.RegisterName reg_name = 2;
+  if (this->has_reg_name()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->reg_name_);
+  }
+
+  // optional .Xenophobia.RegisterRole reg_role = 3;
+  if (this->has_reg_role()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->reg_role_);
+  }
+
+  // optional .Xenophobia.DoAction do_action = 4;
+  if (this->has_do_action()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
+        *this->do_action_);
+  }
+
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = total_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void ClientMessage::MergeFrom(const ::google::protobuf::Message& from) {
+  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
+  const ClientMessage* source = 
+      ::google::protobuf::internal::DynamicCastToGenerated<const ClientMessage>(
+          &from);
+  if (source == NULL) {
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+    MergeFrom(*source);
+  }
+}
+
+void ClientMessage::MergeFrom(const ClientMessage& from) {
+  if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
+  if (from.type() != 0) {
+    set_type(from.type());
+  }
+  if (from.has_reg_name()) {
+    mutable_reg_name()->::Xenophobia::RegisterName::MergeFrom(from.reg_name());
+  }
+  if (from.has_reg_role()) {
+    mutable_reg_role()->::Xenophobia::RegisterRole::MergeFrom(from.reg_role());
+  }
+  if (from.has_do_action()) {
+    mutable_do_action()->::Xenophobia::DoAction::MergeFrom(from.do_action());
+  }
+}
+
+void ClientMessage::CopyFrom(const ::google::protobuf::Message& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void ClientMessage::CopyFrom(const ClientMessage& from) {
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool ClientMessage::IsInitialized() const {
+
+  return true;
+}
+
+void ClientMessage::Swap(ClientMessage* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void ClientMessage::InternalSwap(ClientMessage* other) {
+  std::swap(type_, other->type_);
+  std::swap(reg_name_, other->reg_name_);
+  std::swap(reg_role_, other->reg_role_);
+  std::swap(do_action_, other->do_action_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  std::swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata ClientMessage::GetMetadata() const {
+  protobuf_AssignDescriptorsOnce();
+  ::google::protobuf::Metadata metadata;
+  metadata.descriptor = ClientMessage_descriptor_;
+  metadata.reflection = ClientMessage_reflection_;
+  return metadata;
+}
+
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// ClientMessage
+
+// optional .Xenophobia.ClientMessageType type = 1;
+void ClientMessage::clear_type() {
+  type_ = 0;
+}
+ ::Xenophobia::ClientMessageType ClientMessage::type() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ClientMessage.type)
+  return static_cast< ::Xenophobia::ClientMessageType >(type_);
+}
+ void ClientMessage::set_type(::Xenophobia::ClientMessageType value) {
+  
+  type_ = value;
+  // @@protoc_insertion_point(field_set:Xenophobia.ClientMessage.type)
+}
+
+// optional .Xenophobia.RegisterName reg_name = 2;
+bool ClientMessage::has_reg_name() const {
+  return !_is_default_instance_ && reg_name_ != NULL;
+}
+void ClientMessage::clear_reg_name() {
+  if (GetArenaNoVirtual() == NULL && reg_name_ != NULL) delete reg_name_;
+  reg_name_ = NULL;
+}
+const ::Xenophobia::RegisterName& ClientMessage::reg_name() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ClientMessage.reg_name)
+  return reg_name_ != NULL ? *reg_name_ : *default_instance_->reg_name_;
+}
+::Xenophobia::RegisterName* ClientMessage::mutable_reg_name() {
+  
+  if (reg_name_ == NULL) {
+    reg_name_ = new ::Xenophobia::RegisterName;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ClientMessage.reg_name)
+  return reg_name_;
+}
+::Xenophobia::RegisterName* ClientMessage::release_reg_name() {
+  
+  ::Xenophobia::RegisterName* temp = reg_name_;
+  reg_name_ = NULL;
+  return temp;
+}
+void ClientMessage::set_allocated_reg_name(::Xenophobia::RegisterName* reg_name) {
+  delete reg_name_;
+  reg_name_ = reg_name;
+  if (reg_name) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ClientMessage.reg_name)
+}
+
+// optional .Xenophobia.RegisterRole reg_role = 3;
+bool ClientMessage::has_reg_role() const {
+  return !_is_default_instance_ && reg_role_ != NULL;
+}
+void ClientMessage::clear_reg_role() {
+  if (GetArenaNoVirtual() == NULL && reg_role_ != NULL) delete reg_role_;
+  reg_role_ = NULL;
+}
+const ::Xenophobia::RegisterRole& ClientMessage::reg_role() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ClientMessage.reg_role)
+  return reg_role_ != NULL ? *reg_role_ : *default_instance_->reg_role_;
+}
+::Xenophobia::RegisterRole* ClientMessage::mutable_reg_role() {
+  
+  if (reg_role_ == NULL) {
+    reg_role_ = new ::Xenophobia::RegisterRole;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ClientMessage.reg_role)
+  return reg_role_;
+}
+::Xenophobia::RegisterRole* ClientMessage::release_reg_role() {
+  
+  ::Xenophobia::RegisterRole* temp = reg_role_;
+  reg_role_ = NULL;
+  return temp;
+}
+void ClientMessage::set_allocated_reg_role(::Xenophobia::RegisterRole* reg_role) {
+  delete reg_role_;
+  reg_role_ = reg_role;
+  if (reg_role) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ClientMessage.reg_role)
+}
+
+// optional .Xenophobia.DoAction do_action = 4;
+bool ClientMessage::has_do_action() const {
+  return !_is_default_instance_ && do_action_ != NULL;
+}
+void ClientMessage::clear_do_action() {
+  if (GetArenaNoVirtual() == NULL && do_action_ != NULL) delete do_action_;
+  do_action_ = NULL;
+}
+const ::Xenophobia::DoAction& ClientMessage::do_action() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.ClientMessage.do_action)
+  return do_action_ != NULL ? *do_action_ : *default_instance_->do_action_;
+}
+::Xenophobia::DoAction* ClientMessage::mutable_do_action() {
+  
+  if (do_action_ == NULL) {
+    do_action_ = new ::Xenophobia::DoAction;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.ClientMessage.do_action)
+  return do_action_;
+}
+::Xenophobia::DoAction* ClientMessage::release_do_action() {
+  
+  ::Xenophobia::DoAction* temp = do_action_;
+  do_action_ = NULL;
+  return temp;
+}
+void ClientMessage::set_allocated_do_action(::Xenophobia::DoAction* do_action) {
+  delete do_action_;
+  do_action_ = do_action;
+  if (do_action) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.ClientMessage.do_action)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

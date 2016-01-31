@@ -7,11 +7,28 @@ protobuf_maker::protobuf_maker()
 
 void protobuf_maker::newAnalise(int _name, const QString input)
 {
-    ::types::Event event;
+    ::Xenophobia::ClientMessage message;
+    if(message.ParseFromString(input.toStdString())){
+        switch (message.type()) {
+        case ::Xenophobia::CMT_REGISTER_NAME:
+            emit sigRegisterCreate(RegisterObject(_name,TT_REGNAME,QString::fromStdString(message.reg_name().name())));
+            break;
+        case ::Xenophobia::CMT_REGISTER_ROLE:
+            emit sigRegisterCreate(RegisterObject(_name,TT_REGROLE,message.reg_role().role()));
+            break;
+        case ::Xenophobia::CMT_DISCONNECT:
+            emit sigDisconnect(_name);
+            break;
+        case ::Xenophobia::CMT_DO_ACTION:
+            TurnObject turn;
+            turn.type
+            emit sigTurnCreate(_name,TurnObject());
+            break;
+        default:
+            break;
+        }
+    }
 
-    event.ParseFromString(input.toStdString());
-
-    event.event();
 }
 
 void protobuf_maker::slotSendVoteList(QList<VoteObject *> votelist)
