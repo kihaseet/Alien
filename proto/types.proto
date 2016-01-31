@@ -65,14 +65,14 @@ enum VotingType {
 	FOR_ALIEN = 1;
 }
 
+enum TargetType {
+	TAT_NAME = 0;
+	TAT_ITEM = 1;
+	TAT_ROLE = 2;
+}
+
 // Метасообщения для таргетов
 message ITarget {
-	enum TargetType {
-		TAT_NAME = 0;
-		TAT_ITEM = 1;
-		TAT_ROLE = 2;
-	}
-	
 	TargetType type = 1;
 	string name = 2;
 	Item item = 3;

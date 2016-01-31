@@ -18,15 +18,14 @@ enum ServerMessageType {
 
 //От сервера:
 // Этап регистрации
+enum RegisterStatusType {
+	NAME_CORRECT = 0;
+	NAME_INCORRECT = 1;
+	ROLE_CORRECT = 2;
+	ROLE_INCORRECT = 3;
+}
 message RegisterAnswer {
-	enum StatusType {
-		NAME_CORRECT = 0;
-		NAME_INCORRECT = 1;
-		ROLE_CORRECT = 2;
-		ROLE_INCORRECT = 3;
-	}
-	
-	StatusType status = 1;
+	RegisterStatusType status = 1;
 }
 
 message RegisterUpdate {
@@ -34,24 +33,25 @@ message RegisterUpdate {
 }
 
 // Начало игры
+message PlayerInfo {
+	 types.PlayerStatus status = 1;
+	 bool online = 2;
+	 bool onduty = 3;
+	 int32 avatar = 4; // TODO: что есть аватар?
+	 repeated types.Role roles = 5;
+}
+
 message StartGame {
-	message PlayerInfo {
-		 types.PlayerStatus status = 1;
-		 bool online = 2;
-		 bool onduty = 3;
-		 int32 avatar = 4; // TODO: что есть аватар?
-	}
-	
 	repeated PlayerInfo players = 1;
 }
 
 // Смена дня/ночи
+enum TimeType {
+	NIGHT_TIME = 0;
+	DAY_TIME = 1;
+}
+
 message TimeSwitch {
-	enum TimeType {
-		NIGHT_TIME = 0;
-		DAY_TIME = 1;
-	}
-	
 	 TimeType time = 1;
 	 int32 day_number = 2;
 }
@@ -76,47 +76,50 @@ message Change {
 }
 
 // События влияющие непосредственно на игрока/требующие от него действий
+enum InvetoryChangeType {
+	ADD_ITEM = 0;
+	CHARGE_ITEM = 1;
+	DEL_ITEM = 2;
+}
+
 message InvetoryChange {
-	enum ChangeType {
-		ADD_ITEM = 0;
-		CHARGE_ITEM = 1;
-		DEL_ITEM = 2;
-	}
-	
-	 ChangeType type = 1;
+	 InvetoryChangeType type = 1;
 	 types.Item item = 2;
 	 int32 charge = 3;
 }
 
+
+enum PlayerChangeType {
+	HP_CHANGE = 0;
+	ALIEN = 1;
+	STATUS_CHANGE = 2;
+}
+
 message PlayerChange {
-	enum ChangeType {
-		HP_CHANGE = 0;
-		ALIEN = 1;
-		STATUS_CHANGE = 2;
-	}
-	
-	 ChangeType type = 1;
+	 PlayerChangeType type = 1;
 	 int32 value = 2;
 }
 
+
+enum RequestType {
+	HARD_RESOLVE = 0;
+	NEED_ROTATION = 1;
+}
+
 message ActionRequest {
-	enum RequestType {
-		HARD_RESOLVE = 0;
-		NEED_ROTATION = 1;
-	}
-	
 	RequestType type = 1;
 	repeated types.ITarget targets = 2;
 }
 
+
+enum ResultType {
+	USED_ITEM = 0;
+	USE_ACTION = 1;
+}
+
 message ActionResult {
-	enum ResultType {
-		USED_ITEM = 0;
-		USE_ACTION = 1;
-	}
-	
-	 ResultType type = 1;
-	 types.Action action = 2;
+	ResultType type = 1;
+	types.Action action = 2;
 }
 
 message ServerMessage {
