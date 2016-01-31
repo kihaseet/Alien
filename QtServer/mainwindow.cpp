@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 
     _serv=new Server(21277);
-    _xmlmaker = new xml_maker();
+    _xmlmaker = new protobuf_maker();
     _game=new game();
 
    // config* conf = new config;

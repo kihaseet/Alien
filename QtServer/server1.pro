@@ -11,6 +11,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 targets = server1
 TEMPLATE = app
 
+CONFIG += warn_off
+
 SOURCES += main.cpp\
         mainwindow.cpp \
     game.cpp \

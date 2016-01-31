@@ -8,6 +8,7 @@
 
 #include "server.h"
 #include "xml_maker.h"
+#include "proto/protobuf_maker.h"
 #include "game.h"
 
 namespace Ui {

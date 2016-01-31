@@ -24,7 +24,6 @@ namespace {
 const ::google::protobuf::Descriptor* ITarget_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   ITarget_reflection_ = NULL;
-const ::google::protobuf::EnumDescriptor* ITarget_TargetType_descriptor_ = NULL;
 const ::google::protobuf::Descriptor* Event_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   Event_reflection_ = NULL;
@@ -34,6 +33,7 @@ const ::google::protobuf::EnumDescriptor* Item_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* PlayerStatus_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* EventType_descriptor_ = NULL;
 const ::google::protobuf::EnumDescriptor* VotingType_descriptor_ = NULL;
+const ::google::protobuf::EnumDescriptor* TargetType_descriptor_ = NULL;
 
 }  // namespace
 
@@ -62,7 +62,6 @@ void protobuf_AssignDesc_types_2eproto() {
       sizeof(ITarget),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ITarget, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ITarget, _is_default_instance_));
-  ITarget_TargetType_descriptor_ = ITarget_descriptor_->enum_type(0);
   Event_descriptor_ = file->message_type(1);
   static const int Event_offsets_[4] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Event, event_),
@@ -87,6 +86,7 @@ void protobuf_AssignDesc_types_2eproto() {
   PlayerStatus_descriptor_ = file->enum_type(3);
   EventType_descriptor_ = file->enum_type(4);
   VotingType_descriptor_ = file->enum_type(5);
+  TargetType_descriptor_ = file->enum_type(6);
 }
 
 namespace {
@@ -121,33 +121,33 @@ void protobuf_AddDesc_types_2eproto() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-    "\n\013types.proto\022\005types\"\256\001\n\007ITarget\022\'\n\004type"
-    "\030\001 \001(\0162\031.types.ITarget.TargetType\022\014\n\004nam"
-    "e\030\002 \001(\t\022\031\n\004item\030\003 \001(\0162\013.types.Item\022\031\n\004ro"
-    "le\030\004 \001(\0162\013.types.Role\"6\n\nTargetType\022\014\n\010T"
-    "AT_NAME\020\000\022\014\n\010TAT_ITEM\020\001\022\014\n\010TAT_ROLE\020\002\"\227\001"
-    "\n\005Event\022\037\n\005event\030\001 \001(\0162\020.types.EventType"
-    "\022!\n\tevent_who\030\002 \001(\0132\016.types.ITarget\022$\n\014e"
-    "vent_object\030\003 \001(\0132\016.types.ITarget\022$\n\014eve"
-    "nt_target\030\004 \001(\0132\016.types.ITarget*\315\001\n\004Role"
-    "\022\r\n\tPASSENGER\020\000\022\013\n\007CAPTAIN\020\001\022\n\n\006DOCTOR\020\002"
-    "\022\n\n\006GUNMEN\020\003\022\014\n\010ENGINEER\020\004\022\r\n\tSCIENTIST\020"
-    "\005\022\r\n\tSIGNALMEN\020\006\022\r\n\tASSISTANT\020e\022\016\n\nDEP_D"
-    "OCTOR\020f\022\016\n\nDEP_GUNMEN\020g\022\020\n\014DEP_ENGINEER\020"
-    "h\022\021\n\rDEP_SCIENTIST\020i\022\021\n\rDEP_SIGNALMEN\020j*"
-    "m\n\006Action\022\014\n\010USE_ITEM\020\000\022\013\n\007USE_ULT\020\001\022\n\n\006"
-    "ATTACK\020\002\022\n\n\006INFECT\020\003\022\010\n\004VOTE\020\004\022\n\n\006UNVOTE"
-    "\020\005\022\010\n\004WAIT\020\006\022\006\n\002UP\020\007\022\010\n\004DOWN\020\010*v\n\004Item\022\t"
-    "\n\005BADGE\020\000\022\014\n\010ROTATION\020\001\022\013\n\007BLASTER\020\002\022\014\n\010"
-    "INJECTOR\020\003\022\014\n\010NOTEBOOK\020\004\022\013\n\007BATTERY\020\005\022\013\n"
-    "\007SCANNER\020\006\022\007\n\003MOP\020\007\022\t\n\005FETUS\020\010*3\n\014Player"
-    "Status\022\t\n\005PS_UP\020\000\022\013\n\007PS_DOWN\020\001\022\013\n\007PS_DEA"
-    "D\020\002*\234\001\n\tEventType\022\017\n\013ET_USE_ITEM\020\000\022\016\n\nET"
-    "_USE_ULT\020\001\022\020\n\014ET_USE_BADGE\020\002\022\024\n\020ET_CHANG"
-    "E_STATUS\020\003\022\017\n\013ET_GET_ROLE\020\004\022\017\n\013ET_DEL_RO"
-    "LE\020\005\022\020\n\014ET_VOTING_UP\020\006\022\022\n\016ET_VOTING_DOWN"
-    "\020\007*)\n\nVotingType\022\014\n\010FOR_ROLE\020\000\022\r\n\tFOR_AL"
-    "IEN\020\001b\006proto3", 1053);
+    "\n\013types.proto\022\005types\"n\n\007ITarget\022\037\n\004type\030"
+    "\001 \001(\0162\021.types.TargetType\022\014\n\004name\030\002 \001(\t\022\031"
+    "\n\004item\030\003 \001(\0162\013.types.Item\022\031\n\004role\030\004 \001(\0162"
+    "\013.types.Role\"\227\001\n\005Event\022\037\n\005event\030\001 \001(\0162\020."
+    "types.EventType\022!\n\tevent_who\030\002 \001(\0132\016.typ"
+    "es.ITarget\022$\n\014event_object\030\003 \001(\0132\016.types"
+    ".ITarget\022$\n\014event_target\030\004 \001(\0132\016.types.I"
+    "Target*\315\001\n\004Role\022\r\n\tPASSENGER\020\000\022\013\n\007CAPTAI"
+    "N\020\001\022\n\n\006DOCTOR\020\002\022\n\n\006GUNMEN\020\003\022\014\n\010ENGINEER\020"
+    "\004\022\r\n\tSCIENTIST\020\005\022\r\n\tSIGNALMEN\020\006\022\r\n\tASSIS"
+    "TANT\020e\022\016\n\nDEP_DOCTOR\020f\022\016\n\nDEP_GUNMEN\020g\022\020"
+    "\n\014DEP_ENGINEER\020h\022\021\n\rDEP_SCIENTIST\020i\022\021\n\rD"
+    "EP_SIGNALMEN\020j*|\n\006Action\022\014\n\010USE_ITEM\020\000\022\013"
+    "\n\007USE_ULT\020\001\022\r\n\tUSE_BADGE\020\002\022\n\n\006ATTACK\020\003\022\n"
+    "\n\006INFECT\020\004\022\010\n\004VOTE\020\005\022\n\n\006UNVOTE\020\006\022\010\n\004WAIT"
+    "\020\007\022\006\n\002UP\020\010\022\010\n\004DOWN\020\t*v\n\004Item\022\t\n\005BADGE\020\000\022"
+    "\014\n\010ROTATION\020\001\022\013\n\007BLASTER\020\002\022\014\n\010INJECTOR\020\003"
+    "\022\014\n\010NOTEBOOK\020\004\022\013\n\007BATTERY\020\005\022\013\n\007SCANNER\020\006"
+    "\022\007\n\003MOP\020\007\022\t\n\005FETUS\020\010*3\n\014PlayerStatus\022\t\n\005"
+    "PS_UP\020\000\022\013\n\007PS_DOWN\020\001\022\013\n\007PS_DEAD\020\002*\234\001\n\tEv"
+    "entType\022\017\n\013ET_USE_ITEM\020\000\022\016\n\nET_USE_ULT\020\001"
+    "\022\020\n\014ET_USE_BADGE\020\002\022\024\n\020ET_CHANGE_STATUS\020\003"
+    "\022\017\n\013ET_GET_ROLE\020\004\022\017\n\013ET_DEL_ROLE\020\005\022\020\n\014ET"
+    "_VOTING_UP\020\006\022\022\n\016ET_VOTING_DOWN\020\007*)\n\nVoti"
+    "ngType\022\014\n\010FOR_ROLE\020\000\022\r\n\tFOR_ALIEN\020\001*6\n\nT"
+    "argetType\022\014\n\010TAT_NAME\020\000\022\014\n\010TAT_ITEM\020\001\022\014\n"
+    "\010TAT_ROLE\020\002b\006proto3", 1059);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "types.proto", &protobuf_RegisterTypes);
   ITarget::default_instance_ = new ITarget();
@@ -203,6 +203,7 @@ bool Action_IsValid(int value) {
     case 6:
     case 7:
     case 8:
+    case 9:
       return true;
     default:
       return false;
@@ -279,6 +280,21 @@ bool VotingType_IsValid(int value) {
   }
 }
 
+const ::google::protobuf::EnumDescriptor* TargetType_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return TargetType_descriptor_;
+}
+bool TargetType_IsValid(int value) {
+  switch(value) {
+    case 0:
+    case 1:
+    case 2:
+      return true;
+    default:
+      return false;
+  }
+}
+
 
 namespace {
 
@@ -292,29 +308,6 @@ static void MergeFromFail(int line) {
 
 // ===================================================================
 
-const ::google::protobuf::EnumDescriptor* ITarget_TargetType_descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return ITarget_TargetType_descriptor_;
-}
-bool ITarget_TargetType_IsValid(int value) {
-  switch(value) {
-    case 0:
-    case 1:
-    case 2:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const ITarget_TargetType ITarget::TAT_NAME;
-const ITarget_TargetType ITarget::TAT_ITEM;
-const ITarget_TargetType ITarget::TAT_ROLE;
-const ITarget_TargetType ITarget::TargetType_MIN;
-const ITarget_TargetType ITarget::TargetType_MAX;
-const int ITarget::TargetType_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int ITarget::kTypeFieldNumber;
 const int ITarget::kNameFieldNumber;
@@ -413,14 +406,14 @@ bool ITarget::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional .types.ITarget.TargetType type = 1;
+      // optional .types.TargetType type = 1;
       case 1: {
         if (tag == 8) {
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_type(static_cast< ::types::ITarget_TargetType >(value));
+          set_type(static_cast< ::types::TargetType >(value));
         } else {
           goto handle_unusual;
         }
@@ -501,7 +494,7 @@ failure:
 void ITarget::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:types.ITarget)
-  // optional .types.ITarget.TargetType type = 1;
+  // optional .types.TargetType type = 1;
   if (this->type() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->type(), output);
@@ -535,7 +528,7 @@ void ITarget::SerializeWithCachedSizes(
 ::google::protobuf::uint8* ITarget::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:types.ITarget)
-  // optional .types.ITarget.TargetType type = 1;
+  // optional .types.TargetType type = 1;
   if (this->type() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->type(), target);
@@ -571,7 +564,7 @@ void ITarget::SerializeWithCachedSizes(
 int ITarget::ByteSize() const {
   int total_size = 0;
 
-  // optional .types.ITarget.TargetType type = 1;
+  // optional .types.TargetType type = 1;
   if (this->type() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
@@ -672,15 +665,15 @@ void ITarget::InternalSwap(ITarget* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // ITarget
 
-// optional .types.ITarget.TargetType type = 1;
+// optional .types.TargetType type = 1;
 void ITarget::clear_type() {
   type_ = 0;
 }
- ::types::ITarget_TargetType ITarget::type() const {
+ ::types::TargetType ITarget::type() const {
   // @@protoc_insertion_point(field_get:types.ITarget.type)
-  return static_cast< ::types::ITarget_TargetType >(type_);
+  return static_cast< ::types::TargetType >(type_);
 }
- void ITarget::set_type(::types::ITarget_TargetType value) {
+ void ITarget::set_type(::types::TargetType value) {
   
   type_ = value;
   // @@protoc_insertion_point(field_set:types.ITarget.type)

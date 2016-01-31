@@ -45,7 +45,7 @@ class RegisterRole;
 
 enum ClientMessageType {
   CMT_REGISTER_NAME = 0,
-  CMT_RegisterRole = 1,
+  CMT_REGISTER_ROLE = 1,
   CMT_DISCONNECT = 2,
   CMT_DO_ACTION = 3,
   ClientMessageType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,

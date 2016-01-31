@@ -40,28 +40,6 @@ void protobuf_ShutdownFile_types_2eproto();
 class Event;
 class ITarget;
 
-enum ITarget_TargetType {
-  ITarget_TargetType_TAT_NAME = 0,
-  ITarget_TargetType_TAT_ITEM = 1,
-  ITarget_TargetType_TAT_ROLE = 2,
-  ITarget_TargetType_ITarget_TargetType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  ITarget_TargetType_ITarget_TargetType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool ITarget_TargetType_IsValid(int value);
-const ITarget_TargetType ITarget_TargetType_TargetType_MIN = ITarget_TargetType_TAT_NAME;
-const ITarget_TargetType ITarget_TargetType_TargetType_MAX = ITarget_TargetType_TAT_ROLE;
-const int ITarget_TargetType_TargetType_ARRAYSIZE = ITarget_TargetType_TargetType_MAX + 1;
-
-const ::google::protobuf::EnumDescriptor* ITarget_TargetType_descriptor();
-inline const ::std::string& ITarget_TargetType_Name(ITarget_TargetType value) {
-  return ::google::protobuf::internal::NameOfEnum(
-    ITarget_TargetType_descriptor(), value);
-}
-inline bool ITarget_TargetType_Parse(
-    const ::std::string& name, ITarget_TargetType* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<ITarget_TargetType>(
-    ITarget_TargetType_descriptor(), name, value);
-}
 enum Role {
   PASSENGER = 0,
   CAPTAIN = 1,
@@ -97,13 +75,14 @@ inline bool Role_Parse(
 enum Action {
   USE_ITEM = 0,
   USE_ULT = 1,
-  ATTACK = 2,
-  INFECT = 3,
-  VOTE = 4,
-  UNVOTE = 5,
-  WAIT = 6,
-  UP = 7,
-  DOWN = 8,
+  USE_BADGE = 2,
+  ATTACK = 3,
+  INFECT = 4,
+  VOTE = 5,
+  UNVOTE = 6,
+  WAIT = 7,
+  UP = 8,
+  DOWN = 9,
   Action_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   Action_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
@@ -220,6 +199,28 @@ inline bool VotingType_Parse(
   return ::google::protobuf::internal::ParseNamedEnum<VotingType>(
     VotingType_descriptor(), name, value);
 }
+enum TargetType {
+  TAT_NAME = 0,
+  TAT_ITEM = 1,
+  TAT_ROLE = 2,
+  TargetType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  TargetType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool TargetType_IsValid(int value);
+const TargetType TargetType_MIN = TAT_NAME;
+const TargetType TargetType_MAX = TAT_ROLE;
+const int TargetType_ARRAYSIZE = TargetType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* TargetType_descriptor();
+inline const ::std::string& TargetType_Name(TargetType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    TargetType_descriptor(), value);
+}
+inline bool TargetType_Parse(
+    const ::std::string& name, TargetType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<TargetType>(
+    TargetType_descriptor(), name, value);
+}
 // ===================================================================
 
 class ITarget : public ::google::protobuf::Message {
@@ -276,38 +277,13 @@ class ITarget : public ::google::protobuf::Message {
 
   // nested types ----------------------------------------------------
 
-  typedef ITarget_TargetType TargetType;
-  static const TargetType TAT_NAME = ITarget_TargetType_TAT_NAME;
-  static const TargetType TAT_ITEM = ITarget_TargetType_TAT_ITEM;
-  static const TargetType TAT_ROLE = ITarget_TargetType_TAT_ROLE;
-  static inline bool TargetType_IsValid(int value) {
-    return ITarget_TargetType_IsValid(value);
-  }
-  static const TargetType TargetType_MIN =
-    ITarget_TargetType_TargetType_MIN;
-  static const TargetType TargetType_MAX =
-    ITarget_TargetType_TargetType_MAX;
-  static const int TargetType_ARRAYSIZE =
-    ITarget_TargetType_TargetType_ARRAYSIZE;
-  static inline const ::google::protobuf::EnumDescriptor*
-  TargetType_descriptor() {
-    return ITarget_TargetType_descriptor();
-  }
-  static inline const ::std::string& TargetType_Name(TargetType value) {
-    return ITarget_TargetType_Name(value);
-  }
-  static inline bool TargetType_Parse(const ::std::string& name,
-      TargetType* value) {
-    return ITarget_TargetType_Parse(name, value);
-  }
-
   // accessors -------------------------------------------------------
 
-  // optional .types.ITarget.TargetType type = 1;
+  // optional .types.TargetType type = 1;
   void clear_type();
   static const int kTypeFieldNumber = 1;
-  ::types::ITarget_TargetType type() const;
-  void set_type(::types::ITarget_TargetType value);
+  ::types::TargetType type() const;
+  void set_type(::types::TargetType value);
 
   // optional string name = 2;
   void clear_name();
@@ -465,15 +441,15 @@ class Event : public ::google::protobuf::Message {
 #if !PROTOBUF_INLINE_NOT_IN_HEADERS
 // ITarget
 
-// optional .types.ITarget.TargetType type = 1;
+// optional .types.TargetType type = 1;
 inline void ITarget::clear_type() {
   type_ = 0;
 }
-inline ::types::ITarget_TargetType ITarget::type() const {
+inline ::types::TargetType ITarget::type() const {
   // @@protoc_insertion_point(field_get:types.ITarget.type)
-  return static_cast< ::types::ITarget_TargetType >(type_);
+  return static_cast< ::types::TargetType >(type_);
 }
-inline void ITarget::set_type(::types::ITarget_TargetType value) {
+inline void ITarget::set_type(::types::TargetType value) {
   
   type_ = value;
   // @@protoc_insertion_point(field_set:types.ITarget.type)
@@ -691,11 +667,6 @@ inline void Event::set_allocated_event_target(::types::ITarget* event_target) {
 namespace google {
 namespace protobuf {
 
-template <> struct is_proto_enum< ::types::ITarget_TargetType> : ::google::protobuf::internal::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::types::ITarget_TargetType>() {
-  return ::types::ITarget_TargetType_descriptor();
-}
 template <> struct is_proto_enum< ::types::Role> : ::google::protobuf::internal::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::types::Role>() {
@@ -725,6 +696,11 @@ template <> struct is_proto_enum< ::types::VotingType> : ::google::protobuf::int
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::types::VotingType>() {
   return ::types::VotingType_descriptor();
+}
+template <> struct is_proto_enum< ::types::TargetType> : ::google::protobuf::internal::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::types::TargetType>() {
+  return ::types::TargetType_descriptor();
 }
 
 }  // namespace protobuf

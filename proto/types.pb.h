@@ -75,13 +75,14 @@ inline bool Role_Parse(
 enum Action {
   USE_ITEM = 0,
   USE_ULT = 1,
-  ATTACK = 2,
-  INFECT = 3,
-  VOTE = 4,
-  UNVOTE = 5,
-  WAIT = 6,
-  UP = 7,
-  DOWN = 8,
+  USE_BADGE = 2,
+  ATTACK = 3,
+  INFECT = 4,
+  VOTE = 5,
+  UNVOTE = 6,
+  WAIT = 7,
+  UP = 8,
+  DOWN = 9,
   Action_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   Action_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
@@ -198,6 +199,28 @@ inline bool VotingType_Parse(
   return ::google::protobuf::internal::ParseNamedEnum<VotingType>(
     VotingType_descriptor(), name, value);
 }
+enum TargetType {
+  TAT_NAME = 0,
+  TAT_ITEM = 1,
+  TAT_ROLE = 2,
+  TargetType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  TargetType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool TargetType_IsValid(int value);
+const TargetType TargetType_MIN = TAT_NAME;
+const TargetType TargetType_MAX = TAT_ROLE;
+const int TargetType_ARRAYSIZE = TargetType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* TargetType_descriptor();
+inline const ::std::string& TargetType_Name(TargetType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    TargetType_descriptor(), value);
+}
+inline bool TargetType_Parse(
+    const ::std::string& name, TargetType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<TargetType>(
+    TargetType_descriptor(), name, value);
+}
 // ===================================================================
 
 class ITarget : public ::google::protobuf::Message {
@@ -256,9 +279,15 @@ class ITarget : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // optional string name = 1;
+  // optional .types.TargetType type = 1;
+  void clear_type();
+  static const int kTypeFieldNumber = 1;
+  ::types::TargetType type() const;
+  void set_type(::types::TargetType value);
+
+  // optional string name = 2;
   void clear_name();
-  static const int kNameFieldNumber = 1;
+  static const int kNameFieldNumber = 2;
   const ::std::string& name() const;
   void set_name(const ::std::string& value);
   void set_name(const char* value);
@@ -267,15 +296,15 @@ class ITarget : public ::google::protobuf::Message {
   ::std::string* release_name();
   void set_allocated_name(::std::string* name);
 
-  // optional .types.Item item = 2;
+  // optional .types.Item item = 3;
   void clear_item();
-  static const int kItemFieldNumber = 2;
+  static const int kItemFieldNumber = 3;
   ::types::Item item() const;
   void set_item(::types::Item value);
 
-  // optional .types.Role role = 3;
+  // optional .types.Role role = 4;
   void clear_role();
-  static const int kRoleFieldNumber = 3;
+  static const int kRoleFieldNumber = 4;
   ::types::Role role() const;
   void set_role(::types::Role value);
 
@@ -285,6 +314,7 @@ class ITarget : public ::google::protobuf::Message {
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   bool _is_default_instance_;
   ::google::protobuf::internal::ArenaStringPtr name_;
+  int type_;
   int item_;
   int role_;
   mutable int _cached_size_;
@@ -411,7 +441,21 @@ class Event : public ::google::protobuf::Message {
 #if !PROTOBUF_INLINE_NOT_IN_HEADERS
 // ITarget
 
-// optional string name = 1;
+// optional .types.TargetType type = 1;
+inline void ITarget::clear_type() {
+  type_ = 0;
+}
+inline ::types::TargetType ITarget::type() const {
+  // @@protoc_insertion_point(field_get:types.ITarget.type)
+  return static_cast< ::types::TargetType >(type_);
+}
+inline void ITarget::set_type(::types::TargetType value) {
+  
+  type_ = value;
+  // @@protoc_insertion_point(field_set:types.ITarget.type)
+}
+
+// optional string name = 2;
 inline void ITarget::clear_name() {
   name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -454,7 +498,7 @@ inline void ITarget::set_allocated_name(::std::string* name) {
   // @@protoc_insertion_point(field_set_allocated:types.ITarget.name)
 }
 
-// optional .types.Item item = 2;
+// optional .types.Item item = 3;
 inline void ITarget::clear_item() {
   item_ = 0;
 }
@@ -468,7 +512,7 @@ inline void ITarget::set_item(::types::Item value) {
   // @@protoc_insertion_point(field_set:types.ITarget.item)
 }
 
-// optional .types.Role role = 3;
+// optional .types.Role role = 4;
 inline void ITarget::clear_role() {
   role_ = 0;
 }
@@ -652,6 +696,11 @@ template <> struct is_proto_enum< ::types::VotingType> : ::google::protobuf::int
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::types::VotingType>() {
   return ::types::VotingType_descriptor();
+}
+template <> struct is_proto_enum< ::types::TargetType> : ::google::protobuf::internal::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::types::TargetType>() {
+  return ::types::TargetType_descriptor();
 }
 
 }  // namespace protobuf

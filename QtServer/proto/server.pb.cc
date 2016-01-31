@@ -24,21 +24,19 @@ namespace {
 const ::google::protobuf::Descriptor* RegisterAnswer_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   RegisterAnswer_reflection_ = NULL;
-const ::google::protobuf::EnumDescriptor* RegisterAnswer_StatusType_descriptor_ = NULL;
 const ::google::protobuf::Descriptor* RegisterUpdate_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   RegisterUpdate_reflection_ = NULL;
 const ::google::protobuf::Descriptor* RegisterUpdate_PlayersEntry_descriptor_ = NULL;
+const ::google::protobuf::Descriptor* PlayerInfo_descriptor_ = NULL;
+const ::google::protobuf::internal::GeneratedMessageReflection*
+  PlayerInfo_reflection_ = NULL;
 const ::google::protobuf::Descriptor* StartGame_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   StartGame_reflection_ = NULL;
-const ::google::protobuf::Descriptor* StartGame_PlayerInfo_descriptor_ = NULL;
-const ::google::protobuf::internal::GeneratedMessageReflection*
-  StartGame_PlayerInfo_reflection_ = NULL;
 const ::google::protobuf::Descriptor* TimeSwitch_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   TimeSwitch_reflection_ = NULL;
-const ::google::protobuf::EnumDescriptor* TimeSwitch_TimeType_descriptor_ = NULL;
 const ::google::protobuf::Descriptor* Voting_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   Voting_reflection_ = NULL;
@@ -52,23 +50,25 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* InvetoryChange_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   InvetoryChange_reflection_ = NULL;
-const ::google::protobuf::EnumDescriptor* InvetoryChange_ChangeType_descriptor_ = NULL;
 const ::google::protobuf::Descriptor* PlayerChange_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   PlayerChange_reflection_ = NULL;
-const ::google::protobuf::EnumDescriptor* PlayerChange_ChangeType_descriptor_ = NULL;
 const ::google::protobuf::Descriptor* ActionRequest_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   ActionRequest_reflection_ = NULL;
-const ::google::protobuf::EnumDescriptor* ActionRequest_RequestType_descriptor_ = NULL;
 const ::google::protobuf::Descriptor* ActionResult_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   ActionResult_reflection_ = NULL;
-const ::google::protobuf::EnumDescriptor* ActionResult_ResultType_descriptor_ = NULL;
 const ::google::protobuf::Descriptor* ServerMessage_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   ServerMessage_reflection_ = NULL;
 const ::google::protobuf::EnumDescriptor* ServerMessageType_descriptor_ = NULL;
+const ::google::protobuf::EnumDescriptor* RegisterStatusType_descriptor_ = NULL;
+const ::google::protobuf::EnumDescriptor* TimeType_descriptor_ = NULL;
+const ::google::protobuf::EnumDescriptor* InvetoryChangeType_descriptor_ = NULL;
+const ::google::protobuf::EnumDescriptor* PlayerChangeType_descriptor_ = NULL;
+const ::google::protobuf::EnumDescriptor* RequestType_descriptor_ = NULL;
+const ::google::protobuf::EnumDescriptor* ResultType_descriptor_ = NULL;
 
 }  // namespace
 
@@ -94,7 +94,6 @@ void protobuf_AssignDesc_server_2eproto() {
       sizeof(RegisterAnswer),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RegisterAnswer, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RegisterAnswer, _is_default_instance_));
-  RegisterAnswer_StatusType_descriptor_ = RegisterAnswer_descriptor_->enum_type(0);
   RegisterUpdate_descriptor_ = file->message_type(1);
   static const int RegisterUpdate_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RegisterUpdate, players_),
@@ -111,7 +110,27 @@ void protobuf_AssignDesc_server_2eproto() {
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RegisterUpdate, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(RegisterUpdate, _is_default_instance_));
   RegisterUpdate_PlayersEntry_descriptor_ = RegisterUpdate_descriptor_->nested_type(0);
-  StartGame_descriptor_ = file->message_type(2);
+  PlayerInfo_descriptor_ = file->message_type(2);
+  static const int PlayerInfo_offsets_[6] = {
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerInfo, name_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerInfo, status_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerInfo, online_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerInfo, onduty_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerInfo, avatar_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerInfo, roles_),
+  };
+  PlayerInfo_reflection_ =
+    ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
+      PlayerInfo_descriptor_,
+      PlayerInfo::default_instance_,
+      PlayerInfo_offsets_,
+      -1,
+      -1,
+      -1,
+      sizeof(PlayerInfo),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerInfo, _internal_metadata_),
+      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerInfo, _is_default_instance_));
+  StartGame_descriptor_ = file->message_type(3);
   static const int StartGame_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(StartGame, players_),
   };
@@ -126,25 +145,7 @@ void protobuf_AssignDesc_server_2eproto() {
       sizeof(StartGame),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(StartGame, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(StartGame, _is_default_instance_));
-  StartGame_PlayerInfo_descriptor_ = StartGame_descriptor_->nested_type(0);
-  static const int StartGame_PlayerInfo_offsets_[4] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(StartGame_PlayerInfo, status_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(StartGame_PlayerInfo, online_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(StartGame_PlayerInfo, onduty_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(StartGame_PlayerInfo, avatar_),
-  };
-  StartGame_PlayerInfo_reflection_ =
-    ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
-      StartGame_PlayerInfo_descriptor_,
-      StartGame_PlayerInfo::default_instance_,
-      StartGame_PlayerInfo_offsets_,
-      -1,
-      -1,
-      -1,
-      sizeof(StartGame_PlayerInfo),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(StartGame_PlayerInfo, _internal_metadata_),
-      GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(StartGame_PlayerInfo, _is_default_instance_));
-  TimeSwitch_descriptor_ = file->message_type(3);
+  TimeSwitch_descriptor_ = file->message_type(4);
   static const int TimeSwitch_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TimeSwitch, time_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TimeSwitch, day_number_),
@@ -160,8 +161,7 @@ void protobuf_AssignDesc_server_2eproto() {
       sizeof(TimeSwitch),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TimeSwitch, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TimeSwitch, _is_default_instance_));
-  TimeSwitch_TimeType_descriptor_ = TimeSwitch_descriptor_->enum_type(0);
-  Voting_descriptor_ = file->message_type(4);
+  Voting_descriptor_ = file->message_type(5);
   static const int Voting_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Voting, type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Voting, targets_),
@@ -179,7 +179,7 @@ void protobuf_AssignDesc_server_2eproto() {
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Voting, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Voting, _is_default_instance_));
   Voting_VotesForEntry_descriptor_ = Voting_descriptor_->nested_type(0);
-  EndVoting_descriptor_ = file->message_type(5);
+  EndVoting_descriptor_ = file->message_type(6);
   static const int EndVoting_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(EndVoting, type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(EndVoting, target_),
@@ -196,7 +196,7 @@ void protobuf_AssignDesc_server_2eproto() {
       sizeof(EndVoting),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(EndVoting, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(EndVoting, _is_default_instance_));
-  Change_descriptor_ = file->message_type(6);
+  Change_descriptor_ = file->message_type(7);
   static const int Change_offsets_[1] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Change, events_),
   };
@@ -211,7 +211,7 @@ void protobuf_AssignDesc_server_2eproto() {
       sizeof(Change),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Change, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Change, _is_default_instance_));
-  InvetoryChange_descriptor_ = file->message_type(7);
+  InvetoryChange_descriptor_ = file->message_type(8);
   static const int InvetoryChange_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(InvetoryChange, type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(InvetoryChange, item_),
@@ -228,8 +228,7 @@ void protobuf_AssignDesc_server_2eproto() {
       sizeof(InvetoryChange),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(InvetoryChange, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(InvetoryChange, _is_default_instance_));
-  InvetoryChange_ChangeType_descriptor_ = InvetoryChange_descriptor_->enum_type(0);
-  PlayerChange_descriptor_ = file->message_type(8);
+  PlayerChange_descriptor_ = file->message_type(9);
   static const int PlayerChange_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerChange, type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerChange, value_),
@@ -245,8 +244,7 @@ void protobuf_AssignDesc_server_2eproto() {
       sizeof(PlayerChange),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerChange, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(PlayerChange, _is_default_instance_));
-  PlayerChange_ChangeType_descriptor_ = PlayerChange_descriptor_->enum_type(0);
-  ActionRequest_descriptor_ = file->message_type(9);
+  ActionRequest_descriptor_ = file->message_type(10);
   static const int ActionRequest_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ActionRequest, type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ActionRequest, targets_),
@@ -262,8 +260,7 @@ void protobuf_AssignDesc_server_2eproto() {
       sizeof(ActionRequest),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ActionRequest, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ActionRequest, _is_default_instance_));
-  ActionRequest_RequestType_descriptor_ = ActionRequest_descriptor_->enum_type(0);
-  ActionResult_descriptor_ = file->message_type(10);
+  ActionResult_descriptor_ = file->message_type(11);
   static const int ActionResult_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ActionResult, type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ActionResult, action_),
@@ -279,8 +276,7 @@ void protobuf_AssignDesc_server_2eproto() {
       sizeof(ActionResult),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ActionResult, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ActionResult, _is_default_instance_));
-  ActionResult_ResultType_descriptor_ = ActionResult_descriptor_->enum_type(0);
-  ServerMessage_descriptor_ = file->message_type(11);
+  ServerMessage_descriptor_ = file->message_type(12);
   static const int ServerMessage_offsets_[12] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMessage, type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMessage, register_answer_),
@@ -307,6 +303,12 @@ void protobuf_AssignDesc_server_2eproto() {
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMessage, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ServerMessage, _is_default_instance_));
   ServerMessageType_descriptor_ = file->enum_type(0);
+  RegisterStatusType_descriptor_ = file->enum_type(1);
+  TimeType_descriptor_ = file->enum_type(2);
+  InvetoryChangeType_descriptor_ = file->enum_type(3);
+  PlayerChangeType_descriptor_ = file->enum_type(4);
+  RequestType_descriptor_ = file->enum_type(5);
+  ResultType_descriptor_ = file->enum_type(6);
 }
 
 namespace {
@@ -333,9 +335,9 @@ void protobuf_RegisterTypes(const ::std::string&) {
             0>::CreateDefaultInstance(
                 RegisterUpdate_PlayersEntry_descriptor_));
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-      StartGame_descriptor_, &StartGame::default_instance());
+      PlayerInfo_descriptor_, &PlayerInfo::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-      StartGame_PlayerInfo_descriptor_, &StartGame_PlayerInfo::default_instance());
+      StartGame_descriptor_, &StartGame::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
       TimeSwitch_descriptor_, &TimeSwitch::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
@@ -372,10 +374,10 @@ void protobuf_ShutdownFile_server_2eproto() {
   delete RegisterAnswer_reflection_;
   delete RegisterUpdate::default_instance_;
   delete RegisterUpdate_reflection_;
+  delete PlayerInfo::default_instance_;
+  delete PlayerInfo_reflection_;
   delete StartGame::default_instance_;
   delete StartGame_reflection_;
-  delete StartGame_PlayerInfo::default_instance_;
-  delete StartGame_PlayerInfo_reflection_;
   delete TimeSwitch::default_instance_;
   delete TimeSwitch_reflection_;
   delete Voting::default_instance_;
@@ -405,72 +407,71 @@ void protobuf_AddDesc_server_2eproto() {
   ::types::protobuf_AddDesc_types_2eproto();
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
     "\n\014server.proto\022\nXenophobia\032\013types.proto\""
-    "\241\001\n\016RegisterAnswer\0225\n\006status\030\001 \001(\0162%.Xen"
-    "ophobia.RegisterAnswer.StatusType\"X\n\nSta"
-    "tusType\022\020\n\014NAME_CORRECT\020\000\022\022\n\016NAME_INCORR"
-    "ECT\020\001\022\020\n\014ROLE_CORRECT\020\002\022\022\n\016ROLE_INCORREC"
-    "T\020\003\"\207\001\n\016RegisterUpdate\0228\n\007players\030\001 \003(\0132"
-    "\'.Xenophobia.RegisterUpdate.PlayersEntry"
-    "\032;\n\014PlayersEntry\022\013\n\003key\030\001 \001(\t\022\032\n\005value\030\002"
-    " \001(\0162\013.types.Role:\0028\001\"\241\001\n\tStartGame\0221\n\007p"
-    "layers\030\001 \003(\0132 .Xenophobia.StartGame.Play"
-    "erInfo\032a\n\nPlayerInfo\022#\n\006status\030\001 \001(\0162\023.t"
-    "ypes.PlayerStatus\022\016\n\006online\030\002 \001(\010\022\016\n\006ond"
-    "uty\030\003 \001(\010\022\016\n\006avatar\030\004 \001(\005\"y\n\nTimeSwitch\022"
-    "-\n\004time\030\001 \001(\0162\037.Xenophobia.TimeSwitch.Ti"
-    "meType\022\022\n\nday_number\030\002 \001(\005\"(\n\010TimeType\022\016"
-    "\n\nNIGHT_TIME\020\000\022\014\n\010DAY_TIME\020\001\"\260\001\n\006Voting\022"
-    "\037\n\004type\030\001 \001(\0162\021.types.VotingType\022\037\n\007targ"
-    "ets\030\002 \003(\0132\016.types.ITarget\0223\n\tvotes_for\030\003"
-    " \003(\0132 .Xenophobia.Voting.VotesForEntry\032/"
-    "\n\rVotesForEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002 "
-    "\001(\005:\0028\001\"\\\n\tEndVoting\022\037\n\004type\030\001 \001(\0162\021.typ"
-    "es.VotingType\022\036\n\006target\030\002 \001(\0132\016.types.IT"
-    "arget\022\016\n\006result\030\003 \001(\t\"&\n\006Change\022\034\n\006event"
-    "s\030\001 \003(\0132\014.types.Event\"\253\001\n\016InvetoryChange"
-    "\0223\n\004type\030\001 \001(\0162%.Xenophobia.InvetoryChan"
-    "ge.ChangeType\022\031\n\004item\030\002 \001(\0162\013.types.Item"
-    "\022\016\n\006charge\030\003 \001(\005\"9\n\nChangeType\022\014\n\010ADD_IT"
-    "EM\020\000\022\017\n\013CHARGE_ITEM\020\001\022\014\n\010DEL_ITEM\020\002\"\213\001\n\014"
-    "PlayerChange\0221\n\004type\030\001 \001(\0162#.Xenophobia."
-    "PlayerChange.ChangeType\022\r\n\005value\030\002 \001(\005\"9"
-    "\n\nChangeType\022\r\n\tHP_CHANGE\020\000\022\t\n\005ALIEN\020\001\022\021"
-    "\n\rSTATUS_CHANGE\020\002\"\231\001\n\rActionRequest\0223\n\004t"
-    "ype\030\001 \001(\0162%.Xenophobia.ActionRequest.Req"
-    "uestType\022\037\n\007targets\030\002 \003(\0132\016.types.ITarge"
-    "t\"2\n\013RequestType\022\020\n\014HARD_RESOLVE\020\000\022\021\n\rNE"
-    "ED_ROTATION\020\001\"\215\001\n\014ActionResult\0221\n\004type\030\001"
-    " \001(\0162#.Xenophobia.ActionResult.ResultTyp"
-    "e\022\035\n\006action\030\002 \001(\0162\r.types.Action\"+\n\nResu"
-    "ltType\022\r\n\tUSED_ITEM\020\000\022\016\n\nUSE_ACTION\020\001\"\274\004"
-    "\n\rServerMessage\022+\n\004type\030\001 \001(\0162\035.Xenophob"
-    "ia.ServerMessageType\0223\n\017register_answer\030"
-    "\002 \001(\0132\032.Xenophobia.RegisterAnswer\0223\n\017reg"
-    "ister_update\030\003 \001(\0132\032.Xenophobia.Register"
-    "Update\022)\n\nstart_game\030\004 \001(\0132\025.Xenophobia."
-    "StartGame\022+\n\013time_switch\030\005 \001(\0132\026.Xenopho"
-    "bia.TimeSwitch\022\"\n\006voting\030\006 \001(\0132\022.Xenopho"
-    "bia.Voting\022)\n\nend_voting\030\007 \001(\0132\025.Xenopho"
-    "bia.EndVoting\022\"\n\006change\030\010 \001(\0132\022.Xenophob"
-    "ia.Change\0224\n\020inventory_change\030\t \001(\0132\032.Xe"
-    "nophobia.InvetoryChange\022/\n\rplayer_change"
-    "\030\n \001(\0132\030.Xenophobia.PlayerChange\0221\n\016acti"
-    "on_request\030\013 \001(\0132\031.Xenophobia.ActionRequ"
-    "est\022/\n\raction_result\030\014 \001(\0132\030.Xenophobia."
-    "ActionResult*\202\002\n\021ServerMessageType\022\027\n\023SM"
-    "T_REGISTER_ANSWER\020\000\022\027\n\023SMT_REGISTER_UPDA"
-    "TE\020\001\022\022\n\016SMT_START_GAME\020\002\022\023\n\017SMT_TIME_SWI"
-    "TCH\020\003\022\016\n\nSMT_VOTING\020\004\022\022\n\016SMT_END_VOTING\020"
-    "\005\022\016\n\nSMT_CHANGE\020\006\022\030\n\024SMT_INVENTORY_CHANG"
-    "E\020\007\022\025\n\021SMT_PLAYER_CHANGE\020\010\022\026\n\022SMT_ACTION"
-    "_REQUEST\020\t\022\025\n\021SMT_ACTION_RESULT\020\nP\000b\006pro"
-    "to3", 2403);
+    "@\n\016RegisterAnswer\022.\n\006status\030\001 \001(\0162\036.Xeno"
+    "phobia.RegisterStatusType\"\207\001\n\016RegisterUp"
+    "date\0228\n\007players\030\001 \003(\0132\'.Xenophobia.Regis"
+    "terUpdate.PlayersEntry\032;\n\014PlayersEntry\022\013"
+    "\n\003key\030\001 \001(\t\022\032\n\005value\030\002 \001(\0162\013.types.Role:"
+    "\0028\001\"\213\001\n\nPlayerInfo\022\014\n\004name\030\001 \001(\t\022#\n\006stat"
+    "us\030\002 \001(\0162\023.types.PlayerStatus\022\016\n\006online\030"
+    "\003 \001(\010\022\016\n\006onduty\030\004 \001(\010\022\016\n\006avatar\030\005 \001(\005\022\032\n"
+    "\005roles\030\006 \003(\0162\013.types.Role\"4\n\tStartGame\022\'"
+    "\n\007players\030\001 \003(\0132\026.Xenophobia.PlayerInfo\""
+    "D\n\nTimeSwitch\022\"\n\004time\030\001 \001(\0162\024.Xenophobia"
+    ".TimeType\022\022\n\nday_number\030\002 \001(\005\"\260\001\n\006Voting"
+    "\022\037\n\004type\030\001 \001(\0162\021.types.VotingType\022\037\n\007tar"
+    "gets\030\002 \003(\0132\016.types.ITarget\0223\n\tvotes_for\030"
+    "\003 \003(\0132 .Xenophobia.Voting.VotesForEntry\032"
+    "/\n\rVotesForEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002"
+    " \001(\005:\0028\001\"\\\n\tEndVoting\022\037\n\004type\030\001 \001(\0162\021.ty"
+    "pes.VotingType\022\036\n\006target\030\002 \001(\0132\016.types.I"
+    "Target\022\016\n\006result\030\003 \001(\t\"&\n\006Change\022\034\n\006even"
+    "ts\030\001 \003(\0132\014.types.Event\"i\n\016InvetoryChange"
+    "\022,\n\004type\030\001 \001(\0162\036.Xenophobia.InvetoryChan"
+    "geType\022\031\n\004item\030\002 \001(\0162\013.types.Item\022\016\n\006cha"
+    "rge\030\003 \001(\005\"I\n\014PlayerChange\022*\n\004type\030\001 \001(\0162"
+    "\034.Xenophobia.PlayerChangeType\022\r\n\005value\030\002"
+    " \001(\005\"W\n\rActionRequest\022%\n\004type\030\001 \001(\0162\027.Xe"
+    "nophobia.RequestType\022\037\n\007targets\030\002 \003(\0132\016."
+    "types.ITarget\"S\n\014ActionResult\022$\n\004type\030\001 "
+    "\001(\0162\026.Xenophobia.ResultType\022\035\n\006action\030\002 "
+    "\001(\0162\r.types.Action\"\274\004\n\rServerMessage\022+\n\004"
+    "type\030\001 \001(\0162\035.Xenophobia.ServerMessageTyp"
+    "e\0223\n\017register_answer\030\002 \001(\0132\032.Xenophobia."
+    "RegisterAnswer\0223\n\017register_update\030\003 \001(\0132"
+    "\032.Xenophobia.RegisterUpdate\022)\n\nstart_gam"
+    "e\030\004 \001(\0132\025.Xenophobia.StartGame\022+\n\013time_s"
+    "witch\030\005 \001(\0132\026.Xenophobia.TimeSwitch\022\"\n\006v"
+    "oting\030\006 \001(\0132\022.Xenophobia.Voting\022)\n\nend_v"
+    "oting\030\007 \001(\0132\025.Xenophobia.EndVoting\022\"\n\006ch"
+    "ange\030\010 \001(\0132\022.Xenophobia.Change\0224\n\020invent"
+    "ory_change\030\t \001(\0132\032.Xenophobia.InvetoryCh"
+    "ange\022/\n\rplayer_change\030\n \001(\0132\030.Xenophobia"
+    ".PlayerChange\0221\n\016action_request\030\013 \001(\0132\031."
+    "Xenophobia.ActionRequest\022/\n\raction_resul"
+    "t\030\014 \001(\0132\030.Xenophobia.ActionResult*\202\002\n\021Se"
+    "rverMessageType\022\027\n\023SMT_REGISTER_ANSWER\020\000"
+    "\022\027\n\023SMT_REGISTER_UPDATE\020\001\022\022\n\016SMT_START_G"
+    "AME\020\002\022\023\n\017SMT_TIME_SWITCH\020\003\022\016\n\nSMT_VOTING"
+    "\020\004\022\022\n\016SMT_END_VOTING\020\005\022\016\n\nSMT_CHANGE\020\006\022\030"
+    "\n\024SMT_INVENTORY_CHANGE\020\007\022\025\n\021SMT_PLAYER_C"
+    "HANGE\020\010\022\026\n\022SMT_ACTION_REQUEST\020\t\022\025\n\021SMT_A"
+    "CTION_RESULT\020\n*`\n\022RegisterStatusType\022\020\n\014"
+    "NAME_CORRECT\020\000\022\022\n\016NAME_INCORRECT\020\001\022\020\n\014RO"
+    "LE_CORRECT\020\002\022\022\n\016ROLE_INCORRECT\020\003*(\n\010Time"
+    "Type\022\016\n\nNIGHT_TIME\020\000\022\014\n\010DAY_TIME\020\001*A\n\022In"
+    "vetoryChangeType\022\014\n\010ADD_ITEM\020\000\022\017\n\013CHARGE"
+    "_ITEM\020\001\022\014\n\010DEL_ITEM\020\002*\?\n\020PlayerChangeTyp"
+    "e\022\r\n\tHP_CHANGE\020\000\022\t\n\005ALIEN\020\001\022\021\n\rSTATUS_CH"
+    "ANGE\020\002*2\n\013RequestType\022\020\n\014HARD_RESOLVE\020\000\022"
+    "\021\n\rNEED_ROTATION\020\001*+\n\nResultType\022\r\n\tUSED"
+    "_ITEM\020\000\022\016\n\nUSE_ACTION\020\001P\000b\006proto3", 2393);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "server.proto", &protobuf_RegisterTypes);
   RegisterAnswer::default_instance_ = new RegisterAnswer();
   RegisterUpdate::default_instance_ = new RegisterUpdate();
+  PlayerInfo::default_instance_ = new PlayerInfo();
   StartGame::default_instance_ = new StartGame();
-  StartGame_PlayerInfo::default_instance_ = new StartGame_PlayerInfo();
   TimeSwitch::default_instance_ = new TimeSwitch();
   Voting::default_instance_ = new Voting();
   EndVoting::default_instance_ = new EndVoting();
@@ -482,8 +483,8 @@ void protobuf_AddDesc_server_2eproto() {
   ServerMessage::default_instance_ = new ServerMessage();
   RegisterAnswer::default_instance_->InitAsDefaultInstance();
   RegisterUpdate::default_instance_->InitAsDefaultInstance();
+  PlayerInfo::default_instance_->InitAsDefaultInstance();
   StartGame::default_instance_->InitAsDefaultInstance();
-  StartGame_PlayerInfo::default_instance_->InitAsDefaultInstance();
   TimeSwitch::default_instance_->InitAsDefaultInstance();
   Voting::default_instance_->InitAsDefaultInstance();
   EndVoting::default_instance_->InitAsDefaultInstance();
@@ -525,6 +526,94 @@ bool ServerMessageType_IsValid(int value) {
   }
 }
 
+const ::google::protobuf::EnumDescriptor* RegisterStatusType_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return RegisterStatusType_descriptor_;
+}
+bool RegisterStatusType_IsValid(int value) {
+  switch(value) {
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::google::protobuf::EnumDescriptor* TimeType_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return TimeType_descriptor_;
+}
+bool TimeType_IsValid(int value) {
+  switch(value) {
+    case 0:
+    case 1:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::google::protobuf::EnumDescriptor* InvetoryChangeType_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return InvetoryChangeType_descriptor_;
+}
+bool InvetoryChangeType_IsValid(int value) {
+  switch(value) {
+    case 0:
+    case 1:
+    case 2:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::google::protobuf::EnumDescriptor* PlayerChangeType_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return PlayerChangeType_descriptor_;
+}
+bool PlayerChangeType_IsValid(int value) {
+  switch(value) {
+    case 0:
+    case 1:
+    case 2:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::google::protobuf::EnumDescriptor* RequestType_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return RequestType_descriptor_;
+}
+bool RequestType_IsValid(int value) {
+  switch(value) {
+    case 0:
+    case 1:
+      return true;
+    default:
+      return false;
+  }
+}
+
+const ::google::protobuf::EnumDescriptor* ResultType_descriptor() {
+  protobuf_AssignDescriptorsOnce();
+  return ResultType_descriptor_;
+}
+bool ResultType_IsValid(int value) {
+  switch(value) {
+    case 0:
+    case 1:
+      return true;
+    default:
+      return false;
+  }
+}
+
 
 namespace {
 
@@ -538,31 +627,6 @@ static void MergeFromFail(int line) {
 
 // ===================================================================
 
-const ::google::protobuf::EnumDescriptor* RegisterAnswer_StatusType_descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return RegisterAnswer_StatusType_descriptor_;
-}
-bool RegisterAnswer_StatusType_IsValid(int value) {
-  switch(value) {
-    case 0:
-    case 1:
-    case 2:
-    case 3:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const RegisterAnswer_StatusType RegisterAnswer::NAME_CORRECT;
-const RegisterAnswer_StatusType RegisterAnswer::NAME_INCORRECT;
-const RegisterAnswer_StatusType RegisterAnswer::ROLE_CORRECT;
-const RegisterAnswer_StatusType RegisterAnswer::ROLE_INCORRECT;
-const RegisterAnswer_StatusType RegisterAnswer::StatusType_MIN;
-const RegisterAnswer_StatusType RegisterAnswer::StatusType_MAX;
-const int RegisterAnswer::StatusType_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int RegisterAnswer::kStatusFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
@@ -640,14 +704,14 @@ bool RegisterAnswer::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional .Xenophobia.RegisterAnswer.StatusType status = 1;
+      // optional .Xenophobia.RegisterStatusType status = 1;
       case 1: {
         if (tag == 8) {
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_status(static_cast< ::Xenophobia::RegisterAnswer_StatusType >(value));
+          set_status(static_cast< ::Xenophobia::RegisterStatusType >(value));
         } else {
           goto handle_unusual;
         }
@@ -679,7 +743,7 @@ failure:
 void RegisterAnswer::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:Xenophobia.RegisterAnswer)
-  // optional .Xenophobia.RegisterAnswer.StatusType status = 1;
+  // optional .Xenophobia.RegisterStatusType status = 1;
   if (this->status() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->status(), output);
@@ -691,7 +755,7 @@ void RegisterAnswer::SerializeWithCachedSizes(
 ::google::protobuf::uint8* RegisterAnswer::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:Xenophobia.RegisterAnswer)
-  // optional .Xenophobia.RegisterAnswer.StatusType status = 1;
+  // optional .Xenophobia.RegisterStatusType status = 1;
   if (this->status() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->status(), target);
@@ -704,7 +768,7 @@ void RegisterAnswer::SerializeWithCachedSizes(
 int RegisterAnswer::ByteSize() const {
   int total_size = 0;
 
-  // optional .Xenophobia.RegisterAnswer.StatusType status = 1;
+  // optional .Xenophobia.RegisterStatusType status = 1;
   if (this->status() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->status());
@@ -773,15 +837,15 @@ void RegisterAnswer::InternalSwap(RegisterAnswer* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // RegisterAnswer
 
-// optional .Xenophobia.RegisterAnswer.StatusType status = 1;
+// optional .Xenophobia.RegisterStatusType status = 1;
 void RegisterAnswer::clear_status() {
   status_ = 0;
 }
- ::Xenophobia::RegisterAnswer_StatusType RegisterAnswer::status() const {
+ ::Xenophobia::RegisterStatusType RegisterAnswer::status() const {
   // @@protoc_insertion_point(field_get:Xenophobia.RegisterAnswer.status)
-  return static_cast< ::Xenophobia::RegisterAnswer_StatusType >(status_);
+  return static_cast< ::Xenophobia::RegisterStatusType >(status_);
 }
- void RegisterAnswer::set_status(::Xenophobia::RegisterAnswer_StatusType value) {
+ void RegisterAnswer::set_status(::Xenophobia::RegisterStatusType value) {
   
   status_ = value;
   // @@protoc_insertion_point(field_set:Xenophobia.RegisterAnswer.status)
@@ -1061,103 +1125,128 @@ RegisterUpdate::mutable_players() {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int StartGame_PlayerInfo::kStatusFieldNumber;
-const int StartGame_PlayerInfo::kOnlineFieldNumber;
-const int StartGame_PlayerInfo::kOndutyFieldNumber;
-const int StartGame_PlayerInfo::kAvatarFieldNumber;
+const int PlayerInfo::kNameFieldNumber;
+const int PlayerInfo::kStatusFieldNumber;
+const int PlayerInfo::kOnlineFieldNumber;
+const int PlayerInfo::kOndutyFieldNumber;
+const int PlayerInfo::kAvatarFieldNumber;
+const int PlayerInfo::kRolesFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
-StartGame_PlayerInfo::StartGame_PlayerInfo()
+PlayerInfo::PlayerInfo()
   : ::google::protobuf::Message(), _internal_metadata_(NULL) {
   SharedCtor();
-  // @@protoc_insertion_point(constructor:Xenophobia.StartGame.PlayerInfo)
+  // @@protoc_insertion_point(constructor:Xenophobia.PlayerInfo)
 }
 
-void StartGame_PlayerInfo::InitAsDefaultInstance() {
+void PlayerInfo::InitAsDefaultInstance() {
   _is_default_instance_ = true;
 }
 
-StartGame_PlayerInfo::StartGame_PlayerInfo(const StartGame_PlayerInfo& from)
+PlayerInfo::PlayerInfo(const PlayerInfo& from)
   : ::google::protobuf::Message(),
     _internal_metadata_(NULL) {
   SharedCtor();
   MergeFrom(from);
-  // @@protoc_insertion_point(copy_constructor:Xenophobia.StartGame.PlayerInfo)
+  // @@protoc_insertion_point(copy_constructor:Xenophobia.PlayerInfo)
 }
 
-void StartGame_PlayerInfo::SharedCtor() {
+void PlayerInfo::SharedCtor() {
     _is_default_instance_ = false;
+  ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
+  name_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   status_ = 0;
   online_ = false;
   onduty_ = false;
   avatar_ = 0;
 }
 
-StartGame_PlayerInfo::~StartGame_PlayerInfo() {
-  // @@protoc_insertion_point(destructor:Xenophobia.StartGame.PlayerInfo)
+PlayerInfo::~PlayerInfo() {
+  // @@protoc_insertion_point(destructor:Xenophobia.PlayerInfo)
   SharedDtor();
 }
 
-void StartGame_PlayerInfo::SharedDtor() {
+void PlayerInfo::SharedDtor() {
+  name_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (this != default_instance_) {
   }
 }
 
-void StartGame_PlayerInfo::SetCachedSize(int size) const {
+void PlayerInfo::SetCachedSize(int size) const {
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
 }
-const ::google::protobuf::Descriptor* StartGame_PlayerInfo::descriptor() {
+const ::google::protobuf::Descriptor* PlayerInfo::descriptor() {
   protobuf_AssignDescriptorsOnce();
-  return StartGame_PlayerInfo_descriptor_;
+  return PlayerInfo_descriptor_;
 }
 
-const StartGame_PlayerInfo& StartGame_PlayerInfo::default_instance() {
+const PlayerInfo& PlayerInfo::default_instance() {
   if (default_instance_ == NULL) protobuf_AddDesc_server_2eproto();
   return *default_instance_;
 }
 
-StartGame_PlayerInfo* StartGame_PlayerInfo::default_instance_ = NULL;
+PlayerInfo* PlayerInfo::default_instance_ = NULL;
 
-StartGame_PlayerInfo* StartGame_PlayerInfo::New(::google::protobuf::Arena* arena) const {
-  StartGame_PlayerInfo* n = new StartGame_PlayerInfo;
+PlayerInfo* PlayerInfo::New(::google::protobuf::Arena* arena) const {
+  PlayerInfo* n = new PlayerInfo;
   if (arena != NULL) {
     arena->Own(n);
   }
   return n;
 }
 
-void StartGame_PlayerInfo::Clear() {
+void PlayerInfo::Clear() {
 #define ZR_HELPER_(f) reinterpret_cast<char*>(\
-  &reinterpret_cast<StartGame_PlayerInfo*>(16)->f)
+  &reinterpret_cast<PlayerInfo*>(16)->f)
 
 #define ZR_(first, last) do {\
   ::memset(&first, 0,\
            ZR_HELPER_(last) - ZR_HELPER_(first) + sizeof(last));\
 } while (0)
 
-  ZR_(status_, avatar_);
+  ZR_(status_, onduty_);
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  avatar_ = 0;
 
 #undef ZR_HELPER_
 #undef ZR_
 
+  roles_.Clear();
 }
 
-bool StartGame_PlayerInfo::MergePartialFromCodedStream(
+bool PlayerInfo::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:Xenophobia.StartGame.PlayerInfo)
+  // @@protoc_insertion_point(parse_start:Xenophobia.PlayerInfo)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoff(127);
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional .types.PlayerStatus status = 1;
+      // optional string name = 1;
       case 1: {
-        if (tag == 8) {
+        if (tag == 10) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_name()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->name().data(), this->name().length(),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "Xenophobia.PlayerInfo.name"));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(16)) goto parse_status;
+        break;
+      }
+
+      // optional .types.PlayerStatus status = 2;
+      case 2: {
+        if (tag == 16) {
+         parse_status:
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
@@ -1166,13 +1255,13 @@ bool StartGame_PlayerInfo::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(16)) goto parse_online;
+        if (input->ExpectTag(24)) goto parse_online;
         break;
       }
 
-      // optional bool online = 2;
-      case 2: {
-        if (tag == 16) {
+      // optional bool online = 3;
+      case 3: {
+        if (tag == 24) {
          parse_online:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -1181,13 +1270,13 @@ bool StartGame_PlayerInfo::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(24)) goto parse_onduty;
+        if (input->ExpectTag(32)) goto parse_onduty;
         break;
       }
 
-      // optional bool onduty = 3;
-      case 3: {
-        if (tag == 24) {
+      // optional bool onduty = 4;
+      case 4: {
+        if (tag == 32) {
          parse_onduty:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    bool, ::google::protobuf::internal::WireFormatLite::TYPE_BOOL>(
@@ -1196,18 +1285,46 @@ bool StartGame_PlayerInfo::MergePartialFromCodedStream(
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(32)) goto parse_avatar;
+        if (input->ExpectTag(40)) goto parse_avatar;
         break;
       }
 
-      // optional int32 avatar = 4;
-      case 4: {
-        if (tag == 32) {
+      // optional int32 avatar = 5;
+      case 5: {
+        if (tag == 40) {
          parse_avatar:
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
                  input, &avatar_)));
 
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(50)) goto parse_roles;
+        break;
+      }
+
+      // repeated .types.Role roles = 6;
+      case 6: {
+        if (tag == 50) {
+         parse_roles:
+          ::google::protobuf::uint32 length;
+          DO_(input->ReadVarint32(&length));
+          ::google::protobuf::io::CodedInputStream::Limit limit = input->PushLimit(length);
+          while (input->BytesUntilLimit() > 0) {
+            int value;
+            DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+            add_roles(static_cast< ::types::Role >(value));
+          }
+          input->PopLimit(limit);
+        } else if (tag == 48) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          add_roles(static_cast< ::types::Role >(value));
         } else {
           goto handle_unusual;
         }
@@ -1228,93 +1345,164 @@ bool StartGame_PlayerInfo::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:Xenophobia.StartGame.PlayerInfo)
+  // @@protoc_insertion_point(parse_success:Xenophobia.PlayerInfo)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:Xenophobia.StartGame.PlayerInfo)
+  // @@protoc_insertion_point(parse_failure:Xenophobia.PlayerInfo)
   return false;
 #undef DO_
 }
 
-void StartGame_PlayerInfo::SerializeWithCachedSizes(
+void PlayerInfo::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:Xenophobia.StartGame.PlayerInfo)
-  // optional .types.PlayerStatus status = 1;
+  // @@protoc_insertion_point(serialize_start:Xenophobia.PlayerInfo)
+  // optional string name = 1;
+  if (this->name().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->name().data(), this->name().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "Xenophobia.PlayerInfo.name");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      1, this->name(), output);
+  }
+
+  // optional .types.PlayerStatus status = 2;
   if (this->status() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
-      1, this->status(), output);
+      2, this->status(), output);
   }
 
-  // optional bool online = 2;
+  // optional bool online = 3;
   if (this->online() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(2, this->online(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(3, this->online(), output);
   }
 
-  // optional bool onduty = 3;
+  // optional bool onduty = 4;
   if (this->onduty() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteBool(3, this->onduty(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteBool(4, this->onduty(), output);
   }
 
-  // optional int32 avatar = 4;
+  // optional int32 avatar = 5;
   if (this->avatar() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->avatar(), output);
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(5, this->avatar(), output);
   }
 
-  // @@protoc_insertion_point(serialize_end:Xenophobia.StartGame.PlayerInfo)
+  // repeated .types.Role roles = 6;
+  if (this->roles_size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteTag(
+      6,
+      ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
+      output);
+    output->WriteVarint32(_roles_cached_byte_size_);
+  }
+  for (int i = 0; i < this->roles_size(); i++) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnumNoTag(
+      this->roles(i), output);
+  }
+
+  // @@protoc_insertion_point(serialize_end:Xenophobia.PlayerInfo)
 }
 
-::google::protobuf::uint8* StartGame_PlayerInfo::SerializeWithCachedSizesToArray(
+::google::protobuf::uint8* PlayerInfo::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
-  // @@protoc_insertion_point(serialize_to_array_start:Xenophobia.StartGame.PlayerInfo)
-  // optional .types.PlayerStatus status = 1;
+  // @@protoc_insertion_point(serialize_to_array_start:Xenophobia.PlayerInfo)
+  // optional string name = 1;
+  if (this->name().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->name().data(), this->name().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "Xenophobia.PlayerInfo.name");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        1, this->name(), target);
+  }
+
+  // optional .types.PlayerStatus status = 2;
   if (this->status() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
-      1, this->status(), target);
+      2, this->status(), target);
   }
 
-  // optional bool online = 2;
+  // optional bool online = 3;
   if (this->online() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(2, this->online(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(3, this->online(), target);
   }
 
-  // optional bool onduty = 3;
+  // optional bool onduty = 4;
   if (this->onduty() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(3, this->onduty(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteBoolToArray(4, this->onduty(), target);
   }
 
-  // optional int32 avatar = 4;
+  // optional int32 avatar = 5;
   if (this->avatar() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(4, this->avatar(), target);
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(5, this->avatar(), target);
   }
 
-  // @@protoc_insertion_point(serialize_to_array_end:Xenophobia.StartGame.PlayerInfo)
+  // repeated .types.Role roles = 6;
+  if (this->roles_size() > 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteTagToArray(
+      6,
+      ::google::protobuf::internal::WireFormatLite::WIRETYPE_LENGTH_DELIMITED,
+      target);
+    target = ::google::protobuf::io::CodedOutputStream::WriteVarint32ToArray(    _roles_cached_byte_size_, target);
+  }
+  for (int i = 0; i < this->roles_size(); i++) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumNoTagToArray(
+      this->roles(i), target);
+  }
+
+  // @@protoc_insertion_point(serialize_to_array_end:Xenophobia.PlayerInfo)
   return target;
 }
 
-int StartGame_PlayerInfo::ByteSize() const {
+int PlayerInfo::ByteSize() const {
   int total_size = 0;
 
-  // optional .types.PlayerStatus status = 1;
+  // optional string name = 1;
+  if (this->name().size() > 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->name());
+  }
+
+  // optional .types.PlayerStatus status = 2;
   if (this->status() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->status());
   }
 
-  // optional bool online = 2;
+  // optional bool online = 3;
   if (this->online() != 0) {
     total_size += 1 + 1;
   }
 
-  // optional bool onduty = 3;
+  // optional bool onduty = 4;
   if (this->onduty() != 0) {
     total_size += 1 + 1;
   }
 
-  // optional int32 avatar = 4;
+  // optional int32 avatar = 5;
   if (this->avatar() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::Int32Size(
         this->avatar());
+  }
+
+  // repeated .types.Role roles = 6;
+  {
+    int data_size = 0;
+    for (int i = 0; i < this->roles_size(); i++) {
+      data_size += ::google::protobuf::internal::WireFormatLite::EnumSize(
+        this->roles(i));
+    }
+    if (data_size > 0) {
+      total_size += 1 +
+        ::google::protobuf::internal::WireFormatLite::Int32Size(data_size);
+    }
+    GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+    _roles_cached_byte_size_ = data_size;
+    GOOGLE_SAFE_CONCURRENT_WRITES_END();
+    total_size += data_size;
   }
 
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
@@ -1323,10 +1511,10 @@ int StartGame_PlayerInfo::ByteSize() const {
   return total_size;
 }
 
-void StartGame_PlayerInfo::MergeFrom(const ::google::protobuf::Message& from) {
+void PlayerInfo::MergeFrom(const ::google::protobuf::Message& from) {
   if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
-  const StartGame_PlayerInfo* source = 
-      ::google::protobuf::internal::DynamicCastToGenerated<const StartGame_PlayerInfo>(
+  const PlayerInfo* source = 
+      ::google::protobuf::internal::DynamicCastToGenerated<const PlayerInfo>(
           &from);
   if (source == NULL) {
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
@@ -1335,8 +1523,13 @@ void StartGame_PlayerInfo::MergeFrom(const ::google::protobuf::Message& from) {
   }
 }
 
-void StartGame_PlayerInfo::MergeFrom(const StartGame_PlayerInfo& from) {
+void PlayerInfo::MergeFrom(const PlayerInfo& from) {
   if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
+  roles_.MergeFrom(from.roles_);
+  if (from.name().size() > 0) {
+
+    name_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.name_);
+  }
   if (from.status() != 0) {
     set_status(from.status());
   }
@@ -1351,46 +1544,181 @@ void StartGame_PlayerInfo::MergeFrom(const StartGame_PlayerInfo& from) {
   }
 }
 
-void StartGame_PlayerInfo::CopyFrom(const ::google::protobuf::Message& from) {
+void PlayerInfo::CopyFrom(const ::google::protobuf::Message& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-void StartGame_PlayerInfo::CopyFrom(const StartGame_PlayerInfo& from) {
+void PlayerInfo::CopyFrom(const PlayerInfo& from) {
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
-bool StartGame_PlayerInfo::IsInitialized() const {
+bool PlayerInfo::IsInitialized() const {
 
   return true;
 }
 
-void StartGame_PlayerInfo::Swap(StartGame_PlayerInfo* other) {
+void PlayerInfo::Swap(PlayerInfo* other) {
   if (other == this) return;
   InternalSwap(other);
 }
-void StartGame_PlayerInfo::InternalSwap(StartGame_PlayerInfo* other) {
+void PlayerInfo::InternalSwap(PlayerInfo* other) {
+  name_.Swap(&other->name_);
   std::swap(status_, other->status_);
   std::swap(online_, other->online_);
   std::swap(onduty_, other->onduty_);
   std::swap(avatar_, other->avatar_);
+  roles_.UnsafeArenaSwap(&other->roles_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   std::swap(_cached_size_, other->_cached_size_);
 }
 
-::google::protobuf::Metadata StartGame_PlayerInfo::GetMetadata() const {
+::google::protobuf::Metadata PlayerInfo::GetMetadata() const {
   protobuf_AssignDescriptorsOnce();
   ::google::protobuf::Metadata metadata;
-  metadata.descriptor = StartGame_PlayerInfo_descriptor_;
-  metadata.reflection = StartGame_PlayerInfo_reflection_;
+  metadata.descriptor = PlayerInfo_descriptor_;
+  metadata.reflection = PlayerInfo_reflection_;
   return metadata;
 }
 
+#if PROTOBUF_INLINE_NOT_IN_HEADERS
+// PlayerInfo
 
-// -------------------------------------------------------------------
+// optional string name = 1;
+void PlayerInfo::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ const ::std::string& PlayerInfo::name() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.PlayerInfo.name)
+  return name_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ void PlayerInfo::set_name(const ::std::string& value) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:Xenophobia.PlayerInfo.name)
+}
+ void PlayerInfo::set_name(const char* value) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:Xenophobia.PlayerInfo.name)
+}
+ void PlayerInfo::set_name(const char* value, size_t size) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:Xenophobia.PlayerInfo.name)
+}
+ ::std::string* PlayerInfo::mutable_name() {
+  
+  // @@protoc_insertion_point(field_mutable:Xenophobia.PlayerInfo.name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ ::std::string* PlayerInfo::release_name() {
+  
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ void PlayerInfo::set_allocated_name(::std::string* name) {
+  if (name != NULL) {
+    
+  } else {
+    
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.PlayerInfo.name)
+}
+
+// optional .types.PlayerStatus status = 2;
+void PlayerInfo::clear_status() {
+  status_ = 0;
+}
+ ::types::PlayerStatus PlayerInfo::status() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.PlayerInfo.status)
+  return static_cast< ::types::PlayerStatus >(status_);
+}
+ void PlayerInfo::set_status(::types::PlayerStatus value) {
+  
+  status_ = value;
+  // @@protoc_insertion_point(field_set:Xenophobia.PlayerInfo.status)
+}
+
+// optional bool online = 3;
+void PlayerInfo::clear_online() {
+  online_ = false;
+}
+ bool PlayerInfo::online() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.PlayerInfo.online)
+  return online_;
+}
+ void PlayerInfo::set_online(bool value) {
+  
+  online_ = value;
+  // @@protoc_insertion_point(field_set:Xenophobia.PlayerInfo.online)
+}
+
+// optional bool onduty = 4;
+void PlayerInfo::clear_onduty() {
+  onduty_ = false;
+}
+ bool PlayerInfo::onduty() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.PlayerInfo.onduty)
+  return onduty_;
+}
+ void PlayerInfo::set_onduty(bool value) {
+  
+  onduty_ = value;
+  // @@protoc_insertion_point(field_set:Xenophobia.PlayerInfo.onduty)
+}
+
+// optional int32 avatar = 5;
+void PlayerInfo::clear_avatar() {
+  avatar_ = 0;
+}
+ ::google::protobuf::int32 PlayerInfo::avatar() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.PlayerInfo.avatar)
+  return avatar_;
+}
+ void PlayerInfo::set_avatar(::google::protobuf::int32 value) {
+  
+  avatar_ = value;
+  // @@protoc_insertion_point(field_set:Xenophobia.PlayerInfo.avatar)
+}
+
+// repeated .types.Role roles = 6;
+int PlayerInfo::roles_size() const {
+  return roles_.size();
+}
+void PlayerInfo::clear_roles() {
+  roles_.Clear();
+}
+ ::types::Role PlayerInfo::roles(int index) const {
+  // @@protoc_insertion_point(field_get:Xenophobia.PlayerInfo.roles)
+  return static_cast< ::types::Role >(roles_.Get(index));
+}
+ void PlayerInfo::set_roles(int index, ::types::Role value) {
+  roles_.Set(index, value);
+  // @@protoc_insertion_point(field_set:Xenophobia.PlayerInfo.roles)
+}
+ void PlayerInfo::add_roles(::types::Role value) {
+  roles_.Add(value);
+  // @@protoc_insertion_point(field_add:Xenophobia.PlayerInfo.roles)
+}
+ const ::google::protobuf::RepeatedField<int>&
+PlayerInfo::roles() const {
+  // @@protoc_insertion_point(field_list:Xenophobia.PlayerInfo.roles)
+  return roles_;
+}
+ ::google::protobuf::RepeatedField<int>*
+PlayerInfo::mutable_roles() {
+  // @@protoc_insertion_point(field_mutable_list:Xenophobia.PlayerInfo.roles)
+  return &roles_;
+}
+
+#endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
+
+// ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int StartGame::kPlayersFieldNumber;
@@ -1468,7 +1796,7 @@ bool StartGame::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .Xenophobia.StartGame.PlayerInfo players = 1;
+      // repeated .Xenophobia.PlayerInfo players = 1;
       case 1: {
         if (tag == 10) {
           DO_(input->IncrementRecursionDepth());
@@ -1508,7 +1836,7 @@ failure:
 void StartGame::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:Xenophobia.StartGame)
-  // repeated .Xenophobia.StartGame.PlayerInfo players = 1;
+  // repeated .Xenophobia.PlayerInfo players = 1;
   for (unsigned int i = 0, n = this->players_size(); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
       1, this->players(i), output);
@@ -1520,7 +1848,7 @@ void StartGame::SerializeWithCachedSizes(
 ::google::protobuf::uint8* StartGame::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:Xenophobia.StartGame)
-  // repeated .Xenophobia.StartGame.PlayerInfo players = 1;
+  // repeated .Xenophobia.PlayerInfo players = 1;
   for (unsigned int i = 0, n = this->players_size(); i < n; i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
@@ -1534,7 +1862,7 @@ void StartGame::SerializeWithCachedSizes(
 int StartGame::ByteSize() const {
   int total_size = 0;
 
-  // repeated .Xenophobia.StartGame.PlayerInfo players = 1;
+  // repeated .Xenophobia.PlayerInfo players = 1;
   total_size += 1 * this->players_size();
   for (int i = 0; i < this->players_size(); i++) {
     total_size +=
@@ -1601,93 +1929,33 @@ void StartGame::InternalSwap(StartGame* other) {
 }
 
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
-// StartGame_PlayerInfo
-
-// optional .types.PlayerStatus status = 1;
-void StartGame_PlayerInfo::clear_status() {
-  status_ = 0;
-}
- ::types::PlayerStatus StartGame_PlayerInfo::status() const {
-  // @@protoc_insertion_point(field_get:Xenophobia.StartGame.PlayerInfo.status)
-  return static_cast< ::types::PlayerStatus >(status_);
-}
- void StartGame_PlayerInfo::set_status(::types::PlayerStatus value) {
-  
-  status_ = value;
-  // @@protoc_insertion_point(field_set:Xenophobia.StartGame.PlayerInfo.status)
-}
-
-// optional bool online = 2;
-void StartGame_PlayerInfo::clear_online() {
-  online_ = false;
-}
- bool StartGame_PlayerInfo::online() const {
-  // @@protoc_insertion_point(field_get:Xenophobia.StartGame.PlayerInfo.online)
-  return online_;
-}
- void StartGame_PlayerInfo::set_online(bool value) {
-  
-  online_ = value;
-  // @@protoc_insertion_point(field_set:Xenophobia.StartGame.PlayerInfo.online)
-}
-
-// optional bool onduty = 3;
-void StartGame_PlayerInfo::clear_onduty() {
-  onduty_ = false;
-}
- bool StartGame_PlayerInfo::onduty() const {
-  // @@protoc_insertion_point(field_get:Xenophobia.StartGame.PlayerInfo.onduty)
-  return onduty_;
-}
- void StartGame_PlayerInfo::set_onduty(bool value) {
-  
-  onduty_ = value;
-  // @@protoc_insertion_point(field_set:Xenophobia.StartGame.PlayerInfo.onduty)
-}
-
-// optional int32 avatar = 4;
-void StartGame_PlayerInfo::clear_avatar() {
-  avatar_ = 0;
-}
- ::google::protobuf::int32 StartGame_PlayerInfo::avatar() const {
-  // @@protoc_insertion_point(field_get:Xenophobia.StartGame.PlayerInfo.avatar)
-  return avatar_;
-}
- void StartGame_PlayerInfo::set_avatar(::google::protobuf::int32 value) {
-  
-  avatar_ = value;
-  // @@protoc_insertion_point(field_set:Xenophobia.StartGame.PlayerInfo.avatar)
-}
-
-// -------------------------------------------------------------------
-
 // StartGame
 
-// repeated .Xenophobia.StartGame.PlayerInfo players = 1;
+// repeated .Xenophobia.PlayerInfo players = 1;
 int StartGame::players_size() const {
   return players_.size();
 }
 void StartGame::clear_players() {
   players_.Clear();
 }
-const ::Xenophobia::StartGame_PlayerInfo& StartGame::players(int index) const {
+const ::Xenophobia::PlayerInfo& StartGame::players(int index) const {
   // @@protoc_insertion_point(field_get:Xenophobia.StartGame.players)
   return players_.Get(index);
 }
-::Xenophobia::StartGame_PlayerInfo* StartGame::mutable_players(int index) {
+::Xenophobia::PlayerInfo* StartGame::mutable_players(int index) {
   // @@protoc_insertion_point(field_mutable:Xenophobia.StartGame.players)
   return players_.Mutable(index);
 }
-::Xenophobia::StartGame_PlayerInfo* StartGame::add_players() {
+::Xenophobia::PlayerInfo* StartGame::add_players() {
   // @@protoc_insertion_point(field_add:Xenophobia.StartGame.players)
   return players_.Add();
 }
-::google::protobuf::RepeatedPtrField< ::Xenophobia::StartGame_PlayerInfo >*
+::google::protobuf::RepeatedPtrField< ::Xenophobia::PlayerInfo >*
 StartGame::mutable_players() {
   // @@protoc_insertion_point(field_mutable_list:Xenophobia.StartGame.players)
   return &players_;
 }
-const ::google::protobuf::RepeatedPtrField< ::Xenophobia::StartGame_PlayerInfo >&
+const ::google::protobuf::RepeatedPtrField< ::Xenophobia::PlayerInfo >&
 StartGame::players() const {
   // @@protoc_insertion_point(field_list:Xenophobia.StartGame.players)
   return players_;
@@ -1697,27 +1965,6 @@ StartGame::players() const {
 
 // ===================================================================
 
-const ::google::protobuf::EnumDescriptor* TimeSwitch_TimeType_descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return TimeSwitch_TimeType_descriptor_;
-}
-bool TimeSwitch_TimeType_IsValid(int value) {
-  switch(value) {
-    case 0:
-    case 1:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const TimeSwitch_TimeType TimeSwitch::NIGHT_TIME;
-const TimeSwitch_TimeType TimeSwitch::DAY_TIME;
-const TimeSwitch_TimeType TimeSwitch::TimeType_MIN;
-const TimeSwitch_TimeType TimeSwitch::TimeType_MAX;
-const int TimeSwitch::TimeType_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int TimeSwitch::kTimeFieldNumber;
 const int TimeSwitch::kDayNumberFieldNumber;
@@ -1809,14 +2056,14 @@ bool TimeSwitch::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional .Xenophobia.TimeSwitch.TimeType time = 1;
+      // optional .Xenophobia.TimeType time = 1;
       case 1: {
         if (tag == 8) {
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_time(static_cast< ::Xenophobia::TimeSwitch_TimeType >(value));
+          set_time(static_cast< ::Xenophobia::TimeType >(value));
         } else {
           goto handle_unusual;
         }
@@ -1863,7 +2110,7 @@ failure:
 void TimeSwitch::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:Xenophobia.TimeSwitch)
-  // optional .Xenophobia.TimeSwitch.TimeType time = 1;
+  // optional .Xenophobia.TimeType time = 1;
   if (this->time() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->time(), output);
@@ -1880,7 +2127,7 @@ void TimeSwitch::SerializeWithCachedSizes(
 ::google::protobuf::uint8* TimeSwitch::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:Xenophobia.TimeSwitch)
-  // optional .Xenophobia.TimeSwitch.TimeType time = 1;
+  // optional .Xenophobia.TimeType time = 1;
   if (this->time() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->time(), target);
@@ -1898,7 +2145,7 @@ void TimeSwitch::SerializeWithCachedSizes(
 int TimeSwitch::ByteSize() const {
   int total_size = 0;
 
-  // optional .Xenophobia.TimeSwitch.TimeType time = 1;
+  // optional .Xenophobia.TimeType time = 1;
   if (this->time() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->time());
@@ -1978,15 +2225,15 @@ void TimeSwitch::InternalSwap(TimeSwitch* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // TimeSwitch
 
-// optional .Xenophobia.TimeSwitch.TimeType time = 1;
+// optional .Xenophobia.TimeType time = 1;
 void TimeSwitch::clear_time() {
   time_ = 0;
 }
- ::Xenophobia::TimeSwitch_TimeType TimeSwitch::time() const {
+ ::Xenophobia::TimeType TimeSwitch::time() const {
   // @@protoc_insertion_point(field_get:Xenophobia.TimeSwitch.time)
-  return static_cast< ::Xenophobia::TimeSwitch_TimeType >(time_);
+  return static_cast< ::Xenophobia::TimeType >(time_);
 }
- void TimeSwitch::set_time(::Xenophobia::TimeSwitch_TimeType value) {
+ void TimeSwitch::set_time(::Xenophobia::TimeType value) {
   
   time_ = value;
   // @@protoc_insertion_point(field_set:Xenophobia.TimeSwitch.time)
@@ -3055,29 +3302,6 @@ Change::events() const {
 
 // ===================================================================
 
-const ::google::protobuf::EnumDescriptor* InvetoryChange_ChangeType_descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return InvetoryChange_ChangeType_descriptor_;
-}
-bool InvetoryChange_ChangeType_IsValid(int value) {
-  switch(value) {
-    case 0:
-    case 1:
-    case 2:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const InvetoryChange_ChangeType InvetoryChange::ADD_ITEM;
-const InvetoryChange_ChangeType InvetoryChange::CHARGE_ITEM;
-const InvetoryChange_ChangeType InvetoryChange::DEL_ITEM;
-const InvetoryChange_ChangeType InvetoryChange::ChangeType_MIN;
-const InvetoryChange_ChangeType InvetoryChange::ChangeType_MAX;
-const int InvetoryChange::ChangeType_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int InvetoryChange::kTypeFieldNumber;
 const int InvetoryChange::kItemFieldNumber;
@@ -3171,14 +3395,14 @@ bool InvetoryChange::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional .Xenophobia.InvetoryChange.ChangeType type = 1;
+      // optional .Xenophobia.InvetoryChangeType type = 1;
       case 1: {
         if (tag == 8) {
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_type(static_cast< ::Xenophobia::InvetoryChange_ChangeType >(value));
+          set_type(static_cast< ::Xenophobia::InvetoryChangeType >(value));
         } else {
           goto handle_unusual;
         }
@@ -3241,7 +3465,7 @@ failure:
 void InvetoryChange::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:Xenophobia.InvetoryChange)
-  // optional .Xenophobia.InvetoryChange.ChangeType type = 1;
+  // optional .Xenophobia.InvetoryChangeType type = 1;
   if (this->type() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->type(), output);
@@ -3264,7 +3488,7 @@ void InvetoryChange::SerializeWithCachedSizes(
 ::google::protobuf::uint8* InvetoryChange::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:Xenophobia.InvetoryChange)
-  // optional .Xenophobia.InvetoryChange.ChangeType type = 1;
+  // optional .Xenophobia.InvetoryChangeType type = 1;
   if (this->type() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->type(), target);
@@ -3288,7 +3512,7 @@ void InvetoryChange::SerializeWithCachedSizes(
 int InvetoryChange::ByteSize() const {
   int total_size = 0;
 
-  // optional .Xenophobia.InvetoryChange.ChangeType type = 1;
+  // optional .Xenophobia.InvetoryChangeType type = 1;
   if (this->type() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
@@ -3378,15 +3602,15 @@ void InvetoryChange::InternalSwap(InvetoryChange* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // InvetoryChange
 
-// optional .Xenophobia.InvetoryChange.ChangeType type = 1;
+// optional .Xenophobia.InvetoryChangeType type = 1;
 void InvetoryChange::clear_type() {
   type_ = 0;
 }
- ::Xenophobia::InvetoryChange_ChangeType InvetoryChange::type() const {
+ ::Xenophobia::InvetoryChangeType InvetoryChange::type() const {
   // @@protoc_insertion_point(field_get:Xenophobia.InvetoryChange.type)
-  return static_cast< ::Xenophobia::InvetoryChange_ChangeType >(type_);
+  return static_cast< ::Xenophobia::InvetoryChangeType >(type_);
 }
- void InvetoryChange::set_type(::Xenophobia::InvetoryChange_ChangeType value) {
+ void InvetoryChange::set_type(::Xenophobia::InvetoryChangeType value) {
   
   type_ = value;
   // @@protoc_insertion_point(field_set:Xenophobia.InvetoryChange.type)
@@ -3424,29 +3648,6 @@ void InvetoryChange::clear_charge() {
 
 // ===================================================================
 
-const ::google::protobuf::EnumDescriptor* PlayerChange_ChangeType_descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return PlayerChange_ChangeType_descriptor_;
-}
-bool PlayerChange_ChangeType_IsValid(int value) {
-  switch(value) {
-    case 0:
-    case 1:
-    case 2:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const PlayerChange_ChangeType PlayerChange::HP_CHANGE;
-const PlayerChange_ChangeType PlayerChange::ALIEN;
-const PlayerChange_ChangeType PlayerChange::STATUS_CHANGE;
-const PlayerChange_ChangeType PlayerChange::ChangeType_MIN;
-const PlayerChange_ChangeType PlayerChange::ChangeType_MAX;
-const int PlayerChange::ChangeType_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int PlayerChange::kTypeFieldNumber;
 const int PlayerChange::kValueFieldNumber;
@@ -3538,14 +3739,14 @@ bool PlayerChange::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional .Xenophobia.PlayerChange.ChangeType type = 1;
+      // optional .Xenophobia.PlayerChangeType type = 1;
       case 1: {
         if (tag == 8) {
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_type(static_cast< ::Xenophobia::PlayerChange_ChangeType >(value));
+          set_type(static_cast< ::Xenophobia::PlayerChangeType >(value));
         } else {
           goto handle_unusual;
         }
@@ -3592,7 +3793,7 @@ failure:
 void PlayerChange::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:Xenophobia.PlayerChange)
-  // optional .Xenophobia.PlayerChange.ChangeType type = 1;
+  // optional .Xenophobia.PlayerChangeType type = 1;
   if (this->type() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->type(), output);
@@ -3609,7 +3810,7 @@ void PlayerChange::SerializeWithCachedSizes(
 ::google::protobuf::uint8* PlayerChange::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:Xenophobia.PlayerChange)
-  // optional .Xenophobia.PlayerChange.ChangeType type = 1;
+  // optional .Xenophobia.PlayerChangeType type = 1;
   if (this->type() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->type(), target);
@@ -3627,7 +3828,7 @@ void PlayerChange::SerializeWithCachedSizes(
 int PlayerChange::ByteSize() const {
   int total_size = 0;
 
-  // optional .Xenophobia.PlayerChange.ChangeType type = 1;
+  // optional .Xenophobia.PlayerChangeType type = 1;
   if (this->type() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
@@ -3707,15 +3908,15 @@ void PlayerChange::InternalSwap(PlayerChange* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // PlayerChange
 
-// optional .Xenophobia.PlayerChange.ChangeType type = 1;
+// optional .Xenophobia.PlayerChangeType type = 1;
 void PlayerChange::clear_type() {
   type_ = 0;
 }
- ::Xenophobia::PlayerChange_ChangeType PlayerChange::type() const {
+ ::Xenophobia::PlayerChangeType PlayerChange::type() const {
   // @@protoc_insertion_point(field_get:Xenophobia.PlayerChange.type)
-  return static_cast< ::Xenophobia::PlayerChange_ChangeType >(type_);
+  return static_cast< ::Xenophobia::PlayerChangeType >(type_);
 }
- void PlayerChange::set_type(::Xenophobia::PlayerChange_ChangeType value) {
+ void PlayerChange::set_type(::Xenophobia::PlayerChangeType value) {
   
   type_ = value;
   // @@protoc_insertion_point(field_set:Xenophobia.PlayerChange.type)
@@ -3739,27 +3940,6 @@ void PlayerChange::clear_value() {
 
 // ===================================================================
 
-const ::google::protobuf::EnumDescriptor* ActionRequest_RequestType_descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return ActionRequest_RequestType_descriptor_;
-}
-bool ActionRequest_RequestType_IsValid(int value) {
-  switch(value) {
-    case 0:
-    case 1:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const ActionRequest_RequestType ActionRequest::HARD_RESOLVE;
-const ActionRequest_RequestType ActionRequest::NEED_ROTATION;
-const ActionRequest_RequestType ActionRequest::RequestType_MIN;
-const ActionRequest_RequestType ActionRequest::RequestType_MAX;
-const int ActionRequest::RequestType_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int ActionRequest::kTypeFieldNumber;
 const int ActionRequest::kTargetsFieldNumber;
@@ -3839,14 +4019,14 @@ bool ActionRequest::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional .Xenophobia.ActionRequest.RequestType type = 1;
+      // optional .Xenophobia.RequestType type = 1;
       case 1: {
         if (tag == 8) {
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_type(static_cast< ::Xenophobia::ActionRequest_RequestType >(value));
+          set_type(static_cast< ::Xenophobia::RequestType >(value));
         } else {
           goto handle_unusual;
         }
@@ -3895,7 +4075,7 @@ failure:
 void ActionRequest::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:Xenophobia.ActionRequest)
-  // optional .Xenophobia.ActionRequest.RequestType type = 1;
+  // optional .Xenophobia.RequestType type = 1;
   if (this->type() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->type(), output);
@@ -3913,7 +4093,7 @@ void ActionRequest::SerializeWithCachedSizes(
 ::google::protobuf::uint8* ActionRequest::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:Xenophobia.ActionRequest)
-  // optional .Xenophobia.ActionRequest.RequestType type = 1;
+  // optional .Xenophobia.RequestType type = 1;
   if (this->type() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->type(), target);
@@ -3933,7 +4113,7 @@ void ActionRequest::SerializeWithCachedSizes(
 int ActionRequest::ByteSize() const {
   int total_size = 0;
 
-  // optional .Xenophobia.ActionRequest.RequestType type = 1;
+  // optional .Xenophobia.RequestType type = 1;
   if (this->type() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
@@ -4012,15 +4192,15 @@ void ActionRequest::InternalSwap(ActionRequest* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // ActionRequest
 
-// optional .Xenophobia.ActionRequest.RequestType type = 1;
+// optional .Xenophobia.RequestType type = 1;
 void ActionRequest::clear_type() {
   type_ = 0;
 }
- ::Xenophobia::ActionRequest_RequestType ActionRequest::type() const {
+ ::Xenophobia::RequestType ActionRequest::type() const {
   // @@protoc_insertion_point(field_get:Xenophobia.ActionRequest.type)
-  return static_cast< ::Xenophobia::ActionRequest_RequestType >(type_);
+  return static_cast< ::Xenophobia::RequestType >(type_);
 }
- void ActionRequest::set_type(::Xenophobia::ActionRequest_RequestType value) {
+ void ActionRequest::set_type(::Xenophobia::RequestType value) {
   
   type_ = value;
   // @@protoc_insertion_point(field_set:Xenophobia.ActionRequest.type)
@@ -4060,27 +4240,6 @@ ActionRequest::targets() const {
 
 // ===================================================================
 
-const ::google::protobuf::EnumDescriptor* ActionResult_ResultType_descriptor() {
-  protobuf_AssignDescriptorsOnce();
-  return ActionResult_ResultType_descriptor_;
-}
-bool ActionResult_ResultType_IsValid(int value) {
-  switch(value) {
-    case 0:
-    case 1:
-      return true;
-    default:
-      return false;
-  }
-}
-
-#if !defined(_MSC_VER) || _MSC_VER >= 1900
-const ActionResult_ResultType ActionResult::USED_ITEM;
-const ActionResult_ResultType ActionResult::USE_ACTION;
-const ActionResult_ResultType ActionResult::ResultType_MIN;
-const ActionResult_ResultType ActionResult::ResultType_MAX;
-const int ActionResult::ResultType_ARRAYSIZE;
-#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int ActionResult::kTypeFieldNumber;
 const int ActionResult::kActionFieldNumber;
@@ -4172,14 +4331,14 @@ bool ActionResult::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // optional .Xenophobia.ActionResult.ResultType type = 1;
+      // optional .Xenophobia.ResultType type = 1;
       case 1: {
         if (tag == 8) {
           int value;
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
                  input, &value)));
-          set_type(static_cast< ::Xenophobia::ActionResult_ResultType >(value));
+          set_type(static_cast< ::Xenophobia::ResultType >(value));
         } else {
           goto handle_unusual;
         }
@@ -4227,7 +4386,7 @@ failure:
 void ActionResult::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:Xenophobia.ActionResult)
-  // optional .Xenophobia.ActionResult.ResultType type = 1;
+  // optional .Xenophobia.ResultType type = 1;
   if (this->type() != 0) {
     ::google::protobuf::internal::WireFormatLite::WriteEnum(
       1, this->type(), output);
@@ -4245,7 +4404,7 @@ void ActionResult::SerializeWithCachedSizes(
 ::google::protobuf::uint8* ActionResult::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:Xenophobia.ActionResult)
-  // optional .Xenophobia.ActionResult.ResultType type = 1;
+  // optional .Xenophobia.ResultType type = 1;
   if (this->type() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
       1, this->type(), target);
@@ -4264,7 +4423,7 @@ void ActionResult::SerializeWithCachedSizes(
 int ActionResult::ByteSize() const {
   int total_size = 0;
 
-  // optional .Xenophobia.ActionResult.ResultType type = 1;
+  // optional .Xenophobia.ResultType type = 1;
   if (this->type() != 0) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::EnumSize(this->type());
@@ -4343,15 +4502,15 @@ void ActionResult::InternalSwap(ActionResult* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // ActionResult
 
-// optional .Xenophobia.ActionResult.ResultType type = 1;
+// optional .Xenophobia.ResultType type = 1;
 void ActionResult::clear_type() {
   type_ = 0;
 }
- ::Xenophobia::ActionResult_ResultType ActionResult::type() const {
+ ::Xenophobia::ResultType ActionResult::type() const {
   // @@protoc_insertion_point(field_get:Xenophobia.ActionResult.type)
-  return static_cast< ::Xenophobia::ActionResult_ResultType >(type_);
+  return static_cast< ::Xenophobia::ResultType >(type_);
 }
- void ActionResult::set_type(::Xenophobia::ActionResult_ResultType value) {
+ void ActionResult::set_type(::Xenophobia::ResultType value) {
   
   type_ = value;
   // @@protoc_insertion_point(field_set:Xenophobia.ActionResult.type)

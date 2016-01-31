@@ -46,144 +46,14 @@ class Change;
 class EndVoting;
 class InvetoryChange;
 class PlayerChange;
+class PlayerInfo;
 class RegisterAnswer;
 class RegisterUpdate;
 class ServerMessage;
 class StartGame;
-class StartGame_PlayerInfo;
 class TimeSwitch;
 class Voting;
 
-enum RegisterAnswer_StatusType {
-  RegisterAnswer_StatusType_NAME_CORRECT = 0,
-  RegisterAnswer_StatusType_NAME_INCORRECT = 1,
-  RegisterAnswer_StatusType_ROLE_CORRECT = 2,
-  RegisterAnswer_StatusType_ROLE_INCORRECT = 3,
-  RegisterAnswer_StatusType_RegisterAnswer_StatusType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  RegisterAnswer_StatusType_RegisterAnswer_StatusType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool RegisterAnswer_StatusType_IsValid(int value);
-const RegisterAnswer_StatusType RegisterAnswer_StatusType_StatusType_MIN = RegisterAnswer_StatusType_NAME_CORRECT;
-const RegisterAnswer_StatusType RegisterAnswer_StatusType_StatusType_MAX = RegisterAnswer_StatusType_ROLE_INCORRECT;
-const int RegisterAnswer_StatusType_StatusType_ARRAYSIZE = RegisterAnswer_StatusType_StatusType_MAX + 1;
-
-const ::google::protobuf::EnumDescriptor* RegisterAnswer_StatusType_descriptor();
-inline const ::std::string& RegisterAnswer_StatusType_Name(RegisterAnswer_StatusType value) {
-  return ::google::protobuf::internal::NameOfEnum(
-    RegisterAnswer_StatusType_descriptor(), value);
-}
-inline bool RegisterAnswer_StatusType_Parse(
-    const ::std::string& name, RegisterAnswer_StatusType* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<RegisterAnswer_StatusType>(
-    RegisterAnswer_StatusType_descriptor(), name, value);
-}
-enum TimeSwitch_TimeType {
-  TimeSwitch_TimeType_NIGHT_TIME = 0,
-  TimeSwitch_TimeType_DAY_TIME = 1,
-  TimeSwitch_TimeType_TimeSwitch_TimeType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  TimeSwitch_TimeType_TimeSwitch_TimeType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool TimeSwitch_TimeType_IsValid(int value);
-const TimeSwitch_TimeType TimeSwitch_TimeType_TimeType_MIN = TimeSwitch_TimeType_NIGHT_TIME;
-const TimeSwitch_TimeType TimeSwitch_TimeType_TimeType_MAX = TimeSwitch_TimeType_DAY_TIME;
-const int TimeSwitch_TimeType_TimeType_ARRAYSIZE = TimeSwitch_TimeType_TimeType_MAX + 1;
-
-const ::google::protobuf::EnumDescriptor* TimeSwitch_TimeType_descriptor();
-inline const ::std::string& TimeSwitch_TimeType_Name(TimeSwitch_TimeType value) {
-  return ::google::protobuf::internal::NameOfEnum(
-    TimeSwitch_TimeType_descriptor(), value);
-}
-inline bool TimeSwitch_TimeType_Parse(
-    const ::std::string& name, TimeSwitch_TimeType* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<TimeSwitch_TimeType>(
-    TimeSwitch_TimeType_descriptor(), name, value);
-}
-enum InvetoryChange_ChangeType {
-  InvetoryChange_ChangeType_ADD_ITEM = 0,
-  InvetoryChange_ChangeType_CHARGE_ITEM = 1,
-  InvetoryChange_ChangeType_DEL_ITEM = 2,
-  InvetoryChange_ChangeType_InvetoryChange_ChangeType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  InvetoryChange_ChangeType_InvetoryChange_ChangeType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool InvetoryChange_ChangeType_IsValid(int value);
-const InvetoryChange_ChangeType InvetoryChange_ChangeType_ChangeType_MIN = InvetoryChange_ChangeType_ADD_ITEM;
-const InvetoryChange_ChangeType InvetoryChange_ChangeType_ChangeType_MAX = InvetoryChange_ChangeType_DEL_ITEM;
-const int InvetoryChange_ChangeType_ChangeType_ARRAYSIZE = InvetoryChange_ChangeType_ChangeType_MAX + 1;
-
-const ::google::protobuf::EnumDescriptor* InvetoryChange_ChangeType_descriptor();
-inline const ::std::string& InvetoryChange_ChangeType_Name(InvetoryChange_ChangeType value) {
-  return ::google::protobuf::internal::NameOfEnum(
-    InvetoryChange_ChangeType_descriptor(), value);
-}
-inline bool InvetoryChange_ChangeType_Parse(
-    const ::std::string& name, InvetoryChange_ChangeType* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<InvetoryChange_ChangeType>(
-    InvetoryChange_ChangeType_descriptor(), name, value);
-}
-enum PlayerChange_ChangeType {
-  PlayerChange_ChangeType_HP_CHANGE = 0,
-  PlayerChange_ChangeType_ALIEN = 1,
-  PlayerChange_ChangeType_STATUS_CHANGE = 2,
-  PlayerChange_ChangeType_PlayerChange_ChangeType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  PlayerChange_ChangeType_PlayerChange_ChangeType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool PlayerChange_ChangeType_IsValid(int value);
-const PlayerChange_ChangeType PlayerChange_ChangeType_ChangeType_MIN = PlayerChange_ChangeType_HP_CHANGE;
-const PlayerChange_ChangeType PlayerChange_ChangeType_ChangeType_MAX = PlayerChange_ChangeType_STATUS_CHANGE;
-const int PlayerChange_ChangeType_ChangeType_ARRAYSIZE = PlayerChange_ChangeType_ChangeType_MAX + 1;
-
-const ::google::protobuf::EnumDescriptor* PlayerChange_ChangeType_descriptor();
-inline const ::std::string& PlayerChange_ChangeType_Name(PlayerChange_ChangeType value) {
-  return ::google::protobuf::internal::NameOfEnum(
-    PlayerChange_ChangeType_descriptor(), value);
-}
-inline bool PlayerChange_ChangeType_Parse(
-    const ::std::string& name, PlayerChange_ChangeType* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<PlayerChange_ChangeType>(
-    PlayerChange_ChangeType_descriptor(), name, value);
-}
-enum ActionRequest_RequestType {
-  ActionRequest_RequestType_HARD_RESOLVE = 0,
-  ActionRequest_RequestType_NEED_ROTATION = 1,
-  ActionRequest_RequestType_ActionRequest_RequestType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  ActionRequest_RequestType_ActionRequest_RequestType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool ActionRequest_RequestType_IsValid(int value);
-const ActionRequest_RequestType ActionRequest_RequestType_RequestType_MIN = ActionRequest_RequestType_HARD_RESOLVE;
-const ActionRequest_RequestType ActionRequest_RequestType_RequestType_MAX = ActionRequest_RequestType_NEED_ROTATION;
-const int ActionRequest_RequestType_RequestType_ARRAYSIZE = ActionRequest_RequestType_RequestType_MAX + 1;
-
-const ::google::protobuf::EnumDescriptor* ActionRequest_RequestType_descriptor();
-inline const ::std::string& ActionRequest_RequestType_Name(ActionRequest_RequestType value) {
-  return ::google::protobuf::internal::NameOfEnum(
-    ActionRequest_RequestType_descriptor(), value);
-}
-inline bool ActionRequest_RequestType_Parse(
-    const ::std::string& name, ActionRequest_RequestType* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<ActionRequest_RequestType>(
-    ActionRequest_RequestType_descriptor(), name, value);
-}
-enum ActionResult_ResultType {
-  ActionResult_ResultType_USED_ITEM = 0,
-  ActionResult_ResultType_USE_ACTION = 1,
-  ActionResult_ResultType_ActionResult_ResultType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
-  ActionResult_ResultType_ActionResult_ResultType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
-};
-bool ActionResult_ResultType_IsValid(int value);
-const ActionResult_ResultType ActionResult_ResultType_ResultType_MIN = ActionResult_ResultType_USED_ITEM;
-const ActionResult_ResultType ActionResult_ResultType_ResultType_MAX = ActionResult_ResultType_USE_ACTION;
-const int ActionResult_ResultType_ResultType_ARRAYSIZE = ActionResult_ResultType_ResultType_MAX + 1;
-
-const ::google::protobuf::EnumDescriptor* ActionResult_ResultType_descriptor();
-inline const ::std::string& ActionResult_ResultType_Name(ActionResult_ResultType value) {
-  return ::google::protobuf::internal::NameOfEnum(
-    ActionResult_ResultType_descriptor(), value);
-}
-inline bool ActionResult_ResultType_Parse(
-    const ::std::string& name, ActionResult_ResultType* value) {
-  return ::google::protobuf::internal::ParseNamedEnum<ActionResult_ResultType>(
-    ActionResult_ResultType_descriptor(), name, value);
-}
 enum ServerMessageType {
   SMT_REGISTER_ANSWER = 0,
   SMT_REGISTER_UPDATE = 1,
@@ -213,6 +83,136 @@ inline bool ServerMessageType_Parse(
     const ::std::string& name, ServerMessageType* value) {
   return ::google::protobuf::internal::ParseNamedEnum<ServerMessageType>(
     ServerMessageType_descriptor(), name, value);
+}
+enum RegisterStatusType {
+  NAME_CORRECT = 0,
+  NAME_INCORRECT = 1,
+  ROLE_CORRECT = 2,
+  ROLE_INCORRECT = 3,
+  RegisterStatusType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  RegisterStatusType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool RegisterStatusType_IsValid(int value);
+const RegisterStatusType RegisterStatusType_MIN = NAME_CORRECT;
+const RegisterStatusType RegisterStatusType_MAX = ROLE_INCORRECT;
+const int RegisterStatusType_ARRAYSIZE = RegisterStatusType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* RegisterStatusType_descriptor();
+inline const ::std::string& RegisterStatusType_Name(RegisterStatusType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    RegisterStatusType_descriptor(), value);
+}
+inline bool RegisterStatusType_Parse(
+    const ::std::string& name, RegisterStatusType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<RegisterStatusType>(
+    RegisterStatusType_descriptor(), name, value);
+}
+enum TimeType {
+  NIGHT_TIME = 0,
+  DAY_TIME = 1,
+  TimeType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  TimeType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool TimeType_IsValid(int value);
+const TimeType TimeType_MIN = NIGHT_TIME;
+const TimeType TimeType_MAX = DAY_TIME;
+const int TimeType_ARRAYSIZE = TimeType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* TimeType_descriptor();
+inline const ::std::string& TimeType_Name(TimeType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    TimeType_descriptor(), value);
+}
+inline bool TimeType_Parse(
+    const ::std::string& name, TimeType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<TimeType>(
+    TimeType_descriptor(), name, value);
+}
+enum InvetoryChangeType {
+  ADD_ITEM = 0,
+  CHARGE_ITEM = 1,
+  DEL_ITEM = 2,
+  InvetoryChangeType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  InvetoryChangeType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool InvetoryChangeType_IsValid(int value);
+const InvetoryChangeType InvetoryChangeType_MIN = ADD_ITEM;
+const InvetoryChangeType InvetoryChangeType_MAX = DEL_ITEM;
+const int InvetoryChangeType_ARRAYSIZE = InvetoryChangeType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* InvetoryChangeType_descriptor();
+inline const ::std::string& InvetoryChangeType_Name(InvetoryChangeType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    InvetoryChangeType_descriptor(), value);
+}
+inline bool InvetoryChangeType_Parse(
+    const ::std::string& name, InvetoryChangeType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<InvetoryChangeType>(
+    InvetoryChangeType_descriptor(), name, value);
+}
+enum PlayerChangeType {
+  HP_CHANGE = 0,
+  ALIEN = 1,
+  STATUS_CHANGE = 2,
+  PlayerChangeType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  PlayerChangeType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool PlayerChangeType_IsValid(int value);
+const PlayerChangeType PlayerChangeType_MIN = HP_CHANGE;
+const PlayerChangeType PlayerChangeType_MAX = STATUS_CHANGE;
+const int PlayerChangeType_ARRAYSIZE = PlayerChangeType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* PlayerChangeType_descriptor();
+inline const ::std::string& PlayerChangeType_Name(PlayerChangeType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    PlayerChangeType_descriptor(), value);
+}
+inline bool PlayerChangeType_Parse(
+    const ::std::string& name, PlayerChangeType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<PlayerChangeType>(
+    PlayerChangeType_descriptor(), name, value);
+}
+enum RequestType {
+  HARD_RESOLVE = 0,
+  NEED_ROTATION = 1,
+  RequestType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  RequestType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool RequestType_IsValid(int value);
+const RequestType RequestType_MIN = HARD_RESOLVE;
+const RequestType RequestType_MAX = NEED_ROTATION;
+const int RequestType_ARRAYSIZE = RequestType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* RequestType_descriptor();
+inline const ::std::string& RequestType_Name(RequestType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    RequestType_descriptor(), value);
+}
+inline bool RequestType_Parse(
+    const ::std::string& name, RequestType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<RequestType>(
+    RequestType_descriptor(), name, value);
+}
+enum ResultType {
+  USED_ITEM = 0,
+  USE_ACTION = 1,
+  ResultType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  ResultType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool ResultType_IsValid(int value);
+const ResultType ResultType_MIN = USED_ITEM;
+const ResultType ResultType_MAX = USE_ACTION;
+const int ResultType_ARRAYSIZE = ResultType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* ResultType_descriptor();
+inline const ::std::string& ResultType_Name(ResultType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    ResultType_descriptor(), value);
+}
+inline bool ResultType_Parse(
+    const ::std::string& name, ResultType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<ResultType>(
+    ResultType_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -270,39 +270,13 @@ class RegisterAnswer : public ::google::protobuf::Message {
 
   // nested types ----------------------------------------------------
 
-  typedef RegisterAnswer_StatusType StatusType;
-  static const StatusType NAME_CORRECT = RegisterAnswer_StatusType_NAME_CORRECT;
-  static const StatusType NAME_INCORRECT = RegisterAnswer_StatusType_NAME_INCORRECT;
-  static const StatusType ROLE_CORRECT = RegisterAnswer_StatusType_ROLE_CORRECT;
-  static const StatusType ROLE_INCORRECT = RegisterAnswer_StatusType_ROLE_INCORRECT;
-  static inline bool StatusType_IsValid(int value) {
-    return RegisterAnswer_StatusType_IsValid(value);
-  }
-  static const StatusType StatusType_MIN =
-    RegisterAnswer_StatusType_StatusType_MIN;
-  static const StatusType StatusType_MAX =
-    RegisterAnswer_StatusType_StatusType_MAX;
-  static const int StatusType_ARRAYSIZE =
-    RegisterAnswer_StatusType_StatusType_ARRAYSIZE;
-  static inline const ::google::protobuf::EnumDescriptor*
-  StatusType_descriptor() {
-    return RegisterAnswer_StatusType_descriptor();
-  }
-  static inline const ::std::string& StatusType_Name(StatusType value) {
-    return RegisterAnswer_StatusType_Name(value);
-  }
-  static inline bool StatusType_Parse(const ::std::string& name,
-      StatusType* value) {
-    return RegisterAnswer_StatusType_Parse(name, value);
-  }
-
   // accessors -------------------------------------------------------
 
-  // optional .Xenophobia.RegisterAnswer.StatusType status = 1;
+  // optional .Xenophobia.RegisterStatusType status = 1;
   void clear_status();
   static const int kStatusFieldNumber = 1;
-  ::Xenophobia::RegisterAnswer_StatusType status() const;
-  void set_status(::Xenophobia::RegisterAnswer_StatusType value);
+  ::Xenophobia::RegisterStatusType status() const;
+  void set_status(::Xenophobia::RegisterStatusType value);
 
   // @@protoc_insertion_point(class_scope:Xenophobia.RegisterAnswer)
  private:
@@ -412,32 +386,32 @@ class RegisterUpdate : public ::google::protobuf::Message {
 };
 // -------------------------------------------------------------------
 
-class StartGame_PlayerInfo : public ::google::protobuf::Message {
+class PlayerInfo : public ::google::protobuf::Message {
  public:
-  StartGame_PlayerInfo();
-  virtual ~StartGame_PlayerInfo();
+  PlayerInfo();
+  virtual ~PlayerInfo();
 
-  StartGame_PlayerInfo(const StartGame_PlayerInfo& from);
+  PlayerInfo(const PlayerInfo& from);
 
-  inline StartGame_PlayerInfo& operator=(const StartGame_PlayerInfo& from) {
+  inline PlayerInfo& operator=(const PlayerInfo& from) {
     CopyFrom(from);
     return *this;
   }
 
   static const ::google::protobuf::Descriptor* descriptor();
-  static const StartGame_PlayerInfo& default_instance();
+  static const PlayerInfo& default_instance();
 
-  void Swap(StartGame_PlayerInfo* other);
+  void Swap(PlayerInfo* other);
 
   // implements Message ----------------------------------------------
 
-  inline StartGame_PlayerInfo* New() const { return New(NULL); }
+  inline PlayerInfo* New() const { return New(NULL); }
 
-  StartGame_PlayerInfo* New(::google::protobuf::Arena* arena) const;
+  PlayerInfo* New(::google::protobuf::Arena* arena) const;
   void CopyFrom(const ::google::protobuf::Message& from);
   void MergeFrom(const ::google::protobuf::Message& from);
-  void CopyFrom(const StartGame_PlayerInfo& from);
-  void MergeFrom(const StartGame_PlayerInfo& from);
+  void CopyFrom(const PlayerInfo& from);
+  void MergeFrom(const PlayerInfo& from);
   void Clear();
   bool IsInitialized() const;
 
@@ -452,7 +426,7 @@ class StartGame_PlayerInfo : public ::google::protobuf::Message {
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const;
-  void InternalSwap(StartGame_PlayerInfo* other);
+  void InternalSwap(PlayerInfo* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return _internal_metadata_.arena();
@@ -468,38 +442,62 @@ class StartGame_PlayerInfo : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // optional .types.PlayerStatus status = 1;
+  // optional string name = 1;
+  void clear_name();
+  static const int kNameFieldNumber = 1;
+  const ::std::string& name() const;
+  void set_name(const ::std::string& value);
+  void set_name(const char* value);
+  void set_name(const char* value, size_t size);
+  ::std::string* mutable_name();
+  ::std::string* release_name();
+  void set_allocated_name(::std::string* name);
+
+  // optional .types.PlayerStatus status = 2;
   void clear_status();
-  static const int kStatusFieldNumber = 1;
+  static const int kStatusFieldNumber = 2;
   ::types::PlayerStatus status() const;
   void set_status(::types::PlayerStatus value);
 
-  // optional bool online = 2;
+  // optional bool online = 3;
   void clear_online();
-  static const int kOnlineFieldNumber = 2;
+  static const int kOnlineFieldNumber = 3;
   bool online() const;
   void set_online(bool value);
 
-  // optional bool onduty = 3;
+  // optional bool onduty = 4;
   void clear_onduty();
-  static const int kOndutyFieldNumber = 3;
+  static const int kOndutyFieldNumber = 4;
   bool onduty() const;
   void set_onduty(bool value);
 
-  // optional int32 avatar = 4;
+  // optional int32 avatar = 5;
   void clear_avatar();
-  static const int kAvatarFieldNumber = 4;
+  static const int kAvatarFieldNumber = 5;
   ::google::protobuf::int32 avatar() const;
   void set_avatar(::google::protobuf::int32 value);
 
-  // @@protoc_insertion_point(class_scope:Xenophobia.StartGame.PlayerInfo)
+  // repeated .types.Role roles = 6;
+  int roles_size() const;
+  void clear_roles();
+  static const int kRolesFieldNumber = 6;
+  ::types::Role roles(int index) const;
+  void set_roles(int index, ::types::Role value);
+  void add_roles(::types::Role value);
+  const ::google::protobuf::RepeatedField<int>& roles() const;
+  ::google::protobuf::RepeatedField<int>* mutable_roles();
+
+  // @@protoc_insertion_point(class_scope:Xenophobia.PlayerInfo)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   bool _is_default_instance_;
+  ::google::protobuf::internal::ArenaStringPtr name_;
   int status_;
   bool online_;
   bool onduty_;
+  ::google::protobuf::RepeatedField<int> roles_;
+  mutable int _roles_cached_byte_size_;
   ::google::protobuf::int32 avatar_;
   mutable int _cached_size_;
   friend void  protobuf_AddDesc_server_2eproto();
@@ -507,7 +505,7 @@ class StartGame_PlayerInfo : public ::google::protobuf::Message {
   friend void protobuf_ShutdownFile_server_2eproto();
 
   void InitAsDefaultInstance();
-  static StartGame_PlayerInfo* default_instance_;
+  static PlayerInfo* default_instance_;
 };
 // -------------------------------------------------------------------
 
@@ -565,20 +563,18 @@ class StartGame : public ::google::protobuf::Message {
 
   // nested types ----------------------------------------------------
 
-  typedef StartGame_PlayerInfo PlayerInfo;
-
   // accessors -------------------------------------------------------
 
-  // repeated .Xenophobia.StartGame.PlayerInfo players = 1;
+  // repeated .Xenophobia.PlayerInfo players = 1;
   int players_size() const;
   void clear_players();
   static const int kPlayersFieldNumber = 1;
-  const ::Xenophobia::StartGame_PlayerInfo& players(int index) const;
-  ::Xenophobia::StartGame_PlayerInfo* mutable_players(int index);
-  ::Xenophobia::StartGame_PlayerInfo* add_players();
-  ::google::protobuf::RepeatedPtrField< ::Xenophobia::StartGame_PlayerInfo >*
+  const ::Xenophobia::PlayerInfo& players(int index) const;
+  ::Xenophobia::PlayerInfo* mutable_players(int index);
+  ::Xenophobia::PlayerInfo* add_players();
+  ::google::protobuf::RepeatedPtrField< ::Xenophobia::PlayerInfo >*
       mutable_players();
-  const ::google::protobuf::RepeatedPtrField< ::Xenophobia::StartGame_PlayerInfo >&
+  const ::google::protobuf::RepeatedPtrField< ::Xenophobia::PlayerInfo >&
       players() const;
 
   // @@protoc_insertion_point(class_scope:Xenophobia.StartGame)
@@ -586,7 +582,7 @@ class StartGame : public ::google::protobuf::Message {
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   bool _is_default_instance_;
-  ::google::protobuf::RepeatedPtrField< ::Xenophobia::StartGame_PlayerInfo > players_;
+  ::google::protobuf::RepeatedPtrField< ::Xenophobia::PlayerInfo > players_;
   mutable int _cached_size_;
   friend void  protobuf_AddDesc_server_2eproto();
   friend void protobuf_AssignDesc_server_2eproto();
@@ -651,37 +647,13 @@ class TimeSwitch : public ::google::protobuf::Message {
 
   // nested types ----------------------------------------------------
 
-  typedef TimeSwitch_TimeType TimeType;
-  static const TimeType NIGHT_TIME = TimeSwitch_TimeType_NIGHT_TIME;
-  static const TimeType DAY_TIME = TimeSwitch_TimeType_DAY_TIME;
-  static inline bool TimeType_IsValid(int value) {
-    return TimeSwitch_TimeType_IsValid(value);
-  }
-  static const TimeType TimeType_MIN =
-    TimeSwitch_TimeType_TimeType_MIN;
-  static const TimeType TimeType_MAX =
-    TimeSwitch_TimeType_TimeType_MAX;
-  static const int TimeType_ARRAYSIZE =
-    TimeSwitch_TimeType_TimeType_ARRAYSIZE;
-  static inline const ::google::protobuf::EnumDescriptor*
-  TimeType_descriptor() {
-    return TimeSwitch_TimeType_descriptor();
-  }
-  static inline const ::std::string& TimeType_Name(TimeType value) {
-    return TimeSwitch_TimeType_Name(value);
-  }
-  static inline bool TimeType_Parse(const ::std::string& name,
-      TimeType* value) {
-    return TimeSwitch_TimeType_Parse(name, value);
-  }
-
   // accessors -------------------------------------------------------
 
-  // optional .Xenophobia.TimeSwitch.TimeType time = 1;
+  // optional .Xenophobia.TimeType time = 1;
   void clear_time();
   static const int kTimeFieldNumber = 1;
-  ::Xenophobia::TimeSwitch_TimeType time() const;
-  void set_time(::Xenophobia::TimeSwitch_TimeType value);
+  ::Xenophobia::TimeType time() const;
+  void set_time(::Xenophobia::TimeType value);
 
   // optional int32 day_number = 2;
   void clear_day_number();
@@ -1056,38 +1028,13 @@ class InvetoryChange : public ::google::protobuf::Message {
 
   // nested types ----------------------------------------------------
 
-  typedef InvetoryChange_ChangeType ChangeType;
-  static const ChangeType ADD_ITEM = InvetoryChange_ChangeType_ADD_ITEM;
-  static const ChangeType CHARGE_ITEM = InvetoryChange_ChangeType_CHARGE_ITEM;
-  static const ChangeType DEL_ITEM = InvetoryChange_ChangeType_DEL_ITEM;
-  static inline bool ChangeType_IsValid(int value) {
-    return InvetoryChange_ChangeType_IsValid(value);
-  }
-  static const ChangeType ChangeType_MIN =
-    InvetoryChange_ChangeType_ChangeType_MIN;
-  static const ChangeType ChangeType_MAX =
-    InvetoryChange_ChangeType_ChangeType_MAX;
-  static const int ChangeType_ARRAYSIZE =
-    InvetoryChange_ChangeType_ChangeType_ARRAYSIZE;
-  static inline const ::google::protobuf::EnumDescriptor*
-  ChangeType_descriptor() {
-    return InvetoryChange_ChangeType_descriptor();
-  }
-  static inline const ::std::string& ChangeType_Name(ChangeType value) {
-    return InvetoryChange_ChangeType_Name(value);
-  }
-  static inline bool ChangeType_Parse(const ::std::string& name,
-      ChangeType* value) {
-    return InvetoryChange_ChangeType_Parse(name, value);
-  }
-
   // accessors -------------------------------------------------------
 
-  // optional .Xenophobia.InvetoryChange.ChangeType type = 1;
+  // optional .Xenophobia.InvetoryChangeType type = 1;
   void clear_type();
   static const int kTypeFieldNumber = 1;
-  ::Xenophobia::InvetoryChange_ChangeType type() const;
-  void set_type(::Xenophobia::InvetoryChange_ChangeType value);
+  ::Xenophobia::InvetoryChangeType type() const;
+  void set_type(::Xenophobia::InvetoryChangeType value);
 
   // optional .types.Item item = 2;
   void clear_item();
@@ -1173,38 +1120,13 @@ class PlayerChange : public ::google::protobuf::Message {
 
   // nested types ----------------------------------------------------
 
-  typedef PlayerChange_ChangeType ChangeType;
-  static const ChangeType HP_CHANGE = PlayerChange_ChangeType_HP_CHANGE;
-  static const ChangeType ALIEN = PlayerChange_ChangeType_ALIEN;
-  static const ChangeType STATUS_CHANGE = PlayerChange_ChangeType_STATUS_CHANGE;
-  static inline bool ChangeType_IsValid(int value) {
-    return PlayerChange_ChangeType_IsValid(value);
-  }
-  static const ChangeType ChangeType_MIN =
-    PlayerChange_ChangeType_ChangeType_MIN;
-  static const ChangeType ChangeType_MAX =
-    PlayerChange_ChangeType_ChangeType_MAX;
-  static const int ChangeType_ARRAYSIZE =
-    PlayerChange_ChangeType_ChangeType_ARRAYSIZE;
-  static inline const ::google::protobuf::EnumDescriptor*
-  ChangeType_descriptor() {
-    return PlayerChange_ChangeType_descriptor();
-  }
-  static inline const ::std::string& ChangeType_Name(ChangeType value) {
-    return PlayerChange_ChangeType_Name(value);
-  }
-  static inline bool ChangeType_Parse(const ::std::string& name,
-      ChangeType* value) {
-    return PlayerChange_ChangeType_Parse(name, value);
-  }
-
   // accessors -------------------------------------------------------
 
-  // optional .Xenophobia.PlayerChange.ChangeType type = 1;
+  // optional .Xenophobia.PlayerChangeType type = 1;
   void clear_type();
   static const int kTypeFieldNumber = 1;
-  ::Xenophobia::PlayerChange_ChangeType type() const;
-  void set_type(::Xenophobia::PlayerChange_ChangeType value);
+  ::Xenophobia::PlayerChangeType type() const;
+  void set_type(::Xenophobia::PlayerChangeType value);
 
   // optional int32 value = 2;
   void clear_value();
@@ -1283,37 +1205,13 @@ class ActionRequest : public ::google::protobuf::Message {
 
   // nested types ----------------------------------------------------
 
-  typedef ActionRequest_RequestType RequestType;
-  static const RequestType HARD_RESOLVE = ActionRequest_RequestType_HARD_RESOLVE;
-  static const RequestType NEED_ROTATION = ActionRequest_RequestType_NEED_ROTATION;
-  static inline bool RequestType_IsValid(int value) {
-    return ActionRequest_RequestType_IsValid(value);
-  }
-  static const RequestType RequestType_MIN =
-    ActionRequest_RequestType_RequestType_MIN;
-  static const RequestType RequestType_MAX =
-    ActionRequest_RequestType_RequestType_MAX;
-  static const int RequestType_ARRAYSIZE =
-    ActionRequest_RequestType_RequestType_ARRAYSIZE;
-  static inline const ::google::protobuf::EnumDescriptor*
-  RequestType_descriptor() {
-    return ActionRequest_RequestType_descriptor();
-  }
-  static inline const ::std::string& RequestType_Name(RequestType value) {
-    return ActionRequest_RequestType_Name(value);
-  }
-  static inline bool RequestType_Parse(const ::std::string& name,
-      RequestType* value) {
-    return ActionRequest_RequestType_Parse(name, value);
-  }
-
   // accessors -------------------------------------------------------
 
-  // optional .Xenophobia.ActionRequest.RequestType type = 1;
+  // optional .Xenophobia.RequestType type = 1;
   void clear_type();
   static const int kTypeFieldNumber = 1;
-  ::Xenophobia::ActionRequest_RequestType type() const;
-  void set_type(::Xenophobia::ActionRequest_RequestType value);
+  ::Xenophobia::RequestType type() const;
+  void set_type(::Xenophobia::RequestType value);
 
   // repeated .types.ITarget targets = 2;
   int targets_size() const;
@@ -1398,37 +1296,13 @@ class ActionResult : public ::google::protobuf::Message {
 
   // nested types ----------------------------------------------------
 
-  typedef ActionResult_ResultType ResultType;
-  static const ResultType USED_ITEM = ActionResult_ResultType_USED_ITEM;
-  static const ResultType USE_ACTION = ActionResult_ResultType_USE_ACTION;
-  static inline bool ResultType_IsValid(int value) {
-    return ActionResult_ResultType_IsValid(value);
-  }
-  static const ResultType ResultType_MIN =
-    ActionResult_ResultType_ResultType_MIN;
-  static const ResultType ResultType_MAX =
-    ActionResult_ResultType_ResultType_MAX;
-  static const int ResultType_ARRAYSIZE =
-    ActionResult_ResultType_ResultType_ARRAYSIZE;
-  static inline const ::google::protobuf::EnumDescriptor*
-  ResultType_descriptor() {
-    return ActionResult_ResultType_descriptor();
-  }
-  static inline const ::std::string& ResultType_Name(ResultType value) {
-    return ActionResult_ResultType_Name(value);
-  }
-  static inline bool ResultType_Parse(const ::std::string& name,
-      ResultType* value) {
-    return ActionResult_ResultType_Parse(name, value);
-  }
-
   // accessors -------------------------------------------------------
 
-  // optional .Xenophobia.ActionResult.ResultType type = 1;
+  // optional .Xenophobia.ResultType type = 1;
   void clear_type();
   static const int kTypeFieldNumber = 1;
-  ::Xenophobia::ActionResult_ResultType type() const;
-  void set_type(::Xenophobia::ActionResult_ResultType value);
+  ::Xenophobia::ResultType type() const;
+  void set_type(::Xenophobia::ResultType value);
 
   // optional .types.Action action = 2;
   void clear_action();
@@ -1647,15 +1521,15 @@ class ServerMessage : public ::google::protobuf::Message {
 #if !PROTOBUF_INLINE_NOT_IN_HEADERS
 // RegisterAnswer
 
-// optional .Xenophobia.RegisterAnswer.StatusType status = 1;
+// optional .Xenophobia.RegisterStatusType status = 1;
 inline void RegisterAnswer::clear_status() {
   status_ = 0;
 }
-inline ::Xenophobia::RegisterAnswer_StatusType RegisterAnswer::status() const {
+inline ::Xenophobia::RegisterStatusType RegisterAnswer::status() const {
   // @@protoc_insertion_point(field_get:Xenophobia.RegisterAnswer.status)
-  return static_cast< ::Xenophobia::RegisterAnswer_StatusType >(status_);
+  return static_cast< ::Xenophobia::RegisterStatusType >(status_);
 }
-inline void RegisterAnswer::set_status(::Xenophobia::RegisterAnswer_StatusType value) {
+inline void RegisterAnswer::set_status(::Xenophobia::RegisterStatusType value) {
   
   status_ = value;
   // @@protoc_insertion_point(field_set:Xenophobia.RegisterAnswer.status)
@@ -1685,93 +1559,166 @@ RegisterUpdate::mutable_players() {
 
 // -------------------------------------------------------------------
 
-// StartGame_PlayerInfo
+// PlayerInfo
 
-// optional .types.PlayerStatus status = 1;
-inline void StartGame_PlayerInfo::clear_status() {
+// optional string name = 1;
+inline void PlayerInfo::clear_name() {
+  name_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& PlayerInfo::name() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.PlayerInfo.name)
+  return name_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void PlayerInfo::set_name(const ::std::string& value) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:Xenophobia.PlayerInfo.name)
+}
+inline void PlayerInfo::set_name(const char* value) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:Xenophobia.PlayerInfo.name)
+}
+inline void PlayerInfo::set_name(const char* value, size_t size) {
+  
+  name_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:Xenophobia.PlayerInfo.name)
+}
+inline ::std::string* PlayerInfo::mutable_name() {
+  
+  // @@protoc_insertion_point(field_mutable:Xenophobia.PlayerInfo.name)
+  return name_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* PlayerInfo::release_name() {
+  
+  return name_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void PlayerInfo::set_allocated_name(::std::string* name) {
+  if (name != NULL) {
+    
+  } else {
+    
+  }
+  name_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), name);
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.PlayerInfo.name)
+}
+
+// optional .types.PlayerStatus status = 2;
+inline void PlayerInfo::clear_status() {
   status_ = 0;
 }
-inline ::types::PlayerStatus StartGame_PlayerInfo::status() const {
-  // @@protoc_insertion_point(field_get:Xenophobia.StartGame.PlayerInfo.status)
+inline ::types::PlayerStatus PlayerInfo::status() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.PlayerInfo.status)
   return static_cast< ::types::PlayerStatus >(status_);
 }
-inline void StartGame_PlayerInfo::set_status(::types::PlayerStatus value) {
+inline void PlayerInfo::set_status(::types::PlayerStatus value) {
   
   status_ = value;
-  // @@protoc_insertion_point(field_set:Xenophobia.StartGame.PlayerInfo.status)
+  // @@protoc_insertion_point(field_set:Xenophobia.PlayerInfo.status)
 }
 
-// optional bool online = 2;
-inline void StartGame_PlayerInfo::clear_online() {
+// optional bool online = 3;
+inline void PlayerInfo::clear_online() {
   online_ = false;
 }
-inline bool StartGame_PlayerInfo::online() const {
-  // @@protoc_insertion_point(field_get:Xenophobia.StartGame.PlayerInfo.online)
+inline bool PlayerInfo::online() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.PlayerInfo.online)
   return online_;
 }
-inline void StartGame_PlayerInfo::set_online(bool value) {
+inline void PlayerInfo::set_online(bool value) {
   
   online_ = value;
-  // @@protoc_insertion_point(field_set:Xenophobia.StartGame.PlayerInfo.online)
+  // @@protoc_insertion_point(field_set:Xenophobia.PlayerInfo.online)
 }
 
-// optional bool onduty = 3;
-inline void StartGame_PlayerInfo::clear_onduty() {
+// optional bool onduty = 4;
+inline void PlayerInfo::clear_onduty() {
   onduty_ = false;
 }
-inline bool StartGame_PlayerInfo::onduty() const {
-  // @@protoc_insertion_point(field_get:Xenophobia.StartGame.PlayerInfo.onduty)
+inline bool PlayerInfo::onduty() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.PlayerInfo.onduty)
   return onduty_;
 }
-inline void StartGame_PlayerInfo::set_onduty(bool value) {
+inline void PlayerInfo::set_onduty(bool value) {
   
   onduty_ = value;
-  // @@protoc_insertion_point(field_set:Xenophobia.StartGame.PlayerInfo.onduty)
+  // @@protoc_insertion_point(field_set:Xenophobia.PlayerInfo.onduty)
 }
 
-// optional int32 avatar = 4;
-inline void StartGame_PlayerInfo::clear_avatar() {
+// optional int32 avatar = 5;
+inline void PlayerInfo::clear_avatar() {
   avatar_ = 0;
 }
-inline ::google::protobuf::int32 StartGame_PlayerInfo::avatar() const {
-  // @@protoc_insertion_point(field_get:Xenophobia.StartGame.PlayerInfo.avatar)
+inline ::google::protobuf::int32 PlayerInfo::avatar() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.PlayerInfo.avatar)
   return avatar_;
 }
-inline void StartGame_PlayerInfo::set_avatar(::google::protobuf::int32 value) {
+inline void PlayerInfo::set_avatar(::google::protobuf::int32 value) {
   
   avatar_ = value;
-  // @@protoc_insertion_point(field_set:Xenophobia.StartGame.PlayerInfo.avatar)
+  // @@protoc_insertion_point(field_set:Xenophobia.PlayerInfo.avatar)
+}
+
+// repeated .types.Role roles = 6;
+inline int PlayerInfo::roles_size() const {
+  return roles_.size();
+}
+inline void PlayerInfo::clear_roles() {
+  roles_.Clear();
+}
+inline ::types::Role PlayerInfo::roles(int index) const {
+  // @@protoc_insertion_point(field_get:Xenophobia.PlayerInfo.roles)
+  return static_cast< ::types::Role >(roles_.Get(index));
+}
+inline void PlayerInfo::set_roles(int index, ::types::Role value) {
+  roles_.Set(index, value);
+  // @@protoc_insertion_point(field_set:Xenophobia.PlayerInfo.roles)
+}
+inline void PlayerInfo::add_roles(::types::Role value) {
+  roles_.Add(value);
+  // @@protoc_insertion_point(field_add:Xenophobia.PlayerInfo.roles)
+}
+inline const ::google::protobuf::RepeatedField<int>&
+PlayerInfo::roles() const {
+  // @@protoc_insertion_point(field_list:Xenophobia.PlayerInfo.roles)
+  return roles_;
+}
+inline ::google::protobuf::RepeatedField<int>*
+PlayerInfo::mutable_roles() {
+  // @@protoc_insertion_point(field_mutable_list:Xenophobia.PlayerInfo.roles)
+  return &roles_;
 }
 
 // -------------------------------------------------------------------
 
 // StartGame
 
-// repeated .Xenophobia.StartGame.PlayerInfo players = 1;
+// repeated .Xenophobia.PlayerInfo players = 1;
 inline int StartGame::players_size() const {
   return players_.size();
 }
 inline void StartGame::clear_players() {
   players_.Clear();
 }
-inline const ::Xenophobia::StartGame_PlayerInfo& StartGame::players(int index) const {
+inline const ::Xenophobia::PlayerInfo& StartGame::players(int index) const {
   // @@protoc_insertion_point(field_get:Xenophobia.StartGame.players)
   return players_.Get(index);
 }
-inline ::Xenophobia::StartGame_PlayerInfo* StartGame::mutable_players(int index) {
+inline ::Xenophobia::PlayerInfo* StartGame::mutable_players(int index) {
   // @@protoc_insertion_point(field_mutable:Xenophobia.StartGame.players)
   return players_.Mutable(index);
 }
-inline ::Xenophobia::StartGame_PlayerInfo* StartGame::add_players() {
+inline ::Xenophobia::PlayerInfo* StartGame::add_players() {
   // @@protoc_insertion_point(field_add:Xenophobia.StartGame.players)
   return players_.Add();
 }
-inline ::google::protobuf::RepeatedPtrField< ::Xenophobia::StartGame_PlayerInfo >*
+inline ::google::protobuf::RepeatedPtrField< ::Xenophobia::PlayerInfo >*
 StartGame::mutable_players() {
   // @@protoc_insertion_point(field_mutable_list:Xenophobia.StartGame.players)
   return &players_;
 }
-inline const ::google::protobuf::RepeatedPtrField< ::Xenophobia::StartGame_PlayerInfo >&
+inline const ::google::protobuf::RepeatedPtrField< ::Xenophobia::PlayerInfo >&
 StartGame::players() const {
   // @@protoc_insertion_point(field_list:Xenophobia.StartGame.players)
   return players_;
@@ -1781,15 +1728,15 @@ StartGame::players() const {
 
 // TimeSwitch
 
-// optional .Xenophobia.TimeSwitch.TimeType time = 1;
+// optional .Xenophobia.TimeType time = 1;
 inline void TimeSwitch::clear_time() {
   time_ = 0;
 }
-inline ::Xenophobia::TimeSwitch_TimeType TimeSwitch::time() const {
+inline ::Xenophobia::TimeType TimeSwitch::time() const {
   // @@protoc_insertion_point(field_get:Xenophobia.TimeSwitch.time)
-  return static_cast< ::Xenophobia::TimeSwitch_TimeType >(time_);
+  return static_cast< ::Xenophobia::TimeType >(time_);
 }
-inline void TimeSwitch::set_time(::Xenophobia::TimeSwitch_TimeType value) {
+inline void TimeSwitch::set_time(::Xenophobia::TimeType value) {
   
   time_ = value;
   // @@protoc_insertion_point(field_set:Xenophobia.TimeSwitch.time)
@@ -2011,15 +1958,15 @@ Change::events() const {
 
 // InvetoryChange
 
-// optional .Xenophobia.InvetoryChange.ChangeType type = 1;
+// optional .Xenophobia.InvetoryChangeType type = 1;
 inline void InvetoryChange::clear_type() {
   type_ = 0;
 }
-inline ::Xenophobia::InvetoryChange_ChangeType InvetoryChange::type() const {
+inline ::Xenophobia::InvetoryChangeType InvetoryChange::type() const {
   // @@protoc_insertion_point(field_get:Xenophobia.InvetoryChange.type)
-  return static_cast< ::Xenophobia::InvetoryChange_ChangeType >(type_);
+  return static_cast< ::Xenophobia::InvetoryChangeType >(type_);
 }
-inline void InvetoryChange::set_type(::Xenophobia::InvetoryChange_ChangeType value) {
+inline void InvetoryChange::set_type(::Xenophobia::InvetoryChangeType value) {
   
   type_ = value;
   // @@protoc_insertion_point(field_set:Xenophobia.InvetoryChange.type)
@@ -2057,15 +2004,15 @@ inline void InvetoryChange::set_charge(::google::protobuf::int32 value) {
 
 // PlayerChange
 
-// optional .Xenophobia.PlayerChange.ChangeType type = 1;
+// optional .Xenophobia.PlayerChangeType type = 1;
 inline void PlayerChange::clear_type() {
   type_ = 0;
 }
-inline ::Xenophobia::PlayerChange_ChangeType PlayerChange::type() const {
+inline ::Xenophobia::PlayerChangeType PlayerChange::type() const {
   // @@protoc_insertion_point(field_get:Xenophobia.PlayerChange.type)
-  return static_cast< ::Xenophobia::PlayerChange_ChangeType >(type_);
+  return static_cast< ::Xenophobia::PlayerChangeType >(type_);
 }
-inline void PlayerChange::set_type(::Xenophobia::PlayerChange_ChangeType value) {
+inline void PlayerChange::set_type(::Xenophobia::PlayerChangeType value) {
   
   type_ = value;
   // @@protoc_insertion_point(field_set:Xenophobia.PlayerChange.type)
@@ -2089,15 +2036,15 @@ inline void PlayerChange::set_value(::google::protobuf::int32 value) {
 
 // ActionRequest
 
-// optional .Xenophobia.ActionRequest.RequestType type = 1;
+// optional .Xenophobia.RequestType type = 1;
 inline void ActionRequest::clear_type() {
   type_ = 0;
 }
-inline ::Xenophobia::ActionRequest_RequestType ActionRequest::type() const {
+inline ::Xenophobia::RequestType ActionRequest::type() const {
   // @@protoc_insertion_point(field_get:Xenophobia.ActionRequest.type)
-  return static_cast< ::Xenophobia::ActionRequest_RequestType >(type_);
+  return static_cast< ::Xenophobia::RequestType >(type_);
 }
-inline void ActionRequest::set_type(::Xenophobia::ActionRequest_RequestType value) {
+inline void ActionRequest::set_type(::Xenophobia::RequestType value) {
   
   type_ = value;
   // @@protoc_insertion_point(field_set:Xenophobia.ActionRequest.type)
@@ -2137,15 +2084,15 @@ ActionRequest::targets() const {
 
 // ActionResult
 
-// optional .Xenophobia.ActionResult.ResultType type = 1;
+// optional .Xenophobia.ResultType type = 1;
 inline void ActionResult::clear_type() {
   type_ = 0;
 }
-inline ::Xenophobia::ActionResult_ResultType ActionResult::type() const {
+inline ::Xenophobia::ResultType ActionResult::type() const {
   // @@protoc_insertion_point(field_get:Xenophobia.ActionResult.type)
-  return static_cast< ::Xenophobia::ActionResult_ResultType >(type_);
+  return static_cast< ::Xenophobia::ResultType >(type_);
 }
-inline void ActionResult::set_type(::Xenophobia::ActionResult_ResultType value) {
+inline void ActionResult::set_type(::Xenophobia::ResultType value) {
   
   type_ = value;
   // @@protoc_insertion_point(field_set:Xenophobia.ActionResult.type)
@@ -2624,40 +2571,40 @@ inline void ServerMessage::set_allocated_action_result(::Xenophobia::ActionResul
 namespace google {
 namespace protobuf {
 
-template <> struct is_proto_enum< ::Xenophobia::RegisterAnswer_StatusType> : ::google::protobuf::internal::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::Xenophobia::RegisterAnswer_StatusType>() {
-  return ::Xenophobia::RegisterAnswer_StatusType_descriptor();
-}
-template <> struct is_proto_enum< ::Xenophobia::TimeSwitch_TimeType> : ::google::protobuf::internal::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::Xenophobia::TimeSwitch_TimeType>() {
-  return ::Xenophobia::TimeSwitch_TimeType_descriptor();
-}
-template <> struct is_proto_enum< ::Xenophobia::InvetoryChange_ChangeType> : ::google::protobuf::internal::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::Xenophobia::InvetoryChange_ChangeType>() {
-  return ::Xenophobia::InvetoryChange_ChangeType_descriptor();
-}
-template <> struct is_proto_enum< ::Xenophobia::PlayerChange_ChangeType> : ::google::protobuf::internal::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::Xenophobia::PlayerChange_ChangeType>() {
-  return ::Xenophobia::PlayerChange_ChangeType_descriptor();
-}
-template <> struct is_proto_enum< ::Xenophobia::ActionRequest_RequestType> : ::google::protobuf::internal::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::Xenophobia::ActionRequest_RequestType>() {
-  return ::Xenophobia::ActionRequest_RequestType_descriptor();
-}
-template <> struct is_proto_enum< ::Xenophobia::ActionResult_ResultType> : ::google::protobuf::internal::true_type {};
-template <>
-inline const EnumDescriptor* GetEnumDescriptor< ::Xenophobia::ActionResult_ResultType>() {
-  return ::Xenophobia::ActionResult_ResultType_descriptor();
-}
 template <> struct is_proto_enum< ::Xenophobia::ServerMessageType> : ::google::protobuf::internal::true_type {};
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::Xenophobia::ServerMessageType>() {
   return ::Xenophobia::ServerMessageType_descriptor();
+}
+template <> struct is_proto_enum< ::Xenophobia::RegisterStatusType> : ::google::protobuf::internal::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::Xenophobia::RegisterStatusType>() {
+  return ::Xenophobia::RegisterStatusType_descriptor();
+}
+template <> struct is_proto_enum< ::Xenophobia::TimeType> : ::google::protobuf::internal::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::Xenophobia::TimeType>() {
+  return ::Xenophobia::TimeType_descriptor();
+}
+template <> struct is_proto_enum< ::Xenophobia::InvetoryChangeType> : ::google::protobuf::internal::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::Xenophobia::InvetoryChangeType>() {
+  return ::Xenophobia::InvetoryChangeType_descriptor();
+}
+template <> struct is_proto_enum< ::Xenophobia::PlayerChangeType> : ::google::protobuf::internal::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::Xenophobia::PlayerChangeType>() {
+  return ::Xenophobia::PlayerChangeType_descriptor();
+}
+template <> struct is_proto_enum< ::Xenophobia::RequestType> : ::google::protobuf::internal::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::Xenophobia::RequestType>() {
+  return ::Xenophobia::RequestType_descriptor();
+}
+template <> struct is_proto_enum< ::Xenophobia::ResultType> : ::google::protobuf::internal::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::Xenophobia::ResultType>() {
+  return ::Xenophobia::ResultType_descriptor();
 }
 
 }  // namespace protobuf

@@ -1,4 +1,4 @@
-syntax = "proto3";
+﻿syntax = "proto3";
 package Xenophobia;
 import public "types.proto";
 
@@ -34,13 +34,13 @@ message RegisterUpdate {
 
 // Начало игры
 message PlayerInfo {
-	 types.PlayerStatus status = 1;
-	 bool online = 2;
-	 bool onduty = 3;
-	 int32 avatar = 4; // TODO: что есть аватар?
-	 repeated types.Role roles = 5;
+ string name = 1;
+  types.PlayerStatus status = 2;
+  bool online = 3;
+  bool onduty = 4;
+  int32 avatar = 5; // TODO: что есть аватар?
+  repeated types.Role roles = 6;
 }
-
 message StartGame {
 	repeated PlayerInfo players = 1;
 }

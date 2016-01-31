@@ -1,28 +1,35 @@
 #ifndef TYPES_H
 #define TYPES_H
 #include "proto/types.pb.h"
+#include "proto/client.pb.h"
 #include <QString>
 #include <QMap>
+
+enum TARGET_TYPE {
+    XX_PERSON,
+    XX_ITEM,
+    XX_ROTATION
+};
 
 enum TURN_TYPE {
     TT_DIED = -4,
     TT_DAYTIME = -3,
     TT_NIGHTTIME = -2,//для ведения лога
     TT_NOTHING = -1,
-    TT_DUTY = 0,
-    TT_USE_BADGE = 1,
-    TT_USE_ITEM,
-    TT_ULT_ITEM,
-    TT_ATTACK,
-    TT_INFECT,
-    TT_SKIP,
+    TT_DUTY = -5,
+    TT_USE_ITEM = 0,
+    TT_ULT_ITEM = 1,
+    TT_USE_BADGE = 2,
+    TT_ATTACK = 3,
+    TT_INFECT = 4,
+    TT_VOTE = 5,
+    TT_UNVOTE = 6,
+    TT_SKIP = 7,
+    TT_UP = 8,
+    TT_DOWN = 9,
     TT_ALIEN,
-    TT_UP,
-    TT_DOWN,
     TT_GETITEM,
     TT_DELITEM,
-    TT_VOTE,
-    TT_UNVOTE,
     TT_REGNAME,
     TT_REGROLE,
     TT_GETROLE,
@@ -37,14 +44,14 @@ enum TURN_TYPE {
 enum ITEM{
     IT_UNKNOW = -1,
     IT_BADGE = 0,
-    IT_INJECTOR,
-    IT_SCANNER,
-    IT_MOP,
-    IT_BATTERY,
-    IT_BLASTER,
-    IT_NOTEBOOK,
-    IT_ROTATION,
-    IT_FETUS
+    IT_INJECTOR = 3,
+    IT_SCANNER = 6,
+    IT_MOP = 7,
+    IT_BATTERY = 5,
+    IT_BLASTER = 2,
+    IT_NOTEBOOK = 4,
+    IT_ROTATION = 1,
+    IT_FETUS = 8
 };
 
 enum ROLE{
@@ -52,23 +59,23 @@ enum ROLE{
     RT_UNKNOWN = -1,
     RT_PASSENGER = 0,
     RT_CAPTAIN = 1,
-    RT_ASSISTANT,
-    RT_GUNMEN,
-    RT_SCIENTIST,
-    RT_SIGNALMEN,
-    RT_DOCTOR,
-    RT_ENGINEER,
-    RT_DEP_GUNMEN,
-    RT_DEP_SCIENTIST,
-    RT_DEP_SIGNALMEN,
-    RT_DEP_DOCTOR,
-    RT_DEP_ENGINEER
+    RT_ASSISTANT = 101,
+    RT_GUNMEN = 3,
+    RT_SCIENTIST = 5,
+    RT_SIGNALMEN = 6,
+    RT_DOCTOR = 2,
+    RT_ENGINEER = 4,
+    RT_DEP_GUNMEN = 103,
+    RT_DEP_SCIENTIST = 105,
+    RT_DEP_SIGNALMEN = 106,
+    RT_DEP_DOCTOR = 102,
+    RT_DEP_ENGINEER = 104
 };
 
 struct RegisterObject{
 public:
     TURN_TYPE targets;
-    ::types::Role role;
+    ROLE role;
     QString name;
     int ID;
 
@@ -81,6 +88,12 @@ public:
         name = n;
     }
     RegisterObject(int id, TURN_TYPE tar,::types::Role r){
+        ID = id;
+        targets = tar;
+        role = (ROLE)r;
+    }
+
+    RegisterObject(int id, TURN_TYPE tar,ROLE r){
         ID = id;
         targets = tar;
         role = r;

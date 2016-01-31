@@ -163,10 +163,10 @@ void protobuf_AddDesc_client_2eproto() {
     "\n\010reg_name\030\002 \001(\0132\030.Xenophobia.RegisterNa"
     "me\022*\n\010reg_role\030\003 \001(\0132\030.Xenophobia.Regist"
     "erRole\022\'\n\tdo_action\030\004 \001(\0132\024.Xenophobia.D"
-    "oAction*g\n\021ClientMessageType\022\025\n\021CMT_REGI"
-    "STER_NAME\020\000\022\024\n\020CMT_RegisterRole\020\001\022\022\n\016CMT"
-    "_DISCONNECT\020\002\022\021\n\rCMT_DO_ACTION\020\003P\000b\006prot"
-    "o3", 522);
+    "oAction*h\n\021ClientMessageType\022\025\n\021CMT_REGI"
+    "STER_NAME\020\000\022\025\n\021CMT_REGISTER_ROLE\020\001\022\022\n\016CM"
+    "T_DISCONNECT\020\002\022\021\n\rCMT_DO_ACTION\020\003P\000b\006pro"
+    "to3", 523);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "client.proto", &protobuf_RegisterTypes);
   RegisterName::default_instance_ = new RegisterName();

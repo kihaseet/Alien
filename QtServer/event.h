@@ -6,12 +6,13 @@
 
 class player;
 
+
+
 struct TurnObject{
 public:
     TURN_TYPE type;
     QQueue<QString> targets;
     ITEM item;
-    
     player* wh;
 
     static QMap <QString, ITEM> ItemDescr;
@@ -30,9 +31,25 @@ public:
         this->type = type;
     }
 
-    TurnObject(::types::Event event)
+    TurnObject(::Xenophobia::DoAction event)
     {
-        if()
+        switch (event.action()) {
+        case types::USE_ITEM:
+        case types::USE_ULT:
+        case types::USE_BADGE:
+            item = (ITEM)event.item();
+        default:
+            type = (TURN_TYPE)event.action();
+            foreach (const types::ITarget& target, event.targets()) {
+                if(target.type() == types::TAT_ITEM){
+                    targets.append(ItemDescr.key((ITEM(target.item()))));
+                }
+                else {
+                    targets.enqueue(QString::fromStdString(target.name()));
+                }
+            }
+            break;
+        }
     }
 
     TurnObject(TURN_TYPE type,
