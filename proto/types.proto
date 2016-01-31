@@ -1,0 +1,81 @@
+syntax = "proto3";
+
+package types;
+
+// Общие перечисления
+enum Role {
+    PASSENGER = 0;
+    CAPTAIN = 1;
+    DOCTOR = 2;
+    GUNMEN = 3;
+    ENGINEER = 4;
+    SCIENTIST = 5;
+    SIGNALMEN = 6;
+	ASSISTANT = 101;
+	DEP_DOCTOR = 102;
+	DEP_GUNMEN = 103;
+	DEP_ENGINEER = 104;
+	DEP_SCIENTIST = 105;
+	DEP_SIGNALMEN = 106;
+}
+
+enum Action {
+	USE_ITEM = 0;
+	USE_ULT = 1;
+	ATTACK = 2;
+	INFECT = 3;
+	VOTE = 4;
+	UNVOTE = 5;
+	WAIT = 6;
+	UP = 7;
+	DOWN = 8;
+}
+
+enum Item {
+	BADGE = 0;
+	ROTATION = 1;
+	BLASTER = 2;
+	INJECTOR = 3;
+	NOTEBOOK = 4;
+	BATTERY = 5;
+	SCANNER = 6;
+	MOP = 7;
+	FETUS = 8;
+}
+
+enum PlayerStatus {
+	PS_UP = 0;
+	PS_DOWN = 1;
+	PS_DEAD = 2;
+}
+
+enum EventType {
+	ET_USE_ITEM = 0;
+	ET_USE_ULT = 1;
+	ET_USE_BADGE = 2;
+	ET_CHANGE_STATUS = 3;
+	ET_GET_ROLE = 4;
+	ET_DEL_ROLE = 5;
+	ET_VOTING_UP = 6;
+	ET_VOTING_DOWN = 7;
+}
+
+enum VotingType {
+	FOR_ROLE = 0;
+	FOR_ALIEN = 1;
+}
+
+// Метасообщения для таргетов
+message ITarget {
+	string name = 1;
+	Item item = 2;
+	Role role = 3;
+}
+
+// Общие сообщения
+message Event {
+	EventType event = 1;
+	ITarget event_who = 2;
+	ITarget event_object = 3;
+	ITarget event_target = 4;
+}

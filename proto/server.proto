@@ -1,0 +1,105 @@
+syntax = "proto3";
+package Xenophobia;
+import public "types.proto";
+//От сервера:
+// Этап регистрации
+message RegisterAnswer {
+	enum StatusType {
+		NAME_CORRECT = 0;
+		NAME_INCORRECT = 1;
+		ROLE_CORRECT = 2;
+		ROLE_INCORRECT = 3;
+	}
+	
+	StatusType status = 1;
+}
+
+message RegisterUpdate {
+	map<string, types.Role> players = 1;
+}
+
+// Начало игры
+message StartGame {
+	message PlayerInfo {
+		 types.PlayerStatus status = 1;
+		 bool online = 2;
+		 bool onduty = 3;
+		 int32 avatar = 4; // TODO: что есть аватар?
+	}
+	
+	repeated PlayerInfo players = 1;
+}
+
+// Смена дня/ночи
+message TimeSwitch {
+	enum TimeType {
+		NIGHT_TIME = 0;
+		DAY_TIME = 1;
+	}
+	
+	 TimeType time = 1;
+	 int32 day_number = 2;
+}
+
+// Начало голосования
+message Voting {
+	types.VotingType type = 1;
+	repeated types.ITarget targets = 2;
+	map<string, int32> votes_for = 3;
+}
+
+// Конец голосования
+message EndVoting {
+	types.VotingType type = 1;
+	types.ITarget target = 2;
+	string result = 3;
+}
+
+// Список произошедших событий
+message Change {
+	repeated types.Event events = 1;
+}
+
+// События влияющие непосредственно на игрока/требующие от него действий
+message InvetoryChange {
+	enum ChangeType {
+		ADD_ITEM = 0;
+		CHARGE_ITEM = 1;
+		DEL_ITEM = 2;
+	}
+	
+	 ChangeType type = 1;
+	 types.Item item = 2;
+	 int32 charge = 3;
+}
+
+message PlayerChange {
+	enum ChangeType {
+		HP_CHANGE = 0;
+		ALIEN = 1;
+		STATUS_CHANGE = 2;
+	}
+	
+	 ChangeType type = 1;
+	 int32 value = 2;
+}
+
+message ActionRequest {
+	enum RequestType {
+		HARD_RESOLVE = 0;
+		NEED_ROTATION = 1;
+	}
+	
+	RequestType type = 1;
+	repeated types.ITarget targets = 2;
+}
+
+message ActionResult {
+	enum ResultType {
+		USED_ITEM = 0;
+		USE_ACTION = 1;
+	}
+	
+	 ResultType type = 1;
+	 types.Action action = 2;
+}
