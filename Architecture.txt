@@ -1,0 +1,175 @@
+V.class GameClient:
+	connect:bool
+	registerName:bool
+	registerRole:bool
+	doAction:bool
+	disconnect
+	reconnect -- not implemented yet
+
+--------------------------------------------------
+
+V.enum Status:
+	UP
+	DOWN
+	DIED
+	DUTY
+	ONLINE
+	OFFLINE
+
+V.enum PlayerImage:
+	CAPTAIN
+	DOCTOR
+	GUNMEN
+	ASSISTANT
+	ENGINEER
+	SCIENTIST
+	SIGNALMEN
+	DUPUTY
+	PASSENGER
+	
+
+V.class ITarget:
+	-name:string
+	+f:getName:string
+	+f:setName(string)
+
+V.class Player(ITarget):
+	-status:Status
+	-role:string[]
+	-image:PlayerImage
+	+f:getStatus:Status
+	+f:setStatus(Status)
+	+f:getRole:string[]
+	+f:setRole(string[])
+
+V.class CurrentPlayer(Player):
+	+HP:int
+	+isAlien:bool
+	+Items:Item[]
+	+actions:Action[]
+	f:RecalcAction
+
+V.class Item(ITarget):
+	-charge:int
+	f:getChargeLevel:int
+	f:canUse:bool
+	f:canUlt:bool
+
+--------------------------------------------------
+
+V.class Action:
+	-user:ITarget
+	-item:ITarget
+	-targets:ITarget[]
+
+	f:getUser:CurrentPlayer
+	f:getItem:Item
+	f:getTargets:ITarget[]
+
+V.class ActionFactory:
+	-currentPlayer:CurrentPlayer
+	f:useItem(Item, ITarget[]):Action
+	f:ultItem(Item, ITarget[]):Action
+	f:useBadge():Action
+	f:attack(Player):Action
+	f:infect(Player):Action
+	f:vote(Player):Action
+	f:unvote(Player):Action
+	f:sleep():Action
+	f:up():Action
+	f:down():Action
+
+--------------------------------------------------
+
+V.class IEvent:
+	-who:string
+	-target:string
+	-what:string
+	i:getDisplayMsg:string
+
+V.class EventItem(IEvent):
+	-item:ITarget
+	f:getDisplayMsg:string
+
+V.class EventStatus(IEvent):
+	-status:Status
+	f:getDisplayMsg:string
+
+V.class EventRole(IEvent):
+	-role:string[]
+	-getRole:bool
+	f:getDisplayMsg:string
+
+V.class EventVoting(IEvent):
+	-target:string
+	-voteUp:bool
+	f:getDisplayMsg:string
+
+
+V.class EventFactory:
+	f:Item(ITarget):IEvent
+	f:Status(ITarget):IEvent
+	f:Role(ITarget):IEvent
+	f:Voting(ITarget):IEvent
+
+--------------------------------------------------
+
+V.class Vote:
+	-votingFor:string
+	-targets:Player[]
+
+	f:getDisplayMsg:stirng
+
+V.class EndVote:
+	-votingFor:string
+	-result:string
+	-target:string
+	f:getDisplayMsg:string
+
+--------------------------------------------------
+
+V.class IStatUpdate:
+	i:Apply(CurrentPlayer)
+
+V.class StatAddItem(IStatUpdate):
+	-item:Item
+	f:Apply(CurrentPlayer)
+
+V.class StatUsedItem(IStatUpdate):
+	-item:Item
+	f:Apply(CurrentPlayer)
+
+V.class StatDelItem(IStatUpdate):
+	-item:Item
+	f:Apply(CurrentPlayer)
+
+V.class StatAlien(IStatUpdate):
+	f:Apply(CurrentPlayer)
+
+V.class StatChangeHP(IStatUpdate):
+	-HP:int
+	f:Apply(CurrentPlayer)
+
+V.class StatUpdateFactory:
+	f:addItem(Item):IStatUpdate
+	f:usedItem(Item):IStatUpdate
+	f:delItem(Item):IStatUpdate
+	f:alien():IStatUpdate
+	f:changeHP(int):IStatUpdate
+
+--------------------------------------------------
+
+V.class IProtocol:
+	f:registerName(string)
+	f:registerRole(string)
+	f:doAction(Action)
+	f:disconnect()
+
+	signals:
+		f:dayTime()
+		f:nightTime()
+		f:startVote(Vote)
+		f:endVote(EndVote)
+		f:playersUpdate(Player[])
+		f:statUpdate(IStatUpdate)
+		f:event(IEvent)

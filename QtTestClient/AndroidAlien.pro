@@ -13,43 +13,83 @@ TARGET = AndroidAlien
 TEMPLATE = app
 
 
-SOURCES += tcpclient.cpp \
-    xmlmanager.cpp \
-    alienclient.cpp \
-    ui/game.cpp \
-    ui/lobby.cpp \
-    ui/lobbyregistername.cpp \
-    ui/lobbyregisterrole.cpp \
-    ui/lobbywaiting.cpp \
-    ui/mainwindow.cpp \
-    ui/playerlist.cpp \
-    ui/playerwidget.cpp \
-    ui/start.cpp \
-    main.cpp \
-    xmlprotocol.cpp
+SOURCES += main.cpp \
+    gameclient.cpp \
+    types/action.cpp \
+    types/itarget.cpp \
+    types/player.cpp \
+    types/currentplayer.cpp \
+    types/item.cpp \
+    factories/actionfactory.cpp \
+    events/ievent.cpp \
+    events/eventitem.cpp \
+    events/eventstatus.cpp \
+    events/eventrole.cpp \
+    events/eventvoting.cpp \
+    factories/eventfactory.cpp \
+    types/vote.cpp \
+    types/endvote.cpp \
+    statupdate/istatupdate.cpp \
+    statupdate/statadditem.cpp \
+    statupdate/statdelitem.cpp \
+    statupdate/statalien.cpp \
+    statupdate/statchangehp.cpp \
+    factories/statupdatefactory.cpp \
+    protocol/iprotocol.cpp \
+    protocol/xmlprotocol/xmlprotocol.cpp \
+    protocol/tcpclient.cpp \
+    mainwindow.cpp \
+    events/eventduty.cpp \
+    statupdate/statuseditem.cpp \
+    types/status.cpp \
+    qclickablelabel.cpp \
+    gametabs.cpp \
+    qplayerwidget.cpp \
+    statupdate/statchargeitem.cpp \
+    types/itemtype.cpp \
+    gameconfig.cpp
 
-HEADERS  += tcpclient.h \
-    xmlmanager.h \
-    alienclient.h \
-    ui/game.h \
-    ui/lobby.h \
-    ui/lobbyregistername.h \
-    ui/lobbyregisterrole.h \
-    ui/lobbywaiting.h \
-    ui/mainwindow.h \
-    ui/playerlist.h \
-    ui/playerwidget.h \
-    ui/start.h \
-    xmlprotocol.h \
-    types.h
+HEADERS  += gameclient.h \
+    types/action.h \
+    types/itarget.h \
+    types/player.h \
+    types/currentplayer.h \
+    types/item.h \
+    factories/actionfactory.h \
+    events/ievent.h \
+    events/eventitem.h \
+    events/eventstatus.h \
+    events/eventrole.h \
+    events/eventvoting.h \
+    factories/eventfactory.h \
+    types/vote.h \
+    types/endvote.h \
+    statupdate/istatupdate.h \
+    statupdate/statadditem.h \
+    statupdate/statdelitem.h \
+    statupdate/statalien.h \
+    statupdate/statchangehp.h \
+    factories/statupdatefactory.h \
+    protocol/iprotocol.h \
+    protocol/xmlprotocol/xmlprotocol.h \
+    protocol/tcpclient.h \
+    mainwindow.h \
+    types/status.h \
+    types/playerimage.h \
+    types/itemtype.h \
+    types/actiontype.h \
+    events/eventduty.h \
+    statupdate/statuseditem.h \
+    qclickablelabel.h \
+    gametabs.h \
+    qplayerwidget.h \
+    statupdate/statchargeitem.h \
+    gameconfig.h \
+    types/eventtype.h
 
-FORMS    += ui/form.ui \
-    ui/game.ui \
-    ui/lobby.ui \
-    ui/lobbyregistername.ui \
-    ui/lobbyregisterrole.ui \
-    ui/lobbywaiting.ui \
-    ui/mainwindow.ui \
-    ui/playerlist.ui \
-    ui/playerwidget.ui \
-    ui/start.ui
+FORMS    += \
+    mainwindow.ui \
+    player.ui
+
+RESOURCES += \
+    alienresources.qrc

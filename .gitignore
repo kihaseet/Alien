@@ -4,3 +4,4 @@ QtServer/libqjson.dll
 *.o
 build-*
 build_*
+QtServer/server1.pro.user

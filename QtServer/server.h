@@ -13,7 +13,6 @@ class Server : public QObject {
 Q_OBJECT
 private:
     QTcpServer* m_ptcpServer;
-    QWidget *_widget;
     quint16 m_nNextBlockSize;
 
 private:
@@ -21,7 +20,7 @@ private:
 
 
 public:
-    Server(int nPort, QWidget* pwgt);
+    Server(int nPort);
     void add_to_log(QString _name, QString msg);
 
 
