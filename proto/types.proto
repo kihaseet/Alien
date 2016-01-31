@@ -67,9 +67,16 @@ enum VotingType {
 
 // Метасообщения для таргетов
 message ITarget {
-	string name = 1;
-	Item item = 2;
-	Role role = 3;
+	enum TargetType {
+		TAT_NAME = 0;
+		TAT_ITEM = 1;
+		TAT_ROLE = 2;
+	}
+	
+	TargetType type = 1;
+	string name = 2;
+	Item item = 3;
+	Role role = 4;
 }
 
 // Общие сообщения
