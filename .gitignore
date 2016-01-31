@@ -3,3 +3,4 @@ QtServer/libqjson.dll
 *.a
 *.o
 build-*
+build_*
