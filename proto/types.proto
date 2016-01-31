@@ -22,13 +22,14 @@ enum Role {
 enum Action {
 	USE_ITEM = 0;
 	USE_ULT = 1;
-	ATTACK = 2;
-	INFECT = 3;
-	VOTE = 4;
-	UNVOTE = 5;
-	WAIT = 6;
-	UP = 7;
-	DOWN = 8;
+	USE_BADGE = 2;
+	ATTACK = 3;
+	INFECT = 4;
+	VOTE = 5;
+	UNVOTE = 6;
+	WAIT = 7;
+	UP = 8;
+	DOWN = 9;
 }
 
 enum Item {
