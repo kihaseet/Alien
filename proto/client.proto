@@ -1,0 +1,22 @@
+syntax = "proto3";
+package Xenophobia;
+
+import public "types.proto";
+
+message RegisterName {
+	string name = 1;
+}
+
+message RegisterRole {
+	types.Role role = 1;
+}
+
+message Disconnect {
+
+}
+
+message DoAction {
+	types.Action action = 1;
+	types.Item item = 2;
+	repeated types.ITarget targets = 3;
+}
