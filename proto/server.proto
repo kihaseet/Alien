@@ -34,11 +34,12 @@ message RegisterUpdate {
 
 // Начало игры
 message PlayerInfo {
-	 types.PlayerStatus status = 1;
-	 bool online = 2;
-	 bool onduty = 3;
-	 int32 avatar = 4; // TODO: что есть аватар?
-	 repeated types.Role roles = 5;
+	string name = 1;
+	 types.PlayerStatus status = 2;
+	 bool online = 3;
+	 bool onduty = 4;
+	 int32 avatar = 5; // TODO: что есть аватар?
+	 repeated types.Role roles = 6;
 }
 
 message StartGame {
@@ -60,7 +61,6 @@ message TimeSwitch {
 message Voting {
 	types.VotingType type = 1;
 	repeated types.ITarget targets = 2;
-	map<string, int32> votes_for = 3;
 }
 
 // Конец голосования
@@ -72,7 +72,7 @@ message EndVoting {
 
 // Список произошедших событий
 message Change {
-	repeated types.Event events = 1;
+	types.Event event = 1;
 }
 
 // События влияющие непосредственно на игрока/требующие от него действий
@@ -80,6 +80,7 @@ enum InvetoryChangeType {
 	ADD_ITEM = 0;
 	CHARGE_ITEM = 1;
 	DEL_ITEM = 2;
+	RECHARGE_ITEM = 3;
 }
 
 message InvetoryChange {
