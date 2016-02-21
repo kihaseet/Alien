@@ -14,21 +14,21 @@ public:
 public slots:
     void newAnalise(int _name, const QString input);
 
-    void slotSendVoteList(QList<VoteObject *> votelist);
-    void slotNameCorrect(int tempname, bool isCorrect);
-    void slotRoleCorrect(int _name, bool isCorrect);
-    void slotUpdateRoleList(QList<player*> NameRolelist);
-    void slotDisconnected(QList<player*>playerlist);
-
+    void slotRegisterAnswer(int connectID, RegisterStatusType isCorrect);
+    void slotRegisterUpdate(QList<player *> NameRolelist);
     void slotStartGame(QList<player*>playerlist);
-    void slotStartPhase(int dayNo, bool isDay);
-    void slotStartVoting(ROLE targets,QList<QString>list);
+    void slotTimeSwitch(int dayNo, TimeType type);
+    void slotPlayerDisconnect(QString name);
+
+    void slotVoting(VotingType type, QList<QString> list, ROLE targets);
     void slotEndVoting(ROLE targets,QString name,QString result);
+    void slotChange(TurnObject turn);
+    void slotSendMess(int ID, QString mess);
 
-    void slotSendMess(player *who, QString mess);
-    void slotSendTurn(TurnObject turn);
-    void slotSendStat(TurnObject turn);
-
+    void slotInventoryChange(int connectID, InvetoryChangeType type, ITEM item, int charge);
+    void slotPlayerChange(int connectID, PlayerChangeType type, int value);
+    void slotActionRequest(int connectID, RequestType type, QList<QString> targets);
+    void slotActionResult(int connectID, ResultType type, TURN_TYPE action);
 };
 
 #endif // PROTOBUF_MAKER_H

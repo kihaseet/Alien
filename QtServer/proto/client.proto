@@ -3,6 +3,13 @@ package Xenophobia;
 
 import public "types.proto";
 
+enum ClientMessageType {
+	CMT_REGISTER_NAME = 0;
+	CMT_REGISTER_ROLE = 1;
+	CMT_DISCONNECT = 2;
+	CMT_DO_ACTION = 3;
+}
+
 message RegisterName {
 	string name = 1;
 }
@@ -11,12 +18,15 @@ message RegisterRole {
 	types.Role role = 1;
 }
 
-message Disconnect {
-
-}
-
 message DoAction {
 	types.Action action = 1;
 	types.Item item = 2;
 	repeated types.ITarget targets = 3;
+}
+
+message ClientMessage {
+	ClientMessageType type = 1;
+	RegisterName reg_name = 2;
+	RegisterRole reg_role = 3;
+	DoAction do_action = 4;
 }

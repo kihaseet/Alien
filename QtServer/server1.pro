@@ -11,7 +11,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 targets = server1
 TEMPLATE = app
 
-CONFIG += warn_off
+CONFIG +=  c++11 warn_off
 
 SOURCES += main.cpp\
         mainwindow.cpp \

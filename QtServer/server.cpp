@@ -43,6 +43,7 @@ void Server::on_disconnected(){
     }
 }
 void Server::send2all(QString msg){
+    qDebug()<<msg;
     foreach (ClientSocket* client, m_clients) {
         QString tmp = QString::number(msg.size())+msg+'\n';
         QByteArray arrBlock = tmp.toLocal8Bit();
@@ -83,6 +84,7 @@ void Server::noVerifyClientName(int name){
 
 void Server::slotsendToClient(int _name,QString msg)
 {
+    qDebug()<<msg;
     foreach (ClientSocket* client, m_clients) {
         if (client->_name==_name){
             QString tmp = QString::number(msg.size())+msg+'\n';

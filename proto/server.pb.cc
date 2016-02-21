@@ -40,7 +40,6 @@ const ::google::protobuf::internal::GeneratedMessageReflection*
 const ::google::protobuf::Descriptor* Voting_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   Voting_reflection_ = NULL;
-const ::google::protobuf::Descriptor* Voting_VotesForEntry_descriptor_ = NULL;
 const ::google::protobuf::Descriptor* EndVoting_descriptor_ = NULL;
 const ::google::protobuf::internal::GeneratedMessageReflection*
   EndVoting_reflection_ = NULL;
@@ -162,10 +161,9 @@ void protobuf_AssignDesc_server_2eproto() {
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TimeSwitch, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(TimeSwitch, _is_default_instance_));
   Voting_descriptor_ = file->message_type(5);
-  static const int Voting_offsets_[3] = {
+  static const int Voting_offsets_[2] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Voting, type_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Voting, targets_),
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Voting, votes_for_),
   };
   Voting_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
@@ -178,7 +176,6 @@ void protobuf_AssignDesc_server_2eproto() {
       sizeof(Voting),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Voting, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Voting, _is_default_instance_));
-  Voting_VotesForEntry_descriptor_ = Voting_descriptor_->nested_type(0);
   EndVoting_descriptor_ = file->message_type(6);
   static const int EndVoting_offsets_[3] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(EndVoting, type_),
@@ -198,7 +195,7 @@ void protobuf_AssignDesc_server_2eproto() {
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(EndVoting, _is_default_instance_));
   Change_descriptor_ = file->message_type(7);
   static const int Change_offsets_[1] = {
-    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Change, events_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Change, event_),
   };
   Change_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
@@ -343,15 +340,6 @@ void protobuf_RegisterTypes(const ::std::string&) {
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
       Voting_descriptor_, &Voting::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
-        Voting_VotesForEntry_descriptor_,
-        ::google::protobuf::internal::MapEntry<
-            ::std::string,
-            ::google::protobuf::int32,
-            ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
-            ::google::protobuf::internal::WireFormatLite::TYPE_INT32,
-            0>::CreateDefaultInstance(
-                Voting_VotesForEntry_descriptor_));
-  ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
       EndVoting_descriptor_, &EndVoting::default_instance());
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedMessage(
       Change_descriptor_, &Change::default_instance());
@@ -418,54 +406,52 @@ void protobuf_AddDesc_server_2eproto() {
     "\005roles\030\006 \003(\0162\013.types.Role\"4\n\tStartGame\022\'"
     "\n\007players\030\001 \003(\0132\026.Xenophobia.PlayerInfo\""
     "D\n\nTimeSwitch\022\"\n\004time\030\001 \001(\0162\024.Xenophobia"
-    ".TimeType\022\022\n\nday_number\030\002 \001(\005\"\260\001\n\006Voting"
-    "\022\037\n\004type\030\001 \001(\0162\021.types.VotingType\022\037\n\007tar"
-    "gets\030\002 \003(\0132\016.types.ITarget\0223\n\tvotes_for\030"
-    "\003 \003(\0132 .Xenophobia.Voting.VotesForEntry\032"
-    "/\n\rVotesForEntry\022\013\n\003key\030\001 \001(\t\022\r\n\005value\030\002"
-    " \001(\005:\0028\001\"\\\n\tEndVoting\022\037\n\004type\030\001 \001(\0162\021.ty"
-    "pes.VotingType\022\036\n\006target\030\002 \001(\0132\016.types.I"
-    "Target\022\016\n\006result\030\003 \001(\t\"&\n\006Change\022\034\n\006even"
-    "ts\030\001 \003(\0132\014.types.Event\"i\n\016InvetoryChange"
-    "\022,\n\004type\030\001 \001(\0162\036.Xenophobia.InvetoryChan"
-    "geType\022\031\n\004item\030\002 \001(\0162\013.types.Item\022\016\n\006cha"
-    "rge\030\003 \001(\005\"I\n\014PlayerChange\022*\n\004type\030\001 \001(\0162"
-    "\034.Xenophobia.PlayerChangeType\022\r\n\005value\030\002"
-    " \001(\005\"W\n\rActionRequest\022%\n\004type\030\001 \001(\0162\027.Xe"
-    "nophobia.RequestType\022\037\n\007targets\030\002 \003(\0132\016."
-    "types.ITarget\"S\n\014ActionResult\022$\n\004type\030\001 "
-    "\001(\0162\026.Xenophobia.ResultType\022\035\n\006action\030\002 "
-    "\001(\0162\r.types.Action\"\274\004\n\rServerMessage\022+\n\004"
-    "type\030\001 \001(\0162\035.Xenophobia.ServerMessageTyp"
-    "e\0223\n\017register_answer\030\002 \001(\0132\032.Xenophobia."
-    "RegisterAnswer\0223\n\017register_update\030\003 \001(\0132"
-    "\032.Xenophobia.RegisterUpdate\022)\n\nstart_gam"
-    "e\030\004 \001(\0132\025.Xenophobia.StartGame\022+\n\013time_s"
-    "witch\030\005 \001(\0132\026.Xenophobia.TimeSwitch\022\"\n\006v"
-    "oting\030\006 \001(\0132\022.Xenophobia.Voting\022)\n\nend_v"
-    "oting\030\007 \001(\0132\025.Xenophobia.EndVoting\022\"\n\006ch"
-    "ange\030\010 \001(\0132\022.Xenophobia.Change\0224\n\020invent"
-    "ory_change\030\t \001(\0132\032.Xenophobia.InvetoryCh"
-    "ange\022/\n\rplayer_change\030\n \001(\0132\030.Xenophobia"
-    ".PlayerChange\0221\n\016action_request\030\013 \001(\0132\031."
-    "Xenophobia.ActionRequest\022/\n\raction_resul"
-    "t\030\014 \001(\0132\030.Xenophobia.ActionResult*\202\002\n\021Se"
-    "rverMessageType\022\027\n\023SMT_REGISTER_ANSWER\020\000"
-    "\022\027\n\023SMT_REGISTER_UPDATE\020\001\022\022\n\016SMT_START_G"
-    "AME\020\002\022\023\n\017SMT_TIME_SWITCH\020\003\022\016\n\nSMT_VOTING"
-    "\020\004\022\022\n\016SMT_END_VOTING\020\005\022\016\n\nSMT_CHANGE\020\006\022\030"
-    "\n\024SMT_INVENTORY_CHANGE\020\007\022\025\n\021SMT_PLAYER_C"
-    "HANGE\020\010\022\026\n\022SMT_ACTION_REQUEST\020\t\022\025\n\021SMT_A"
-    "CTION_RESULT\020\n*`\n\022RegisterStatusType\022\020\n\014"
-    "NAME_CORRECT\020\000\022\022\n\016NAME_INCORRECT\020\001\022\020\n\014RO"
-    "LE_CORRECT\020\002\022\022\n\016ROLE_INCORRECT\020\003*(\n\010Time"
-    "Type\022\016\n\nNIGHT_TIME\020\000\022\014\n\010DAY_TIME\020\001*A\n\022In"
-    "vetoryChangeType\022\014\n\010ADD_ITEM\020\000\022\017\n\013CHARGE"
-    "_ITEM\020\001\022\014\n\010DEL_ITEM\020\002*\?\n\020PlayerChangeTyp"
-    "e\022\r\n\tHP_CHANGE\020\000\022\t\n\005ALIEN\020\001\022\021\n\rSTATUS_CH"
-    "ANGE\020\002*2\n\013RequestType\022\020\n\014HARD_RESOLVE\020\000\022"
-    "\021\n\rNEED_ROTATION\020\001*+\n\nResultType\022\r\n\tUSED"
-    "_ITEM\020\000\022\016\n\nUSE_ACTION\020\001P\000b\006proto3", 2393);
+    ".TimeType\022\022\n\nday_number\030\002 \001(\005\"J\n\006Voting\022"
+    "\037\n\004type\030\001 \001(\0162\021.types.VotingType\022\037\n\007targ"
+    "ets\030\002 \003(\0132\016.types.ITarget\"\\\n\tEndVoting\022\037"
+    "\n\004type\030\001 \001(\0162\021.types.VotingType\022\036\n\006targe"
+    "t\030\002 \001(\0132\016.types.ITarget\022\016\n\006result\030\003 \001(\t\""
+    "%\n\006Change\022\033\n\005event\030\001 \001(\0132\014.types.Event\"i"
+    "\n\016InvetoryChange\022,\n\004type\030\001 \001(\0162\036.Xenopho"
+    "bia.InvetoryChangeType\022\031\n\004item\030\002 \001(\0162\013.t"
+    "ypes.Item\022\016\n\006charge\030\003 \001(\005\"I\n\014PlayerChang"
+    "e\022*\n\004type\030\001 \001(\0162\034.Xenophobia.PlayerChang"
+    "eType\022\r\n\005value\030\002 \001(\005\"W\n\rActionRequest\022%\n"
+    "\004type\030\001 \001(\0162\027.Xenophobia.RequestType\022\037\n\007"
+    "targets\030\002 \003(\0132\016.types.ITarget\"S\n\014ActionR"
+    "esult\022$\n\004type\030\001 \001(\0162\026.Xenophobia.ResultT"
+    "ype\022\035\n\006action\030\002 \001(\0162\r.types.Action\"\274\004\n\rS"
+    "erverMessage\022+\n\004type\030\001 \001(\0162\035.Xenophobia."
+    "ServerMessageType\0223\n\017register_answer\030\002 \001"
+    "(\0132\032.Xenophobia.RegisterAnswer\0223\n\017regist"
+    "er_update\030\003 \001(\0132\032.Xenophobia.RegisterUpd"
+    "ate\022)\n\nstart_game\030\004 \001(\0132\025.Xenophobia.Sta"
+    "rtGame\022+\n\013time_switch\030\005 \001(\0132\026.Xenophobia"
+    ".TimeSwitch\022\"\n\006voting\030\006 \001(\0132\022.Xenophobia"
+    ".Voting\022)\n\nend_voting\030\007 \001(\0132\025.Xenophobia"
+    ".EndVoting\022\"\n\006change\030\010 \001(\0132\022.Xenophobia."
+    "Change\0224\n\020inventory_change\030\t \001(\0132\032.Xenop"
+    "hobia.InvetoryChange\022/\n\rplayer_change\030\n "
+    "\001(\0132\030.Xenophobia.PlayerChange\0221\n\016action_"
+    "request\030\013 \001(\0132\031.Xenophobia.ActionRequest"
+    "\022/\n\raction_result\030\014 \001(\0132\030.Xenophobia.Act"
+    "ionResult*\202\002\n\021ServerMessageType\022\027\n\023SMT_R"
+    "EGISTER_ANSWER\020\000\022\027\n\023SMT_REGISTER_UPDATE\020"
+    "\001\022\022\n\016SMT_START_GAME\020\002\022\023\n\017SMT_TIME_SWITCH"
+    "\020\003\022\016\n\nSMT_VOTING\020\004\022\022\n\016SMT_END_VOTING\020\005\022\016"
+    "\n\nSMT_CHANGE\020\006\022\030\n\024SMT_INVENTORY_CHANGE\020\007"
+    "\022\025\n\021SMT_PLAYER_CHANGE\020\010\022\026\n\022SMT_ACTION_RE"
+    "QUEST\020\t\022\025\n\021SMT_ACTION_RESULT\020\n*`\n\022Regist"
+    "erStatusType\022\020\n\014NAME_CORRECT\020\000\022\022\n\016NAME_I"
+    "NCORRECT\020\001\022\020\n\014ROLE_CORRECT\020\002\022\022\n\016ROLE_INC"
+    "ORRECT\020\003*(\n\010TimeType\022\016\n\nNIGHT_TIME\020\000\022\014\n\010"
+    "DAY_TIME\020\001*T\n\022InvetoryChangeType\022\014\n\010ADD_"
+    "ITEM\020\000\022\017\n\013CHARGE_ITEM\020\001\022\014\n\010DEL_ITEM\020\002\022\021\n"
+    "\rRECHARGE_ITEM\020\003*\?\n\020PlayerChangeType\022\r\n\t"
+    "HP_CHANGE\020\000\022\t\n\005ALIEN\020\001\022\021\n\rSTATUS_CHANGE\020"
+    "\002*2\n\013RequestType\022\020\n\014HARD_RESOLVE\020\000\022\021\n\rNE"
+    "ED_ROTATION\020\001*+\n\nResultType\022\r\n\tUSED_ITEM"
+    "\020\000\022\016\n\nUSE_ACTION\020\001P\000b\006proto3", 2308);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "server.proto", &protobuf_RegisterTypes);
   RegisterAnswer::default_instance_ = new RegisterAnswer();
@@ -565,6 +551,7 @@ bool InvetoryChangeType_IsValid(int value) {
     case 0:
     case 1:
     case 2:
+    case 3:
       return true;
     default:
       return false;
@@ -2260,7 +2247,6 @@ void TimeSwitch::clear_day_number() {
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int Voting::kTypeFieldNumber;
 const int Voting::kTargetsFieldNumber;
-const int Voting::kVotesForFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Voting::Voting()
@@ -2285,10 +2271,6 @@ void Voting::SharedCtor() {
     _is_default_instance_ = false;
   _cached_size_ = 0;
   type_ = 0;
-  votes_for_.SetAssignDescriptorCallback(
-      protobuf_AssignDescriptorsOnce);
-  votes_for_.SetEntryDescriptor(
-      &::Xenophobia::Voting_VotesForEntry_descriptor_);
 }
 
 Voting::~Voting() {
@@ -2329,7 +2311,6 @@ Voting* Voting::New(::google::protobuf::Arena* arena) const {
 void Voting::Clear() {
   type_ = 0;
   targets_.Clear();
-  votes_for_.Clear();
 }
 
 bool Voting::MergePartialFromCodedStream(
@@ -2369,28 +2350,6 @@ bool Voting::MergePartialFromCodedStream(
           goto handle_unusual;
         }
         if (input->ExpectTag(18)) goto parse_loop_targets;
-        if (input->ExpectTag(26)) goto parse_loop_votes_for;
-        input->UnsafeDecrementRecursionDepth();
-        break;
-      }
-
-      // map<string, int32> votes_for = 3;
-      case 3: {
-        if (tag == 26) {
-          DO_(input->IncrementRecursionDepth());
-         parse_loop_votes_for:
-          ::google::protobuf::scoped_ptr<Voting_VotesForEntry> entry(votes_for_.NewEntry());
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-              input, entry.get()));
-          (*mutable_votes_for())[entry->key()] = *entry->mutable_value();
-          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-            entry->key().data(), entry->key().length(),
-            ::google::protobuf::internal::WireFormatLite::PARSE,
-            "Xenophobia.Voting.VotesForEntry.key"));
-        } else {
-          goto handle_unusual;
-        }
-        if (input->ExpectTag(26)) goto parse_loop_votes_for;
         input->UnsafeDecrementRecursionDepth();
         if (input->ExpectAtEnd()) goto success;
         break;
@@ -2432,22 +2391,6 @@ void Voting::SerializeWithCachedSizes(
       2, this->targets(i), output);
   }
 
-  // map<string, int32> votes_for = 3;
-  {
-    ::google::protobuf::scoped_ptr<Voting_VotesForEntry> entry;
-    for (::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >::const_iterator
-        it = this->votes_for().begin();
-        it != this->votes_for().end(); ++it) {
-      entry.reset(votes_for_.NewEntryWrapper(it->first, it->second));
-      ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-          3, *entry, output);
-      ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-        it->first.data(), it->first.length(),
-        ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-        "Xenophobia.Voting.VotesForEntry.key");
-    }
-  }
-
   // @@protoc_insertion_point(serialize_end:Xenophobia.Voting)
 }
 
@@ -2465,23 +2408,6 @@ void Voting::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
         2, this->targets(i), target);
-  }
-
-  // map<string, int32> votes_for = 3;
-  {
-    ::google::protobuf::scoped_ptr<Voting_VotesForEntry> entry;
-    for (::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >::const_iterator
-        it = this->votes_for().begin();
-        it != this->votes_for().end(); ++it) {
-      entry.reset(votes_for_.NewEntryWrapper(it->first, it->second));
-      target = ::google::protobuf::internal::WireFormatLite::
-          WriteMessageNoVirtualToArray(
-              3, *entry, target);
-      ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
-        it->first.data(), it->first.length(),
-        ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-        "Xenophobia.Voting.VotesForEntry.key");
-    }
   }
 
   // @@protoc_insertion_point(serialize_to_array_end:Xenophobia.Voting)
@@ -2505,19 +2431,6 @@ int Voting::ByteSize() const {
         this->targets(i));
   }
 
-  // map<string, int32> votes_for = 3;
-  total_size += 1 * this->votes_for_size();
-  {
-    ::google::protobuf::scoped_ptr<Voting_VotesForEntry> entry;
-    for (::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >::const_iterator
-        it = this->votes_for().begin();
-        it != this->votes_for().end(); ++it) {
-      entry.reset(votes_for_.NewEntryWrapper(it->first, it->second));
-      total_size += ::google::protobuf::internal::WireFormatLite::
-          MessageSizeNoVirtual(*entry);
-    }
-  }
-
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = total_size;
   GOOGLE_SAFE_CONCURRENT_WRITES_END();
@@ -2539,7 +2452,6 @@ void Voting::MergeFrom(const ::google::protobuf::Message& from) {
 void Voting::MergeFrom(const Voting& from) {
   if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
   targets_.MergeFrom(from.targets_);
-  votes_for_.MergeFrom(from.votes_for_);
   if (from.type() != 0) {
     set_type(from.type());
   }
@@ -2569,7 +2481,6 @@ void Voting::Swap(Voting* other) {
 void Voting::InternalSwap(Voting* other) {
   std::swap(type_, other->type_);
   targets_.UnsafeArenaSwap(&other->targets_);
-  votes_for_.Swap(&other->votes_for_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -2627,24 +2538,6 @@ const ::google::protobuf::RepeatedPtrField< ::types::ITarget >&
 Voting::targets() const {
   // @@protoc_insertion_point(field_list:Xenophobia.Voting.targets)
   return targets_;
-}
-
-// map<string, int32> votes_for = 3;
-int Voting::votes_for_size() const {
-  return votes_for_.size();
-}
-void Voting::clear_votes_for() {
-  votes_for_.Clear();
-}
- const ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >&
-Voting::votes_for() const {
-  // @@protoc_insertion_point(field_map:Xenophobia.Voting.votes_for)
-  return votes_for_.GetMap();
-}
- ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >*
-Voting::mutable_votes_for() {
-  // @@protoc_insertion_point(field_mutable_map:Xenophobia.Voting.votes_for)
-  return votes_for_.MutableMap();
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS
@@ -3058,7 +2951,7 @@ void EndVoting::clear_result() {
 // ===================================================================
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
-const int Change::kEventsFieldNumber;
+const int Change::kEventFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Change::Change()
@@ -3069,6 +2962,7 @@ Change::Change()
 
 void Change::InitAsDefaultInstance() {
   _is_default_instance_ = true;
+  event_ = const_cast< ::types::Event*>(&::types::Event::default_instance());
 }
 
 Change::Change(const Change& from)
@@ -3082,6 +2976,7 @@ Change::Change(const Change& from)
 void Change::SharedCtor() {
     _is_default_instance_ = false;
   _cached_size_ = 0;
+  event_ = NULL;
 }
 
 Change::~Change() {
@@ -3091,6 +2986,7 @@ Change::~Change() {
 
 void Change::SharedDtor() {
   if (this != default_instance_) {
+    delete event_;
   }
 }
 
@@ -3120,7 +3016,8 @@ Change* Change::New(::google::protobuf::Arena* arena) const {
 }
 
 void Change::Clear() {
-  events_.Clear();
+  if (GetArenaNoVirtual() == NULL && event_ != NULL) delete event_;
+  event_ = NULL;
 }
 
 bool Change::MergePartialFromCodedStream(
@@ -3133,18 +3030,14 @@ bool Change::MergePartialFromCodedStream(
     tag = p.first;
     if (!p.second) goto handle_unusual;
     switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
-      // repeated .types.Event events = 1;
+      // optional .types.Event event = 1;
       case 1: {
         if (tag == 10) {
-          DO_(input->IncrementRecursionDepth());
-         parse_loop_events:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtualNoRecursionDepth(
-                input, add_events()));
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
+               input, mutable_event()));
         } else {
           goto handle_unusual;
         }
-        if (input->ExpectTag(10)) goto parse_loop_events;
-        input->UnsafeDecrementRecursionDepth();
         if (input->ExpectAtEnd()) goto success;
         break;
       }
@@ -3173,10 +3066,10 @@ failure:
 void Change::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
   // @@protoc_insertion_point(serialize_start:Xenophobia.Change)
-  // repeated .types.Event events = 1;
-  for (unsigned int i = 0, n = this->events_size(); i < n; i++) {
+  // optional .types.Event event = 1;
+  if (this->has_event()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      1, this->events(i), output);
+      1, *this->event_, output);
   }
 
   // @@protoc_insertion_point(serialize_end:Xenophobia.Change)
@@ -3185,11 +3078,11 @@ void Change::SerializeWithCachedSizes(
 ::google::protobuf::uint8* Change::SerializeWithCachedSizesToArray(
     ::google::protobuf::uint8* target) const {
   // @@protoc_insertion_point(serialize_to_array_start:Xenophobia.Change)
-  // repeated .types.Event events = 1;
-  for (unsigned int i = 0, n = this->events_size(); i < n; i++) {
+  // optional .types.Event event = 1;
+  if (this->has_event()) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        1, this->events(i), target);
+        1, *this->event_, target);
   }
 
   // @@protoc_insertion_point(serialize_to_array_end:Xenophobia.Change)
@@ -3199,12 +3092,11 @@ void Change::SerializeWithCachedSizes(
 int Change::ByteSize() const {
   int total_size = 0;
 
-  // repeated .types.Event events = 1;
-  total_size += 1 * this->events_size();
-  for (int i = 0; i < this->events_size(); i++) {
-    total_size +=
+  // optional .types.Event event = 1;
+  if (this->has_event()) {
+    total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        this->events(i));
+        *this->event_);
   }
 
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
@@ -3227,7 +3119,9 @@ void Change::MergeFrom(const ::google::protobuf::Message& from) {
 
 void Change::MergeFrom(const Change& from) {
   if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
-  events_.MergeFrom(from.events_);
+  if (from.has_event()) {
+    mutable_event()->::types::Event::MergeFrom(from.event());
+  }
 }
 
 void Change::CopyFrom(const ::google::protobuf::Message& from) {
@@ -3252,7 +3146,7 @@ void Change::Swap(Change* other) {
   InternalSwap(other);
 }
 void Change::InternalSwap(Change* other) {
-  events_.UnsafeArenaSwap(&other->events_);
+  std::swap(event_, other->event_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -3268,34 +3162,41 @@ void Change::InternalSwap(Change* other) {
 #if PROTOBUF_INLINE_NOT_IN_HEADERS
 // Change
 
-// repeated .types.Event events = 1;
-int Change::events_size() const {
-  return events_.size();
+// optional .types.Event event = 1;
+bool Change::has_event() const {
+  return !_is_default_instance_ && event_ != NULL;
 }
-void Change::clear_events() {
-  events_.Clear();
+void Change::clear_event() {
+  if (GetArenaNoVirtual() == NULL && event_ != NULL) delete event_;
+  event_ = NULL;
 }
-const ::types::Event& Change::events(int index) const {
-  // @@protoc_insertion_point(field_get:Xenophobia.Change.events)
-  return events_.Get(index);
+const ::types::Event& Change::event() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.Change.event)
+  return event_ != NULL ? *event_ : *default_instance_->event_;
 }
-::types::Event* Change::mutable_events(int index) {
-  // @@protoc_insertion_point(field_mutable:Xenophobia.Change.events)
-  return events_.Mutable(index);
+::types::Event* Change::mutable_event() {
+  
+  if (event_ == NULL) {
+    event_ = new ::types::Event;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.Change.event)
+  return event_;
 }
-::types::Event* Change::add_events() {
-  // @@protoc_insertion_point(field_add:Xenophobia.Change.events)
-  return events_.Add();
+::types::Event* Change::release_event() {
+  
+  ::types::Event* temp = event_;
+  event_ = NULL;
+  return temp;
 }
-::google::protobuf::RepeatedPtrField< ::types::Event >*
-Change::mutable_events() {
-  // @@protoc_insertion_point(field_mutable_list:Xenophobia.Change.events)
-  return &events_;
-}
-const ::google::protobuf::RepeatedPtrField< ::types::Event >&
-Change::events() const {
-  // @@protoc_insertion_point(field_list:Xenophobia.Change.events)
-  return events_;
+void Change::set_allocated_event(::types::Event* event) {
+  delete event_;
+  event_ = event;
+  if (event) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.Change.event)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

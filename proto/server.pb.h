@@ -132,12 +132,13 @@ enum InvetoryChangeType {
   ADD_ITEM = 0,
   CHARGE_ITEM = 1,
   DEL_ITEM = 2,
+  RECHARGE_ITEM = 3,
   InvetoryChangeType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   InvetoryChangeType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool InvetoryChangeType_IsValid(int value);
 const InvetoryChangeType InvetoryChangeType_MIN = ADD_ITEM;
-const InvetoryChangeType InvetoryChangeType_MAX = DEL_ITEM;
+const InvetoryChangeType InvetoryChangeType_MAX = RECHARGE_ITEM;
 const int InvetoryChangeType_ARRAYSIZE = InvetoryChangeType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* InvetoryChangeType_descriptor();
@@ -732,7 +733,6 @@ class Voting : public ::google::protobuf::Message {
 
   // nested types ----------------------------------------------------
 
-
   // accessors -------------------------------------------------------
 
   // optional .types.VotingType type = 1;
@@ -753,32 +753,12 @@ class Voting : public ::google::protobuf::Message {
   const ::google::protobuf::RepeatedPtrField< ::types::ITarget >&
       targets() const;
 
-  // map<string, int32> votes_for = 3;
-  int votes_for_size() const;
-  void clear_votes_for();
-  static const int kVotesForFieldNumber = 3;
-  const ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >&
-      votes_for() const;
-  ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >*
-      mutable_votes_for();
-
   // @@protoc_insertion_point(class_scope:Xenophobia.Voting)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   bool _is_default_instance_;
   ::google::protobuf::RepeatedPtrField< ::types::ITarget > targets_;
-  typedef ::google::protobuf::internal::MapEntryLite<
-      ::std::string, ::google::protobuf::int32,
-      ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
-      ::google::protobuf::internal::WireFormatLite::TYPE_INT32,
-      0 >
-      Voting_VotesForEntry;
-  ::google::protobuf::internal::MapField<
-      ::std::string, ::google::protobuf::int32,
-      ::google::protobuf::internal::WireFormatLite::TYPE_STRING,
-      ::google::protobuf::internal::WireFormatLite::TYPE_INT32,
-      0 > votes_for_;
   int type_;
   mutable int _cached_size_;
   friend void  protobuf_AddDesc_server_2eproto();
@@ -946,24 +926,21 @@ class Change : public ::google::protobuf::Message {
 
   // accessors -------------------------------------------------------
 
-  // repeated .types.Event events = 1;
-  int events_size() const;
-  void clear_events();
-  static const int kEventsFieldNumber = 1;
-  const ::types::Event& events(int index) const;
-  ::types::Event* mutable_events(int index);
-  ::types::Event* add_events();
-  ::google::protobuf::RepeatedPtrField< ::types::Event >*
-      mutable_events();
-  const ::google::protobuf::RepeatedPtrField< ::types::Event >&
-      events() const;
+  // optional .types.Event event = 1;
+  bool has_event() const;
+  void clear_event();
+  static const int kEventFieldNumber = 1;
+  const ::types::Event& event() const;
+  ::types::Event* mutable_event();
+  ::types::Event* release_event();
+  void set_allocated_event(::types::Event* event);
 
   // @@protoc_insertion_point(class_scope:Xenophobia.Change)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   bool _is_default_instance_;
-  ::google::protobuf::RepeatedPtrField< ::types::Event > events_;
+  ::types::Event* event_;
   mutable int _cached_size_;
   friend void  protobuf_AddDesc_server_2eproto();
   friend void protobuf_AssignDesc_server_2eproto();
@@ -1804,24 +1781,6 @@ Voting::targets() const {
   return targets_;
 }
 
-// map<string, int32> votes_for = 3;
-inline int Voting::votes_for_size() const {
-  return votes_for_.size();
-}
-inline void Voting::clear_votes_for() {
-  votes_for_.Clear();
-}
-inline const ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >&
-Voting::votes_for() const {
-  // @@protoc_insertion_point(field_map:Xenophobia.Voting.votes_for)
-  return votes_for_.GetMap();
-}
-inline ::google::protobuf::Map< ::std::string, ::google::protobuf::int32 >*
-Voting::mutable_votes_for() {
-  // @@protoc_insertion_point(field_mutable_map:Xenophobia.Voting.votes_for)
-  return votes_for_.MutableMap();
-}
-
 // -------------------------------------------------------------------
 
 // EndVoting
@@ -1924,34 +1883,41 @@ inline void EndVoting::set_allocated_result(::std::string* result) {
 
 // Change
 
-// repeated .types.Event events = 1;
-inline int Change::events_size() const {
-  return events_.size();
+// optional .types.Event event = 1;
+inline bool Change::has_event() const {
+  return !_is_default_instance_ && event_ != NULL;
 }
-inline void Change::clear_events() {
-  events_.Clear();
+inline void Change::clear_event() {
+  if (GetArenaNoVirtual() == NULL && event_ != NULL) delete event_;
+  event_ = NULL;
 }
-inline const ::types::Event& Change::events(int index) const {
-  // @@protoc_insertion_point(field_get:Xenophobia.Change.events)
-  return events_.Get(index);
+inline const ::types::Event& Change::event() const {
+  // @@protoc_insertion_point(field_get:Xenophobia.Change.event)
+  return event_ != NULL ? *event_ : *default_instance_->event_;
 }
-inline ::types::Event* Change::mutable_events(int index) {
-  // @@protoc_insertion_point(field_mutable:Xenophobia.Change.events)
-  return events_.Mutable(index);
+inline ::types::Event* Change::mutable_event() {
+  
+  if (event_ == NULL) {
+    event_ = new ::types::Event;
+  }
+  // @@protoc_insertion_point(field_mutable:Xenophobia.Change.event)
+  return event_;
 }
-inline ::types::Event* Change::add_events() {
-  // @@protoc_insertion_point(field_add:Xenophobia.Change.events)
-  return events_.Add();
+inline ::types::Event* Change::release_event() {
+  
+  ::types::Event* temp = event_;
+  event_ = NULL;
+  return temp;
 }
-inline ::google::protobuf::RepeatedPtrField< ::types::Event >*
-Change::mutable_events() {
-  // @@protoc_insertion_point(field_mutable_list:Xenophobia.Change.events)
-  return &events_;
-}
-inline const ::google::protobuf::RepeatedPtrField< ::types::Event >&
-Change::events() const {
-  // @@protoc_insertion_point(field_list:Xenophobia.Change.events)
-  return events_;
+inline void Change::set_allocated_event(::types::Event* event) {
+  delete event_;
+  event_ = event;
+  if (event) {
+    
+  } else {
+    
+  }
+  // @@protoc_insertion_point(field_set_allocated:Xenophobia.Change.event)
 }
 
 // -------------------------------------------------------------------

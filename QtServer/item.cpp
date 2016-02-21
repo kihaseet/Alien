@@ -99,7 +99,7 @@ void Blaster::use_item_night(QQueue<QString> whom){
 void Blaster::ult_item(QQueue<QString> whom){
     qDebug()<<"Blaster::ult_item(QString whom)"<<whom;
     _game->playerlist->value(whom.first())->HP -= 1;
-    if(_game->daytime)
+    if(_game->daytime == DAY_TIME)
         //_game->slot_down(TurnObject(TT_DOWN,whom));
         _game->check_HP(_game->playerlist->value(whom.first()));
 
@@ -118,7 +118,7 @@ void Injector::use_item_day(QQueue<QString> whom)
     qDebug()<<"Injector::use_item_day(QString whom)"<<whom;
     _game->playerlist->value(whom.first())->HP += 1;
     _game->check_HP(_game->playerlist->value(whom.first()));
-    if(_game->daytime && _game->playerlist->value(whom.first())->status == 2)
+    if((_game->daytime == DAY_TIME) && _game->playerlist->value(whom.first())->status == 2)
         _game->slot_up(TurnObject(TT_UP,whom));
     this->power = 2;
 }
@@ -236,7 +236,7 @@ void Scanner::ult_item(QQueue<QString> whom){
                 var->HP -= 1;
             }else{
                 var->HP -= 2;
-                if(_game->daytime)
+                if(_game->daytime == DAY_TIME)
                 {
                     _game->slot_down(TurnObject(TT_DOWN,var->name));
                 }

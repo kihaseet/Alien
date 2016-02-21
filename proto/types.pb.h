@@ -155,17 +155,23 @@ enum EventType {
   ET_USE_ITEM = 0,
   ET_USE_ULT = 1,
   ET_USE_BADGE = 2,
-  ET_CHANGE_STATUS = 3,
-  ET_GET_ROLE = 4,
-  ET_DEL_ROLE = 5,
-  ET_VOTING_UP = 6,
-  ET_VOTING_DOWN = 7,
+  ET_GET_ROLE = 3,
+  ET_DEL_ROLE = 4,
+  ET_INGAME_MESSAGE = 5,
+  ET_GET_DUTY = 6,
+  ET_CONNECT = 7,
+  ET_DISCONNECT = 8,
+  ET_DIED = 9,
+  ET_DOWN = 10,
+  ET_UP = 11,
+  ET_VOTE = 12,
+  ET_UNVOTE = 13,
   EventType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   EventType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool EventType_IsValid(int value);
 const EventType EventType_MIN = ET_USE_ITEM;
-const EventType EventType_MAX = ET_VOTING_DOWN;
+const EventType EventType_MAX = ET_UNVOTE;
 const int EventType_ARRAYSIZE = EventType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* EventType_descriptor();
@@ -179,14 +185,19 @@ inline bool EventType_Parse(
     EventType_descriptor(), name, value);
 }
 enum VotingType {
-  FOR_ROLE = 0,
-  FOR_ALIEN = 1,
+  FOR_ALIEN = 0,
+  FOR_CAPTAIN = 1,
+  FOR_DOCTOR = 2,
+  FOR_GUNMEN = 3,
+  FOR_ENGINEER = 4,
+  FOR_SCIENTIST = 5,
+  FOR_SIGNALMEN = 6,
   VotingType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   VotingType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool VotingType_IsValid(int value);
-const VotingType VotingType_MIN = FOR_ROLE;
-const VotingType VotingType_MAX = FOR_ALIEN;
+const VotingType VotingType_MIN = FOR_ALIEN;
+const VotingType VotingType_MAX = FOR_SIGNALMEN;
 const int VotingType_ARRAYSIZE = VotingType_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* VotingType_descriptor();
@@ -407,14 +418,28 @@ class Event : public ::google::protobuf::Message {
   ::types::ITarget* release_event_object();
   void set_allocated_event_object(::types::ITarget* event_object);
 
-  // optional .types.ITarget event_target = 4;
-  bool has_event_target() const;
+  // repeated .types.ITarget event_target = 4;
+  int event_target_size() const;
   void clear_event_target();
   static const int kEventTargetFieldNumber = 4;
-  const ::types::ITarget& event_target() const;
-  ::types::ITarget* mutable_event_target();
-  ::types::ITarget* release_event_target();
-  void set_allocated_event_target(::types::ITarget* event_target);
+  const ::types::ITarget& event_target(int index) const;
+  ::types::ITarget* mutable_event_target(int index);
+  ::types::ITarget* add_event_target();
+  ::google::protobuf::RepeatedPtrField< ::types::ITarget >*
+      mutable_event_target();
+  const ::google::protobuf::RepeatedPtrField< ::types::ITarget >&
+      event_target() const;
+
+  // optional string payload = 5;
+  void clear_payload();
+  static const int kPayloadFieldNumber = 5;
+  const ::std::string& payload() const;
+  void set_payload(const ::std::string& value);
+  void set_payload(const char* value);
+  void set_payload(const char* value, size_t size);
+  ::std::string* mutable_payload();
+  ::std::string* release_payload();
+  void set_allocated_payload(::std::string* payload);
 
   // @@protoc_insertion_point(class_scope:types.Event)
  private:
@@ -423,7 +448,8 @@ class Event : public ::google::protobuf::Message {
   bool _is_default_instance_;
   ::types::ITarget* event_who_;
   ::types::ITarget* event_object_;
-  ::types::ITarget* event_target_;
+  ::google::protobuf::RepeatedPtrField< ::types::ITarget > event_target_;
+  ::google::protobuf::internal::ArenaStringPtr payload_;
   int event_;
   mutable int _cached_size_;
   friend void  protobuf_AddDesc_types_2eproto();
@@ -618,41 +644,77 @@ inline void Event::set_allocated_event_object(::types::ITarget* event_object) {
   // @@protoc_insertion_point(field_set_allocated:types.Event.event_object)
 }
 
-// optional .types.ITarget event_target = 4;
-inline bool Event::has_event_target() const {
-  return !_is_default_instance_ && event_target_ != NULL;
+// repeated .types.ITarget event_target = 4;
+inline int Event::event_target_size() const {
+  return event_target_.size();
 }
 inline void Event::clear_event_target() {
-  if (GetArenaNoVirtual() == NULL && event_target_ != NULL) delete event_target_;
-  event_target_ = NULL;
+  event_target_.Clear();
 }
-inline const ::types::ITarget& Event::event_target() const {
+inline const ::types::ITarget& Event::event_target(int index) const {
   // @@protoc_insertion_point(field_get:types.Event.event_target)
-  return event_target_ != NULL ? *event_target_ : *default_instance_->event_target_;
+  return event_target_.Get(index);
 }
-inline ::types::ITarget* Event::mutable_event_target() {
-  
-  if (event_target_ == NULL) {
-    event_target_ = new ::types::ITarget;
-  }
+inline ::types::ITarget* Event::mutable_event_target(int index) {
   // @@protoc_insertion_point(field_mutable:types.Event.event_target)
+  return event_target_.Mutable(index);
+}
+inline ::types::ITarget* Event::add_event_target() {
+  // @@protoc_insertion_point(field_add:types.Event.event_target)
+  return event_target_.Add();
+}
+inline ::google::protobuf::RepeatedPtrField< ::types::ITarget >*
+Event::mutable_event_target() {
+  // @@protoc_insertion_point(field_mutable_list:types.Event.event_target)
+  return &event_target_;
+}
+inline const ::google::protobuf::RepeatedPtrField< ::types::ITarget >&
+Event::event_target() const {
+  // @@protoc_insertion_point(field_list:types.Event.event_target)
   return event_target_;
 }
-inline ::types::ITarget* Event::release_event_target() {
-  
-  ::types::ITarget* temp = event_target_;
-  event_target_ = NULL;
-  return temp;
+
+// optional string payload = 5;
+inline void Event::clear_payload() {
+  payload_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-inline void Event::set_allocated_event_target(::types::ITarget* event_target) {
-  delete event_target_;
-  event_target_ = event_target;
-  if (event_target) {
+inline const ::std::string& Event::payload() const {
+  // @@protoc_insertion_point(field_get:types.Event.payload)
+  return payload_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Event::set_payload(const ::std::string& value) {
+  
+  payload_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:types.Event.payload)
+}
+inline void Event::set_payload(const char* value) {
+  
+  payload_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:types.Event.payload)
+}
+inline void Event::set_payload(const char* value, size_t size) {
+  
+  payload_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:types.Event.payload)
+}
+inline ::std::string* Event::mutable_payload() {
+  
+  // @@protoc_insertion_point(field_mutable:types.Event.payload)
+  return payload_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* Event::release_payload() {
+  
+  return payload_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void Event::set_allocated_payload(::std::string* payload) {
+  if (payload != NULL) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:types.Event.event_target)
+  payload_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), payload);
+  // @@protoc_insertion_point(field_set_allocated:types.Event.payload)
 }
 
 #endif  // !PROTOBUF_INLINE_NOT_IN_HEADERS

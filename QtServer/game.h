@@ -21,7 +21,7 @@ Q_OBJECT
 
 public:
     bool started;
-    bool daytime;
+    TimeType daytime;
     int currentday;
     bool hardresolve; //true если во время голосования решение принимает капитан
     QString mopper;//дежурный
@@ -62,7 +62,7 @@ public:
 
     bool isHunted(QStringList playerhunt, TurnObject turn);
     void slot_use_battery(ITEM item);
-    TurnObject makeRotationList();
+    QList<QString> makeRotationList();
     void day_gameover();
 signals:
     void GuiUpdatePlayerlist(QList<player*>list);
@@ -74,21 +74,24 @@ signals:
     void startPhase(int dayNo,bool day);
     void startvote(ROLE tar,QList<QString>list);
     void endvote(ROLE role,QString name,QString result);
-    void send_votelist(QList<VoteObject*>list);
     void send_changes(TurnObject turn);
     void send_stat(TurnObject turn);
-    void send_mess(player* who,QString mess);
-
-    void namecorrect(int name, bool isCorr);
-    void rolecorrect(int name, bool isCorr);
-    void sendrolelist2all(QList <player*> pllst);
+    void send_mess(int whoID,QString mess);
     void game_over();
 
-
-    void send_events(player* who);
-
-    void send_nightmare(QQueue <TurnObject>_n,QList <player*> p);
-
+    /*блок сигналов для нового протокола*/
+    void sigGamePlayerDisconnect(QString name);
+    void sigGameRegisterAnswer(int connectID, RegisterStatusType isCorrect);
+    void sigGameRegisterUpdate(QList<player*> NameRolelist);
+    void sigGameStartGame(QList<player*>playerlist);
+    void sigGameTimeSwitch(int dayNo, TimeType type);
+    void sigGameVoting(VotingType type ,QList<QString>list, ROLE targets);
+    void sigGameEndVoting(ROLE targets,QString name,QString result);
+    void sigGameChange(TurnObject turn);                                      //изменения с другими игроками
+    void sigGameInventoryChange(int connectID,InvetoryChangeType type, ITEM item, int charge);  //изменения в инвентаре
+    void sigGamePlayerChange(int connectID, PlayerChangeType type, int value);                  //изменение с хп, заражением или статусом(?)
+    void sigGameActionRequest(int connectID, RequestType type, QList<QString> targets);         //посылается при хардрезолве и нидротации
+    void sigGameActionResult(int connectID, ResultType type, TURN_TYPE action);                 //подтверждение действия или предмета
 
 public slots:
     void register_new_player(RegisterObject reg);

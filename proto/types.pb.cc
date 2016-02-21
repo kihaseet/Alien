@@ -63,11 +63,12 @@ void protobuf_AssignDesc_types_2eproto() {
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ITarget, _internal_metadata_),
       GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(ITarget, _is_default_instance_));
   Event_descriptor_ = file->message_type(1);
-  static const int Event_offsets_[4] = {
+  static const int Event_offsets_[5] = {
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Event, event_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Event, event_who_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Event, event_object_),
     GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Event, event_target_),
+    GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(Event, payload_),
   };
   Event_reflection_ =
     ::google::protobuf::internal::GeneratedMessageReflection::NewGeneratedMessageReflection(
@@ -124,30 +125,35 @@ void protobuf_AddDesc_types_2eproto() {
     "\n\013types.proto\022\005types\"n\n\007ITarget\022\037\n\004type\030"
     "\001 \001(\0162\021.types.TargetType\022\014\n\004name\030\002 \001(\t\022\031"
     "\n\004item\030\003 \001(\0162\013.types.Item\022\031\n\004role\030\004 \001(\0162"
-    "\013.types.Role\"\227\001\n\005Event\022\037\n\005event\030\001 \001(\0162\020."
+    "\013.types.Role\"\250\001\n\005Event\022\037\n\005event\030\001 \001(\0162\020."
     "types.EventType\022!\n\tevent_who\030\002 \001(\0132\016.typ"
     "es.ITarget\022$\n\014event_object\030\003 \001(\0132\016.types"
-    ".ITarget\022$\n\014event_target\030\004 \001(\0132\016.types.I"
-    "Target*\315\001\n\004Role\022\r\n\tPASSENGER\020\000\022\013\n\007CAPTAI"
-    "N\020\001\022\n\n\006DOCTOR\020\002\022\n\n\006GUNMEN\020\003\022\014\n\010ENGINEER\020"
-    "\004\022\r\n\tSCIENTIST\020\005\022\r\n\tSIGNALMEN\020\006\022\r\n\tASSIS"
-    "TANT\020e\022\016\n\nDEP_DOCTOR\020f\022\016\n\nDEP_GUNMEN\020g\022\020"
-    "\n\014DEP_ENGINEER\020h\022\021\n\rDEP_SCIENTIST\020i\022\021\n\rD"
-    "EP_SIGNALMEN\020j*|\n\006Action\022\014\n\010USE_ITEM\020\000\022\013"
-    "\n\007USE_ULT\020\001\022\r\n\tUSE_BADGE\020\002\022\n\n\006ATTACK\020\003\022\n"
-    "\n\006INFECT\020\004\022\010\n\004VOTE\020\005\022\n\n\006UNVOTE\020\006\022\010\n\004WAIT"
-    "\020\007\022\006\n\002UP\020\010\022\010\n\004DOWN\020\t*v\n\004Item\022\t\n\005BADGE\020\000\022"
-    "\014\n\010ROTATION\020\001\022\013\n\007BLASTER\020\002\022\014\n\010INJECTOR\020\003"
-    "\022\014\n\010NOTEBOOK\020\004\022\013\n\007BATTERY\020\005\022\013\n\007SCANNER\020\006"
-    "\022\007\n\003MOP\020\007\022\t\n\005FETUS\020\010*3\n\014PlayerStatus\022\t\n\005"
-    "PS_UP\020\000\022\013\n\007PS_DOWN\020\001\022\013\n\007PS_DEAD\020\002*\234\001\n\tEv"
-    "entType\022\017\n\013ET_USE_ITEM\020\000\022\016\n\nET_USE_ULT\020\001"
-    "\022\020\n\014ET_USE_BADGE\020\002\022\024\n\020ET_CHANGE_STATUS\020\003"
-    "\022\017\n\013ET_GET_ROLE\020\004\022\017\n\013ET_DEL_ROLE\020\005\022\020\n\014ET"
-    "_VOTING_UP\020\006\022\022\n\016ET_VOTING_DOWN\020\007*)\n\nVoti"
-    "ngType\022\014\n\010FOR_ROLE\020\000\022\r\n\tFOR_ALIEN\020\001*6\n\nT"
-    "argetType\022\014\n\010TAT_NAME\020\000\022\014\n\010TAT_ITEM\020\001\022\014\n"
-    "\010TAT_ROLE\020\002b\006proto3", 1059);
+    ".ITarget\022$\n\014event_target\030\004 \003(\0132\016.types.I"
+    "Target\022\017\n\007payload\030\005 \001(\t*\315\001\n\004Role\022\r\n\tPASS"
+    "ENGER\020\000\022\013\n\007CAPTAIN\020\001\022\n\n\006DOCTOR\020\002\022\n\n\006GUNM"
+    "EN\020\003\022\014\n\010ENGINEER\020\004\022\r\n\tSCIENTIST\020\005\022\r\n\tSIG"
+    "NALMEN\020\006\022\r\n\tASSISTANT\020e\022\016\n\nDEP_DOCTOR\020f\022"
+    "\016\n\nDEP_GUNMEN\020g\022\020\n\014DEP_ENGINEER\020h\022\021\n\rDEP"
+    "_SCIENTIST\020i\022\021\n\rDEP_SIGNALMEN\020j*|\n\006Actio"
+    "n\022\014\n\010USE_ITEM\020\000\022\013\n\007USE_ULT\020\001\022\r\n\tUSE_BADG"
+    "E\020\002\022\n\n\006ATTACK\020\003\022\n\n\006INFECT\020\004\022\010\n\004VOTE\020\005\022\n\n"
+    "\006UNVOTE\020\006\022\010\n\004WAIT\020\007\022\006\n\002UP\020\010\022\010\n\004DOWN\020\t*v\n"
+    "\004Item\022\t\n\005BADGE\020\000\022\014\n\010ROTATION\020\001\022\013\n\007BLASTE"
+    "R\020\002\022\014\n\010INJECTOR\020\003\022\014\n\010NOTEBOOK\020\004\022\013\n\007BATTE"
+    "RY\020\005\022\013\n\007SCANNER\020\006\022\007\n\003MOP\020\007\022\t\n\005FETUS\020\010*3\n"
+    "\014PlayerStatus\022\t\n\005PS_UP\020\000\022\013\n\007PS_DOWN\020\001\022\013\n"
+    "\007PS_DEAD\020\002*\354\001\n\tEventType\022\017\n\013ET_USE_ITEM\020"
+    "\000\022\016\n\nET_USE_ULT\020\001\022\020\n\014ET_USE_BADGE\020\002\022\017\n\013E"
+    "T_GET_ROLE\020\003\022\017\n\013ET_DEL_ROLE\020\004\022\025\n\021ET_INGA"
+    "ME_MESSAGE\020\005\022\017\n\013ET_GET_DUTY\020\006\022\016\n\nET_CONN"
+    "ECT\020\007\022\021\n\rET_DISCONNECT\020\010\022\013\n\007ET_DIED\020\t\022\013\n"
+    "\007ET_DOWN\020\n\022\t\n\005ET_UP\020\013\022\013\n\007ET_VOTE\020\014\022\r\n\tET"
+    "_UNVOTE\020\r*\204\001\n\nVotingType\022\r\n\tFOR_ALIEN\020\000\022"
+    "\017\n\013FOR_CAPTAIN\020\001\022\016\n\nFOR_DOCTOR\020\002\022\016\n\nFOR_"
+    "GUNMEN\020\003\022\020\n\014FOR_ENGINEER\020\004\022\021\n\rFOR_SCIENT"
+    "IST\020\005\022\021\n\rFOR_SIGNALMEN\020\006*6\n\nTargetType\022\014"
+    "\n\010TAT_NAME\020\000\022\014\n\010TAT_ITEM\020\001\022\014\n\010TAT_ROLE\020\002"
+    "b\006proto3", 1248);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "types.proto", &protobuf_RegisterTypes);
   ITarget::default_instance_ = new ITarget();
@@ -260,6 +266,12 @@ bool EventType_IsValid(int value) {
     case 5:
     case 6:
     case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
+    case 12:
+    case 13:
       return true;
     default:
       return false;
@@ -274,6 +286,11 @@ bool VotingType_IsValid(int value) {
   switch(value) {
     case 0:
     case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+    case 6:
       return true;
     default:
       return false;
@@ -759,6 +776,7 @@ const int Event::kEventFieldNumber;
 const int Event::kEventWhoFieldNumber;
 const int Event::kEventObjectFieldNumber;
 const int Event::kEventTargetFieldNumber;
+const int Event::kPayloadFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 Event::Event()
@@ -771,7 +789,6 @@ void Event::InitAsDefaultInstance() {
   _is_default_instance_ = true;
   event_who_ = const_cast< ::types::ITarget*>(&::types::ITarget::default_instance());
   event_object_ = const_cast< ::types::ITarget*>(&::types::ITarget::default_instance());
-  event_target_ = const_cast< ::types::ITarget*>(&::types::ITarget::default_instance());
 }
 
 Event::Event(const Event& from)
@@ -784,11 +801,12 @@ Event::Event(const Event& from)
 
 void Event::SharedCtor() {
     _is_default_instance_ = false;
+  ::google::protobuf::internal::GetEmptyString();
   _cached_size_ = 0;
   event_ = 0;
   event_who_ = NULL;
   event_object_ = NULL;
-  event_target_ = NULL;
+  payload_.UnsafeSetDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 
 Event::~Event() {
@@ -797,10 +815,10 @@ Event::~Event() {
 }
 
 void Event::SharedDtor() {
+  payload_.DestroyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
   if (this != default_instance_) {
     delete event_who_;
     delete event_object_;
-    delete event_target_;
   }
 }
 
@@ -835,8 +853,8 @@ void Event::Clear() {
   event_who_ = NULL;
   if (GetArenaNoVirtual() == NULL && event_object_ != NULL) delete event_object_;
   event_object_ = NULL;
-  if (GetArenaNoVirtual() == NULL && event_target_ != NULL) delete event_target_;
-  event_target_ = NULL;
+  payload_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+  event_target_.Clear();
 }
 
 bool Event::MergePartialFromCodedStream(
@@ -890,12 +908,33 @@ bool Event::MergePartialFromCodedStream(
         break;
       }
 
-      // optional .types.ITarget event_target = 4;
+      // repeated .types.ITarget event_target = 4;
       case 4: {
         if (tag == 34) {
          parse_event_target:
-          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtual(
-               input, mutable_event_target()));
+          DO_(input->IncrementRecursionDepth());
+         parse_loop_event_target:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessageNoVirtualNoRecursionDepth(
+                input, add_event_target()));
+        } else {
+          goto handle_unusual;
+        }
+        if (input->ExpectTag(34)) goto parse_loop_event_target;
+        input->UnsafeDecrementRecursionDepth();
+        if (input->ExpectTag(42)) goto parse_payload;
+        break;
+      }
+
+      // optional string payload = 5;
+      case 5: {
+        if (tag == 42) {
+         parse_payload:
+          DO_(::google::protobuf::internal::WireFormatLite::ReadString(
+                input, this->mutable_payload()));
+          DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+            this->payload().data(), this->payload().length(),
+            ::google::protobuf::internal::WireFormatLite::PARSE,
+            "types.Event.payload"));
         } else {
           goto handle_unusual;
         }
@@ -945,10 +984,20 @@ void Event::SerializeWithCachedSizes(
       3, *this->event_object_, output);
   }
 
-  // optional .types.ITarget event_target = 4;
-  if (this->has_event_target()) {
+  // repeated .types.ITarget event_target = 4;
+  for (unsigned int i = 0, n = this->event_target_size(); i < n; i++) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      4, *this->event_target_, output);
+      4, this->event_target(i), output);
+  }
+
+  // optional string payload = 5;
+  if (this->payload().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->payload().data(), this->payload().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "types.Event.payload");
+    ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
+      5, this->payload(), output);
   }
 
   // @@protoc_insertion_point(serialize_end:types.Event)
@@ -977,11 +1026,22 @@ void Event::SerializeWithCachedSizes(
         3, *this->event_object_, target);
   }
 
-  // optional .types.ITarget event_target = 4;
-  if (this->has_event_target()) {
+  // repeated .types.ITarget event_target = 4;
+  for (unsigned int i = 0, n = this->event_target_size(); i < n; i++) {
     target = ::google::protobuf::internal::WireFormatLite::
       WriteMessageNoVirtualToArray(
-        4, *this->event_target_, target);
+        4, this->event_target(i), target);
+  }
+
+  // optional string payload = 5;
+  if (this->payload().size() > 0) {
+    ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
+      this->payload().data(), this->payload().length(),
+      ::google::protobuf::internal::WireFormatLite::SERIALIZE,
+      "types.Event.payload");
+    target =
+      ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
+        5, this->payload(), target);
   }
 
   // @@protoc_insertion_point(serialize_to_array_end:types.Event)
@@ -1011,11 +1071,19 @@ int Event::ByteSize() const {
         *this->event_object_);
   }
 
-  // optional .types.ITarget event_target = 4;
-  if (this->has_event_target()) {
+  // optional string payload = 5;
+  if (this->payload().size() > 0) {
     total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::StringSize(
+        this->payload());
+  }
+
+  // repeated .types.ITarget event_target = 4;
+  total_size += 1 * this->event_target_size();
+  for (int i = 0; i < this->event_target_size(); i++) {
+    total_size +=
       ::google::protobuf::internal::WireFormatLite::MessageSizeNoVirtual(
-        *this->event_target_);
+        this->event_target(i));
   }
 
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
@@ -1038,6 +1106,7 @@ void Event::MergeFrom(const ::google::protobuf::Message& from) {
 
 void Event::MergeFrom(const Event& from) {
   if (GOOGLE_PREDICT_FALSE(&from == this)) MergeFromFail(__LINE__);
+  event_target_.MergeFrom(from.event_target_);
   if (from.event() != 0) {
     set_event(from.event());
   }
@@ -1047,8 +1116,9 @@ void Event::MergeFrom(const Event& from) {
   if (from.has_event_object()) {
     mutable_event_object()->::types::ITarget::MergeFrom(from.event_object());
   }
-  if (from.has_event_target()) {
-    mutable_event_target()->::types::ITarget::MergeFrom(from.event_target());
+  if (from.payload().size() > 0) {
+
+    payload_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.payload_);
   }
 }
 
@@ -1077,7 +1147,8 @@ void Event::InternalSwap(Event* other) {
   std::swap(event_, other->event_);
   std::swap(event_who_, other->event_who_);
   std::swap(event_object_, other->event_object_);
-  std::swap(event_target_, other->event_target_);
+  event_target_.UnsafeArenaSwap(&other->event_target_);
+  payload_.Swap(&other->payload_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   std::swap(_cached_size_, other->_cached_size_);
 }
@@ -1181,41 +1252,77 @@ void Event::set_allocated_event_object(::types::ITarget* event_object) {
   // @@protoc_insertion_point(field_set_allocated:types.Event.event_object)
 }
 
-// optional .types.ITarget event_target = 4;
-bool Event::has_event_target() const {
-  return !_is_default_instance_ && event_target_ != NULL;
+// repeated .types.ITarget event_target = 4;
+int Event::event_target_size() const {
+  return event_target_.size();
 }
 void Event::clear_event_target() {
-  if (GetArenaNoVirtual() == NULL && event_target_ != NULL) delete event_target_;
-  event_target_ = NULL;
+  event_target_.Clear();
 }
-const ::types::ITarget& Event::event_target() const {
+const ::types::ITarget& Event::event_target(int index) const {
   // @@protoc_insertion_point(field_get:types.Event.event_target)
-  return event_target_ != NULL ? *event_target_ : *default_instance_->event_target_;
+  return event_target_.Get(index);
 }
-::types::ITarget* Event::mutable_event_target() {
-  
-  if (event_target_ == NULL) {
-    event_target_ = new ::types::ITarget;
-  }
+::types::ITarget* Event::mutable_event_target(int index) {
   // @@protoc_insertion_point(field_mutable:types.Event.event_target)
+  return event_target_.Mutable(index);
+}
+::types::ITarget* Event::add_event_target() {
+  // @@protoc_insertion_point(field_add:types.Event.event_target)
+  return event_target_.Add();
+}
+::google::protobuf::RepeatedPtrField< ::types::ITarget >*
+Event::mutable_event_target() {
+  // @@protoc_insertion_point(field_mutable_list:types.Event.event_target)
+  return &event_target_;
+}
+const ::google::protobuf::RepeatedPtrField< ::types::ITarget >&
+Event::event_target() const {
+  // @@protoc_insertion_point(field_list:types.Event.event_target)
   return event_target_;
 }
-::types::ITarget* Event::release_event_target() {
-  
-  ::types::ITarget* temp = event_target_;
-  event_target_ = NULL;
-  return temp;
+
+// optional string payload = 5;
+void Event::clear_payload() {
+  payload_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
-void Event::set_allocated_event_target(::types::ITarget* event_target) {
-  delete event_target_;
-  event_target_ = event_target;
-  if (event_target) {
+ const ::std::string& Event::payload() const {
+  // @@protoc_insertion_point(field_get:types.Event.payload)
+  return payload_.GetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ void Event::set_payload(const ::std::string& value) {
+  
+  payload_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:types.Event.payload)
+}
+ void Event::set_payload(const char* value) {
+  
+  payload_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:types.Event.payload)
+}
+ void Event::set_payload(const char* value, size_t size) {
+  
+  payload_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:types.Event.payload)
+}
+ ::std::string* Event::mutable_payload() {
+  
+  // @@protoc_insertion_point(field_mutable:types.Event.payload)
+  return payload_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ ::std::string* Event::release_payload() {
+  
+  return payload_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+ void Event::set_allocated_payload(::std::string* payload) {
+  if (payload != NULL) {
     
   } else {
     
   }
-  // @@protoc_insertion_point(field_set_allocated:types.Event.event_target)
+  payload_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), payload);
+  // @@protoc_insertion_point(field_set_allocated:types.Event.payload)
 }
 
 #endif  // PROTOBUF_INLINE_NOT_IN_HEADERS

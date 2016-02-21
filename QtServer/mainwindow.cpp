@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 
     _serv=new Server(21277);
-    _xmlmaker = new protobuf_maker();
+    serilazer = new protobuf_maker();
     _game=new game();
 
    // config* conf = new config;
@@ -20,32 +20,32 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(ui->itemlist,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(updateInventoryInfo(QListWidgetItem*)));
 
 
-    connect(_serv, SIGNAL(sendToAnalise(int,QString)), _xmlmaker, SLOT(newAnalise(int,QString)));
+    connect(_serv, SIGNAL(sendToAnalise(int,QString)), serilazer, SLOT(newAnalise(int,QString)));
     connect(_serv,SIGNAL(addLogToGui(QString,QString)),this,SLOT(onAddLogToGui(QString,QString)));
     connect(_serv,SIGNAL(client_disconnected(int)),_game,SLOT(slot_disconnected(int)));
     connect(_serv,SIGNAL(client_connected()),_game,SLOT(slotSendRolelist()));
 
-    connect(_xmlmaker,SIGNAL(sigRegisterCreate(RegisterObject)),_game,SLOT(register_new_player(RegisterObject)));
-    connect(_xmlmaker,SIGNAL(sigSendToClient(int,QString)),_serv,SLOT(slotsendToClient(int,QString)));
-    connect(_xmlmaker,SIGNAL(sigSendToAll(QString)),_serv,SLOT(send2all(QString)));
-    connect(_xmlmaker,SIGNAL(sigTurnCreate(int,TurnObject)),
+    connect(serilazer,SIGNAL(sigRegisterCreate(RegisterObject)),_game,SLOT(register_new_player(RegisterObject)));
+    connect(serilazer,SIGNAL(sigSendToClient(int,QString)),_serv,SLOT(slotsendToClient(int,QString)));
+    connect(serilazer,SIGNAL(sigSendToAll(QString)),_serv,SLOT(send2all(QString)));
+    connect(serilazer,SIGNAL(sigTurnCreate(int,TurnObject)),
             _game,SLOT(make_events(int,TurnObject)));
 
-    connect(_game,SIGNAL(startgame(QList<player*>)),_xmlmaker,SLOT(slotStartGame(QList<player*>)));
-    connect(_game,SIGNAL(namecorrect(int,bool)),_xmlmaker,SLOT(slotNameCorrect(int,bool)));
-    connect(_game,SIGNAL(sendrolelist2all (QList <player*>)),_xmlmaker,SLOT(slotUpdateRoleList(QList<player*>)));
-    connect(_game,SIGNAL(rolecorrect(int,bool)),_xmlmaker,SLOT(slotRoleCorrect(int,bool)));
+    connect(_game,SIGNAL(sigGameActionRequest(int,RequestType,QList<QString>)),serilazer,SLOT(slotActionRequest(int,RequestType,QList<QString>)));
+    connect(_game,SIGNAL(sigGameActionResult(int,ResultType,TURN_TYPE)),serilazer,SLOT(slotActionResult(int,ResultType,TURN_TYPE)));
+    connect(_game,SIGNAL(sigGameChange(TurnObject)),serilazer,SLOT(slotChange(TurnObject)));
+    connect(_game,SIGNAL(sigGameEndVoting(ROLE,QString,QString)),serilazer,SLOT(slotEndVoting(ROLE,QString,QString)));
+    connect(_game,SIGNAL(sigGameInventoryChange(int,InvetoryChangeType,ITEM,int)),serilazer,SLOT(slotInventoryChange(int,InvetoryChangeType,ITEM,int)));
+    connect(_game,SIGNAL(sigGamePlayerChange(int,PlayerChangeType,int)),serilazer,SLOT(slotPlayerChange(int,PlayerChangeType,int)));
+    connect(_game,SIGNAL(sigGamePlayerDisconnect(QString)),serilazer,SLOT(slotPlayerDisconnect(QString)));
+    connect(_game,SIGNAL(sigGameRegisterAnswer(int,RegisterStatusType)),serilazer,SLOT(slotRegisterAnswer(int,RegisterStatusType)));
+    connect(_game,SIGNAL(sigGameRegisterUpdate(QList<player*>)),serilazer,SLOT(slotRegisterUpdate(QList<player*>)));
+    connect(_game,SIGNAL(sigGameStartGame(QList<player*>)),serilazer,SLOT(slotStartGame(QList<player*>)));
+    connect(_game,SIGNAL(sigGameTimeSwitch(int,TimeType)),serilazer,SLOT(slotTimeSwitch(int,TimeType)));
+    connect(_game,SIGNAL(sigGameVoting(VotingType,QList<QString>,ROLE)),serilazer,SLOT(slotVoting(VotingType,QList<QString>,ROLE)));
+    connect(_game,SIGNAL(send_mess(int,QString)),serilazer,SLOT(slotSendMess(int,QString)));
+
     connect(_game,SIGNAL(startnewsessionenable(bool)),this,SLOT(newGameSessionStatus(bool)));
-
-    connect(_game,SIGNAL(startPhase(int,bool)),_xmlmaker,SLOT(slotStartPhase(int, bool)));
-    connect(_game,SIGNAL(startvote(ROLE,QList<QString>)),_xmlmaker,SLOT(slotStartVoting(ROLE,QList<QString>)));
-    connect(_game,SIGNAL(endvote(ROLE,QString,QString)),_xmlmaker,SLOT(slotEndVoting(ROLE,QString,QString)));
-
-    connect(_game,SIGNAL(send_votelist(QList<VoteObject*>)),_xmlmaker,SLOT(slotSendVoteList(QList<VoteObject*>)));
-    connect(_game,SIGNAL(send_changes(TurnObject)),_xmlmaker,SLOT(slotSendTurn(TurnObject)));
-    connect(_game,SIGNAL(send_stat(TurnObject)),_xmlmaker,SLOT(slotSendStat(TurnObject)));
-    connect(_game,SIGNAL(send_mess(player*,QString)),_xmlmaker,SLOT(slotSendMess(player*,QString)));
-
     connect(_game,SIGNAL(GuiUpdatePlayerlist(QList<player*>)),this,SLOT(updatePlayerlist(QList<player*>)));
     connect(_game,SIGNAL(GuiUpdateVotelist()),this,SLOT(UpdateVotelist()));
     connect(_game,SIGNAL(GuiMess2Log(QString,QString)),this,SLOT(onAddLogToGui(QString,QString)));

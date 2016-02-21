@@ -51,19 +51,31 @@ enum PlayerStatus {
 }
 
 enum EventType {
-	ET_USE_ITEM = 0;
-	ET_USE_ULT = 1;
-	ET_USE_BADGE = 2;
-	ET_CHANGE_STATUS = 3;
-	ET_GET_ROLE = 4;
-	ET_DEL_ROLE = 5;
-	ET_VOTING_UP = 6;
-	ET_VOTING_DOWN = 7;
+  ET_USE_ITEM = 0;
+  ET_USE_ULT = 1;
+  ET_USE_BADGE = 2;
+  ET_GET_ROLE = 3;
+  ET_DEL_ROLE = 4;
+  ET_INGAME_MESSAGE = 5;
+  ET_GET_DUTY = 6;
+  ET_CONNECT = 7;
+  ET_DISCONNECT = 8;
+  ET_DIED = 9;
+  ET_DOWN = 10;
+  ET_UP = 11;
+  ET_VOTE = 12;
+  ET_UNVOTE = 13;
 }
 
 enum VotingType {
-	FOR_ROLE = 0;
-	FOR_ALIEN = 1;
+	FOR_ALIEN = 0;
+	FOR_CAPTAIN = 1;
+	FOR_DOCTOR = 2;
+	FOR_GUNMEN = 3;
+	FOR_ENGINEER = 4;
+	FOR_SCIENTIST = 5;
+	FOR_SIGNALMEN = 6;
+	
 }
 
 enum TargetType {
@@ -85,5 +97,6 @@ message Event {
 	EventType event = 1;
 	ITarget event_who = 2;
 	ITarget event_object = 3;
-	ITarget event_target = 4;
+	repeated ITarget event_target = 4;
+	string payload = 5;
 }

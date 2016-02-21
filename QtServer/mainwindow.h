@@ -4,6 +4,8 @@
 #include <QDebug>
 #include <QtGui>
 #include <QtCore>
+#include <QMainWindow>
+#include <QListWidgetItem>
 
 
 #include "server.h"
@@ -26,7 +28,7 @@ public:
 private:
     Ui::MainWindow *ui;
     Server* _serv;
-    Protocol* _xmlmaker;
+    Protocol* serilazer;
     game* _game;
 
 public slots:
